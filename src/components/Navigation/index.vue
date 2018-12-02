@@ -1,7 +1,6 @@
 <template>
     <el-menu
-      :default-active="activeIndex2"
-      class="el-menu-demo"
+      class="el-menu-demo navigation-container"
       mode="horizontal"
       @select="handleSelect"
       background-color="#545c64"
@@ -11,7 +10,7 @@
       <el-menu-item index="2" style="float: right">
         <el-dropdown trigger="click">
         <span class="el-dropdown-link" style="color: white">
-          下拉菜单<i class="el-icon-arrow-down el-icon--right"></i>
+          <img src="../../assets/yonghu.svg"> 下拉菜单<i class="el-icon-arrow-down el-icon--right"></i>
         </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item>黄金糕</el-dropdown-item>
@@ -43,5 +42,7 @@
 </script>
 
 <style scoped>
-
+.navigation-container{
+  border: #545c64;
+}
 </style>
