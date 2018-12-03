@@ -25,6 +25,7 @@
 
 <script>
   import {loginApi} from './index.api';
+  import {setCookie} from '../../../utils/package-cookies';
 export default {
   name: 'Login',
   data(){
@@ -41,8 +42,8 @@ export default {
   },
   methods:{
     async login(){
-      console.log(this.form.name)
       const res=await loginApi(this.form);
+      setCookie('simulate',res.data.toString(),20);
       await this.$store.dispatch('userInfo/setUserInfo',this.form);
       this.$router.push('/');
     }

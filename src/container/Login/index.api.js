@@ -4,7 +4,6 @@ export async function loginApi({
                               pwd,
                               type,
                              }) {
-  console.log('diaoyong');
   return await axios.post('/api/login', {
     data: {
       name,

@@ -20,4 +20,4 @@ export function delCookie (name) {
   const cval = getCookie(name);
   if (cval != null)
     document.cookie = name + "=" + cval + ";expires=" + exp.toGMTString();
-};
+}

@@ -9,7 +9,7 @@
         <el-submenu index="1">
           <template slot="title">
             <i class="el-icon-location"></i>
-            <span>导航一</span>
+            <span>个人信息</span>
           </template>
           <el-menu-item index="1">选项1</el-menu-item>
           <el-menu-item index="2">选项2</el-menu-item>
@@ -19,7 +19,7 @@
         <el-submenu index="2">
           <template slot="title">
             <i class="el-icon-location"></i>
-            <span>导航二</span>
+            <span>基础管理</span>
           </template>
           <el-menu-item index="1">选项1</el-menu-item>
           <el-menu-item index="2">选项2</el-menu-item>
@@ -29,17 +29,46 @@
         <el-submenu index="3">
           <template slot="title">
             <i class="el-icon-location"></i>
-            <span>导航三</span>
+            <span>设备管理</span>
+          </template>
+          <el-menu-item index="1">网关设备</el-menu-item>
+          <el-menu-item index="2">物理设备</el-menu-item>
+          <el-menu-item index="3">设备数据</el-menu-item>
+        </el-submenu>
+        <el-submenu index="4">
+          <template slot="title">
+            <i class="el-icon-location"></i>
+            <span>智能监控</span>
           </template>
           <el-menu-item index="1">选项1</el-menu-item>
           <el-menu-item index="2">选项2</el-menu-item>
           <el-menu-item index="3">选项3</el-menu-item>
           <el-menu-item index="4">选项4</el-menu-item>
         </el-submenu>
-        <el-submenu index="4">
+        <el-submenu index="5">
           <template slot="title">
             <i class="el-icon-location"></i>
-            <span>导航四</span>
+            <span>应用容器</span>
+          </template>
+          <el-menu-item index="1">选项1</el-menu-item>
+          <el-menu-item index="2">选项2</el-menu-item>
+          <el-menu-item index="3">选项3</el-menu-item>
+          <el-menu-item index="4">选项4</el-menu-item>
+        </el-submenu>
+        <el-submenu index="6">
+          <template slot="title">
+            <i class="el-icon-location"></i>
+            <span>告警通知</span>
+          </template>
+          <el-menu-item index="1">选项1</el-menu-item>
+          <el-menu-item index="2">选项2</el-menu-item>
+          <el-menu-item index="3">选项3</el-menu-item>
+          <el-menu-item index="4">选项4</el-menu-item>
+        </el-submenu>
+        <el-submenu index="6">
+          <template slot="title">
+            <i class="el-icon-location"></i>
+            <span>数据可视化</span>
           </template>
           <el-menu-item index="1">选项1</el-menu-item>
           <el-menu-item index="2">选项2</el-menu-item>
@@ -63,6 +92,10 @@
     }
 </script>
 
-<style scoped>
-
+<style rel="stylesheet/scss" lang="scss" scoped>
+  .el-submenu{
+    .el-menu-item{
+      min-width: auto;
+    }
+  }
 </style>

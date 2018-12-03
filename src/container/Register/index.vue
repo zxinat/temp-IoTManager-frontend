@@ -51,22 +51,22 @@
     }
 </script>
 
-<style scoped>
-  .register-container{
-    width:100%;
-    height:100%;
+<style rel="stylesheet/scss" lang="scss" scoped>
+  .register-container {
+    width: 100%;
+    height: 100%;
     margin: 0px auto;
     display: table;
-  }
-  .register-box{
-    display: table-cell;
-    vertical-align: middle;
-  }
-  .register-form{
-    width: 25%;
-    margin: auto;
-    padding: 2% 2%;
-    border: 1px solid gray;
-    border-radius: 5rem;
+    .register-box {
+      display: table-cell;
+      vertical-align: middle;
+      .register-form {
+        width: 25%;
+        margin: auto;
+        padding: 2% 2%;
+        border: 1px solid gray;
+        border-radius: 5rem;
+      }
+    }
   }
 </style>

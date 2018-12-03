@@ -4,6 +4,7 @@ import Home from '../container/Home/index'
 import Login from '../container/Login/index'
 import Register from '../container/Register/index'
 import RegisterSuccess from '../container/RegisterSuccess/index'
+import {getCookie} from '../../utils/package-cookies';
 Vue.use(Router)
 
 const routes=[
@@ -11,6 +12,9 @@ const routes=[
       path: '/',
       name: 'Home',
       component: Home,
+      meta:{
+        requireAuth:true
+      }
     },
     {
       path: '/login',
@@ -31,25 +35,21 @@ const routes=[
 
 const router = new Router({routes});
 
-// router.beforeEach((to, from, next) => {
-//   if(to.meta.requireAuth) {
-//     fetch('api/login').then(res => {
-//       if(res.errCode == 200) {
-//         next();
-//       } else {
-//         if(getCookie('session')) {
-//           delCookie('session');
-//         }
-//         if(getCookie('u_uuid')) {
-//           delCookie('u_uuid');
-//         }
-//         next({
-//           path: '/login'
-//         });
-//       }
-//     });
-//   } else {
-//     next();
-//   }
-// });
+router.beforeEach((to, from, next) => {
+  if(to.meta.requireAuth) {
+    // fetch('api/login').then(res => {
+    //   if(res.errCode == 200) {
+    //     next();
+    //   } else {
+        if(getCookie('simulate')) {
+           next()
+        }else {
+          next({
+            path: '/login'
+          });
+        }
+  } else {
+    next();
+  }
+});
 export default router;

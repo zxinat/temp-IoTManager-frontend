@@ -10,14 +10,12 @@
       <el-menu-item index="2" style="float: right">
         <el-dropdown trigger="click">
         <span class="el-dropdown-link" style="color: white">
-          <img src="../../assets/yonghu.svg"> 下拉菜单<i class="el-icon-arrow-down el-icon--right"></i>
+          <img src="../../assets/img/yonghu.svg"> 下拉菜单<i class="el-icon-arrow-down el-icon--right"></i>
         </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>黄金糕</el-dropdown-item>
-            <el-dropdown-item>狮子头</el-dropdown-item>
-            <el-dropdown-item>螺蛳粉</el-dropdown-item>
-            <el-dropdown-item>双皮奶</el-dropdown-item>
-            <el-dropdown-item>蚵仔煎</el-dropdown-item>
+            <el-dropdown-item>用户信息</el-dropdown-item>
+            <el-dropdown-item>设置</el-dropdown-item>
+            <el-dropdown-item @click.native="logout">注销</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-menu-item>
@@ -25,6 +23,7 @@
 </template>
 
 <script>
+  import {delCookie} from '../../../utils/package-cookies';
     export default {
         name: "Navigation",
       data() {
@@ -36,13 +35,24 @@
       methods: {
         handleSelect(key, keyPath) {
           console.log(key, keyPath);
+        },
+        logout(){
+          delCookie('simulate');
+          this.$router.push('/login');
         }
+      },
+      mounted(){
+
       }
     }
 </script>
 
-<style scoped>
+<style rel="stylesheet/scss" lang="scss" scoped>
+@import "../../assets/scss/variaties";
 .navigation-container{
-  border: #545c64;
+  border: $main-color;
+  .el-menu-item, .el-submenu__title {
+    height: 100%;
+  }
 }
 </style>
