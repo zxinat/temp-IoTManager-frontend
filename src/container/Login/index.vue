@@ -16,7 +16,7 @@
               <!--<el-option label="管理用户" value="management"></el-option>-->
             <!--</el-select>-->
           <!--</el-form-item>-->
-          <el-button type="primary" @click="onSubmit">登录</el-button>
+          <el-button type="primary" @click="login">登录</el-button>
         </el-form>
       </div>
     </div>
@@ -24,6 +24,7 @@
 </template>
 
 <script>
+  import {loginApi} from './index.api';
 export default {
   name: 'Login',
   data(){
@@ -39,8 +40,11 @@ export default {
 
   },
   methods:{
-    onSubmit(){
-      console.log('submit!');
+    async login(){
+      console.log(this.form.name)
+      const res=await loginApi(this.form);
+      console.log('niubi')
+      this.$router.push('/');
     }
   }
 }

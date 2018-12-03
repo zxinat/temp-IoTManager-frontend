@@ -27,6 +27,7 @@
 </template>
 
 <script>
+  import {signupApi} from './index.api';
     export default {
       name: "Register",
       data(){
@@ -42,8 +43,9 @@
 
       },
       methods:{
-        onSubmit(){
-          console.log('submit!');
+        async onSubmit(){
+          await signupApi(this.form);
+          this.$router.push('/registerSuccess');
         }
       }
     }
