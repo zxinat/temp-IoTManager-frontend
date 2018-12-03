@@ -3,10 +3,15 @@ import { Message } from 'element-ui';
 const getUserInfo = () => {};
 
 const actions = {
-  async getUserInfo({ commit, dispatch, state }, {
-    skipJWTValidate
-  } = {}) {
-
+  async setUserInfo({ commit, dispatch, state }, {
+    name,
+    type,
+  }) {
+      commit(Type.SET_USER_INFO,{
+        username:name,
+        type,
+        isLogin:true
+      });
   }
 };
 

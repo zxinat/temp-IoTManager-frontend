@@ -19,6 +19,16 @@
   export default {
     name: "Home",
     components: {Sidebar, Navigation},
+    mounted(){//简单鉴权
+      console.log('diaoyongle')
+      // 查看是否登陆
+        if (this.$store.state.userInfo.isLogin === false) {
+          // 没登录的做处理
+          alert('请先登录')
+          this.$router.push('/login');
+        }
+    }
+
   }
 </script>
 

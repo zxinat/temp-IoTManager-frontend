@@ -43,7 +43,7 @@ export default {
     async login(){
       console.log(this.form.name)
       const res=await loginApi(this.form);
-      console.log('niubi')
+      await this.$store.dispatch('userInfo/setUserInfo',this.form);
       this.$router.push('/');
     }
   }

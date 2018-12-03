@@ -6,12 +6,11 @@ import Register from '../container/Register/index'
 import RegisterSuccess from '../container/RegisterSuccess/index'
 Vue.use(Router)
 
-export default new Router({
-  routes: [
+const routes=[
     {
       path: '/',
       name: 'Home',
-      component: Home
+      component: Home,
     },
     {
       path: '/login',
@@ -28,5 +27,29 @@ export default new Router({
       name: 'RegisterSuccess',
       component: RegisterSuccess
     },
-  ]
-})
+  ];
+
+const router = new Router({routes});
+
+// router.beforeEach((to, from, next) => {
+//   if(to.meta.requireAuth) {
+//     fetch('api/login').then(res => {
+//       if(res.errCode == 200) {
+//         next();
+//       } else {
+//         if(getCookie('session')) {
+//           delCookie('session');
+//         }
+//         if(getCookie('u_uuid')) {
+//           delCookie('u_uuid');
+//         }
+//         next({
+//           path: '/login'
+//         });
+//       }
+//     });
+//   } else {
+//     next();
+//   }
+// });
+export default router;
