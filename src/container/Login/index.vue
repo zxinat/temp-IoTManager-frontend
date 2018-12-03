@@ -50,22 +50,24 @@ export default {
 }
 </script>
 
-<style scoped>
+<style rel="stylesheet/scss" lang="scss" scoped>
   .login-container{
     width:100%;
     height:100%;
     margin: 0px auto;
     display: table;
+    .login-box{
+      display: table-cell;
+      vertical-align: middle;
+      .login-form{
+      width: 25%;
+      margin: auto;
+      padding: 2% 2%;
+      border: 1px solid gray;
+      border-radius: 5rem;
+      }
+    }
   }
-  .login-box{
-    display: table-cell;
-    vertical-align: middle;
-  }
-  .login-form{
-    width: 25%;
-    margin: auto;
-    padding: 2% 2%;
-    border: 1px solid gray;
-    border-radius: 5rem;
-  }
+
+
 </style>
