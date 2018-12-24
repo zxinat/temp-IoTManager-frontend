@@ -6,75 +6,49 @@
         background-color="#545c64"
         text-color="#fff"
         active-text-color="#ffd04b">
-        <el-submenu index="1">
-          <template slot="title">
+        <router-link to="/personalInformation"  class="hide-underline">
+          <el-menu-item index="1">
             <i class="el-icon-location"></i>
             <span>个人信息</span>
-          </template>
-          <el-menu-item index="1">选项1</el-menu-item>
-          <el-menu-item index="2">选项2</el-menu-item>
-          <el-menu-item index="3">选项3</el-menu-item>
-          <el-menu-item index="4">选项4</el-menu-item>
-        </el-submenu>
-        <el-submenu index="2">
-          <template slot="title">
+          </el-menu-item>
+        </router-link>
+        <router-link to="/dashBoard" class="hide-underline">
+          <el-menu-item index="2">
             <i class="el-icon-location"></i>
-            <span>基础管理</span>
-          </template>
-          <el-menu-item index="1">选项1</el-menu-item>
-          <el-menu-item index="2">选项2</el-menu-item>
-          <el-menu-item index="3">选项3</el-menu-item>
-          <el-menu-item index="4">选项4</el-menu-item>
-        </el-submenu>
+            <span>仪表盘</span>
+          </el-menu-item>
+        </router-link>
         <el-submenu index="3">
           <template slot="title">
             <i class="el-icon-location"></i>
             <span>设备管理</span>
           </template>
-          <el-menu-item index="1">网关设备</el-menu-item>
-          <el-menu-item index="2">物理设备</el-menu-item>
-          <el-menu-item index="3">设备数据</el-menu-item>
+          <router-link to="/gatewayEquipment" class="hide-underline"><el-menu-item index="3-1">网关设备</el-menu-item></router-link>
+          <router-link to="/physicalDevice" class="hide-underline"><el-menu-item index="3-2">物理设备</el-menu-item></router-link>
+          <router-link to="/equipmentData" class="hide-underline"><el-menu-item index="3-3">设备数据</el-menu-item></router-link>
         </el-submenu>
         <el-submenu index="4">
           <template slot="title">
             <i class="el-icon-location"></i>
-            <span>智能监控</span>
+            <span>监控告警</span>
           </template>
-          <el-menu-item index="1">选项1</el-menu-item>
-          <el-menu-item index="2">选项2</el-menu-item>
-          <el-menu-item index="3">选项3</el-menu-item>
-          <el-menu-item index="4">选项4</el-menu-item>
+          <router-link to="/monitoringConfiguration"  class="hide-underline"><el-menu-item index="4-1">监控配置</el-menu-item></router-link>
+          <router-link to="/warningMessage"  class="hide-underline"><el-menu-item index="4-2">告警信息</el-menu-item></router-link>
         </el-submenu>
         <el-submenu index="5">
           <template slot="title">
             <i class="el-icon-location"></i>
-            <span>应用容器</span>
+            <span>数据智能</span>
           </template>
-          <el-menu-item index="1">选项1</el-menu-item>
-          <el-menu-item index="2">选项2</el-menu-item>
-          <el-menu-item index="3">选项3</el-menu-item>
-          <el-menu-item index="4">选项4</el-menu-item>
+          <router-link to="/modelTraining"  class="hide-underline"><el-menu-item index="5-1">模型训练</el-menu-item></router-link>
+          <router-link to="/intelligentAnalysis"  class="hide-underline"><el-menu-item index="5-2">智能分析</el-menu-item></router-link>
         </el-submenu>
-        <el-submenu index="6">
-          <template slot="title">
-            <i class="el-icon-location"></i>
-            <span>告警通知</span>
-          </template>
-          <el-menu-item index="1">选项1</el-menu-item>
-          <el-menu-item index="2">选项2</el-menu-item>
-          <el-menu-item index="3">选项3</el-menu-item>
-          <el-menu-item index="4">选项4</el-menu-item>
-        </el-submenu>
-        <el-submenu index="6">
-          <template slot="title">
-            <i class="el-icon-location"></i>
-            <span>数据可视化</span>
-          </template>
-          <el-menu-item index="1">选项1</el-menu-item>
-          <el-menu-item index="2">选项2</el-menu-item>
-          <el-menu-item index="3">选项3</el-menu-item>
-          <el-menu-item index="4">选项4</el-menu-item>
-        </el-submenu>
+        <router-link to="/reportCenter"  class="hide-underline">
+          <el-menu-item index="6">
+              <i class="el-icon-location"></i>
+              <span>报表中心</span>
+          </el-menu-item>
+        </router-link>
       </el-menu>
 </template>
 
@@ -93,9 +67,19 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  .el-submenu{
+  .el-menu-vertical-demo{
+    /*重载一些样式*/
     .el-menu-item{
       min-width: auto;
+      text-align: left;
     }
+    .el-submenu{
+      text-align: left;
+    }
+
+    .hide-underline{
+      text-decoration: none;
+    }
+
   }
 </style>

@@ -1,20 +1,79 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Home from '../container/Home/index'
-import Login from '../container/Login/index'
-import Register from '../container/Register/index'
-import RegisterSuccess from '../container/RegisterSuccess/index'
+import Vue from 'vue';
+import Router from 'vue-router';
+import Home from '../container/Home/index';
+import Login from '../container/Login/index';
+import Register from '../container/Register/index';
+import RegisterSuccess from '../container/RegisterSuccess/index';
+import DashBoard from '../container/DashBoard/index';
+// home页组件
+import GatewayEquipment from '../components/GatewayEquipment/index';
+import PhysicalDevice from '../components/PhysicalDevice/index';
+import EquipmentData from '../components/EquipmentData/index';
+import MonitoringConfiguration from '../components/MonitoringConfiguration/index';
+import WarningMessage from '../components/WarningMessage/index';
+import PersonalInformation from '../components/PersonalInformation/index';
+import ReportCenter from '../components/ReportCenter/index';
+import ModelTraining from '../components/ModelTraining/index';
+import IntelligentAnalysis from '../components/IntelligentAnalysis/index';
+
 import {getCookie} from '../../utils/package-cookies';
-Vue.use(Router)
+Vue.use(Router);
 
 const routes=[
     {
       path: '/',
       name: 'Home',
       component: Home,
-      meta:{
-        requireAuth:true
-      }
+      meta: {
+        requireAuth: true
+      },
+      children:[
+        {
+          path: '/gatewayEquipment',
+          name: 'GatewayEquipment',
+          component: GatewayEquipment
+        },
+        {
+          path: '/physicalDevice',
+          name: 'PhysicalDevice',
+          component: PhysicalDevice
+        },
+        {
+          path: '/equipmentData',
+          name: 'EquipmentData',
+          component: EquipmentData
+        },
+        {
+          path: '/monitoringConfiguration',
+          name: 'MonitoringConfiguration',
+          component: MonitoringConfiguration
+        },
+        {
+          path: '/warningMessage',
+          name: 'WarningMessage',
+          component: WarningMessage
+        },
+        {
+          path: '/personalInformation',
+          name: 'PersonalInformation',
+          component: PersonalInformation
+        },
+        {
+          path: '/reportCenter',
+          name: 'ReportCenter',
+          component: ReportCenter
+        },
+        {
+          path: '/modelTraining',
+          name: 'ModelTraining',
+          component: ModelTraining
+        },
+        {
+          path: '/intelligentAnalysis',
+          name: 'IntelligentAnalysis',
+          component: IntelligentAnalysis
+        }
+      ]
     },
     {
       path: '/login',
@@ -31,6 +90,11 @@ const routes=[
       name: 'RegisterSuccess',
       component: RegisterSuccess
     },
+    {
+      path: '/dashBoard',
+      name: 'DashBoard',
+      component: DashBoard
+    }
   ];
 
 const router = new Router({routes});

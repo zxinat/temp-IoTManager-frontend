@@ -13,7 +13,7 @@
           <img src="../../assets/img/yonghu.svg"> 下拉菜单<i class="el-icon-arrow-down el-icon--right"></i>
         </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>用户信息</el-dropdown-item>
+            <router-link to="/personalInformation" style="text-decoration: none"><el-dropdown-item>用户信息</el-dropdown-item></router-link>
             <el-dropdown-item>设置</el-dropdown-item>
             <el-dropdown-item @click.native="logout">注销</el-dropdown-item>
           </el-dropdown-menu>
@@ -53,6 +53,9 @@
   border: $main-color;
   .el-menu-item, .el-submenu__title {
     height: 100%;
+  }
+  .hide-underline{
+    text-decoration: none;
   }
 }
 </style>

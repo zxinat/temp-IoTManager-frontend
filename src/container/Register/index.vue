@@ -11,7 +11,7 @@
             <el-input type="password" v-model="form.pwd" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="确认密码" prop="checkPass">
-            <el-input type="password" v-model="form.pwd" autocomplete="off"></el-input>
+            <el-input type="password" v-model="form.confirmPwd" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="用户类别">
             <el-select v-model="form.type" placeholder="请选择用户类别">
@@ -35,6 +35,7 @@
           form: {
             name: '',
             pwd: '',
+            confirmPwd:'',
             type:'',
           }
         }
@@ -44,8 +45,10 @@
       },
       methods:{
         async onSubmit(){
-          await signupApi(this.form);
-          this.$router.push('/registerSuccess');
+          if(this.form.pwd===this.form.confirmPwd){
+            await signupApi(this.form);
+            this.$router.push('/registerSuccess');
+          }
         }
       }
     }

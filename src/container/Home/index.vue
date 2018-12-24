@@ -1,15 +1,16 @@
 <template>
   <div class="home-container">
     <Navigation class="nav-screen"></Navigation>
-      <el-row class="tac sidebar-screen">
-        <el-col :span="3" class="full-screen">
-          <Sidebar class="full-screen">
-          </Sidebar>
-        </el-col>
-        <el-col :span="20">
-          <h1>具体内容</h1>
-        </el-col>
-      </el-row>
+    <el-row class="tac sidebar-screen">
+      <el-col :span="3" class="full-screen">
+        <Sidebar class="full-screen adaptive">
+        </Sidebar>
+      </el-col>
+      <el-col :span="20">
+        <router-view></router-view>
+      </el-col>
+    </el-row>
+
   </div>
 </template>
 
@@ -32,14 +33,18 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  $nav-height: 9%;
+  $nav-height: 60px;
   .home-container{
     height: 100%;
     .nav-screen{
       height: $nav-height;
     }
     .sidebar-screen{
-      height: 100%-$nav-height;
+      /*sass加变量*/
+      height: calc(100% - #{$nav-height});
+      .adaptive{
+        min-width: 150px;
+      }
     }
   }
   .full-screen{
