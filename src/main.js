@@ -11,7 +11,7 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI);
 Vue.use(Vuex);
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 const store=createStore()
 /* eslint-disable no-new */
 new Vue({

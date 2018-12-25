@@ -1,12 +1,14 @@
 <template>
     <div>
-      <h1>仪表盘</h1>
+      <DashBoardMap></DashBoardMap>
     </div>
 </template>
 
 <script>
+    import DashBoardMap from "../../components/DashBoardMap/index";
     export default {
-        name: "DashBoard"
+        name: "DashBoard",
+      components: {DashBoardMap}
     }
 </script>
 
