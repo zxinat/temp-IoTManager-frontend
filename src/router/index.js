@@ -72,6 +72,11 @@ const routes=[
           path: '/intelligentAnalysis',
           name: 'IntelligentAnalysis',
           component: IntelligentAnalysis
+        },
+        {
+          path: '/dashBoard',
+          name: 'DashBoard',
+          component: DashBoard
         }
       ]
     },
@@ -90,11 +95,7 @@ const routes=[
       name: 'RegisterSuccess',
       component: RegisterSuccess
     },
-    {
-      path: '/dashBoard',
-      name: 'DashBoard',
-      component: DashBoard
-    }
+
   ];
 
 const router = new Router({routes});

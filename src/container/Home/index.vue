@@ -6,11 +6,10 @@
         <Sidebar class="full-screen adaptive">
         </Sidebar>
       </el-col>
-      <el-col :span="20">
+      <el-col :span="21">
         <router-view></router-view>
       </el-col>
     </el-row>
-
   </div>
 </template>
 
@@ -43,7 +42,7 @@
       /*sass加变量*/
       height: calc(100% - #{$nav-height});
       .adaptive{
-        min-width: 150px;
+        min-width: 130px;
       }
     }
   }

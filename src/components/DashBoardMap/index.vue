@@ -1,7 +1,5 @@
 <template>
-    <div class="dashboard-map-container" style="height: 500px;width: 500px">
-
-
+    <div class="dashboard-map-container">
     </div>
 </template>
 
@@ -30,5 +28,7 @@
 </script>
 
 <style scoped>
-
+.dashboard-map-container{
+  height: 450px;
+}
 </style>
