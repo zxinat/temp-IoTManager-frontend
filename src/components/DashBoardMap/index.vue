@@ -22,7 +22,7 @@
             tooltip: {}, // 鼠标移到图里面的浮动提示框
             geo: { // 这个是重点配置区
               map: 'china', // 表示中国地图
-              roam: true,
+              // roam: true,
               itemStyle: {					// 定义样式
                 normal: {					// 普通状态下的样式
                   areaColor: '#323c48',
@@ -63,8 +63,9 @@
     }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  @import "../../assets/scss/variaties.scss";
 .dashboard-map-container{
-  height: 450px;
+  height: $dashboard-block-height;
 }
 </style>

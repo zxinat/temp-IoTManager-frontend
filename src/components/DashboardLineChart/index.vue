@@ -105,9 +105,10 @@
   }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  @import "../../assets/scss/variaties";
   .dashboard-line-chart-container {
-    height: 450px;
-    padding-top: 10px;
+    height: $dashboard-block-height;
+    /*padding-top: 10px;*/
   }
 </style>
