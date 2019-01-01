@@ -71,12 +71,7 @@
     /*重载一些样式*/
     .el-menu-item{
       min-width: auto;
-      text-align: left;
     }
-    .el-submenu{
-      text-align: left;
-    }
-
     .hide-underline{
       text-decoration: none;
     }
