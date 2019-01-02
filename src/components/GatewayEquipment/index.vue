@@ -59,7 +59,7 @@
         </el-table-column>
         <el-table-column
           prop="lastConnectionTime"
-          label="网管状态"
+          label="上次连接时间"
           width="120">
         </el-table-column>
         <el-table-column
@@ -166,20 +166,6 @@
           "createTime": "",
           "updateTime": "",
           "remark": ""
-        }, {
-          "id": "2",
-          "hardwareGatewayID": "",
-          "gatewayName": "",
-          "gatewayType": "",
-          "city": "",
-          "factory": "",
-          "workshop": "",
-          "gatewayState": "",
-          "lastConnectionTime": "",
-          "imageUrl": "",
-          "createTime": "",
-          "updateTime": "",
-          "remark": ""
         }],
         updateData: {},
         newGatewayData: {},
@@ -231,15 +217,19 @@
       },
       async deleteGateway(row) {
         try {
-          const data = await deleteGatewayApi(row.hardwareGatewayID);
-          if (data.data.c === 200) {
-            this.$message({
-              message: '删除成功',
-              type: 'success'
-            });
-            //再获取一次所有网关信息
-            this.getGateways();
-          }
+          this.$confirm('确认删除？')
+            .then(async _=> {
+              const data = await deleteGatewayApi(row.hardwareGatewayID);
+              if (data.data.c === 200) {
+                this.$message({
+                  message: '删除成功',
+                  type: 'success'
+                });
+                //再获取一次所有网关信息
+                this.getGateways();
+              }
+            })
+            .catch(_ => {});
         } catch (e) {
           console.log(e)
         }
