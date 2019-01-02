@@ -11,12 +11,6 @@
     name: "MonitoringMap",
     data(){
       return{
-        mapData:[
-          {name: '海门', value: [121.15, 31.89, 90]},
-          {name: '鄂尔多斯', value: [109.781327, 39.608266, 120]},
-          {name: '招远', value: [120.38, 37.35, 142]},
-          {name: '舟山', value: [122.207216, 29.985295, 123]},
-        ],
         mapOption :{
           // 这里是 ECharts 的配置项，接下来会说明
           bmap: {
@@ -30,7 +24,7 @@
             max: 200,
             calculable: true,
             inRange: {
-              color: ['#50a3ba','#eac736','#d94e5d']
+              color: ['#d90516']
             },
             textStyle: {
               color: '#fff'
@@ -38,15 +32,32 @@
           },
           series: [
             {
-              name: '销量',
+              name: '设备地址',
               type: 'scatter',
-
+              symbol: 'pin',
+              symbolSize:50,
               coordinateSystem: 'bmap', // 坐标系使用bmap
-
-              data: this.mapData
+              data: []//默认空
             }
           ]
         }
+      }
+    },
+    computed:{
+      deviceData:{
+        // getter
+        get: function () {
+          return this.$store.state.device.currentDeviceData;
+        },
+        // setter
+        set: function (newValue) {
+        }
+      }
+    },
+    watch:{
+      deviceData(val){
+        this.mapOption.series[0].data=[{"name":val.city,"value":val.address}]
+        this.mapConfigure();
       }
     },
     methods:{
@@ -59,7 +70,6 @@
       }
     },
     mounted(){
-      console.log("diaoyongle");
       this.mapConfigure();
     }
 

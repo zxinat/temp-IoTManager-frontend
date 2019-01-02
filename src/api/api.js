@@ -69,7 +69,7 @@ export async function searchDevicesApi(data) {
     }
   });
 }
-
+//单个设备
 export async function getDeviceApi(id){
   return await axios.get(`/api/device/${id}`);
 }
@@ -107,4 +107,28 @@ export async function searchDeviceDataApi(data) {
 //监控
 export async function getDeviceTreeApi() {
   return await axios.get('/api/deviceTree');
+}
+
+//告警信息
+export async function getAlarmInformationApi() {
+  return await axios.get('/api/alarmInformation');
+}
+export async function updateAlarmInformationApi(data) {
+  return await axios.put(`/api/alarmInformation/${data.id}`,{
+    ...data
+  });
+}
+
+export async function handleAllAlarmInformationApi(data){
+  return await axios.post(`/api/alarmInformation`,{
+    ...data
+  });
+}
+
+export async function searchAlarmInformationApi(data) {
+  return await axios.get('/api/alarmInformation',{
+    params:{
+      ...data
+    }
+  });
 }

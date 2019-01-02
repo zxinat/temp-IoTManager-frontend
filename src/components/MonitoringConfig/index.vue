@@ -55,6 +55,7 @@
 
 <style lang="scss" scoped>
 .monitoring-config-container{
+  padding-top: 1rem;
     h3{
       display: inline;
       font-family: "Adobe 黑体 Std R";

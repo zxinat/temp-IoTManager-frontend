@@ -29,11 +29,12 @@
       </el-col>
       <el-col :span="8" :offset="5">
         <el-card :body-style="{ padding: '0px' }">
-          <img src="../../assets/img/cat.jpg" class="image">
+          <img v-if="!deviceData.imageUrl" src="../../assets/img/cat.jpg" class="image">
+          <img v-else :src="deviceData.imageUrl" class="image">
           <div style="padding: 14px;">
             <span>设备快照</span>
             <div class="bottom clearfix">
-              <time class="time">{{updateTime}}</time>
+              <time class="time">{{deviceData.updateTime}}</time>
               <!--<el-button class="button">操作按钮</el-button>-->
             </div>
           </div>
