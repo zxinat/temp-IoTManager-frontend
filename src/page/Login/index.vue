@@ -10,6 +10,8 @@
           <el-form-item label="密码" prop="pass">
             <el-input type="password" v-model="form.pwd" autocomplete="off"></el-input>
           </el-form-item>
+          <span class="right"><router-link to="/register" class="hide-underline">没有账号?注册一个</router-link></span>
+
           <!--<el-form-item label="用户类别">-->
             <!--<el-select v-model="form.type" placeholder="请选择用户类别">-->
               <!--<el-option label="普通用户" value="normal"></el-option>-->
@@ -45,7 +47,7 @@ export default {
       const res=await loginApi(this.form);
       setCookie('simulate',res.data.toString(),20);
       await this.$store.dispatch('userInfo/setUserInfo',this.form);
-      this.$router.push('/');
+      this.$router.push('/dashBoard');
     }
   }
 }
@@ -53,6 +55,7 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   .login-container{
+    text-align: center;
     width:100%;
     height:100%;
     margin: 0px auto;
@@ -64,8 +67,14 @@ export default {
       width: 25%;
       margin: auto;
       padding: 2% 2%;
-      border: 1px solid gray;
+      /*border: 1px solid gray;*/
       border-radius: 5rem;
+      box-shadow: 0px 0px 15px #6c807b;
+        .right{
+          font-size:14px;
+          display: block;
+          text-align: right;
+        }
       }
     }
   }

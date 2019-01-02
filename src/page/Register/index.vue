@@ -56,6 +56,7 @@
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   .register-container {
+    text-align: center;
     width: 100%;
     height: 100%;
     margin: 0px auto;
@@ -67,8 +68,9 @@
         width: 25%;
         margin: auto;
         padding: 2% 2%;
-        border: 1px solid gray;
+        /*border: 1px solid gray;*/
         border-radius: 5rem;
+        box-shadow: 0px 0px 15px #6c807b;
       }
     }
   }
