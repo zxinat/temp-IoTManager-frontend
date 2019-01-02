@@ -144,7 +144,7 @@
 </template>
 
 <script>
-  import {addGatewayApi, deleteGatewayApi, getGatewaysApi, searchGatewaysApi, updateGatewayApi} from './index.api';
+  import {addGatewayApi, deleteGatewayApi, getGatewaysApi, searchGatewaysApi, updateGatewayApi} from '../../api/api';
 
   export default {
     name: "GatewayEquipment",

@@ -137,7 +137,7 @@
 </template>
 
 <script>
-  import {addDeviceApi, deleteDeviceApi, getDevicesApi, searchDevicesApi, updateDeviceApi} from './index.api';
+  import {addDeviceApi, deleteDeviceApi, getDevicesApi, searchDevicesApi, updateDeviceApi} from '../../api/api';
     export default {
         name: "PhysicalDevice",
       data() {

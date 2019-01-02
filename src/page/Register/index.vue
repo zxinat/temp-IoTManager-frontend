@@ -27,7 +27,7 @@
 </template>
 
 <script>
-  import {signupApi} from './index.api';
+  import {signupApi} from '../../api/api';
     export default {
       name: "Register",
       data(){

@@ -1,7 +1,7 @@
 <template>
   <div class="monitoring-device-card-container">
     <el-row>
-      <el-col :span="8" offset="1">
+      <el-col :span="8" :offset="1">
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <img src="../../assets/img/chilunzu.svg">
@@ -28,7 +28,7 @@
           </div>
         </el-card>
       </el-col>
-      <el-col :span="8" offset="5">
+      <el-col :span="8" :offset="5">
         <el-card :body-style="{ padding: '0px' }">
           <img src="../../assets/img/cat.jpg" class="image">
           <div style="padding: 14px;">

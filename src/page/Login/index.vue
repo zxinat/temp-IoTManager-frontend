@@ -24,7 +24,7 @@
 </template>
 
 <script>
-  import {loginApi} from './index.api';
+  import {loginApi} from '../../api/api';
   import {setCookie} from '../../../utils/package-cookies';
 export default {
   name: 'Login',

@@ -129,7 +129,7 @@
 </template>
 
 <script>
-  import {addDeviceDataApi, deleteDeviceDataApi, getDevicesDataApi, searchDeviceDataApi, updateDeviceDataApi} from './index.api';
+  import {addDeviceDataApi, deleteDeviceDataApi, getDevicesDataApi, searchDeviceDataApi, updateDeviceDataApi} from '../../api/api';
     export default {
         name: "EquipmentData",
       data() {
