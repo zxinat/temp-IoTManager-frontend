@@ -19,7 +19,14 @@
           chart:null,
           option:{
             backgroundColor: '#404a59',  		// 图表背景色
-            tooltip: {}, // 鼠标移到图里面的浮动提示框
+            tooltip: {
+              trigger: 'item',
+              formatter: function(data)//对提示框的数据自定义
+              {
+                  return data.seriesName + '<br/>' + data.name+ '：'+(data.value[2]); //将小数转化为百分数显示
+
+              }
+            }, // 鼠标移到图里面的浮动提示框
             geo: { // 这个是重点配置区
               map: 'china', // 表示中国地图
               // roam: true,
