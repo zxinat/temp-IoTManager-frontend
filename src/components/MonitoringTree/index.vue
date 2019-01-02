@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="monitoring-tree-container">
       <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
     </div>
 </template>
@@ -58,5 +58,6 @@
 </script>
 
 <style scoped>
-
+.monitoring-tree-container{
+}
 </style>
