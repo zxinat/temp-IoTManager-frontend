@@ -9,7 +9,7 @@
           <el-input v-model="searchData.deviceName"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="search">查询</el-button>
+          <el-button type="primary" @click="search"><img src="../../assets/img/find.svg">查询</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -53,12 +53,17 @@
           width="120">
         </el-table-column>
         <el-table-column
+          prop="gatewayID"
+          label="所属网关ID"
+          width="120">
+        </el-table-column>
+        <el-table-column
           prop="deviceState"
           label="设备状态"
           width="120">
         </el-table-column>
         <el-table-column
-          prop="lastConnectionTime"
+          prop="LastConnectionTime"
           label="上次连接时间"
           width="120">
         </el-table-column>
@@ -99,14 +104,8 @@
         <el-form-item label="设备类型" label-width="120px">
           <el-input v-model="updateData.deviceType" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="城市" label-width="120px">
-          <el-input v-model="updateData.city" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="工厂名称" label-width="120px">
-          <el-input v-model="updateData.factory" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="车间" label-width="120px">
-          <el-input v-model="updateData.workshop" autocomplete="off"></el-input>
+        <el-form-item label="所属网关ID" label-width="120px">
+          <el-input v-model="updateData.gatewayID" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -125,14 +124,8 @@
         <el-form-item label="设备类型" label-width="120px">
           <el-input v-model="newDeviceData.deviceType" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="城市" label-width="120px">
-          <el-input v-model="newDeviceData.city" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="工厂名称" label-width="120px">
-          <el-input v-model="newDeviceData.factory" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="车间" label-width="120px">
-          <el-input v-model="newDeviceData.workshop" autocomplete="off"></el-input>
+        <el-form-item label="所属网关ID" label-width="120px">
+          <el-input v-model="newDeviceData.gatewayID" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -161,7 +154,7 @@
             "deviceState": "",
             "lastConnectionTime": "",
             "imageUrl": "",
-            "deviceID": "",
+            "gatewayID": "",
             "mac": "",
             "deviceType": "",
             "createTime": "",

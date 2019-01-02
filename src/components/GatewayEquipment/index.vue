@@ -9,7 +9,7 @@
           <el-input v-model="searchData.gatewayName"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="search">查询</el-button>
+          <el-button type="primary" @click="search"><img src="../../assets/img/find.svg">查询</el-button>
         </el-form-item>
       </el-form>
     </div>
