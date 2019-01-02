@@ -1,20 +1,20 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from '../container/Home/index';
-import Login from '../container/Login/index';
-import Register from '../container/Register/index';
-import RegisterSuccess from '../container/RegisterSuccess/index';
+import Home from '../page/Home/index';
+import Login from '../page/Login/index';
+import Register from '../page/Register/index';
+import RegisterSuccess from '../page/RegisterSuccess/index';
 import DashBoard from '../container/DashBoard/index';
 // home页组件
-import GatewayEquipment from '../components/GatewayEquipment/index';
-import PhysicalDevice from '../components/PhysicalDevice/index';
-import EquipmentData from '../components/EquipmentData/index';
-import MonitoringConfiguration from '../components/MonitoringConfiguration/index';
-import WarningMessage from '../components/WarningMessage/index';
-import PersonalInformation from '../components/PersonalInformation/index';
-import ReportCenter from '../components/ReportCenter/index';
-import ModelTraining from '../components/ModelTraining/index';
-import IntelligentAnalysis from '../components/IntelligentAnalysis/index';
+import GatewayEquipment from '../container/GatewayEquipment/index';
+import PhysicalDevice from '../container/PhysicalDevice/index';
+import EquipmentData from '../container/EquipmentData/index';
+import MonitoringConfiguration from '../container/MonitoringConfiguration/index';
+import WarningMessage from '../container/WarningMessage/index';
+import PersonalInformation from '../container/PersonalInformation/index';
+import ReportCenter from '../container/ReportCenter/index';
+import ModelTraining from '../container/ModelTraining/index';
+import IntelligentAnalysis from '../container/IntelligentAnalysis/index';
 
 import {getCookie} from '../../utils/package-cookies';
 Vue.use(Router);
