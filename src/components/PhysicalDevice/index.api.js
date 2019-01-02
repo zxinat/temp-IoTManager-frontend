@@ -15,7 +15,7 @@ export async function updateDeviceApi(data) {
 }
 
 export async function addDeviceApi(data){
-  return await axios.post(`https://www.easy-mock.com/mock/5c22475a4e21841210a7015f/api/device/${data.hardwareDeviceID}`,{
+  return await axios.post(`https://www.easy-mock.com/mock/5c22475a4e21841210a7015f/api/device`,{
     ...data
   });
 }

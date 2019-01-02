@@ -184,6 +184,7 @@
                 message: '添加成功',
                 type: 'success'
               });
+              this.getDevices();
             }
           } catch (e) {
             this.newFormVisible = false;
@@ -196,13 +197,14 @@
             this.updateFormVisible = false;
             if (data.data.c === 200) {
               this.$message({
-                message: '添加成功',
+                message: '更新成功',
                 type: 'success'
               });
+              this.getDevices();
             }
           } catch (e) {
             this.updateFormVisible = false;
-            this.$message.error('添加设备未成功');
+            this.$message.error('更新设备未成功');
           }
         },
         async openUpdateForm(row) {//打开更新表单
@@ -220,7 +222,7 @@
                     type: 'success'
                   });
                   //再获取一次所有网关信息
-                  this.getGateways();
+                  this.getDevices();
                 }
               })
               .catch(_ => {});

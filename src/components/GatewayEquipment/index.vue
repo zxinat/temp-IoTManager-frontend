@@ -190,6 +190,7 @@
               message: '添加成功',
               type: 'success'
             });
+            this.getGateways();
           }
         } catch (e) {
           this.newFormVisible = false;
@@ -202,13 +203,14 @@
           this.updateFormVisible = false;
           if (data.data.c === 200) {
             this.$message({
-              message: '添加成功',
+              message: '更新成功',
               type: 'success'
             });
+            this.getGateways();
           }
         } catch (e) {
           this.updateFormVisible = false;
-          this.$message.error('添加网关未成功');
+          this.$message.error('更新网关未成功');
         }
       },
       async openUpdateForm(row) {//打开更新表单
