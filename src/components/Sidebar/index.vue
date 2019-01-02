@@ -6,12 +6,6 @@
         background-color="#545c64"
         text-color="#fff"
         active-text-color="#ffd04b">
-        <router-link to="/personalInformation"  class="hide-underline">
-          <el-menu-item index="1">
-            <i class="el-icon-location"></i>
-            <span>个人信息</span>
-          </el-menu-item>
-        </router-link>
         <router-link to="/dashBoard" class="hide-underline">
           <el-menu-item index="2">
             <i class="el-icon-location"></i>

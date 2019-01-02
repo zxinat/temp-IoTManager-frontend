@@ -1,40 +1,44 @@
 <template>
-    <div class="monitoring-tree-container">
-      <el-tree :data="treeData" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
-    </div>
+  <div class="monitoring-tree-container">
+    <el-tree :data="treeData" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+  </div>
 </template>
 
 <script>
-  import {getDeviceTreeApi} from '../../api/api';
-    export default {
-        name: "MonitoringTree",
-      data() {
-        return {
-          treeData: [],
-          defaultProps: {
-            children: 'children',
-            label: 'label'
-          }
-        };
-      },
-      methods: {
-        handleNodeClick(data) {
+  import {getDeviceTreeApi,getDeviceApi} from '../../api/api';
 
-        },
-        async getDeviceTree(){
-          // await this.$store.dispatch('device/setDeviceTree');
-          const data=await getDeviceTreeApi();
-          this.treeData=data.data.d;
+  export default {
+    name: "MonitoringTree",
+    data() {
+      return {
+        treeData: [],
+        defaultProps: {
+          children: 'children',
+          label: 'label'
         }
-
+      };
+    },
+    methods: {
+      async handleNodeClick(data) {
+          if(data.id){
+            const result= (await getDeviceApi(data.id)).data.d;
+            this.$store.dispatch('device/setCurrentDeviceData',result);
+          }
       },
-      mounted(){
-        this.getDeviceTree();
+      async getDeviceTree() {
+        // await this.$store.dispatch('device/setDeviceTree');
+        const data = await getDeviceTreeApi();
+        this.treeData = data.data.d;
       }
+
+    },
+    mounted() {
+      this.getDeviceTree();
     }
+  }
 </script>
 
 <style scoped>
-.monitoring-tree-container{
-}
+  .monitoring-tree-container {
+  }
 </style>

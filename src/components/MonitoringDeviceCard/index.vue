@@ -6,25 +6,24 @@
           <div slot="header" class="clearfix">
             <img src="../../assets/img/chilunzu.svg">
             <span>属性信息</span>
-            <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
           </div>
           <div  class="text item">
-            {{'设备名称：'+deviceName}}
+            {{'设备名称：'+deviceData.deviceName}}
           </div>
           <div  class="text item">
-            {{'设备编号：'+hardwareDeviceID}}
+            {{'设备编号：'+deviceData.hardwareDeviceID}}
           </div>
           <div  class="text item">
-            {{'设备类型：'+deviceType}}
+            {{'设备类型：'+deviceData.deviceType}}
           </div>
           <div  class="text item">
-            {{'东经：    '+deviceName}}
+            {{'东经：    '+deviceData.deviceName}}
           </div>
           <div  class="text item">
-            {{'北纬：    '+deviceName}}
+            {{'北纬：    '+deviceData.deviceName}}
           </div>
           <div  class="text item">
-            {{'设备状态：'+deviceState}}
+            {{'设备状态：'+deviceData.deviceState}}
           </div>
         </el-card>
       </el-col>
@@ -49,22 +48,24 @@
     name: "MonitoringDeviceCard",
     data(){
       return {
-        "id": "1",
-        "hardwareDeviceID": "001",
-        "deviceName": "设备1",
-        "city": "上海",
-        "factory": "某工厂",
-        "workshop": "某车间",
-        "deviceState": "正常",
-        "LastConnectionTime": "2018-9-9",
-        "imageUrl": "",
-        "gatewayID": "T001",
-        "mac": "",
-        "deviceType": "类型1",
-        "createTime": "2018-1-1",
-        "updateTime": "2818-9-10",
-        "remark": "描述描述"
+
       }
+    },
+    computed:{
+      deviceData:{
+        // getter
+        get: function () {
+          return this.$store.state.device.currentDeviceData;
+        },
+        // setter
+        set: function (newValue) {
+          console.log('newvalue',newValue)
+        }
+      }
+    },
+    watch:{
+    },
+    mounted(){
     }
   }
 </script>
