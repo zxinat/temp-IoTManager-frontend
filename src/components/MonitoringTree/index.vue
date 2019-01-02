@@ -22,6 +22,7 @@
 
         },
         async getDeviceTree(){
+          // await this.$store.dispatch('device/setDeviceTree');
           const data=await getDeviceTreeApi();
           this.treeData=data.data.d;
         }
