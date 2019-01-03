@@ -134,6 +134,9 @@
         <el-form-item label="车间" label-width="120px">
           <el-input v-model="newGatewayData.workshop" autocomplete="off"></el-input>
         </el-form-item>
+        <el-form-item>
+          <UploadImg></UploadImg>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="newFormVisible = false">取 消</el-button>
@@ -145,9 +148,11 @@
 
 <script>
   import {addGatewayApi, deleteGatewayApi, getGatewaysApi, searchGatewaysApi, updateGatewayApi} from '../../api/api';
+  import UploadImg from "../../components/UploadImg/index";
 
   export default {
     name: "GatewayEquipment",
+    components: {UploadImg},
     data() {
       return {
         updateFormVisible: false,

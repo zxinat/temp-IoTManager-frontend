@@ -7,7 +7,7 @@ export async function loginApi({name, pwd, type}) {
   });
 }
 export async function signupApi({name,pwd, type,}) {
-  return await axios.post('/api/signup', {
+  return await axios.post('/api/register', {
     data: {name, pwd, type,}
   });
 }
@@ -28,7 +28,7 @@ export async function updateGatewayApi(data) {
 }
 
 export async function addGatewayApi(data){
-  return await axios.post(`/api/gateway/${data.hardwareGatewayID}`,{
+  return await axios.post(`/api/gateway`,{
     ...data
   });
 }
@@ -57,9 +57,7 @@ export async function updateDeviceApi(data) {
 }
 
 export async function addDeviceApi(data){
-  return await axios.post(`/api/device`,{
-    ...data
-  });
+  return await axios.post(`/api/device`,{...data});
 }
 
 export async function searchDevicesApi(data) {

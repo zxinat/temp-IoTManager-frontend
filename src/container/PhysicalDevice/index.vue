@@ -127,6 +127,9 @@
         <el-form-item label="所属网关ID" label-width="120px">
           <el-input v-model="newDeviceData.gatewayID" autocomplete="off"></el-input>
         </el-form-item>
+        <el-form-item>
+          <UploadImg @upload="addImage"></UploadImg>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="newFormVisible = false">取 消</el-button>
@@ -138,8 +141,10 @@
 
 <script>
   import {addDeviceApi, deleteDeviceApi, getDevicesApi, searchDevicesApi, updateDeviceApi} from '../../api/api';
+  import UploadImg from "../../components/UploadImg/index";
     export default {
         name: "PhysicalDevice",
+      components: {UploadImg},
       data() {
         return {
           updateFormVisible: false,
@@ -171,12 +176,16 @@
       },
 
       methods: {
+        addImage(file){
+          this.newDeviceData.img=file;
+        },
         async search() {
           const data = await searchDevicesApi(this.searchData);
           this.tableData = data.data.d;
         },
         async add() {
           try {
+            console.log('yyy',this.newDeviceData);
             const data = await addDeviceApi(this.newDeviceData);
             this.newFormVisible = false;
             if (data.data.c === 200) {
