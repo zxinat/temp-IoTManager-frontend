@@ -47,7 +47,7 @@
         async onSubmit(){
           if(this.form.pwd===this.form.confirmPwd){
             await signupApi(this.form);
-            this.$router.push('/registerSuccess');
+            this.$router.push('/login');
           }
         }
       }
