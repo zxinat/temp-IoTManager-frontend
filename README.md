@@ -28,3 +28,4 @@ npm test
 ```
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+[图片上传方案详解](https://juejin.im/post/5c2dd1855188257c30462962?utm_source=gold_browser_extension)
