@@ -8,7 +8,8 @@
 
 <script>
   import echarts from 'echarts';
-
+  import io from 'socket.io-client';
+  const socket = io('ws://localhost:3000')
   export default {
     name: "DashboardLineChart",
     data() {
@@ -39,7 +40,7 @@
             axisTick: {
               show: false,
             },
-            data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月']
+            data: ['14:43:00', '14:43:01', '14:43:02', '14:43:03', '14:43:04', '14:43:05', '14:43:06']
           },
           yAxis: {},
           series: [{
@@ -51,41 +52,32 @@
             },
             itemStyle: {
               normal: {
-                // color: "#28ffb3",
-
               }
             },
-            // areaStyle: { //区域填充样式
-            //   normal: {
-            //     //线性渐变，前4个参数分别是x0,y0,x2,y2(范围0~1);相当于图形包围盒中的百分比。如果最后一个参数是‘true’，则该四个值是绝对像素位置。
-            //     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-            //       offset: 0,
-            //       color: 'rgba(0,154,120,1)'
-            //     },
-            //       {
-            //         offset: 1,
-            //         color: 'rgba(255,255,255,255)'
-            //       }
-            //     ], false),
-            //     shadowColor: 'rgba(53,142,215, 0.5)', //阴影颜色
-            //     shadowBlur: 20 //shadowBlur设图形阴影的模糊大小。配合shadowColor,shadowOffsetX/Y, 设置图形的阴影效果。
-            //   }
-            //
-            // },
             data: [393, 438, 485, 631, 689, 824, 987]
-          }, {
-            type: 'line',
-            name: 'humidity',
-            label: {
-              show:true
-            },
-            data: [200.500, 382, 102, 267, 186, 315, 316]
-          }]
+          },
+          //   {
+          //   type: 'line',
+          //   name: 'humidity',
+          //   label: {
+          //     show:true
+          //   },
+          //   data: [200.500, 382, 102, 267, 186, 315, 316]
+          // }
+          ]
         },
       }
     },
     mounted() {
+      socket.emit('open');
       this.initChart();
+      socket.on('updateData', data => {
+        this.option.series[0].data.shift();
+        this.option.series[0].data.push(parseInt(data.value));
+        this.option.xAxis.data.shift();
+        this.option.xAxis.data.push(data.time);
+        this.initChart();
+      })
     },
     methods: {
       initChart() {
