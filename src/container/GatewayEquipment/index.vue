@@ -135,6 +135,10 @@
           <el-input v-model="newGatewayData.workshop" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item>
+          <el-radio v-model="newGatewayData.radio" label="gateway">网关设备</el-radio>
+          <el-radio v-model="newGatewayData.radio" label="device">物理设备</el-radio>
+        </el-form-item>
+        <el-form-item>
           <UploadImg></UploadImg>
         </el-form-item>
       </el-form>
@@ -188,6 +192,7 @@
       },
       async add() {
         try {
+          console.log('add',this.newGatewayData);
           const data = await addGatewayApi(this.newGatewayData);
           this.newFormVisible = false;
           if (data.data.c === 200) {

@@ -14,7 +14,7 @@
         </span>
           <el-dropdown-menu slot="dropdown">
             <router-link to="/personalInformation" style="text-decoration: none"><el-dropdown-item>用户信息</el-dropdown-item></router-link>
-            <el-dropdown-item>设置</el-dropdown-item>
+            <!--<el-dropdown-item>设置</el-dropdown-item>-->
             <el-dropdown-item @click.native="logout">注销</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
