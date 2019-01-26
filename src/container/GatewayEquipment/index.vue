@@ -134,7 +134,7 @@
         <el-form-item label="车间" label-width="120px">
           <el-input v-model="newGatewayData.workshop" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item>
+        <el-form-item class="gateway-radio">
           <el-radio v-model="newGatewayData.radio" label="gateway">网关设备</el-radio>
           <el-radio v-model="newGatewayData.radio" label="device">物理设备</el-radio>
         </el-form-item>
@@ -262,6 +262,10 @@
   .search-container, .addbutton-container ,.table-container{
     margin:1% 1%;
     text-align: left;
+  }
+  .gateway-radio{
+    margin: 0 auto 10px;
+    width: 30%;
   }
   .add-gateway-container{
 
