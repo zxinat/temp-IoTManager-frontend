@@ -20,7 +20,12 @@
       <el-table
         :data="tableData"
         border
-        style="width: 100%">
+        style="width: 100%"
+        @selection-change="handleSelectionChange">
+        <el-table-column
+          type="selection"
+          width="55">
+        </el-table-column>
         <el-table-column
           fixed
           prop="deviceName"
@@ -96,15 +101,15 @@
       </div>
     </el-dialog>
     <el-dialog title="快速处理" :visible.sync="newFormVisible">
-      <el-form :model="newDeviceData">
+      <el-form :model="handleData">
         <el-form-item label="处理状态" label-width="120px">
-          <el-input v-model="newDeviceData.handleState" autocomplete="off"></el-input>
+          <el-input v-model="handleData.handleState" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="处理方式" label-width="120px">
-          <el-input v-model="newDeviceData.handleMethod" autocomplete="off"></el-input>
+          <el-input v-model="handleData.handleMethod" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="处理内容" label-width="120px">
-          <el-input v-model="newDeviceData.handleContent" autocomplete="off"></el-input>
+          <el-input v-model="handleData.handleContent" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -135,8 +140,9 @@
             "handleMethod":"",
             "handleContent":""
           }],
+          multipleSelection: [],
           updateData: {},
-          newDeviceData: {},
+          handleData: {},
           searchData: {
             deviceID: '',
             deviceName: ''
@@ -151,11 +157,11 @@
         },
         async handleAll() {
           try {
-            const data = await handleAllAlarmInformationApi(this.newDeviceData);
+            const data = await handleAllAlarmInformationApi(this.handleData,this.multipleSelection.map(el=>el.id));
             this.newFormVisible = false;
             if (data.data.c === 200) {
               this.$message({
-                message: '所有警报处理成功',
+                message: '已选警报处理成功',
                 type: 'success'
               });
               this.getAlarmInformation();
@@ -189,7 +195,11 @@
         async getAlarmInformation() {
           const data = await getAlarmInformationApi();
           this.tableData = data.data.d;
-        }
+        },
+        handleSelectionChange(val) {
+          console.log('change',this.multipleSelection);
+          this.multipleSelection = val;
+        },
       },
       async mounted() {
         //获取所有设备信息

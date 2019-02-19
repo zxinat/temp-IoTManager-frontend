@@ -20,6 +20,13 @@ export async function getGatewaysApi() {
 export async function deleteGatewayApi(id) {
   return await axios.delete(`/api/gateway/${id}`);
 }
+export async function deleteMultipleGatewayApi(id) {
+  return await axios.delete(`/api/multipleGateway`,{
+    params:{
+      ...id
+    }
+  });
+}
 
 export async function updateGatewayApi(data) {
   return await axios.put(`/api/gateway/${data.hardwareGatewayID}`,{
@@ -50,6 +57,16 @@ export async function deleteDeviceApi(id) {
   return await axios.delete(`/api/device/${id}`);
 }
 
+export async function deleteMultipleDeviceApi(id) {
+  return await axios.delete(`/api/multipleDevice`,{
+    params:{
+      ...id
+    }
+  });
+}
+
+
+
 export async function updateDeviceApi(data) {
   return await axios.put(`/api/device/${data.hardwareDeviceID}`,{
     ...data
@@ -67,6 +84,8 @@ export async function searchDevicesApi(data) {
     }
   });
 }
+
+
 //单个设备
 export async function getDeviceApi(id){
   return await axios.get(`/api/device/${id}`);
@@ -79,6 +98,13 @@ export async function getDevicesDataApi() {
 
 export async function deleteDeviceDataApi(id) {
   return await axios.delete(`/api/deviceData/${id}`);
+}
+export async function deleteMultipleDataApi(id) {
+  return await axios.delete(`/api/multipleDeviceData`,{
+    params:{
+      ...id
+    }
+  });
 }
 
 export async function updateDeviceDataApi(data) {
@@ -117,9 +143,12 @@ export async function updateAlarmInformationApi(data) {
   });
 }
 
-export async function handleAllAlarmInformationApi(data){
+export async function handleAllAlarmInformationApi(handleData,id){
   return await axios.post(`/api/alarmInformation`,{
-    ...data
+    handleData,
+    id:{
+      ...id
+    }
   });
 }
 

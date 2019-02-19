@@ -20,7 +20,12 @@
       <el-table
         :data="tableData"
         border
-        style="width: 100%">
+        style="width: 100%"
+        @selection-change="handleSelectionChange">
+        <el-table-column
+          type="selection"
+          width="55">
+        </el-table-column>
         <el-table-column
           fixed
           prop="hardwareGatewayID"
@@ -88,6 +93,9 @@
         </el-table-column>
       </el-table>
     </div>
+    <div class="addbutton-container">
+      <el-button type="primary" @click="multipleDelete">批量删除</el-button>
+    </div>
     <el-dialog title="修改网关" :visible.sync="updateFormVisible">
       <el-form :model="updateData">
         <el-form-item label="网关ID" label-width="120px">
@@ -151,7 +159,7 @@
 </template>
 
 <script>
-  import {addGatewayApi, deleteGatewayApi, getGatewaysApi, searchGatewaysApi, updateGatewayApi} from '../../api/api';
+  import {addGatewayApi, deleteGatewayApi, getGatewaysApi, searchGatewaysApi, updateGatewayApi,deleteMultipleGatewayApi} from '../../api/api';
   import UploadImg from "../../components/UploadImg/index";
 
   export default {
@@ -176,6 +184,7 @@
           "updateTime": "",
           "remark": ""
         }],
+        multipleSelection: [],
         updateData: {},
         newGatewayData: {},
         searchData: {
@@ -249,6 +258,29 @@
       async getGateways() {
         const data = await getGatewaysApi();
         this.tableData = data.data.d;
+      },
+      handleSelectionChange(val) {
+        console.log('change',this.multipleSelection);
+        this.multipleSelection = val;
+      },
+      async multipleDelete(){
+        try {
+          this.$confirm('确认删除？')
+            .then(async _=> {
+              const data = await deleteMultipleGatewayApi(this.multipleSelection.map(el=>el.id));
+              if (data.data.c === 200) {
+                this.$message({
+                  message: '删除成功',
+                  type: 'success'
+                });
+                //再获取一次所有网关信息
+                this.getDevices();
+              }
+            })
+            .catch(_ => {});
+        } catch (e) {
+          console.log(e)
+        }
       }
     },
     async mounted() {

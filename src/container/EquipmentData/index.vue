@@ -20,7 +20,12 @@
       <el-table
         :data="tableData"
         border
-        style="width: 100%">
+        style="width: 100%"
+        @selection-change="handleSelectionChange">
+        <el-table-column
+          type="selection"
+          width="55">
+        </el-table-column>
         <el-table-column
           fixed
           prop="ID"
@@ -72,6 +77,9 @@
           </template>
         </el-table-column>
       </el-table>
+    </div>
+    <div class="addbutton-container">
+      <el-button type="primary" @click="multipleDelete">批量删除</el-button>
     </div>
     <el-dialog title="修改数据" :visible.sync="updateFormVisible">
       <el-form :model="updateData">
@@ -129,7 +137,7 @@
 </template>
 
 <script>
-  import {addDeviceDataApi, deleteDeviceDataApi, getDevicesDataApi, searchDeviceDataApi, updateDeviceDataApi} from '../../api/api';
+  import {addDeviceDataApi, deleteDeviceDataApi, getDevicesDataApi, searchDeviceDataApi, updateDeviceDataApi,deleteMultipleDataApi} from '../../api/api';
     export default {
         name: "EquipmentData",
       data() {
@@ -146,6 +154,7 @@
             "createTime": "2018-9-9",
             "remark": "描述",
           }],
+          multipleSelection: [],
           updateData: {},
           newDeviceData: {},
           searchData: {
@@ -218,6 +227,29 @@
         async getDeviceDatas() {
           const data = await getDevicesDataApi();
           this.tableData = data.data.d;
+        },
+        handleSelectionChange(val) {
+          console.log('change',this.multipleSelection);
+          this.multipleSelection = val;
+        },
+        async multipleDelete(){
+          try {
+            this.$confirm('确认删除？')
+              .then(async _=> {
+                const data = await deleteMultipleDataApi(this.multipleSelection.map(el=>el.id));
+                if (data.data.c === 200) {
+                  this.$message({
+                    message: '删除成功',
+                    type: 'success'
+                  });
+                  //再获取一次所有网关信息
+                  this.getDevices();
+                }
+              })
+              .catch(_ => {});
+          } catch (e) {
+            console.log(e)
+          }
         }
       },
       async mounted() {
