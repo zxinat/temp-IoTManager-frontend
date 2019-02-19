@@ -1,7 +1,7 @@
 <template>
   <div class="upload-img-container">
     <div class="upload-button"><input v-on:change="saveList" class="img-input" type="file" accept="image/*"/></div>
-    <el-button type="primary" class="warp-button">choose a file</el-button>
+    <el-button type="primary" class="warp-button">选择文件</el-button>
     <div class="preview_box">
       <img class="preview" src="" alt="preview"/>
     </div>
