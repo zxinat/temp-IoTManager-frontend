@@ -32,6 +32,7 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+  /*sass加变量*/
   $nav-height: 60px;
   $sidebar-width:180px;
   .home-container{
@@ -43,7 +44,6 @@
       z-index: 99;
     }
     .sidebar-screen{
-      /*sass加变量*/
       height: calc(100% - #{$nav-height});
       .adaptive{
         top:$nav-height;
