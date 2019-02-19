@@ -5,6 +5,7 @@ import Login from '../page/Login/index';
 import Register from '../page/Register/index';
 import RegisterSuccess from '../page/RegisterSuccess/index';
 import DashBoard from '../container/DashBoard/index';
+import RoleManagement from  '../container/RoleManagement/index';
 // home页组件
 import GatewayEquipment from '../container/GatewayEquipment/index';
 import PhysicalDevice from '../container/PhysicalDevice/index';
@@ -77,6 +78,12 @@ const routes=[
           path: '/dashBoard',
           name: 'DashBoard',
           component: DashBoard
+        },
+        {
+          path: '/roleManagement',
+          name: 'RoleManagement',
+          component: RoleManagement
+
         }
       ]
     },

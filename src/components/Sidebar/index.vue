@@ -43,6 +43,12 @@
               <span>报表中心</span>
           </el-menu-item>
         </router-link>
+        <router-link to="/roleManagement"  class="hide-underline">
+          <el-menu-item index="7">
+            <i class="el-icon-location"></i>
+            <span>角色管理</span>
+          </el-menu-item>
+        </router-link>
       </el-menu>
 </template>
 
