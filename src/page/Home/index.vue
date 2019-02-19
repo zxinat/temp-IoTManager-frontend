@@ -1,15 +1,15 @@
 <template>
   <div class="home-container">
     <Navigation class="nav-screen"></Navigation>
-    <el-row class="tac sidebar-screen">
-      <el-col :span="3" class="full-screen">
+    <div class="tac sidebar-screen">
+      <div class="full-screen">
         <Sidebar class="full-screen adaptive">
         </Sidebar>
-      </el-col>
-      <el-col :span="21">
+      </div>
+      <div class="router-view">
         <router-view></router-view>
-      </el-col>
-    </el-row>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -33,20 +33,33 @@
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   $nav-height: 60px;
+  $sidebar-width:180px;
   .home-container{
     height: 100%;
     .nav-screen{
+      position: fixed;
+      width: 100%;
       height: $nav-height;
+      z-index: 99;
     }
     .sidebar-screen{
       /*sass加变量*/
       height: calc(100% - #{$nav-height});
       .adaptive{
+        top:$nav-height;
+        position: fixed;
+        width: $sidebar-width;
         min-width: 130px;
       }
     }
   }
   .full-screen{
     height: 100%;
+  }
+  .router-view{
+    position: absolute;
+    top:$nav-height;
+    right: 0;
+    width: calc(100% - #{$sidebar-width});;
   }
 </style>
