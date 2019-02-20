@@ -135,6 +135,27 @@
         <el-form-item label="所属网关ID" label-width="120px">
           <el-input v-model="newDeviceData.gatewayID" autocomplete="off"></el-input>
         </el-form-item>
+        <el-form-item class="tag-center">
+          <el-tag
+            :key="tag"
+            v-for="tag in newDeviceData.dynamicTags"
+            closable
+            :disable-transitions="false"
+            @close="handleClose(tag)">
+            {{tag}}
+          </el-tag>
+          <el-input
+            class="input-new-tag"
+            v-if="newDeviceData.inputVisible"
+            v-model="newDeviceData.inputValue"
+            ref="saveTagInput"
+            size="small"
+            @keyup.enter.native="handleInputConfirm"
+            @blur="handleInputConfirm"
+          >
+          </el-input>
+          <el-button v-else class="button-new-tag" size="small" @click="showInput">+</el-button>
+        </el-form-item>
         <el-form-item>
           <UploadImg @upload="addImage"></UploadImg>
         </el-form-item>
@@ -176,7 +197,12 @@
           }],
           multipleSelection: [],
           updateData: {},
-          newDeviceData: {},
+          newDeviceData: {
+            // 标签
+            inputVisible: false,
+            inputValue: '',
+            dynamicTags: ['标签一', '标签二', '标签三'],
+          },
           searchData: {
             deviceID: '',
             deviceName: ''
@@ -256,11 +282,11 @@
           console.log('change',this.multipleSelection);
           this.multipleSelection = val;
         },
-        async multipleDelete(){
+        async multipleDelete() {
           try {
             this.$confirm('确认删除？')
-              .then(async _=> {
-                const data = await deleteMultipleDeviceApi(this.multipleSelection.map(el=>el.id));
+              .then(async _ => {
+                const data = await deleteMultipleDeviceApi(this.multipleSelection.map(el => el.id));
                 if (data.data.c === 200) {
                   this.$message({
                     message: '删除成功',
@@ -270,10 +296,31 @@
                   this.getDevices();
                 }
               })
-              .catch(_ => {});
+              .catch(_ => {
+              });
           } catch (e) {
             console.log(e)
           }
+        },
+        // 标签处理函数
+        handleClose(tag) {
+          this.newDeviceData.dynamicTags.splice(this.newDeviceData.dynamicTags.indexOf(tag), 1);
+        },
+
+        showInput() {
+          this.newDeviceData.inputVisible = true;
+          this.$nextTick(_ => {
+            this.$refs.saveTagInput.$refs.input.focus();
+          });
+        },
+
+        handleInputConfirm() {
+          let inputValue = this.newDeviceData.inputValue;
+          if (inputValue) {
+            this.newDeviceData.dynamicTags.push(inputValue);
+          }
+          this.newDeviceData.inputVisible = false;
+          this.newDeviceData.inputValue = '';
         }
       },
       async mounted() {
@@ -290,5 +337,24 @@
   }
   .add-device-container{
 
+  }
+  /*标签处理*/
+  .el-tag + .el-tag {
+    margin-left: 10px;
+  }
+  .button-new-tag {
+    margin-left: 10px;
+    height: 32px;
+    line-height: 30px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .input-new-tag {
+    width: 90px;
+    margin-left: 10px;
+    vertical-align: bottom;
+  }
+  .tag-center{
+    text-align: center;
   }
 </style>

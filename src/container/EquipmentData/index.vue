@@ -127,6 +127,27 @@
         <el-form-item label="描述" label-width="120px">
           <el-input v-model="newDeviceData.remark" autocomplete="off"></el-input>
         </el-form-item>
+        <el-form-item class="tag-center">
+          <el-tag
+            :key="tag"
+            v-for="tag in newDeviceData.dynamicTags"
+            closable
+            :disable-transitions="false"
+            @close="handleClose(tag)">
+            {{tag}}
+          </el-tag>
+          <el-input
+            class="input-new-tag"
+            v-if="newDeviceData.inputVisible"
+            v-model="newDeviceData.inputValue"
+            ref="saveTagInput"
+            size="small"
+            @keyup.enter.native="handleInputConfirm"
+            @blur="handleInputConfirm"
+          >
+          </el-input>
+          <el-button v-else class="button-new-tag" size="small" @click="showInput">+</el-button>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="newFormVisible = false">取 消</el-button>
@@ -156,7 +177,12 @@
           }],
           multipleSelection: [],
           updateData: {},
-          newDeviceData: {},
+          newDeviceData: {
+            // 标签
+            inputVisible: false,
+            inputValue: '',
+            dynamicTags: ['标签一', '标签二', '标签三'],
+          },
           searchData: {
             deviceID: '',
             deviceName: ''
@@ -250,6 +276,26 @@
           } catch (e) {
             console.log(e)
           }
+        },
+        // 标签处理函数
+        handleClose(tag) {
+          this.newDeviceData.dynamicTags.splice(this.newDeviceData.dynamicTags.indexOf(tag), 1);
+        },
+
+        showInput() {
+          this.newDeviceData.inputVisible = true;
+          this.$nextTick(_ => {
+            this.$refs.saveTagInput.$refs.input.focus();
+          });
+        },
+
+        handleInputConfirm() {
+          let inputValue = this.newDeviceData.inputValue;
+          if (inputValue) {
+            this.newDeviceData.dynamicTags.push(inputValue);
+          }
+          this.newDeviceData.inputVisible = false;
+          this.newDeviceData.inputValue = '';
         }
       },
       async mounted() {
@@ -266,5 +312,24 @@
   }
   .add-device-container{
 
+  }
+  /*标签处理*/
+  .el-tag + .el-tag {
+    margin-left: 10px;
+  }
+  .button-new-tag {
+    margin-left: 10px;
+    height: 32px;
+    line-height: 30px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .input-new-tag {
+    width: 90px;
+    margin-left: 10px;
+    vertical-align: bottom;
+  }
+  .tag-center{
+    text-align: center;
   }
 </style>

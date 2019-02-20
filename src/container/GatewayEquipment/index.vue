@@ -142,6 +142,27 @@
         <el-form-item label="车间" label-width="120px">
           <el-input v-model="newGatewayData.workshop" autocomplete="off"></el-input>
         </el-form-item>
+        <el-form-item class="tag-center">
+          <el-tag
+            :key="tag"
+            v-for="tag in newGatewayData.dynamicTags"
+            closable
+            :disable-transitions="false"
+            @close="handleClose(tag)">
+            {{tag}}
+          </el-tag>
+          <el-input
+            class="input-new-tag"
+            v-if="newGatewayData.inputVisible"
+            v-model="newGatewayData.inputValue"
+            ref="saveTagInput"
+            size="small"
+            @keyup.enter.native="handleInputConfirm"
+            @blur="handleInputConfirm"
+          >
+          </el-input>
+          <el-button v-else class="button-new-tag" size="small" @click="showInput">+</el-button>
+        </el-form-item>
         <el-form-item class="gateway-radio">
           <el-radio v-model="newGatewayData.radio" label="gateway">网关设备</el-radio>
           <el-radio v-model="newGatewayData.radio" label="device">物理设备</el-radio>
@@ -186,11 +207,16 @@
         }],
         multipleSelection: [],
         updateData: {},
-        newGatewayData: {},
+        newGatewayData: {
+          // 标签
+          inputVisible: false,
+          inputValue: '',
+          dynamicTags: ['标签一', '标签二', '标签三'],
+        },
         searchData: {
           gatewayID: '',
           gatewayName: ''
-        }
+        },
       }
     },
 
@@ -281,6 +307,26 @@
         } catch (e) {
           console.log(e)
         }
+      },
+      // 标签处理函数
+      handleClose(tag) {
+        this.newGatewayData.dynamicTags.splice(this.newGatewayData.dynamicTags.indexOf(tag), 1);
+      },
+
+      showInput() {
+        this.newGatewayData.inputVisible = true;
+        this.$nextTick(_ => {
+          this.$refs.saveTagInput.$refs.input.focus();
+        });
+      },
+
+      handleInputConfirm() {
+        let inputValue = this.newGatewayData.inputValue;
+        if (inputValue) {
+          this.newGatewayData.dynamicTags.push(inputValue);
+        }
+        this.newGatewayData.inputVisible = false;
+        this.newGatewayData.inputValue = '';
       }
     },
     async mounted() {
@@ -301,5 +347,24 @@
   }
   .add-gateway-container{
 
+  }
+  /*标签处理*/
+  .el-tag + .el-tag {
+    margin-left: 10px;
+  }
+  .button-new-tag {
+    margin-left: 10px;
+    height: 32px;
+    line-height: 30px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .input-new-tag {
+    width: 90px;
+    margin-left: 10px;
+    vertical-align: bottom;
+  }
+  .tag-center{
+    text-align: center;
   }
 </style>
