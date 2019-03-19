@@ -1,19 +1,47 @@
 <template>
-  <div class="dashboard-line-chart-container">
+  <div class="dashboard-line-chart">
+    <div class="selector-container">
+      设备
+      <el-select v-model="deviceSelectorValue" placeholder="请选择设备">
+        <el-option
+          v-for="item in deviceSelectorOptions"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
+      </el-select>
+      属性
+      <el-select v-model="propertySelectorValue" multiple placeholder="请选择属性">
+        <el-option
+          v-for="item in propertySelectorOptions"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
+      </el-select>
+      <el-button type="primary" plain @click="searchLineChartData">确认</el-button>
+    </div>
+    <div class="dashboard-line-chart-container">
     <!--<h2>-->
     <!--折线图-->
     <!--</h2>-->
+    </div>
   </div>
 </template>
 
 <script>
   import echarts from 'echarts';
   import io from 'socket.io-client';
+  import {getDevicesApi,getDeviceProperty,getDevicePropertyData} from '../../api/api';
   const socket = io('ws://localhost:3000')
   export default {
     name: "DashboardLineChart",
     data() {
       return {
+        deviceSelectorOptions: [],
+        deviceSelectorValue: '',
+        propertySelectorOptions: [],
+        propertySelectorValue: [],
         chart: null,
         option: {
           title: {
@@ -21,8 +49,10 @@
           },
           tooltip: {},
           legend: {
-            itemGap: 50,
-            data: ['temperature', 'humidity'],
+            itemGap: 25,
+            data: [
+              // 'temperature', 'humidity'
+            ],
           },
           xAxis: {
             type: 'category',
@@ -43,19 +73,20 @@
             data: ['14:43:00', '14:43:01', '14:43:02', '14:43:03', '14:43:04', '14:43:05', '14:43:06']
           },
           yAxis: {},
-          series: [{
-            type: 'line',
-            name: 'temperature',
-            label: {
-              show: true,
-              // position: 'top'
-            },
-            itemStyle: {
-              normal: {
-              }
-            },
-            data: [393, 438, 485, 631, 689, 824, 987]
-          },
+          series: [
+            // {
+          //   type: 'line',
+          //   name: 'temperature',
+          //   label: {
+          //     show: true,
+          //     // position: 'top'
+          //   },
+          //   itemStyle: {
+          //     normal: {
+          //     }
+          //   },
+          //   data: [393, 438, 485, 631, 689, 824, 987]
+          // },
           //   {
           //   type: 'line',
           //   name: 'humidity',
@@ -68,7 +99,7 @@
         },
       }
     },
-    mounted() {
+    async mounted() {
       socket.emit('open');
       this.initChart();
       socket.on('updateData', data => {
@@ -77,7 +108,22 @@
         this.option.xAxis.data.shift();
         this.option.xAxis.data.push(data.time);
         this.initChart();
-      })
+      });
+      this.deviceSelectorOptions=((await getDevicesApi()).data.d).map(el=>{
+        return {
+          value: el.hardwareDeviceID,
+          label: el.deviceName}
+      });
+    },
+    watch:{
+      async 'deviceSelectorValue'(newVal,oldVal){
+        // console.log('manmantest',newVal);
+        this.propertySelectorOptions=((await getDeviceProperty(newVal)).data.d).map(el=>{
+          return {
+            value: el.devicePropertyId,
+            label: el.propertyName}
+        });
+      }
     },
     methods: {
       initChart() {
@@ -85,6 +131,30 @@
         // 把配置和数据放这里
         console.log(this.option);
         this.chart.setOption(this.option)
+      },
+      async searchLineChartData(){
+        if(this.deviceSelectorValue&&this.propertySelectorValue){
+          //获取数据
+          let result= (await getDevicePropertyData(this.deviceSelectorValue,this.propertySelectorValue)).data.d;
+          console.log('manman',result);
+          this.option.series=result.map(el=>{
+            return {
+              type: 'line',
+              name: el.name,
+              label: {
+                show:true
+              },
+              data: el.data
+            }
+          });
+          this.option.legend.data=result.map(el=>{
+            return el.name;
+          });
+          this.initChart();
+        }
+
+        // this.initChart();
+
       }
     },
     beforeDestroy() {
@@ -99,6 +169,9 @@
 
 <style lang="scss" scoped>
   @import "../../assets/scss/variaties";
+  .selector-container{
+    margin: 10px 0 10px 10px
+  }
   .dashboard-line-chart-container {
     height: $dashboard-block-height;
     /*padding-top: 10px;*/

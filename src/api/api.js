@@ -11,6 +11,16 @@ export async function signupApi({name,pwd, type,}) {
     data: {name, pwd, type,}
   });
 }
+//折线图
+export async function getDeviceProperty(id) {
+  return await axios.get(`api/deviceProperty/${id}`);
+
+}
+export async function getDevicePropertyData(deviceid,propertyid) {
+  return await axios.get(`/api/devicePropertyData/${deviceid}/${propertyid}`);
+
+}
+
 
 //网关管理
 export async function getGatewaysApi() {
