@@ -259,7 +259,9 @@
           try {
             this.$confirm('确认删除？')
               .then(async _=> {
-                const data = await deleteDeviceApi(row.hardwareDeviceID);
+                console.log(row);
+                console.log(row.id);
+                const data = await deleteDeviceApi(row.id);
                 if (data.data.c === 200) {
                   this.$message({
                     message: '删除成功',

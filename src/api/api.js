@@ -1,5 +1,6 @@
 import axios from "axios";
 axios.defaults.baseURL='https://www.easy-mock.com/mock/5c22475a4e21841210a7015f';
+//axios.defaults.baseURL='http://localhost:5001';
 //登陆注册
 export async function loginApi({name, pwd, type}) {
   return await axios.post('/api/login', {
