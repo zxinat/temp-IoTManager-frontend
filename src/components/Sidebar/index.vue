@@ -37,12 +37,18 @@
           <router-link to="/modelTraining"  class="hide-underline"><el-menu-item index="5-1">模型训练</el-menu-item></router-link>
           <router-link to="/intelligentAnalysis"  class="hide-underline"><el-menu-item index="5-2">智能分析</el-menu-item></router-link>
         </el-submenu>
-        <router-link to="/reportCenter"  class="hide-underline">
-          <el-menu-item index="6">
-              <i class="el-icon-location"></i>
-              <span>报表中心</span>
-          </el-menu-item>
-        </router-link>
+        <el-submenu index="6">
+          <template slot="title">
+            <i class="el-icon-location"></i>
+            <span>报表中心</span>
+          </template>
+          <router-link to="/reportCenter"  class="hide-underline"><el-menu-item index="6-1">概览</el-menu-item></router-link>
+          <router-link to="/ReportStaticDaily"  class="hide-underline"><el-menu-item index="6-2">按日费用统计</el-menu-item></router-link>
+          <router-link to="/ReportStaticMonthly"  class="hide-underline"><el-menu-item index="6-3">按月费用统计</el-menu-item></router-link>
+          <router-link to="/ReportStaticByCategory"  class="hide-underline"><el-menu-item index="6-4">按资源类别费用统计</el-menu-item></router-link>
+          <router-link to="/ReportStaticBySubscribe"  class="hide-underline"><el-menu-item index="6-5">按订阅费用统计</el-menu-item></router-link>
+          <router-link to="/ReportOfMonthlyExpense"  class="hide-underline"><el-menu-item index="6-6">月度费用报告</el-menu-item></router-link>
+        </el-submenu>
         <router-link to="/roleManagement"  class="hide-underline">
           <el-menu-item index="7">
             <i class="el-icon-location"></i>

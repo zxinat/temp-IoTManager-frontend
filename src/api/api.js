@@ -170,3 +170,98 @@ export async function searchAlarmInformationApi(data) {
     }
   });
 }
+
+// 报表中心
+// 概览
+export function getReportStaticIndexHistogram1() {
+  return axios.get('/api/ReportStaticIndexHistogram1');
+}
+export function getReportStaticIndexPieChart1() {
+  return axios.get('/api/ReportStaticIndexPieChart1');
+}
+export function getReportStaticIndexHistogram2() {
+  return axios.get('/api/ReportStaticIndexHistogram2');
+}
+export function getReportStaticIndexPieChart2() {
+  return axios.get('/api/ReportStaticIndexPieChart2');
+}
+// 按天统计
+export function getReportStaticDailyHistogram(selectedType,selectedSource,time) {
+  return axios.get('/api/ReportStaticDailyHistogram',{
+    selectedType:selectedType,
+    selectedSource:selectedSource,
+    time:time
+  });
+}
+
+export function getReportStaticDaithlyPieChart(selectedType,selectedSource,time) {
+  return axios.get('/api/ReportStaticDailyPieChart',{
+    selectedType:selectedType,
+    selectedSource:selectedSource,
+    time:time
+  });
+}
+// 按月统计
+export function getReportStaticMonthlyHistogram(selectedType,selectedSource,time) {
+  return axios.get('/api/ReportStaticMonthlyHistogram',{
+    selectedType:selectedType,
+    selectedSource:selectedSource,
+    time:time
+  });
+}
+
+export function getReportStaticMonthlyPieChart(selectedType,selectedSource,time) {
+  return axios.get('/api/ReportStaticMonthlyPieChart',{
+    selectedType:selectedType,
+    selectedSource:selectedSource,
+    time:time
+  });
+}
+// 按资源类别费用统计
+export function getReportStaticByCategoryTable(selectedType,selectedSource,time) {
+  return axios.get('/api/ReportStaticByCategoryTable',{
+    selectedType:selectedType,
+    selectedSource:selectedSource,
+    time:time
+  });
+}
+export function getReportStaticByCategoryTypeHistogram(selectedType,selectedSource,time) {
+  return axios.get('/api/ReportStaticByCategoryTypeHistogram',{
+    selectedType:selectedType,
+    selectedSource:selectedSource,
+    time:time
+  });
+}
+export function getReportStaticByCategorySubClassHistogram(selectedType,selectedSource,time) {
+  return axios.get('/api/gReportStaticByCategorySubClassHistogram',{
+    selectedType:selectedType,
+    selectedSource:selectedSource,
+    time:time
+  });
+}
+
+
+
+// 按订阅费用统计
+export function getReportStaticBySubscribe(year) {
+  return axios.get('/api/ReportStaticBySubscribe',{
+    params:{
+      year:year
+    }
+  });
+}
+
+// 月度费用报告
+export function getReportOfMonthlyExpense() {
+  return axios.get('/api/getReportOfMonthlyExpense');
+}
+
+
+export function checkMonthlyReport(order,date) {
+  return axios.get('/api/checkMonthlyReport',{
+    params:{
+      order:order,
+      date:date
+    }
+  });
+}

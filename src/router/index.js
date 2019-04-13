@@ -4,9 +4,9 @@ import Home from '../page/Home/index';
 import Login from '../page/Login/index';
 import Register from '../page/Register/index';
 import RegisterSuccess from '../page/RegisterSuccess/index';
+// home页组件
 import DashBoard from '../container/DashBoard/index';
 import RoleManagement from  '../container/RoleManagement/index';
-// home页组件
 import GatewayEquipment from '../container/GatewayEquipment/index';
 import PhysicalDevice from '../container/PhysicalDevice/index';
 import EquipmentData from '../container/EquipmentData/index';
@@ -16,6 +16,11 @@ import PersonalInformation from '../container/PersonalInformation/index';
 import ReportCenter from '../container/ReportCenter/index';
 import ModelTraining from '../container/ModelTraining/index';
 import IntelligentAnalysis from '../container/IntelligentAnalysis/index';
+import ReportStaticDaily from  '../container/ReportStaticDaily';
+import ReportStaticMonthly from '../container/ReportStaticMonthly';
+import ReportStaticByCategory from '../container/ReportStaticByCategory';
+import ReportStaticBySubscribe from '../container/ReportStaticBySubscribe';
+import ReportOfMonthlyExpense from '../container/ReportOfMonthlyExpense';
 
 import {getCookie} from '../../utils/package-cookies';
 Vue.use(Router);
@@ -63,6 +68,30 @@ const routes=[
           path: '/reportCenter',
           name: 'ReportCenter',
           component: ReportCenter
+        },
+        {
+          path: '/ReportStaticDaily',
+          name: 'ReportStaticDaily',
+          component: ReportStaticDaily
+        },{
+          path: '/ReportStaticMonthly',
+          name: 'ReportStaticMonthly',
+          component: ReportStaticMonthly
+        },
+        {
+          path:'/ReportStaticByCategory',
+          name: 'ReportStaticByCategory',
+          component: ReportStaticByCategory
+        },
+        {
+          path:'/ReportStaticBySubscribe',
+          name: 'ReportStaticBySubscribe',
+          component: ReportStaticBySubscribe
+        },
+        {
+          path:'/ReportOfMonthlyExpense',
+          name: 'ReportOfMonthlyExpense',
+          component: ReportOfMonthlyExpense
         },
         {
           path: '/modelTraining',
