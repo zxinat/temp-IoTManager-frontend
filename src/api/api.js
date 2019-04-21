@@ -2,57 +2,57 @@ import axios from "axios";
 axios.defaults.baseURL='https://www.easy-mock.com/mock/5c22475a4e21841210a7015f';
 //axios.defaults.baseURL='http://localhost:5001';
 //登陆注册
-export async function loginApi({name, pwd, type}) {
-  return await axios.post('/api/login', {
+export  function loginApi({name, pwd, type}) {
+  return  axios.post('/api/login', {
     data: {name, pwd, type,}
   });
 }
-export async function signupApi({name,pwd, type,}) {
-  return await axios.post('/api/register', {
+export  function signupApi({name,pwd, type,}) {
+  return  axios.post('/api/register', {
     data: {name, pwd, type,}
   });
 }
 //折线图
-export async function getDeviceProperty(id) {
-  return await axios.get(`api/deviceProperty/${id}`);
+export  function getDeviceProperty(id) {
+  return  axios.get(`api/deviceProperty/${id}`);
 
 }
-export async function getDevicePropertyData(deviceid,propertyid) {
-  return await axios.get(`/api/devicePropertyData/${deviceid}/${propertyid}`);
+export  function getDevicePropertyData(deviceid,propertyid) {
+  return  axios.get(`/api/devicePropertyData/${deviceid}/${propertyid}`);
 
 }
 
 
 //网关管理
-export async function getGatewaysApi() {
-  return await axios.get('/api/gateway');
+export  function getGatewaysApi() {
+  return  axios.get('/api/gateway');
 }
 
-export async function deleteGatewayApi(id) {
-  return await axios.delete(`/api/gateway/${id}`);
+export  function deleteGatewayApi(id) {
+  return  axios.delete(`/api/gateway/${id}`);
 }
-export async function deleteMultipleGatewayApi(id) {
-  return await axios.delete(`/api/multipleGateway`,{
+export  function deleteMultipleGatewayApi(id) {
+  return  axios.delete(`/api/multipleGateway`,{
     params:{
       ...id
     }
   });
 }
 
-export async function updateGatewayApi(data) {
-  return await axios.put(`/api/gateway/${data.hardwareGatewayID}`,{
+export  function updateGatewayApi(data) {
+  return  axios.put(`/api/gateway/${data.hardwareGatewayID}`,{
     ...data
   });
 }
 
-export async function addGatewayApi(data){
-  return await axios.post(`/api/gateway`,{
+export  function addGatewayApi(data){
+  return  axios.post(`/api/gateway`,{
     ...data
   });
 }
 
-export async function searchGatewaysApi(data) {
-  return await axios.get('/api/gateway',{
+export  function searchGatewaysApi(data) {
+  return  axios.get('/api/gateway',{
     params:{
       ...data
     }
@@ -60,16 +60,16 @@ export async function searchGatewaysApi(data) {
 }
 
 //设备管理
-export async function getDevicesApi() {
-  return await axios.get('/api/device');
+export  function getDevicesApi() {
+  return  axios.get('/api/device');
 }
 
-export async function deleteDeviceApi(id) {
-  return await axios.delete(`/api/device/${id}`);
+export  function deleteDeviceApi(id) {
+  return  axios.delete(`/api/device/${id}`);
 }
 
-export async function deleteMultipleDeviceApi(id) {
-  return await axios.delete(`/api/multipleDevice`,{
+export  function deleteMultipleDeviceApi(id) {
+  return  axios.delete(`/api/multipleDevice`,{
     params:{
       ...id
     }
@@ -78,18 +78,18 @@ export async function deleteMultipleDeviceApi(id) {
 
 
 
-export async function updateDeviceApi(data) {
-  return await axios.put(`/api/device/${data.hardwareDeviceID}`,{
+export  function updateDeviceApi(data) {
+  return  axios.put(`/api/device/${data.hardwareDeviceID}`,{
     ...data
   });
 }
 
-export async function addDeviceApi(data){
-  return await axios.post(`/api/device`,{...data});
+export  function addDeviceApi(data){
+  return  axios.post(`/api/device`,{...data});
 }
 
-export async function searchDevicesApi(data) {
-  return await axios.get('/api/device',{
+export  function searchDevicesApi(data) {
+  return  axios.get('/api/device',{
     params:{
       ...data
     }
@@ -98,41 +98,41 @@ export async function searchDevicesApi(data) {
 
 
 //单个设备
-export async function getDeviceApi(id){
-  return await axios.get(`/api/device/${id}`);
+export  function getDeviceApi(id){
+  return  axios.get(`/api/device/${id}`);
 }
 
 //设备数据
-export async function getDevicesDataApi() {
-  return await axios.get('/api/deviceData');
+export  function getDevicesDataApi() {
+  return  axios.get('/api/deviceData');
 }
 
-export async function deleteDeviceDataApi(id) {
-  return await axios.delete(`/api/deviceData/${id}`);
+export  function deleteDeviceDataApi(id) {
+  return  axios.delete(`/api/deviceData/${id}`);
 }
-export async function deleteMultipleDataApi(id) {
-  return await axios.delete(`/api/multipleDeviceData`,{
+export  function deleteMultipleDataApi(id) {
+  return  axios.delete(`/api/multipleDeviceData`,{
     params:{
       ...id
     }
   });
 }
 
-export async function updateDeviceDataApi(data) {
+export  function updateDeviceDataApi(data) {
   console.log(data);
-  return await axios.put(`/api/deviceData/${data.ID}`,{
+  return  axios.put(`/api/deviceData/${data.ID}`,{
     ...data
   });
 }
 
-export async function addDeviceDataApi(data){
-  return await axios.post(`/api/device`,{
+export  function addDeviceDataApi(data){
+  return  axios.post(`/api/device`,{
     ...data
   });
 }
 
-export async function searchDeviceDataApi(data) {
-  return await axios.get('/api/deviceData',{
+export  function searchDeviceDataApi(data) {
+  return  axios.get('/api/deviceData',{
     params:{
       ...data
     }
@@ -140,22 +140,22 @@ export async function searchDeviceDataApi(data) {
 }
 
 //监控
-export async function getDeviceTreeApi() {
-  return await axios.get('/api/deviceTree');
+export  function getDeviceTreeApi() {
+  return  axios.get('/api/deviceTree');
 }
 
 //告警信息
-export async function getAlarmInformationApi() {
-  return await axios.get('/api/alarmInformation');
+export  function getAlarmInformationApi() {
+  return  axios.get('/api/alarmInformation');
 }
-export async function updateAlarmInformationApi(data) {
-  return await axios.put(`/api/alarmInformation/${data.id}`,{
+export  function updateAlarmInformationApi(data) {
+  return  axios.put(`/api/alarmInformation/${data.id}`,{
     ...data
   });
 }
 
-export async function handleAllAlarmInformationApi(handleData,id){
-  return await axios.post(`/api/alarmInformation`,{
+export  function handleAllAlarmInformationApi(handleData,id){
+  return  axios.post(`/api/alarmInformation`,{
     handleData,
     id:{
       ...id
@@ -163,8 +163,8 @@ export async function handleAllAlarmInformationApi(handleData,id){
   });
 }
 
-export async function searchAlarmInformationApi(data) {
-  return await axios.get('/api/alarmInformation',{
+export  function searchAlarmInformationApi(data) {
+  return  axios.get('/api/alarmInformation',{
     params:{
       ...data
     }
@@ -264,4 +264,42 @@ export function checkMonthlyReport(order,date) {
       date:date
     }
   });
+}
+// 用户管理
+export function getAllDepartments() {
+  return axios.get('/api/getAllDepartments');
+}
+
+export function getUserTable(username,depart) {
+  return axios.get('/api/getUserTable',{
+    params:{
+      username:username,
+      depart:depart
+    }
+  });
+}
+
+export function deleteUser(userID) {
+  return axios.delete(`/api/deleteUser/${userID}`)
+}
+
+export function getAllAuthorities() {
+  return axios.get('/api/getAllAuthorities');
+}
+
+export function getAuthorities(userID) {
+  return axios.get(`/api/getAuthorities/${userID}`)
+}
+
+export function editAuthorities(userID,options) {
+  return axios.post(`/api/editAuthorities`,{
+    userID,
+    options:options
+  })
+}
+
+export function createNewUser(userInfo) {
+  return axios.post(`/api/createNewUser`,{
+    userInfo
+  })
 }
