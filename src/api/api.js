@@ -1,6 +1,6 @@
 import axios from "axios";
-axios.defaults.baseURL='https://www.easy-mock.com/mock/5c22475a4e21841210a7015f';
-//axios.defaults.baseURL='http://localhost:5001';
+//axios.defaults.baseURL='https://www.easy-mock.com/mock/5c22475a4e21841210a7015f';
+axios.defaults.baseURL='https://localhost:44373';
 //登陆注册
 export  function loginApi({name, pwd, type}) {
   return  axios.post('/api/login', {
@@ -40,7 +40,7 @@ export  function deleteMultipleGatewayApi(id) {
 }
 
 export  function updateGatewayApi(data) {
-  return  axios.put(`/api/gateway/${data.hardwareGatewayID}`,{
+  return  axios.put(`/api/gateway/${data.id}`,{
     ...data
   });
 }
@@ -79,7 +79,7 @@ export  function deleteMultipleDeviceApi(id) {
 
 
 export  function updateDeviceApi(data) {
-  return  axios.put(`/api/device/${data.hardwareDeviceID}`,{
+  return  axios.put(`/api/device/${data.id}`,{
     ...data
   });
 }
@@ -118,9 +118,9 @@ export  function deleteMultipleDataApi(id) {
   });
 }
 
-export  function updateDeviceDataApi(data) {
+export  function updateDeviceDataApi(data) {//
   console.log(data);
-  return  axios.put(`/api/deviceData/${data.ID}`,{
+  return  axios.put(`/api/deviceData/${data.id}`,{
     ...data
   });
 }
