@@ -266,40 +266,42 @@ export function checkMonthlyReport(order,date) {
   });
 }
 // 用户管理
+// 获取所有部门 下拉框要用
 export function getAllDepartments() {
   return axios.get('/api/getAllDepartments');
 }
+// crud
 
+// 增加新用户
+export function createNewUser(userInfo) {
+  return axios.post(`/api/user`,{
+    userInfo
+  })
+}
+// 获取用户信息表，如果没有传参数就是获取全部
 export function getUserTable(username,depart) {
-  return axios.get('/api/getUserTable',{
+  return axios.get('/api/user',{
     params:{
       username:username,
       depart:depart
     }
   });
 }
-
+// 删除用户
 export function deleteUser(userID) {
   return axios.delete(`/api/deleteUser/${userID}`)
 }
-
-export function getAllAuthorities() {
-  return axios.get('/api/getAllAuthorities');
-}
-
-export function getAuthorities(userID) {
-  return axios.get(`/api/getAuthorities/${userID}`)
-}
-
+//  修改用户(一般改权限，传参用户id和权限名的数组)
 export function editAuthorities(userID,options) {
   return axios.post(`/api/editAuthorities`,{
     userID,
     options:options
   })
 }
+export function getAllAuthorities() {
+  return axios.get('/api/getAllAuthorities');
+}
 
-export function createNewUser(userInfo) {
-  return axios.post(`/api/createNewUser`,{
-    userInfo
-  })
+export function getAuthorities(userID) {
+  return axios.get(`/api/getAuthorities/${userID}`)
 }
