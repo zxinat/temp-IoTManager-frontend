@@ -113,7 +113,7 @@
     </div>
     <el-dialog title="修改设备" :visible.sync="updateFormVisible">
       <el-form :model="updateData">
-        <el-form-item label="设备ID" label-width="120px">
+        <el-form-item label="设备编号" label-width="120px">
           <el-input v-model="updateData.hardwareDeviceID" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="设备名称" label-width="120px">
@@ -162,7 +162,7 @@
         <el-form-item label="设备图像链接" label-width="120px">
           <el-input v-model="updateData.imageUrl" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="所属网关ID" label-width="120px">
+        <el-form-item label="所属网关编号" label-width="120px">
           <el-input v-model="updateData.gatewayID" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="MAC地址" label-width="120px">
@@ -202,7 +202,7 @@
     </el-dialog>
     <el-dialog title="新增设备" :visible.sync="newFormVisible">
       <el-form :model="newDeviceData">
-        <el-form-item label="设备ID" label-width="120px">
+        <el-form-item label="设备编号" label-width="120px">
           <el-input v-model="newDeviceData.hardwareDeviceID" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="设备名称" label-width="120px">
@@ -251,7 +251,7 @@
         <el-form-item label="设备图像链接" label-width="120px">
           <el-input v-model="newDeviceData.imageUrl" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="所属网关ID" label-width="120px">
+        <el-form-item label="所属网关编号" label-width="120px">
           <el-input v-model="newDeviceData.gatewayID" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="MAC地址" label-width="120px">

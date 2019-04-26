@@ -2,7 +2,7 @@
   <div>
     <div class="search-container">
       <el-form :inline="true" :model="searchData" class="demo-form-inline">
-        <el-form-item label="网关ID">
+        <el-form-item label="网关编号">
           <el-input v-model="searchData.hardwareGatewayID"></el-input>
         </el-form-item>
         <el-form-item label="网关名称">
@@ -29,7 +29,7 @@
         <el-table-column
           fixed
           prop="hardwareGatewayID"
-          label="网关id"
+          label="网关编号"
           width="120">
         </el-table-column>
         <el-table-column
@@ -98,7 +98,7 @@
     </div>
     <el-dialog title="修改网关" :visible.sync="updateFormVisible">
       <el-form :model="updateData">
-        <el-form-item label="网关ID" label-width="120px">
+        <el-form-item label="网关编号" label-width="120px">
           <el-input v-model="updateData.hardwareGatewayID" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="网关名称" label-width="120px">
@@ -124,7 +124,7 @@
     </el-dialog>
     <el-dialog title="新增网关" :visible.sync="newFormVisible">
       <el-form :model="newGatewayData">
-        <el-form-item label="网关ID" label-width="120px">
+        <el-form-item label="网关编号" label-width="120px">
           <el-input v-model="newGatewayData.hardwareGatewayID" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="网关名称" label-width="120px">
@@ -349,9 +349,6 @@
 
   }
   /*标签处理*/
-  .el-tag + .el-tag {
-    margin-left: 10px;
-  }
   .button-new-tag {
     margin-left: 10px;
     height: 32px;
