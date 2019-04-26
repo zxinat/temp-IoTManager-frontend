@@ -58,6 +58,11 @@
           width="120">
         </el-table-column>
         <el-table-column
+          prop="imageUrl"
+          label="设备图像链接"
+          width="120">
+        </el-table-column>
+        <el-table-column
           prop="gatewayID"
           label="所属网关ID"
           width="120">
@@ -68,7 +73,7 @@
           width="120">
         </el-table-column>
         <el-table-column
-          prop="LastConnectionTime"
+          prop="lastConnectionTime"
           label="上次连接时间"
           width="120">
         </el-table-column>
@@ -85,6 +90,11 @@
         <el-table-column
           prop="remark"
           label="描述"
+          width="120">
+        </el-table-column>
+        <el-table-column
+          prop="department"
+          label="部门"
           width="120">
         </el-table-column>
         <el-table-column
@@ -109,11 +119,80 @@
         <el-form-item label="设备名称" label-width="120px">
           <el-input v-model="updateData.deviceName" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="设备类型" label-width="120px">
-          <el-input v-model="updateData.deviceType" autocomplete="off"></el-input>
+        <el-form-item label="城市" label-width="120px">
+          <el-select v-model="updateData.city" placeholder="选择城市">
+            <el-option
+              v-for="c in city"
+              :key="c.id"
+              :label="c.cityName"
+              :value="c.cityName">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="工厂" label-width="120px">
+          <el-select v-model="updateData.factory" placeholder="选择工厂">
+            <el-option
+              v-for="f in factory"
+              :key="f.id"
+              :label="f.factoryName"
+              :value="f.factoryName">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="车间" label-width="120px">
+          <el-select v-model="updateData.workshop" placeholder="选择车间">
+            <el-option
+              v-for="w in workshop"
+              :key="w.id"
+              :label="w.workshopName"
+              :value="w.workshopName">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="设备状态" label-width="120px">
+          <el-select v-model="updateData.deviceState" placeholder="选择设备状态">
+            <el-option
+              v-for="ds in deviceState"
+              :key="ds.id"
+              :label="ds.stateName"
+              :value="ds.stateName">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="设备图像链接" label-width="120px">
+          <el-input v-model="updateData.imageUrl" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="所属网关ID" label-width="120px">
           <el-input v-model="updateData.gatewayID" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="MAC地址" label-width="120px">
+          <el-input v-model="updateData.mac" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="设备类型" label-width="120px">
+          <el-select v-model="updateData.deviceType" placeholder="选择设备类型">
+            <el-option
+              v-for="dt in deviceType"
+              :key="dt.id"
+              :label="dt.deviceTypeName"
+              :value="dt.deviceTypeName">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="部门" label-width="120px">
+          <el-select v-model="updateData.department" placeholder="选择部门">
+            <el-option
+              v-for="d in department"
+              :key="d.id"
+              :label="d.departmentName"
+              :value="d.departmentName">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="描述" label-width="120px">
+          <el-input v-model="updateData.remark" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <UploadImg @upload="addImage"></UploadImg>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -129,33 +208,99 @@
         <el-form-item label="设备名称" label-width="120px">
           <el-input v-model="newDeviceData.deviceName" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="设备类型" label-width="120px">
-          <el-input v-model="newDeviceData.deviceType" autocomplete="off"></el-input>
+        <el-form-item label="城市" label-width="120px">
+          <el-select v-model="newDeviceData.city" placeholder="选择城市">
+            <el-option
+              v-for="c in city"
+              :key="c.id"
+              :label="c.cityName"
+              :value="c.cityName">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="工厂" label-width="120px">
+          <el-select v-model="newDeviceData.factory" placeholder="选择工厂">
+            <el-option
+              v-for="f in factory"
+              :key="f.id"
+              :label="f.factoryName"
+              :value="f.factoryName">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="车间" label-width="120px">
+          <el-select v-model="newDeviceData.workshop" placeholder="选择车间">
+            <el-option
+              v-for="w in workshop"
+              :key="w.id"
+              :label="w.workshopName"
+              :value="w.workshopName">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="设备状态" label-width="120px">
+          <el-select v-model="newDeviceData.deviceState" placeholder="选择设备状态">
+            <el-option
+              v-for="ds in deviceState"
+              :key="ds.id"
+              :label="ds.stateName"
+              :value="ds.stateName">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="设备图像链接" label-width="120px">
+          <el-input v-model="newDeviceData.imageUrl" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="所属网关ID" label-width="120px">
           <el-input v-model="newDeviceData.gatewayID" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item class="tag-center">
-          <el-tag
-            :key="tag"
-            v-for="tag in newDeviceData.dynamicTags"
-            closable
-            :disable-transitions="false"
-            @close="handleClose(tag)">
-            {{tag}}
-          </el-tag>
-          <el-input
-            class="input-new-tag"
-            v-if="newDeviceData.inputVisible"
-            v-model="newDeviceData.inputValue"
-            ref="saveTagInput"
-            size="small"
-            @keyup.enter.native="handleInputConfirm"
-            @blur="handleInputConfirm"
-          >
-          </el-input>
-          <el-button v-else class="button-new-tag" size="small" @click="showInput">+</el-button>
+        <el-form-item label="MAC地址" label-width="120px">
+          <el-input v-model="newDeviceData.mac" autocomplete="off"></el-input>
         </el-form-item>
+        <el-form-item label="设备类型" label-width="120px">
+          <el-select v-model="newDeviceData.deviceType" placeholder="选择设备类型">
+            <el-option
+              v-for="dt in deviceType"
+              :key="dt.id"
+              :label="dt.deviceTypeName"
+              :value="dt.deviceTypeName">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="部门" label-width="120px">
+          <el-select v-model="newDeviceData.department" placeholder="选择部门">
+            <el-option
+              v-for="d in department"
+              :key="d.id"
+              :label="d.departmentName"
+              :value="d.departmentName">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="描述" label-width="120px">
+          <el-input v-model="newDeviceData.remark" autocomplete="off"></el-input>
+        </el-form-item>
+        <!--<el-form-item class="tag-center">-->
+          <!--<el-tag-->
+            <!--:key="tag"-->
+            <!--v-for="tag in newDeviceData.dynamicTags"-->
+            <!--closable-->
+            <!--:disable-transitions="false"-->
+            <!--@close="handleClose(tag)">-->
+            <!--{{tag}}-->
+          <!--</el-tag>-->
+          <!--<el-input-->
+            <!--class="input-new-tag"-->
+            <!--v-if="newDeviceData.inputVisible"-->
+            <!--v-model="newDeviceData.inputValue"-->
+            <!--ref="saveTagInput"-->
+            <!--size="small"-->
+            <!--@keyup.enter.native="handleInputConfirm"-->
+            <!--@blur="handleInputConfirm"-->
+          <!--&gt;-->
+          <!--</el-input>-->
+          <!--<el-button v-else class="button-new-tag" size="small" @click="showInput">+</el-button>-->
+        <!--</el-form-item>-->
         <el-form-item>
           <UploadImg @upload="addImage"></UploadImg>
         </el-form-item>
@@ -169,7 +314,15 @@
 </template>
 
 <script>
-  import {addDeviceApi, deleteDeviceApi, getDevicesApi, searchDevicesApi, updateDeviceApi,deleteMultipleDeviceApi} from '../../api/api';
+  import {
+    addDeviceApi,
+    deleteDeviceApi,
+    getDevicesApi,
+    searchDevicesApi,
+    updateDeviceApi,
+    deleteMultipleDeviceApi,
+    getCity, getFactory, getDeviceState, getDeviceType, getWorkshop, getAllDepartments
+  } from '../../api/api';
   import UploadImg from "../../components/UploadImg/index";
     export default {
         name: "PhysicalDevice",
@@ -178,6 +331,12 @@
         return {
           updateFormVisible: false,
           newFormVisible: false,
+          deviceState: [],
+          city: [],
+          factory: [],
+          workshop: [],
+          deviceType: [],
+          department: [],
           tableData: [{
             "id": "",
             "hardwareDeviceID": "",
@@ -194,11 +353,38 @@
             "createTime": "",
             "updateTime": "",
             "remark": "",
+            "department": "",
           }],
           multipleSelection: [],
-          updateData: {},
+          updateData: {
+            hardwareDeviceID: '',
+            deviceName: '',
+            city: '',
+            factory: '',
+            workshop: '',
+            deviceState: '',
+            imageUrl: '',
+            gatewayID:'',
+            mac: '',
+            deviceType: '',
+            remark: '',
+            department: '',
+          },
           newDeviceData: {
             // 标签
+            hardwareDeviceID: '',
+            deviceName: '',
+            city: '',
+            factory: '',
+            workshop: '',
+            deviceState: '',
+            imageUrl: '',
+            gatewayID:'',
+            mac: '',
+            deviceType: '',
+            remark: '',
+            department: '',
+
             inputVisible: false,
             inputValue: '',
             dynamicTags: ['标签一', '标签二', '标签三'],
@@ -328,6 +514,12 @@
       async mounted() {
         //获取所有设备信息
         this.getDevices();
+        this.city = (await getCity()).data.d;
+        this.factory = (await getFactory()).data.d;
+        this.workshop = (await getWorkshop()).data.d;
+        this.deviceState = (await getDeviceState()).data.d;
+        this.deviceType = (await getDeviceType()).data.d;
+        this.department = (await getAllDepartments()).data.d;
       }
     }
 </script>

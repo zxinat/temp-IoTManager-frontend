@@ -76,8 +76,24 @@ export  function deleteMultipleDeviceApi(id) {
   });
 }
 
-export function getCityApi() {
+export function getCity() {
   return axios.get('/api/city');
+}
+
+export function getFactory() {
+  return axios.get('/api/factory');
+}
+
+export function getWorkshop() {
+  return axios.get('/api/workshop');
+}
+
+export function getDeviceState() {
+  return axios.get('/api/deviceState');
+}
+
+export function getDeviceType() {
+  return axios.get('/api/deviceType');
 }
 
 
