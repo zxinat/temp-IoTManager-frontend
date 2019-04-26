@@ -343,7 +343,7 @@
   }
   .gateway-radio{
     margin: 0 auto 10px;
-    width: 30%;
+    width: 200px;
   }
   .add-gateway-container{
 
