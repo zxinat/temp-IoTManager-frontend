@@ -39,7 +39,7 @@
         </el-table-column>
         <el-table-column
           prop="gatewayType"
-          label="网管类型"
+          label="网关类型"
           width="120">
         </el-table-column>
         <el-table-column
@@ -59,7 +59,12 @@
         </el-table-column>
         <el-table-column
           prop="gatewayState"
-          label="网管状态"
+          label="网关状态"
+          width="120">
+        </el-table-column>
+        <el-table-column
+          prop="imageUrl"
+          label="网关图像链接"
           width="120">
         </el-table-column>
         <el-table-column
@@ -75,6 +80,11 @@
         <el-table-column
           prop="updateTime"
           label="更新时间"
+          width="120">
+        </el-table-column>
+        <el-table-column
+          prop="department"
+          label="部门"
           width="120">
         </el-table-column>
         <el-table-column
@@ -105,16 +115,73 @@
           <el-input v-model="updateData.gatewayName" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="网关类型" label-width="120px">
-          <el-input v-model="updateData.gatewayType" autocomplete="off"></el-input>
+          <el-select v-model="updateData.gatewayType" placeholder="选择网关类型">
+            <el-option
+              v-for="gt in gatewayType"
+              :key="gt.id"
+              :label="gt.gatewayTypeName"
+              :value="gt.gatewayTypeName">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="城市" label-width="120px">
-          <el-input v-model="updateData.city" autocomplete="off"></el-input>
+          <el-select v-model="updateData.city" placeholder="选择网关类型">
+            <el-option
+              v-for="c in city"
+              :key="c.id"
+              :label="c.cityName"
+              :value="c.cityName">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="工厂名称" label-width="120px">
-          <el-input v-model="updateData.factory" autocomplete="off"></el-input>
+          <el-select v-model="updateData.factory" placeholder="选择网关类型">
+            <el-option
+              v-for="f in factory"
+              :key="f.id"
+              :label="f.factoryName"
+              :value="f.factoryName">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="车间" label-width="120px">
-          <el-input v-model="updateData.workshop" autocomplete="off"></el-input>
+          <el-select v-model="updateData.workshop" placeholder="选择网关类型">
+            <el-option
+              v-for="w in workshop"
+              :key="w.id"
+              :label="w.workshopName"
+              :value="w.workshopName">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="网关状态" label-width="120px">
+          <el-select v-model="updateData.gatewayState" placeholder="选择网关类型">
+            <el-option
+              v-for="gs in gatewayState"
+              :key="gs.id"
+              :label="gs.stateName"
+              :value="gs.stateName">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="网关图像链接" label-width="120px">
+          <el-input v-model="updateData.imageUrl" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="描述" label-width="120px">
+          <el-input v-model="updateData.remark" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="部门" label-width="120px">
+          <el-select v-model="updateData.department" placeholder="选择网关类型">
+            <el-option
+              v-for="d in department"
+              :key="d.id"
+              :label="d.departmentName"
+              :value="d.departmentName">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <UploadImg></UploadImg>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -131,42 +198,96 @@
           <el-input v-model="newGatewayData.gatewayName" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="网关类型" label-width="120px">
-          <el-input v-model="newGatewayData.gatewayType" autocomplete="off"></el-input>
+          <el-select v-model="newGatewayData.gatewayType" placeholder="选择网关类型">
+            <el-option
+              v-for="gt in gatewayType"
+              :key="gt.id"
+              :label="gt.gatewayTypeName"
+              :value="gt.gatewayTypeName">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="城市" label-width="120px">
-          <el-input v-model="newGatewayData.city" autocomplete="off"></el-input>
+          <el-select v-model="newGatewayData.city" placeholder="选择网关类型">
+            <el-option
+              v-for="c in city"
+              :key="c.id"
+              :label="c.cityName"
+              :value="c.cityName">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="工厂名称" label-width="120px">
-          <el-input v-model="newGatewayData.factory" autocomplete="off"></el-input>
+          <el-select v-model="newGatewayData.factory" placeholder="选择网关类型">
+            <el-option
+              v-for="f in factory"
+              :key="f.id"
+              :label="f.factoryName"
+              :value="f.factoryName">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="车间" label-width="120px">
-          <el-input v-model="newGatewayData.workshop" autocomplete="off"></el-input>
+          <el-select v-model="newGatewayData.workshop" placeholder="选择网关类型">
+            <el-option
+              v-for="w in workshop"
+              :key="w.id"
+              :label="w.workshopName"
+              :value="w.workshopName">
+            </el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item class="tag-center">
-          <el-tag
-            :key="tag"
-            v-for="tag in newGatewayData.dynamicTags"
-            closable
-            :disable-transitions="false"
-            @close="handleClose(tag)">
-            {{tag}}
-          </el-tag>
-          <el-input
-            class="input-new-tag"
-            v-if="newGatewayData.inputVisible"
-            v-model="newGatewayData.inputValue"
-            ref="saveTagInput"
-            size="small"
-            @keyup.enter.native="handleInputConfirm"
-            @blur="handleInputConfirm"
-          >
-          </el-input>
-          <el-button v-else class="button-new-tag" size="small" @click="showInput">+</el-button>
+        <el-form-item label="网关状态" label-width="120px">
+          <el-select v-model="newGatewayData.gatewayState" placeholder="选择网关类型">
+            <el-option
+              v-for="gs in gatewayState"
+              :key="gs.id"
+              :label="gs.stateName"
+              :value="gs.stateName">
+            </el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item class="gateway-radio">
-          <el-radio v-model="newGatewayData.radio" label="gateway">网关设备</el-radio>
-          <el-radio v-model="newGatewayData.radio" label="device">物理设备</el-radio>
+        <el-form-item label="网关图像链接" label-width="120px">
+          <el-input v-model="newGatewayData.imageUrl" autocomplete="off"></el-input>
         </el-form-item>
+        <el-form-item label="描述" label-width="120px">
+          <el-input v-model="newGatewayData.remark" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="部门" label-width="120px">
+          <el-select v-model="newGatewayData.department" placeholder="选择网关类型">
+            <el-option
+              v-for="d in department"
+              :key="d.id"
+              :label="d.departmentName"
+              :value="d.departmentName">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <!--<el-form-item class="tag-center">-->
+          <!--<el-tag-->
+            <!--:key="tag"-->
+            <!--v-for="tag in newGatewayData.dynamicTags"-->
+            <!--closable-->
+            <!--:disable-transitions="false"-->
+            <!--@close="handleClose(tag)">-->
+            <!--{{tag}}-->
+          <!--</el-tag>-->
+          <!--<el-input-->
+            <!--class="input-new-tag"-->
+            <!--v-if="newGatewayData.inputVisible"-->
+            <!--v-model="newGatewayData.inputValue"-->
+            <!--ref="saveTagInput"-->
+            <!--size="small"-->
+            <!--@keyup.enter.native="handleInputConfirm"-->
+            <!--@blur="handleInputConfirm"-->
+          <!--&gt;-->
+          <!--</el-input>-->
+          <!--<el-button v-else class="button-new-tag" size="small" @click="showInput">+</el-button>-->
+        <!--</el-form-item>-->
+        <!--<el-form-item class="gateway-radio">-->
+          <!--<el-radio v-model="newGatewayData.radio" label="gateway">网关设备</el-radio>-->
+          <!--<el-radio v-model="newGatewayData.radio" label="device">物理设备</el-radio>-->
+        <!--</el-form-item>-->
         <el-form-item>
           <UploadImg></UploadImg>
         </el-form-item>
@@ -180,7 +301,15 @@
 </template>
 
 <script>
-  import {addGatewayApi, deleteGatewayApi, getGatewaysApi, searchGatewaysApi, updateGatewayApi,deleteMultipleGatewayApi} from '../../api/api';
+  import {
+    addGatewayApi,
+    deleteGatewayApi,
+    getGatewaysApi,
+    searchGatewaysApi,
+    updateGatewayApi,
+    deleteMultipleGatewayApi,
+    getCity, getFactory, getGatewayType, getGatewayState, getAllDepartments, getWorkshop
+  } from '../../api/api';
   import UploadImg from "../../components/UploadImg/index";
 
   export default {
@@ -190,6 +319,12 @@
       return {
         updateFormVisible: false,
         newFormVisible: false,
+        city: [],
+        factory: [],
+        workshop: [],
+        department: [],
+        gatewayState: [],
+        gatewayType: [],
         tableData: [{
           "id": "1",
           "hardwareGatewayID": "T001",
@@ -203,11 +338,35 @@
           "imageUrl": "",
           "createTime": "",
           "updateTime": "",
-          "remark": ""
+          "remark": "",
+          "department": ""
         }],
         multipleSelection: [],
-        updateData: {},
+        updateData: {
+          hardwareGatewayID: '',
+          gatewayName: '',
+          gatewayType: '',
+          city: '',
+          factory: '',
+          workshop: '',
+          gatewayState: '',
+          imageUrl: '',
+          remark: '',
+          department: '',
+        },
         newGatewayData: {
+          hardwareGatewayID: '',
+          gatewayName: '',
+          gatewayType: '',
+          city: '',
+          factory: '',
+          workshop: '',
+          gatewayState: '',
+          imageUrl: '',
+          remark: '',
+          department: '',
+
+
           // 标签
           inputVisible: false,
           inputValue: '',
@@ -332,6 +491,12 @@
     async mounted() {
       //获取所有网关信息
       this.getGateways();
+      this.city = (await getCity()).data.d;
+      this.factory = (await getFactory()).data.d;
+      this.workshop = (await  getWorkshop()).data.d;
+      this.department = (await getAllDepartments()).data.d;
+      this.gatewayState = (await getGatewayState()).data.d;
+      this.gatewayType = (await getGatewayType()).data.d;
     }
   }
 </script>

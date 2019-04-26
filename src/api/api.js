@@ -96,6 +96,14 @@ export function getDeviceType() {
   return axios.get('/api/deviceType');
 }
 
+export function getGatewayState() {
+  return axios.get('/api/gatewayState');
+}
+
+export function getGatewayType() {
+  return axios.get('/api/gatewayType');
+}
+
 
 
 export  function updateDeviceApi(data) {
