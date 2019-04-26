@@ -38,7 +38,7 @@
         style="width: 100%">
         <el-table-column
           prop="id"
-          label="用户id">
+          label="用户编号">
         </el-table-column>
         <el-table-column
           prop="userName"
@@ -125,22 +125,22 @@
     </el-dialog>
     <el-dialog title="添加用户" :visible.sync="createNewDialogFormVisible">
       <el-form :model="newUser">
-        <el-form-item label="用户名">
+        <el-form-item label="用户名" label-width="120px">
           <el-input v-model="newUser.userName"></el-input>
         </el-form-item>
-        <el-form-item label="昵称">
+        <el-form-item label="昵称" label-width="120px">
           <el-input v-model="newUser.displayName"></el-input>
         </el-form-item>
-        <el-form-item label="密码">
+        <el-form-item label="密码" label-width="120px">
           <el-input v-model="newUser.password"></el-input>
         </el-form-item>
-        <el-form-item label="邮箱">
+        <el-form-item label="邮箱" label-width="120px">
           <el-input v-model="newUser.email"></el-input>
         </el-form-item>
-        <el-form-item label="电话">
+        <el-form-item label="电话" label-width="120px">
           <el-input v-model="newUser.phoneNumber"></el-input>
         </el-form-item>
-        <el-form-item label="部门">
+        <el-form-item label="部门"  label-width="120px">
           <el-select v-model="newUser.department" placeholder="请选择部门">
             <el-option
               v-for="item in departmentOptions"
@@ -249,14 +249,22 @@
       async resetPassword(row) {
       },
       async deleteUser(row) {
-        if((await deleteUser(row.id)).data.c===200){
-          this.$message({
-            message: '删除成功',
-            type: 'success'
-          });
-          this.tableData = (await getUserTable()).data.d;
-        }else{
-          this.$message.error('删除失败');
+        try {
+          this.$confirm('确认删除？')
+            .then(async _=> {
+              if((await deleteUser(row.id)).data.c===200){
+                this.$message({
+                  message: '删除成功',
+                  type: 'success'
+                });
+                this.tableData = (await getUserTable()).data.d;
+              }else{
+                this.$message.error('删除失败');
+              }
+            })
+            .catch(_ => {});
+        } catch (e) {
+          console.log(e)
         }
       },
       handleClose(tag) {

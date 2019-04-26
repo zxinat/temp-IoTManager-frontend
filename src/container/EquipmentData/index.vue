@@ -2,7 +2,7 @@
   <div>
     <div class="search-container">
       <el-form :inline="true" :model="searchData" class="demo-form-inline">
-        <el-form-item label="设备ID">
+        <el-form-item label="设备编号">
           <el-input v-model="searchData.hardwareDeviceID"></el-input>
         </el-form-item>
         <el-form-item label="设备名称">
@@ -29,12 +29,12 @@
         <el-table-column
           fixed
           prop="ID"
-          label="数据ID"
+          label="数据编号"
           width="120">
         </el-table-column>
         <el-table-column
           prop="hardwareGatewayID"
-          label="所属网关ID"
+          label="所属网关编号"
           width="120">
         </el-table-column>
         <el-table-column
@@ -44,7 +44,7 @@
         </el-table-column>
         <el-table-column
           prop="hardwareDeviceID"
-          label="所属设备ID"
+          label="所属设备编号"
           width="120">
         </el-table-column>
         <el-table-column
@@ -83,13 +83,13 @@
     </div>
     <el-dialog title="修改数据" :visible.sync="updateFormVisible">
       <el-form :model="updateData">
-        <el-form-item label="所属设备ID" label-width="120px">
+        <el-form-item label="所属设备编号" label-width="120px">
           <el-input v-model="updateData.hardwareDeviceID" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="所属设备名称" label-width="120px">
           <el-input v-model="updateData.deviceName" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="所属网关ID" label-width="120px">
+        <el-form-item label="所属网关编号" label-width="120px">
           <el-input v-model="updateData.hardwareGatewayID" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="所属网关名称" label-width="120px">
@@ -109,13 +109,13 @@
     </el-dialog>
     <el-dialog title="新增数据" :visible.sync="newFormVisible">
       <el-form :model="newDeviceData">
-        <el-form-item label="所属设备ID" label-width="120px">
+        <el-form-item label="所属设备编号" label-width="120px">
           <el-input v-model="newDeviceData.hardwareDeviceID" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="所属设备名称" label-width="120px">
           <el-input v-model="newDeviceData.deviceName" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="所属网关ID" label-width="120px">
+        <el-form-item label="所属网关编号" label-width="120px">
           <el-input v-model="newDeviceData.hardwareGatewayID" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="所属网关名称" label-width="120px">

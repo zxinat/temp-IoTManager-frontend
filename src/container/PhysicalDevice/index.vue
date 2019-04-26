@@ -2,7 +2,7 @@
   <div>
     <div class="search-container">
       <el-form :inline="true" :model="searchData" class="demo-form-inline">
-        <el-form-item label="设备ID">
+        <el-form-item label="设备编号">
           <el-input v-model="searchData.hardwareDeviceID"></el-input>
         </el-form-item>
         <el-form-item label="设备名称">
@@ -29,7 +29,7 @@
         <el-table-column
           fixed
           prop="hardwareDeviceID"
-          label="设备id"
+          label="设备编号"
           width="120">
         </el-table-column>
         <el-table-column
