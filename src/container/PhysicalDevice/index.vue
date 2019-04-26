@@ -68,6 +68,11 @@
           width="120">
         </el-table-column>
         <el-table-column
+          prop="mac"
+          label="Mac地址"
+          width="120">
+        </el-table-column>
+        <el-table-column
           prop="deviceState"
           label="设备状态"
           width="120">
