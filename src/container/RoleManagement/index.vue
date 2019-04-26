@@ -37,30 +37,30 @@
         border
         style="width: 100%">
         <el-table-column
-          prop="userID"
-          label="用户id"
-          width="100">
+          prop="id"
+          label="用户id">
         </el-table-column>
         <el-table-column
-          prop="username"
-          label="用户名"
-          width="150">
+          prop="userName"
+          label="用户名">
+        </el-table-column>
+        <el-table-column
+          prop="displayName"
+          label="昵称">
+        </el-table-column>
+        <el-table-column
+          prop="email"
+          label="邮箱">
         </el-table-column>
         <el-table-column
           prop="department"
-          label="部门"
-          width="100">
+          label="部门">
         </el-table-column>
+        <!--TODO:权限  -->
         <el-table-column
-          prop="authority"
-          label="权限"
-          width="700">
-        </el-table-column>
-        <el-table-column
-          label="操作"
-          width="300">
+          label="操作">
           <template slot-scope="scope">
-            <el-button @click="editAuthority(scope.row)" type="primary" size="small">设置权限</el-button>
+            <!--<el-button @click="editAuthority(scope.row)" type="primary" size="small">设置权限</el-button>-->
             <el-button @click="resetPassword(scope.row)" type="warning" size="small">重置随机密码</el-button>
             <el-button @click="deleteUser(scope.row)" type="danger" size="small">删除</el-button>
           </template>
@@ -97,42 +97,54 @@
     </el-dialog>
     <el-dialog title="添加用户" :visible.sync="createNewDialogFormVisible">
       <el-form :model="newUser">
-        <el-form-item label="用户名" label-width="120px">
+        <el-form-item label="用户名">
           <el-input v-model="newUser.userName"></el-input>
         </el-form-item>
-        <el-form-item label="部门" label-width="120px">
+        <el-form-item label="昵称">
+          <el-input v-model="newUser.displayName"></el-input>
+        </el-form-item>
+        <el-form-item label="密码">
+          <el-input v-model="newUser.password"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱">
+          <el-input v-model="newUser.email"></el-input>
+        </el-form-item>
+        <el-form-item label="电话">
+          <el-input v-model="newUser.phoneNumber"></el-input>
+        </el-form-item>
+        <el-form-item label="部门">
           <el-select v-model="newUser.department" placeholder="请选择部门">
             <el-option
               v-for="item in departmentOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.label">
+              :key="item.id"
+              :label="item.departmentName"
+              :value="item.departmentName">
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="权限" label-width="120px">
-          <el-tag
-            :key="tag"
-            v-for="tag in newUser.authorities"
-            closable
-            :disable-transitions="false"
-            @close="handleClose2(tag)">
-            {{tag}}
-          </el-tag>
-          <el-select v-model="inputValue"
-                     v-if="inputVisible"
-                     ref="saveTagInput"
-                     @keyup.enter.native="handleInputConfirm2"
-                     placeholder="请选择">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.label">
-            </el-option>
-          </el-select>
-          <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
-        </el-form-item>
+        <!--<el-form-item label="权限" label-width="120px">-->
+          <!--<el-tag-->
+            <!--:key="tag"-->
+            <!--v-for="tag in newUser.authorities"-->
+            <!--closable-->
+            <!--:disable-transitions="false"-->
+            <!--@close="handleClose2(tag)">-->
+            <!--{{tag}}-->
+          <!--</el-tag>-->
+          <!--<el-select v-model="inputValue"-->
+                     <!--v-if="inputVisible"-->
+                     <!--ref="saveTagInput"-->
+                     <!--@keyup.enter.native="handleInputConfirm2"-->
+                     <!--placeholder="请选择">-->
+            <!--<el-option-->
+              <!--v-for="item in options"-->
+              <!--:key="item.value"-->
+              <!--:label="item.label"-->
+              <!--:value="item.label">-->
+            <!--</el-option>-->
+          <!--</el-select>-->
+          <!--<el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>-->
+        <!--</el-form-item>-->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="createNewDialogFormVisible = false">取 消</el-button>
@@ -170,8 +182,12 @@
         options: [],
         newUser:{
           userName:'',
-          department:'',
-          authorities:[]
+          displayName:'',
+          password:'',
+          email:'',
+          phoneNumber: '',
+          department:''
+          // authorities:[]
         }
       }
     },
@@ -196,7 +212,7 @@
       async resetPassword(row) {
       },
       async deleteUser(row) {
-        if((await deleteUser(row.userID)).data.c===200){
+        if((await deleteUser(row.id)).data.c===200){
           this.$message({
             message: '删除成功',
             type: 'success'
@@ -227,6 +243,7 @@
       this.dialogFormVisible = false;
     },
       async confirmCreateNew(){
+        console.log(this.newUser);
         if((await createNewUser(this.newUser)).data.c===200){
           this.$message({
             message: '添加成功',
@@ -262,6 +279,7 @@
       this.departmentOptions = (await getAllDepartments()).data.d;
       this.tableData = (await getUserTable()).data.d;
       this.options = (await getAllAuthorities()).data.d;
+      this.tableData = (await getUserTable(this.username, this.department)).data.d;
     }
   }
 </script>

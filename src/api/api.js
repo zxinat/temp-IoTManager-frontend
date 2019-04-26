@@ -1,6 +1,6 @@
 import axios from "axios";
 //axios.defaults.baseURL='https://www.easy-mock.com/mock/5c22475a4e21841210a7015f';
-axios.defaults.baseURL='https://localhost:44373';
+axios.defaults.baseURL='http://localhost:5001';
 //登陆注册
 export  function loginApi({name, pwd, type}) {
   return  axios.post('/api/login', {
@@ -74,6 +74,10 @@ export  function deleteMultipleDeviceApi(id) {
       ...id
     }
   });
+}
+
+export function getCityApi() {
+  return axios.get('/api/city');
 }
 
 
@@ -268,14 +272,14 @@ export function checkMonthlyReport(order,date) {
 // 用户管理
 // 获取所有部门 下拉框要用
 export function getAllDepartments() {
-  return axios.get('/api/getAllDepartments');
+  return axios.get('/api/department');
 }
 // crud
 
 // 增加新用户
 export function createNewUser(userInfo) {
   return axios.post(`/api/user`,{
-    userInfo
+    ...userInfo
   })
 }
 // 获取用户信息表，如果没有传参数就是获取全部
@@ -289,7 +293,7 @@ export function getUserTable(username,depart) {
 }
 // 删除用户
 export function deleteUser(userID) {
-  return axios.delete(`/api/deleteUser/${userID}`)
+  return axios.delete(`/api/user/${userID}`)
 }
 //  修改用户(一般改权限，传参用户id和权限名的数组)
 export function editAuthorities(userID,options) {
