@@ -276,6 +276,10 @@ export function getAllDepartments() {
 }
 // crud
 
+
+export function getUserById(id) {
+  return axios.get(`/api/user/${id}`);
+}
 // 增加新用户
 export function createNewUser(userInfo) {
   return axios.post(`/api/user`,{
@@ -294,6 +298,12 @@ export function getUserTable(username,depart) {
 // 删除用户
 export function deleteUser(userID) {
   return axios.delete(`/api/user/${userID}`)
+}
+
+export function editUser(id, userInfo) {
+  return axios.put(`/api/user/${id}`, {
+    ...userInfo
+  });
 }
 //  修改用户(一般改权限，传参用户id和权限名的数组)
 export function editAuthorities(userID,options) {
