@@ -425,7 +425,7 @@
         try {
           this.$confirm('确认删除？')
             .then(async _=> {
-              const data = await deleteGatewayApi(row.hardwareGatewayID);
+              const data = await deleteGatewayApi(row.id);
               if (data.data.c === 200) {
                 this.$message({
                   message: '删除成功',
