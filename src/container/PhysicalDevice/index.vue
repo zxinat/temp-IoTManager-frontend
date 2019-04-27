@@ -285,27 +285,27 @@
         <el-form-item label="描述" label-width="120px">
           <el-input v-model="newDeviceData.remark" autocomplete="off"></el-input>
         </el-form-item>
-        <!--<el-form-item class="tag-center">-->
-          <!--<el-tag-->
-            <!--:key="tag"-->
-            <!--v-for="tag in newDeviceData.dynamicTags"-->
-            <!--closable-->
-            <!--:disable-transitions="false"-->
-            <!--@close="handleClose(tag)">-->
-            <!--{{tag}}-->
-          <!--</el-tag>-->
-          <!--<el-input-->
-            <!--class="input-new-tag"-->
-            <!--v-if="newDeviceData.inputVisible"-->
-            <!--v-model="newDeviceData.inputValue"-->
-            <!--ref="saveTagInput"-->
-            <!--size="small"-->
-            <!--@keyup.enter.native="handleInputConfirm"-->
-            <!--@blur="handleInputConfirm"-->
-          <!--&gt;-->
-          <!--</el-input>-->
-          <!--<el-button v-else class="button-new-tag" size="small" @click="showInput">+</el-button>-->
-        <!--</el-form-item>-->
+        <el-form-item class="tag-center">
+          <el-tag
+            :key="tag"
+            v-for="tag in newDeviceData.dynamicTags"
+            closable
+            :disable-transitions="false"
+            @close="handleClose(tag)">
+            {{tag}}
+          </el-tag>
+          <el-input
+            class="input-new-tag"
+            v-if="newDeviceData.inputVisible"
+            v-model="newDeviceData.inputValue"
+            ref="saveTagInput"
+            size="small"
+            @keyup.enter.native="handleInputConfirm"
+            @blur="handleInputConfirm"
+          >
+          </el-input>
+          <el-button v-else class="button-new-tag" size="small" @click="showInput">+</el-button>
+        </el-form-item>
         <el-form-item>
           <UploadImg @upload="addImage"></UploadImg>
         </el-form-item>

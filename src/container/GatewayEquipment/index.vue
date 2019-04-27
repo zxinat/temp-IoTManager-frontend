@@ -208,7 +208,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="城市" label-width="120px">
-          <el-select v-model="newGatewayData.city" placeholder="选择网关类型">
+          <el-select v-model="newGatewayData.city" placeholder="选择城市">
             <el-option
               v-for="c in city"
               :key="c.id"
@@ -218,7 +218,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="工厂名称" label-width="120px">
-          <el-select v-model="newGatewayData.factory" placeholder="选择网关类型">
+          <el-select v-model="newGatewayData.factory" placeholder="选择工厂">
             <el-option
               v-for="f in factory"
               :key="f.id"
@@ -228,7 +228,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="车间" label-width="120px">
-          <el-select v-model="newGatewayData.workshop" placeholder="选择网关类型">
+          <el-select v-model="newGatewayData.workshop" placeholder="选择车间">
             <el-option
               v-for="w in workshop"
               :key="w.id"
@@ -238,7 +238,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="网关状态" label-width="120px">
-          <el-select v-model="newGatewayData.gatewayState" placeholder="选择网关类型">
+          <el-select v-model="newGatewayData.gatewayState" placeholder="选择网关状态">
             <el-option
               v-for="gs in gatewayState"
               :key="gs.id"
@@ -254,7 +254,7 @@
           <el-input v-model="newGatewayData.remark" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="部门" label-width="120px">
-          <el-select v-model="newGatewayData.department" placeholder="选择网关类型">
+          <el-select v-model="newGatewayData.department" placeholder="选择部门">
             <el-option
               v-for="d in department"
               :key="d.id"

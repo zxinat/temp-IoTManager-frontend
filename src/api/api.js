@@ -1,6 +1,6 @@
 import axios from "axios";
-//axios.defaults.baseURL='https://www.easy-mock.com/mock/5c22475a4e21841210a7015f';
-axios.defaults.baseURL='http://localhost:5001';
+// axios.defaults.baseURL='https://www.easy-mock.com/mock/5c22475a4e21841210a7015f';
+axios.defaults.baseURL='https://localhost:44373';
 //登陆注册
 export  function loginApi({name, pwd, type}) {
   return  axios.post('/api/login', {
