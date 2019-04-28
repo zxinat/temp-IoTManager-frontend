@@ -1,19 +1,19 @@
 <template>
   <div class="role-management-container">
     <div class="top-header">
-      <span style="font-size: 25px">用户管理</span>
+      <span style="font-size: 25px">{{$t('message.roleManagement')}}</span>
       <el-button type="primary" class="float-right" @click="createNewDialogFormVisible=true">创建新用户</el-button>
     </div>
     <div class="search">
       <el-row>
         <el-col :span="16">
           <div class="grid-content bg-purple-dark">
-            <el-input v-model="username" placeholder="全部用户"></el-input>
+            <el-input v-model="username" :placeholder="$t('message.allUser')"></el-input>
           </div>
         </el-col>
         <el-col :span="4">
           <div class="grid-content bg-purple-dark">
-            <el-select v-model="department" placeholder="全部部门">
+            <el-select v-model="department" :placeholder="$t('message.allDepartment')">
               <el-option
                 v-for="item in departmentOptions"
                 :key="item.value"
@@ -25,7 +25,7 @@
         </el-col>
         <el-col :span="4">
           <div class="grid-content bg-purple-dark">
-            <el-button type="primary" @click="search">搜索</el-button>
+            <el-button type="primary" @click="search">{{$t('message.search')}}</el-button>
           </div>
         </el-col>
       </el-row>
@@ -38,7 +38,7 @@
         style="width: 100%">
         <el-table-column
           prop="id"
-          label="用户编号">
+          :label="$t('message.userID')">
         </el-table-column>
         <el-table-column
           prop="userName"
