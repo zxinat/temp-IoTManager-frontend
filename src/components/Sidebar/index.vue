@@ -1,6 +1,6 @@
 <template>
       <el-menu
-        class="el-menu-vertical-demo"
+        class="el-menu-vertical-demo scroll"
         @open="handleOpen"
         @close="handleClose"
         :background-color=mainColor
@@ -79,6 +79,9 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+  .scroll{
+    overflow: auto;
+  }
   .el-menu-vertical-demo{
     /*重载一些样式*/
     .el-menu-item{
