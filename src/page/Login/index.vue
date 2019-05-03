@@ -10,14 +10,15 @@
           <el-form-item label="密码" prop="pass">
             <el-input type="password" v-model="form.pwd" autocomplete="off"></el-input>
           </el-form-item>
-          <span class="right"><router-link to="/register" class="hide-underline">没有账号?注册一个</router-link></span>
+          <!--<span class="right"><router-link to="/register" class="hide-underline">没有账号?注册一个</router-link></span>-->
 
-          <!--<el-form-item label="用户类别">-->
-            <!--<el-select v-model="form.type" placeholder="请选择用户类别">-->
-              <!--<el-option label="普通用户" value="normal"></el-option>-->
-              <!--<el-option label="管理用户" value="management"></el-option>-->
-            <!--</el-select>-->
-          <!--</el-form-item>-->
+          <el-form-item style="text-align: left" label="用户类别">
+            <el-select v-model="form.type" placeholder="请选择用户类别">
+              <el-option label="用户" value="normal"></el-option>
+              <el-option label="管理" value="management"></el-option>
+              <el-option label="超级管理员" value="superManagement"></el-option>
+            </el-select>
+          </el-form-item>
           <el-button type="primary" @click="login">登录</el-button>
         </el-form>
       </div>
@@ -45,7 +46,7 @@ export default {
   methods:{
     async login(){
       const res=await loginApi(this.form);
-      setCookie('simulate',res.data.toString(),20);
+      setCookie('userSessionID',res.data.d.sessionId,20);
       await this.$store.dispatch('userInfo/setUserInfo',this.form);
       this.$router.push('/dashBoard');
     }

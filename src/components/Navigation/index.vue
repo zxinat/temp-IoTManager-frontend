@@ -23,7 +23,8 @@
 </template>
 
 <script>
-  import {delCookie} from '../../../utils/package-cookies';
+  import {delCookie,getCookie} from '../../../utils/package-cookies';
+  import {signOut} from '../../api/api';
     export default {
         name: "Navigation",
       data() {
@@ -37,7 +38,9 @@
           console.log(key, keyPath);
         },
         logout(){
-          delCookie('simulate');
+          let sessionID=getCookie('userSessionID');
+          signOut(sessionID);
+          delCookie('userSessionID');
           this.$router.push('/login');
         }
       },
