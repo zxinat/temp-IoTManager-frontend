@@ -3,18 +3,18 @@
         class="el-menu-vertical-demo"
         @open="handleOpen"
         @close="handleClose"
-        background-color="#545c64"
+        :background-color=mainColor
         text-color="#fff"
         active-text-color="#ffd04b">
         <router-link to="/dashBoard" class="hide-underline">
           <el-menu-item index="2">
-            <i class="el-icon-location"></i>
+            <!--<i class="el-icon-location"></i>-->
             <span>仪表盘</span>
           </el-menu-item>
         </router-link>
         <el-submenu index="3">
           <template slot="title">
-            <i class="el-icon-location"></i>
+            <!--<i class="el-icon-location"></i>-->
             <span>设备管理</span>
           </template>
           <router-link to="/gatewayEquipment" class="hide-underline"><el-menu-item index="3-1">网关设备</el-menu-item></router-link>
@@ -23,7 +23,7 @@
         </el-submenu>
         <el-submenu index="4">
           <template slot="title">
-            <i class="el-icon-location"></i>
+            <!--<i class="el-icon-location"></i>-->
             <span>监控告警</span>
           </template>
           <router-link to="/monitoringConfiguration"  class="hide-underline"><el-menu-item index="4-1">监控配置</el-menu-item></router-link>
@@ -31,7 +31,7 @@
         </el-submenu>
         <el-submenu index="5">
           <template slot="title">
-            <i class="el-icon-location"></i>
+            <!--<i class="el-icon-location"></i>-->
             <span>数据智能</span>
           </template>
           <router-link to="/modelTraining"  class="hide-underline"><el-menu-item index="5-1">模型训练</el-menu-item></router-link>
@@ -39,7 +39,7 @@
         </el-submenu>
         <el-submenu index="6">
           <template slot="title">
-            <i class="el-icon-location"></i>
+            <!--<i class="el-icon-location"></i>-->
             <span>报表中心</span>
           </template>
           <router-link to="/reportCenter"  class="hide-underline"><el-menu-item index="6-1">概览</el-menu-item></router-link>
@@ -51,7 +51,7 @@
         </el-submenu>
         <router-link to="/roleManagement"  class="hide-underline">
           <el-menu-item index="7">
-            <i class="el-icon-location"></i>
+            <!--<i class="el-icon-location"></i>-->
             <span>用户管理</span>
           </el-menu-item>
         </router-link>
@@ -59,8 +59,14 @@
 </template>
 
 <script>
+    import  {mainColor} from '../../common/globalvariaties'
     export default {
       name: "Sidebar",
+      data(){
+        return{
+          mainColor:mainColor
+        }
+      },
       methods: {
         handleOpen(key, keyPath) {
           console.log(key, keyPath);
