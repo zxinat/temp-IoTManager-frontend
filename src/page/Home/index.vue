@@ -34,7 +34,7 @@
 <style rel="stylesheet/scss" lang="scss" scoped>
   /*sass加变量*/
   $nav-height: 60px;
-  $sidebar-width:180px;
+  $sidebar-width:185px;
   .home-container{
     height: 100%;
     .nav-screen{
