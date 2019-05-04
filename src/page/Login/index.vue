@@ -36,7 +36,7 @@ export default {
       form: {
         name: '',
         pwd: '',
-        type:'',
+        type:'normal',
       }
     }
   },
@@ -47,7 +47,6 @@ export default {
     async login(){
       const res=await loginApi(this.form);
       setCookie('userSessionID',res.data.d.sessionId,20);
-      setCookie('mainColor',"#409EFF",20);
       await this.$store.dispatch('userInfo/setUserInfo',this.form);
       this.$router.push('/dashBoard');
     }

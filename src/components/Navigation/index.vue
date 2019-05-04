@@ -46,7 +46,7 @@
         return {
           activeIndex: '1',
           activeIndex2: '1',
-          mainColor: mainColor
+          mainColor:mainColor?mainColor:'#409EFF'
         };
       },
       methods: {

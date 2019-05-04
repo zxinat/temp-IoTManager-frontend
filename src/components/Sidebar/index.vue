@@ -64,7 +64,7 @@
       name: "Sidebar",
       data(){
         return{
-          mainColor:mainColor
+          mainColor:mainColor?mainColor:'#409EFF'
         }
       },
       methods: {
