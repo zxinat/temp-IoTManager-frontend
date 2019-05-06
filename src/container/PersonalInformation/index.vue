@@ -1,6 +1,5 @@
 <template>
   <div class="personal-info-container">
-    <h2 style="margin: 20px">个人中心</h2>
     <el-row :gutter="20">
       <el-col :span="12" :offset="2">
         <el-form ref="form" :model="staffInfo" label-width="80px">
@@ -80,6 +79,7 @@
 
 <style lang="scss" scoped>
   .personal-info-container {
+    padding: 20px;
     .image {
       padding: 1%;
       width: 100%;
