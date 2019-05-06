@@ -2,7 +2,7 @@
   <div class="personal-info-container">
     <h2 style="margin: 20px">个人中心</h2>
     <el-row :gutter="20">
-      <el-col :span="12">
+      <el-col :span="12" :offset="2">
         <el-form ref="form" :model="staffInfo" label-width="80px">
           <el-form-item label="姓名">
             <el-card shadow="hover">
@@ -35,7 +35,7 @@
           </el-form-item>
         </el-form>
       </el-col>
-      <el-col :span="6" :offset="3">
+      <el-col :span="6" :offset="1">
         <div>
           <!--<div class="block" v-for="fit in fits" :key="fit">-->
             <!--<span class="demonstration">{{ fit }}</span>-->

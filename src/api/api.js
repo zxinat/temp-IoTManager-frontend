@@ -1,81 +1,89 @@
 import axios from "axios";
-axios.defaults.baseURL='https://www.easy-mock.com/mock/5c22475a4e21841210a7015f';
+
+axios.defaults.baseURL = 'https://www.easy-mock.com/mock/5c22475a4e21841210a7015f';
 // axios.defaults.baseURL='https://localhost:44373';
+//带cookie
+axios.defaults.withCredentials = true;
 //登陆注册
-export  function loginApi({name, pwd, type}) {
-  return  axios.post('/api/login', {
+export function loginApi({name, pwd, type}) {
+  return axios.post('/api/login', {
     ...{name, pwd, type,}
   });
 }
-export  function signupApi({name,pwd, type,}) {
-  return  axios.post('/api/register', {
+
+export function signupApi({name, pwd, type,}) {
+  return axios.post('/api/register', {
     ...{name, pwd, type,}
   });
 }
+
 export function signOut(sessionID) {
-  return axios.post('/api/logout',{
-    sessionID:sessionID
+  return axios.post('/api/logout', {
+    sessionID: sessionID
   })
 }
+
 //折线图
-export  function getDeviceProperty(id) {
-  return  axios.get(`api/deviceProperty/${id}`);
+export function getDeviceProperty(id) {
+  return axios.get(`api/deviceProperty/${id}`);
 
 }
-export  function getDevicePropertyData(deviceid,propertyid) {
-  return  axios.get(`/api/devicePropertyData/${deviceid}/${propertyid}`);
+
+export function getDevicePropertyData(deviceid, propertyid) {
+  return axios.get(`/api/devicePropertyData/${deviceid}/${propertyid}`);
 
 }
 
 
 //网关管理
-export  function getGatewaysApi() {
-  return  axios.get('/api/gateway');
+export function getGatewaysApi() {
+  return axios.get('/api/gateway');
 }
 
-export  function deleteGatewayApi(id) {
-  return  axios.delete(`/api/gateway/${id}`);
+export function deleteGatewayApi(id) {
+  return axios.delete(`/api/gateway/${id}`);
 }
-export  function deleteMultipleGatewayApi(id) {
-  return  axios.delete(`/api/multipleGateway`,{
-    params:{
+
+export function deleteMultipleGatewayApi(id) {
+  return axios.delete(`/api/multipleGateway`, {
+    params: {
       ...id
     }
   });
 }
 
-export  function updateGatewayApi(data) {
-  return  axios.put(`/api/gateway/${data.id}`,{
+export function updateGatewayApi(data) {
+  return axios.put(`/api/gateway/${data.id}`, {
     ...data
   });
 }
 
-export  function addGatewayApi(data){
-  return  axios.post(`/api/gateway`,{
+export function addGatewayApi(data) {
+  return axios.post(`/api/gateway`, {
     ...data
   });
 }
 
-export  function searchGatewaysApi(data) {
-  return  axios.get('/api/gateway',{
-    params:{
+export function searchGatewaysApi(data) {
+  return axios.get('/api/gateway', {
+    params: {
       ...data
     }
   });
 }
 
 //设备管理
-export  function getDevicesApi() {
-  return  axios.get('/api/device');
+export function getDevicesApi() {
+  return axios.get('/api/device');
 }
 
-export  function deleteDeviceApi(id) {
-  return  axios.delete(`/api/device/${id}`);
+export function deleteDeviceApi(id) {
+  return axios.delete(`/api/device/${id}`);
 }
 
-export  function deleteMultipleDeviceApi(id) {
-  return  axios.delete(`/api/multipleDevice`,{
-    params:{
+export function deleteMultipleDeviceApi(id) {
+  return axios.delete(`/api/multipleDevice`, {
+    params: {
       ...id
     }
   });
@@ -110,20 +118,19 @@ export function getGatewayType() {
 }
 
 
-
-export  function updateDeviceApi(data) {
-  return  axios.put(`/api/device/${data.id}`,{
+export function updateDeviceApi(data) {
+  return axios.put(`/api/device/${data.id}`, {
     ...data
   });
 }
 
-export  function addDeviceApi(data){
-  return  axios.post(`/api/device`,{...data});
+export function addDeviceApi(data) {
+  return axios.post(`/api/device`, {...data});
 }
 
-export  function searchDevicesApi(data) {
-  return  axios.get('/api/device',{
-    params:{
+export function searchDevicesApi(data) {
+  return axios.get('/api/device', {
+    params: {
       ...data
     }
   });
@@ -131,74 +138,76 @@ export  function searchDevicesApi(data) {
 
 
 //单个设备
-export  function getDeviceApi(id){
-  return  axios.get(`/api/device/${id}`);
+export function getDeviceApi(id) {
+  return axios.get(`/api/device/${id}`);
 }
 
 //设备数据
-export  function getDevicesDataApi() {
-  return  axios.get('/api/deviceData');
+export function getDevicesDataApi() {
+  return axios.get('/api/deviceData');
 }
 
-export  function deleteDeviceDataApi(id) {
-  return  axios.delete(`/api/deviceData/${id}`);
+export function deleteDeviceDataApi(id) {
+  return axios.delete(`/api/deviceData/${id}`);
 }
-export  function deleteMultipleDataApi(id) {
-  return  axios.delete(`/api/multipleDeviceData`,{
-    params:{
+
+export function deleteMultipleDataApi(id) {
+  return axios.delete(`/api/multipleDeviceData`, {
+    params: {
       ...id
     }
   });
 }
 
-export  function updateDeviceDataApi(data) {//
+export function updateDeviceDataApi(data) {//
   console.log(data);
-  return  axios.put(`/api/deviceData/${data.id}`,{
+  return axios.put(`/api/deviceData/${data.id}`, {
     ...data
   });
 }
 
-export  function addDeviceDataApi(data){
-  return  axios.post(`/api/device`,{
+export function addDeviceDataApi(data) {
+  return axios.post(`/api/device`, {
     ...data
   });
 }
 
-export  function searchDeviceDataApi(data) {
-  return  axios.get('/api/deviceData',{
-    params:{
+export function searchDeviceDataApi(data) {
+  return axios.get('/api/deviceData', {
+    params: {
       ...data
     }
   });
 }
 
 //监控
-export  function getDeviceTreeApi() {
-  return  axios.get('/api/deviceTree');
+export function getDeviceTreeApi() {
+  return axios.get('/api/deviceTree');
 }
 
 //告警信息
-export  function getAlarmInformationApi() {
-  return  axios.get('/api/alarmInformation');
+export function getAlarmInformationApi() {
+  return axios.get('/api/alarmInformation');
 }
-export  function updateAlarmInformationApi(data) {
-  return  axios.put(`/api/alarmInformation/${data.id}`,{
+
+export function updateAlarmInformationApi(data) {
+  return axios.put(`/api/alarmInformation/${data.id}`, {
     ...data
   });
 }
 
-export  function handleAllAlarmInformationApi(handleData,id){
-  return  axios.post(`/api/alarmInformation`,{
+export function handleAllAlarmInformationApi(handleData, id) {
+  return axios.post(`/api/alarmInformation`, {
     handleData,
-    id:{
+    id: {
       ...id
     }
   });
 }
 
-export  function searchAlarmInformationApi(data) {
-  return  axios.get('/api/alarmInformation',{
-    params:{
+export function searchAlarmInformationApi(data) {
+  return axios.get('/api/alarmInformation', {
+    params: {
       ...data
     }
   });
@@ -209,77 +218,84 @@ export  function searchAlarmInformationApi(data) {
 export function getReportStaticIndexHistogram1() {
   return axios.get('/api/ReportStaticIndexHistogram1');
 }
+
 export function getReportStaticIndexPieChart1() {
   return axios.get('/api/ReportStaticIndexPieChart1');
 }
+
 export function getReportStaticIndexHistogram2() {
   return axios.get('/api/ReportStaticIndexHistogram2');
 }
+
 export function getReportStaticIndexPieChart2() {
   return axios.get('/api/ReportStaticIndexPieChart2');
 }
+
 // 按天统计
-export function getReportStaticDailyHistogram(selectedType,selectedSource,time) {
-  return axios.get('/api/ReportStaticDailyHistogram',{
-    selectedType:selectedType,
-    selectedSource:selectedSource,
-    time:time
+export function getReportStaticDailyHistogram(selectedType, selectedSource, time) {
+  return axios.get('/api/ReportStaticDailyHistogram', {
+    selectedType: selectedType,
+    selectedSource: selectedSource,
+    time: time
   });
 }
 
-export function getReportStaticDaithlyPieChart(selectedType,selectedSource,time) {
-  return axios.get('/api/ReportStaticDailyPieChart',{
-    selectedType:selectedType,
-    selectedSource:selectedSource,
-    time:time
+export function getReportStaticDaithlyPieChart(selectedType, selectedSource, time) {
+  return axios.get('/api/ReportStaticDailyPieChart', {
+    selectedType: selectedType,
+    selectedSource: selectedSource,
+    time: time
   });
 }
+
 // 按月统计
-export function getReportStaticMonthlyHistogram(selectedType,selectedSource,time) {
-  return axios.get('/api/ReportStaticMonthlyHistogram',{
-    selectedType:selectedType,
-    selectedSource:selectedSource,
-    time:time
+export function getReportStaticMonthlyHistogram(selectedType, selectedSource, time) {
+  return axios.get('/api/ReportStaticMonthlyHistogram', {
+    selectedType: selectedType,
+    selectedSource: selectedSource,
+    time: time
   });
 }
 
-export function getReportStaticMonthlyPieChart(selectedType,selectedSource,time) {
-  return axios.get('/api/ReportStaticMonthlyPieChart',{
-    selectedType:selectedType,
-    selectedSource:selectedSource,
-    time:time
+export function getReportStaticMonthlyPieChart(selectedType, selectedSource, time) {
+  return axios.get('/api/ReportStaticMonthlyPieChart', {
+    selectedType: selectedType,
+    selectedSource: selectedSource,
+    time: time
   });
 }
+
 // 按资源类别费用统计
-export function getReportStaticByCategoryTable(selectedType,selectedSource,time) {
-  return axios.get('/api/ReportStaticByCategoryTable',{
-    selectedType:selectedType,
-    selectedSource:selectedSource,
-    time:time
-  });
-}
-export function getReportStaticByCategoryTypeHistogram(selectedType,selectedSource,time) {
-  return axios.get('/api/ReportStaticByCategoryTypeHistogram',{
-    selectedType:selectedType,
-    selectedSource:selectedSource,
-    time:time
-  });
-}
-export function getReportStaticByCategorySubClassHistogram(selectedType,selectedSource,time) {
-  return axios.get('/api/gReportStaticByCategorySubClassHistogram',{
-    selectedType:selectedType,
-    selectedSource:selectedSource,
-    time:time
+export function getReportStaticByCategoryTable(selectedType, selectedSource, time) {
+  return axios.get('/api/ReportStaticByCategoryTable', {
+    selectedType: selectedType,
+    selectedSource: selectedSource,
+    time: time
   });
 }
 
+export function getReportStaticByCategoryTypeHistogram(selectedType, selectedSource, time) {
+  return axios.get('/api/ReportStaticByCategoryTypeHistogram', {
+    selectedType: selectedType,
+    selectedSource: selectedSource,
+    time: time
+  });
+}
+
+export function getReportStaticByCategorySubClassHistogram(selectedType, selectedSource, time) {
+  return axios.get('/api/gReportStaticByCategorySubClassHistogram', {
+    selectedType: selectedType,
+    selectedSource: selectedSource,
+    time: time
+  });
+}
 
 
 // 按订阅费用统计
 export function getReportStaticBySubscribe(year) {
-  return axios.get('/api/ReportStaticBySubscribe',{
-    params:{
-      year:year
+  return axios.get('/api/ReportStaticBySubscribe', {
+    params: {
+      year: year
     }
   });
 }
@@ -290,40 +306,45 @@ export function getReportOfMonthlyExpense() {
 }
 
 
-export function checkMonthlyReport(order,date) {
-  return axios.get('/api/checkMonthlyReport',{
-    params:{
-      order:order,
-      date:date
+export function checkMonthlyReport(order, date) {
+  return axios.get('/api/checkMonthlyReport', {
+    params: {
+      order: order,
+      date: date
     }
   });
 }
+
 // 用户管理
 // 获取所有部门 下拉框要用
 export function getAllDepartments() {
   return axios.get('/api/department');
 }
+
 // crud
 
 
 export function getUserById(id) {
   return axios.get(`/api/user/${id}`);
 }
+
 // 增加新用户
 export function createNewUser(userInfo) {
-  return axios.post(`/api/user`,{
+  return axios.post(`/api/user`, {
     ...userInfo
   })
 }
+
 // 获取用户信息表，如果没有传参数就是获取全部
-export function getUserTable(username,depart) {
-  return axios.get('/api/user',{
-    params:{
-      username:username,
-      depart:depart
+export function getUserTable(username, depart) {
+  return axios.get('/api/user', {
+    params: {
+      username: username,
+      depart: depart
     }
   });
 }
+
 // 删除用户
 export function deleteUser(userID) {
   return axios.delete(`/api/user/${userID}`)
@@ -334,13 +355,15 @@ export function editUser(id, userInfo) {
     ...userInfo
   });
 }
+
 //  修改用户(一般改权限，传参用户id和权限名的数组)
-export function editAuthorities(userID,options) {
-  return axios.post(`/api/editAuthorities`,{
+export function editAuthorities(userID, options) {
+  return axios.post(`/api/editAuthorities`, {
     userID,
-    options:options
+    options: options
   })
 }
+
 export function getAllAuthorities() {
   return axios.get('/api/getAllAuthorities');
 }
