@@ -44,7 +44,7 @@
           </template>
           <router-link to="/reportCenter"  class="hide-underline"><el-menu-item index="6-1">概览</el-menu-item></router-link>
           <router-link to="/RegionalDimension"  class="hide-underline"><el-menu-item index="6-2">按地域维度</el-menu-item></router-link>
-          <router-link to="/ReportStaticMonthly"  class="hide-underline"><el-menu-item index="6-3">按月费用统计</el-menu-item></router-link>
+          <router-link to="/TimeDimension"  class="hide-underline"><el-menu-item index="6-3">按时间维度</el-menu-item></router-link>
           <router-link to="/ReportStaticByCategory"  class="hide-underline"><el-menu-item index="6-4">按资源类别费用统计</el-menu-item></router-link>
           <router-link to="/ReportStaticBySubscribe"  class="hide-underline"><el-menu-item index="6-5">按订阅费用统计</el-menu-item></router-link>
           <router-link to="/ReportOfMonthlyExpense"  class="hide-underline"><el-menu-item index="6-6">月度费用报告</el-menu-item></router-link>

@@ -17,7 +17,7 @@ import ReportCenter from '../container/ReportCenter/index';
 import ModelTraining from '../container/ModelTraining/index';
 import IntelligentAnalysis from '../container/IntelligentAnalysis/index';
 import RegionalDimension from  '../container/RegionalDimension';
-import ReportStaticMonthly from '../container/ReportStaticMonthly';
+import TimeDimension from '../container/TimeDimension';
 import ReportStaticByCategory from '../container/ReportStaticByCategory';
 import ReportStaticBySubscribe from '../container/ReportStaticBySubscribe';
 import ReportOfMonthlyExpense from '../container/ReportOfMonthlyExpense';
@@ -74,9 +74,9 @@ const routes=[
           name: 'RegionalDimension',
           component: RegionalDimension
         },{
-          path: '/ReportStaticMonthly',
-          name: 'ReportStaticMonthly',
-          component: ReportStaticMonthly
+          path: '/TimeDimension',
+          name: 'TimeDimension',
+          component: TimeDimension
         },
         {
           path:'/ReportStaticByCategory',

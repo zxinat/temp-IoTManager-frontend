@@ -1,5 +1,5 @@
 <template>
-  <div class="alarm-history-container">
+  <div class="time-dimension-container">
     <el-table
       :data="tableData"
       border>
@@ -95,7 +95,7 @@
 <style lang="scss" scoped>
   @import "../../assets/scss/variaties";
 
-  .alarm-history-container {
+  .time-dimension-container {
     height: $dashboard-block-height;
     margin: 10px;
   }

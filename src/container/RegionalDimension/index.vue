@@ -17,7 +17,7 @@
       </el-date-picker>
     </div>
     <el-row>
-      <div :span="12" :offset="6" class="report-statistic-daily-histogram">
+      <div class="report-statistic-daily-histogram">
       </div>
     </el-row>
 
