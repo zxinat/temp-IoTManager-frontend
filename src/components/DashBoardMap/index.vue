@@ -7,12 +7,13 @@
         v-model="selectedArea"
         @change="areaFilter">
       </el-cascader>
+      <div class="dashboard-map-container">
+        <!--<h2>-->
+        <!--中国地图-->
+        <!--</h2>-->
+      </div>
     </div>
-    <div class="dashboard-map-container">
-      <!--<h2>-->
-      <!--中国地图-->
-      <!--</h2>-->
-    </div>
+
   </div>
 
 </template>
@@ -285,7 +286,7 @@
   @import "../../assets/scss/variaties.scss";
 
   .block {
-    margin: 10px 0 10px 10px;
+    margin: 10px;
   }
 
   .dashboard-map-container {

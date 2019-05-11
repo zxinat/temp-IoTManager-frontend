@@ -76,5 +76,6 @@
   @import "../../assets/scss/variaties";
 .statistics-container{
   height: $dashboard-block-height;
+  margin: 10px;
 }
 </style>

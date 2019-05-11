@@ -174,6 +174,7 @@
   }
   .dashboard-line-chart-container {
     height: $dashboard-block-height;
+    margin: 10px;
     /*padding-top: 10px;*/
   }
 </style>
