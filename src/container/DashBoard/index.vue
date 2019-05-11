@@ -7,6 +7,8 @@
         <el-col :span="12">
           <DashboardLineChart></DashboardLineChart>
         </el-col>
+      </el-row>
+      <el-row>
         <el-col :span="12">
           <dashboard-alarm-history></dashboard-alarm-history>
         </el-col>

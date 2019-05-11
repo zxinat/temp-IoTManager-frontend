@@ -43,7 +43,7 @@
             <span>报表中心</span>
           </template>
           <router-link to="/reportCenter"  class="hide-underline"><el-menu-item index="6-1">概览</el-menu-item></router-link>
-          <router-link to="/ReportStaticDaily"  class="hide-underline"><el-menu-item index="6-2">按日费用统计</el-menu-item></router-link>
+          <router-link to="/RegionalDimension"  class="hide-underline"><el-menu-item index="6-2">按地域维度</el-menu-item></router-link>
           <router-link to="/ReportStaticMonthly"  class="hide-underline"><el-menu-item index="6-3">按月费用统计</el-menu-item></router-link>
           <router-link to="/ReportStaticByCategory"  class="hide-underline"><el-menu-item index="6-4">按资源类别费用统计</el-menu-item></router-link>
           <router-link to="/ReportStaticBySubscribe"  class="hide-underline"><el-menu-item index="6-5">按订阅费用统计</el-menu-item></router-link>

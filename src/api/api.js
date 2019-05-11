@@ -232,8 +232,8 @@ export function getReportStaticIndexPieChart2() {
 }
 
 // 按天统计
-export function getReportStaticDailyHistogram(selectedType, selectedSource, time) {
-  return axios.get('/api/ReportStaticDailyHistogram', {
+export function getRegionalDimensionHistogram(selectedType, selectedSource, time) {
+  return axios.get('/api/RegionalDimensionHistogram', {
     selectedType: selectedType,
     selectedSource: selectedSource,
     time: time
@@ -241,7 +241,7 @@ export function getReportStaticDailyHistogram(selectedType, selectedSource, time
 }
 
 export function getReportStaticDaithlyPieChart(selectedType, selectedSource, time) {
-  return axios.get('/api/ReportStaticDailyPieChart', {
+  return axios.get('/api/RegionalDimensionPieChart', {
     selectedType: selectedType,
     selectedSource: selectedSource,
     time: time

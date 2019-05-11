@@ -16,7 +16,7 @@ import PersonalInformation from '../container/PersonalInformation/index';
 import ReportCenter from '../container/ReportCenter/index';
 import ModelTraining from '../container/ModelTraining/index';
 import IntelligentAnalysis from '../container/IntelligentAnalysis/index';
-import ReportStaticDaily from  '../container/ReportStaticDaily';
+import RegionalDimension from  '../container/RegionalDimension';
 import ReportStaticMonthly from '../container/ReportStaticMonthly';
 import ReportStaticByCategory from '../container/ReportStaticByCategory';
 import ReportStaticBySubscribe from '../container/ReportStaticBySubscribe';
@@ -70,9 +70,9 @@ const routes=[
           component: ReportCenter
         },
         {
-          path: '/ReportStaticDaily',
-          name: 'ReportStaticDaily',
-          component: ReportStaticDaily
+          path: '/RegionalDimension',
+          name: 'RegionalDimension',
+          component: RegionalDimension
         },{
           path: '/ReportStaticMonthly',
           name: 'ReportStaticMonthly',
