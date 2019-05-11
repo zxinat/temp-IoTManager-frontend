@@ -55,6 +55,12 @@
             <span>用户管理</span>
           </el-menu-item>
         </router-link>
+        <router-link to="/districtManagement"  class="hide-underline">
+          <el-menu-item index="8">
+            <!--<i class="el-icon-location"></i>-->
+            <span>城市工厂管理</span>
+          </el-menu-item>
+        </router-link>
       </el-menu>
 </template>
 

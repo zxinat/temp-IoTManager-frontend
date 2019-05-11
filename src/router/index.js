@@ -21,6 +21,7 @@ import TimeDimension from '../container/TimeDimension';
 import ReportStaticByCategory from '../container/ReportStaticByCategory';
 import ReportStaticBySubscribe from '../container/ReportStaticBySubscribe';
 import ReportOfMonthlyExpense from '../container/ReportOfMonthlyExpense';
+import DistrictManagement from '../container/DistrictManagement';
 
 import {getCookie} from '../../utils/package-cookies';
 Vue.use(Router);
@@ -113,6 +114,11 @@ const routes=[
           name: 'RoleManagement',
           component: RoleManagement
 
+        },
+        {
+          path: '/districtManagement',
+          name: 'DistrictManagement',
+          component: DistrictManagement
         }
       ]
     },
