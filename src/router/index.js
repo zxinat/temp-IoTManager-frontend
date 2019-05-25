@@ -22,6 +22,7 @@ import ReportStaticByCategory from '../container/ReportStaticByCategory';
 import ReportStaticBySubscribe from '../container/ReportStaticBySubscribe';
 import ReportOfMonthlyExpense from '../container/ReportOfMonthlyExpense';
 import DistrictManagement from '../container/DistrictManagement';
+import DeviceTypeDimension from  '../container/DeviceTypeDimension';
 
 import {getCookie} from '../../utils/package-cookies';
 Vue.use(Router);
@@ -119,6 +120,11 @@ const routes=[
           path: '/districtManagement',
           name: 'DistrictManagement',
           component: DistrictManagement
+        },
+        {
+          path: '/DeviceTypeDimension',
+          name: 'DeviceTypeDimension',
+          component: DeviceTypeDimension
         }
       ]
     },

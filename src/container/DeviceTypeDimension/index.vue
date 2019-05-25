@@ -1,5 +1,5 @@
 <template>
-  <div class="time-dimension-container">
+  <div class="device-type-dimension-container">
     <div class="head-container">
       <!--选择车间-->
       <!--<el-cascader-->
@@ -24,8 +24,16 @@
     <!--<el-steps style="margin: 20px 0" simple>-->
     <!--<el-step title="资源类别统计" icon="el-icon-upload"></el-step>-->
     <!--</el-steps>-->
-    <!--<div class="report-statistic-daily-piechart">-->
-    <!--</div>-->
+    <el-row>
+      <el-col :span="12">
+        <div class="report-statistic-daily-piechart1">
+        </div>
+      </el-col>
+      <el-col :span="12">
+        <div class="report-statistic-daily-piechart2">
+        </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -33,7 +41,7 @@
   import echarts from 'echarts';
 
   export default {
-    name: "TimeDimension",
+    name: "DeviceTypeDimension",
     data() {
       return {
         nameOptions: [{
@@ -171,17 +179,24 @@
         // 时间戳数组
         selectedDate: '',
         histogramOption: {
+          color: ['#6c807b'],
           legend: {},
           tooltip: {},
           dataset: {
             source: [
-              ['product', '平均在线时间', '告警次数', '设备数量'],
-              ['2014', 72.4, 53.9, 39.1],
-              ['2015', 72.4, 53.9, 39.1],
-              ['2016', 72.4, 53.9, 39.1],
-              ['2017', 43.3, 85.8, 93.7],
-              ['2018', 83.1, 73.4, 55.1],
-              ['2019', 86.4, 65.2, 82.5],
+              ['product', '平均在线时间'],
+              ['传感器1', 42.4],
+              ['传感器2', 92.4],
+              ['传感器3', 79.4],
+              ['传感器4', 43.3],
+              ['传感器5', 83.1],
+              ['传感器6', 86.4],
+              ['传感器7', 42.4],
+              ['传感器8', 92.4],
+              ['传感器9', 79.4],
+              ['传感器10', 43.3],
+              ['传感器11', 83.1],
+              // ['传感器12', 86.4],
             ]
           },
           xAxis: {type: 'category'},
@@ -190,69 +205,107 @@
           // to a column of dataset.source by default.
           series: [
             {type: 'bar'},
-            {type: 'bar'},
-            {type: 'bar'}
           ]
         },
-        // 左边栏数据
-        treeData: [{
-          "label": "上海",
-          "children": [{
-            "label": "工厂1",
-            "children": [{
-              "label": "车间1",
-            }]
-          }, {
-            "label": "工厂2",
-            "children": [{
-              "label": "车间2",
-            }]
-          }, {
-            "label": "工厂3",
-            "children": [{
-              "label": "车间3",
-            }]
-          }]
-        }, {
-          "label": "长沙",
-          "children": [{
-            "label": "工厂1",
-            "children": [{
-              "label": "车间1",
-            }]
-          }, {
-            "label": "工厂2",
-            "children": [{
-              "label": "车间2",
-            }]
-          }, {
-            "label": "工厂3",
-            "children": [{
-              "label": "车间3",
-            }]
-          }]
-        }, {
-          "label": "武汉",
-          "children": [{
-            "label": "工厂1",
-            "children": [{
-              "label": "车间1",
-            }]
-          }, {
-            "label": "工厂2",
-            "children": [{
-              "label": "车间2",
-            }]
-          }, {
-            "label": "工厂3",
-            "children": [{
-              "label": "车间3"
-            }]
-          }]
-        }],
-        defaultProps: {
-          children: 'children',
-          label: 'label'
+        pieChartOption: {
+          title : {
+            text: '报警次数',
+            x:'center'
+          },
+          tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+          },
+          toolbox: {
+            show: true,
+            y: 'bottom',
+            feature: {
+              restore: {show: true},
+              saveAsImage: {show: true}
+            }
+          },
+          series: [
+            {
+              name: '饼图',
+              type: 'pie',
+              radius: '50%',
+              selectedMode: 'single',
+              label: {
+                normal: {
+                  position: 'outside',
+                  formatter: '{b}\n{c}次',
+                  textStyle: {
+                    color: '',
+                    fontSize: 14
+                  }
+                }
+              },
+              data: [
+                {value: 200, name: '传感器1'},
+                {value: 20, name: '传感器2'},
+                {value: 790, name: '传感器3'},
+                {value: 780, name: '传感器4'},
+                {value: 550, name: '传感器5'},
+                {value: 70, name: '传感器6'},
+                {value: 80, name: '传感器7'},
+                {value: 78, name: '传感器8'},
+                {value: 7, name: '传感器9'},
+                {value: 78, name: '传感器10'},
+                {value: 780, name: '传感器11'},
+                // {value: 780, name: '传感器12'},
+              ]
+            }
+          ]
+        },
+        pieChartOption2: {
+          title : {
+            text: '设备数',
+            x:'center'
+          },
+          tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+          },
+          toolbox: {
+            show: true,
+            y: 'bottom',
+            feature: {
+              restore: {show: true},
+              saveAsImage: {show: true}
+            }
+          },
+          series: [
+            {
+              name: '饼图',
+              type: 'pie',
+              radius: '50%',
+              selectedMode: 'single',
+              label: {
+                normal: {
+                  position: 'outside',
+                  formatter: '{b}\n{c}个',
+                  textStyle: {
+                    color: '',
+                    fontSize: 14
+                  }
+                }
+              },
+              data: [
+                {value: 200, name: '传感器1'},
+                {value: 20, name: '传感器2'},
+                {value: 780, name: '传感器3'},
+                {value: 780, name: '传感器4'},
+                {value: 780, name: '传感器5'},
+                {value: 780, name: '传感器6'},
+                {value: 780, name: '传感器7'},
+                {value: 780, name: '传感器8'},
+                {value: 780, name: '传感器9'},
+                {value: 780, name: '传感器10'},
+                {value: 780, name: '传感器11'},
+                // {value: 780, name: '传感器12'},
+              ]
+            }
+          ]
         }
       }
     },
@@ -263,41 +316,31 @@
       // let pieChartData = await getReportStaticDaithlyPieChart(this.selectedType, this.selectedSource, this.time);
       // this.pieChartOption.series[0].data = pieChartData.data.d;
       this.initTypeChart();
-      // this.initSubClassChart();
+      this.initSubClassChartOne();
+      this.initSubClassChartTwo();
     },
     methods: {
       initTypeChart() {
         this.chart = echarts.init(document.getElementsByClassName('report-statistic-daily-histogram')[0]);
         // 把配置和数据放这里
         this.chart.setOption(this.histogramOption);
-        let vm = this;
-        this.chart.on('click', function (params) {
-          // 控制台打印数据的名称
-          vm.histogramOption.dataset.source = [
-            ['product', '平均在线时间', '告警次数', '设备数量'],
-            ['1月', 72.4, 53.9, 39.1],
-            ['2月', 72.4, 53.9, 39.1],
-            ['3月', 72.4, 53.9, 39.1],
-            ['4月', 43.3, 85.8, 93.7],
-            ['5月', 83.1, 73.4, 55.1],
-            ['6月', 86.4, 65.2, 82.5],
-            ['7月', 72.4, 53.9, 39.1],
-            ['8月', 72.4, 53.9, 39.1],
-            ['9月', 72.4, 53.9, 39.1],
-            ['10月', 43.3, 85.8, 93.7],
-            ['11月', 83.1, 73.4, 55.1],
-            ['12月', 86.4, 65.2, 82.5],
-          ];
-          vm.initTypeChart();
-          console.log(params.name, vm);
-        });
-      }
+      },
+      initSubClassChartOne() {
+        this.chart = echarts.init(document.getElementsByClassName('report-statistic-daily-piechart1')[0]);
+        // 把配置和数据放这里
+        this.chart.setOption(this.pieChartOption)
+      },
+      initSubClassChartTwo() {
+        this.chart = echarts.init(document.getElementsByClassName('report-statistic-daily-piechart2')[0]);
+        // 把配置和数据放这里
+        this.chart.setOption(this.pieChartOption2)
+      },
     },
   }
 </script>
 
 <style lang="scss" scoped>
-  .time-dimension-container {
+  .device-type-dimension-container {
     .head-container {
       margin: 20px 50px;
     }
@@ -306,9 +349,11 @@
       height: 500px;
     }
 
-    .report-statistic-daily-piechart {
+    .report-statistic-daily-piechart1 {
+      height: 400px;
+    }
+    .report-statistic-daily-piechart2 {
       height: 400px;
     }
   }
 </style>
-
