@@ -2,7 +2,7 @@
   <div class="regional-dimension-container">
     <el-row>
       <el-col :span="3">
-        <el-tree :data="treeData" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+        <el-tree :data="treeData" :props="defaultProps" @node-click=""></el-tree>
       </el-col>
       <el-col :span="21">
         <div class="head-container">

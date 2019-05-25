@@ -1,179 +1,321 @@
 <template>
-  <div class="report-statistic-monthly">
-    <div class="head-container">
-      订阅名称
-      <el-select v-model="selectedType" placeholder="请选择">
-        <el-option
-          v-for="item in nameOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
-      资源组
-      <el-select v-model="selectedSource" placeholder="请选择">
-        <el-option
-          v-for="item in sourceOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select>
-      <span class="demonstration">账单日期</span>
-      <el-date-picker
-        v-model="selectedDate"
-        type="year"
-        placeholder="选择年">
-      </el-date-picker>
-    </div>
-    <el-steps style="margin: 20px 0" simple>
-      <el-step title="按月费用统计" icon="el-icon-upload"></el-step>
-    </el-steps>
-    <div class="report-statistic-monthly-histogram">
-    </div>
-    <el-steps style="margin: 20px 0" simple>
-      <el-step title="资源类别统计" icon="el-icon-upload"></el-step>
-    </el-steps>
-    <div class="report-statistic-monthly-piechart">
-    </div>
+  <div class="regional-dimension-container">
+    <el-row>
+      <el-col :span="3">
+        <el-tree :data="treeData" :props="defaultProps" @node-click=""></el-tree>
+      </el-col>
+      <el-col :span="21">
+        <div class="head-container">
+          <!--选择车间-->
+          <!--<el-cascader-->
+          <!--:options="nameOptions"-->
+          <!--v-model="selectedOptions"-->
+          <!--@change="handleChange">-->
+          <!--</el-cascader>-->
+          <span class="demonstration">选择时间</span>
+          <el-date-picker
+            v-model="selectedDate"
+            type="daterange"
+            range-separator="至"
+            start-placeholder="开始月份"
+            end-placeholder="结束月份"
+            :default-time="['00:00:00', '23:59:59']">
+          </el-date-picker>
+        </div>
+        <el-row>
+          <div class="report-statistic-daily-histogram">
+          </div>
+        </el-row>
+      </el-col>
+    </el-row>
+    <!--<el-steps style="margin: 20px 0" simple>-->
+    <!--<el-step title="资源类别统计" icon="el-icon-upload"></el-step>-->
+    <!--</el-steps>-->
+    <!--<div class="report-statistic-daily-piechart">-->
+    <!--</div>-->
   </div>
 </template>
 
 <script>
-  import {getReportStaticMonthlyHistogram,getReportStaticMonthlyPieChart} from '../../api/api';
   import echarts from 'echarts';
 
   export default {
-    name: "ReportStaticMonthly",
+    name: "TimeDimension",
     data() {
       return {
         nameOptions: [{
-          value: '选项1',
-          label: '类型1'
+          value: 'shanghai',
+          label: '上海',
+          children: [{
+            value: '111',
+            label: '工厂1',
+            children: [{
+              value: '',
+              label: '车间1'
+            }, {
+              value: 'fankui',
+              label: '车间2'
+            }, {
+              value: 'xiaolv',
+              label: '车间3'
+            }, {
+              value: 'kekong',
+              label: '车间4'
+            }]
+          }, {
+            value: 'daohang',
+            label: '工厂2',
+            children: [{
+              value: 'cexiangdaohang',
+              label: '车间1'
+            }, {
+              value: 'dingbudaohang',
+              label: '车间2'
+            }]
+          }]
         }, {
-          value: '选项2',
-          label: '类型2'
+          value: 'zujian',
+          label: '长沙',
+          children: [{
+            value: 'basic',
+            label: '工厂1',
+            children: [{
+              value: 'layout',
+              label: '车间1'
+            }, {
+              value: 'color',
+              label: '车间2'
+            }, {
+              value: 'typography',
+              label: '车间3'
+            }, {
+              value: 'icon',
+              label: '车间4'
+            }, {
+              value: 'button',
+              label: '车间5'
+            }]
+          }, {
+            value: 'form',
+            label: '工厂2',
+            children: [{
+              value: 'radio',
+              label: '车间1'
+            }, {
+              value: 'checkbox',
+              label: '车间2'
+            }, {
+              value: 'input',
+              label: '车间3'
+            }, {
+              value: 'input-number',
+              label: '车间4'
+            }, {
+              value: 'select',
+              label: '车间5'
+            }]
+          }, {
+            value: 'data',
+            label: '工厂3',
+            children: [{
+              value: 'table',
+              label: '车间1'
+            }, {
+              value: 'tag',
+              label: '车间2'
+            }, {
+              value: 'progress',
+              label: '车间3'
+            }, {
+              value: 'tree',
+              label: '车间4'
+            }, {
+              value: 'pagination',
+              label: '车间5'
+            }, {
+              value: 'badge',
+              label: '车间6'
+            }]
+          }, {
+            value: 'notice',
+            label: '工厂4',
+            children: [{
+              value: 'alert',
+              label: '车间1'
+            }, {
+              value: 'loading',
+              label: '车间2'
+            }, {
+              value: 'message',
+              label: '车间3'
+            }, {
+              value: 'message-box',
+              label: '车间4'
+            }]
+          }]
         }, {
-          value: '选项3',
-          label: '类型3'
-        }, {
-          value: '选项4',
-          label: '类型4'
-        }, {
-          value: '选项5',
-          label: '类型5'
+          value: 'ziyuan',
+          label: '武汉',
+          children: [{
+            value: 'notice',
+            label: '工厂4',
+            children: [{
+              value: 'alert',
+              label: '车间1'
+            }, {
+              value: 'loading',
+              label: '车间2'
+            }, {
+              value: 'message',
+              label: '车间3'
+            }, {
+              value: 'message-box',
+              label: '车间4'
+            }]
+          }]
         }],
         selectedType: '',
-        sourceOptions: [{
-          value: '选项1',
-          label: '资源1'
-        }, {
-          value: '选项2',
-          label: '资源2'
-        }, {
-          value: '选项3',
-          label: '资源3'
-        }, {
-          value: '选项4',
-          label: '资源4'
-        }, {
-          value: '选项5',
-          label: '资源5'
-        }],
-        selectedSource: '',
         // 时间戳数组
         selectedDate: '',
         histogramOption: {
+          legend: {},
+          tooltip: {},
           dataset: {
-            source: []
+            source: [
+              ['product', '平均在线时间', '告警次数', '设备数量'],
+              ['2014', 72.4, 53.9, 39.1],
+              ['2015', 72.4, 53.9, 39.1],
+              ['2016', 72.4, 53.9, 39.1],
+              ['2017', 43.3, 85.8, 93.7],
+              ['2018', 83.1, 73.4, 55.1],
+              ['2019', 86.4, 65.2, 82.5],
+            ]
           },
-          xAxis: {name: 'amount'},
-          yAxis: {type: 'category'},
-          visualMap: {
-            orient: 'horizontal',
-            left: 'center',
-            min: 10,
-            max: 100,
-            text: ['High Score', 'Low Score'],
-            // Map the score column to color
-            dimension: 0,
-            inRange: {
-              color: ['#D7DA8B', '#E15457']
-            }
-          },
+          xAxis: {type: 'category'},
+          yAxis: {},
+          // Declare several bar series, each will be mapped
+          // to a column of dataset.source by default.
           series: [
-            {
-              type: 'bar',
-              encode: {
-                // Map the "amount" column to X axis.
-                x: 'amount',
-                // Map the "product" column to Y axis
-                y: 'product'
-              }
-            }
+            {type: 'bar'},
+            {type: 'bar'},
+            {type: 'bar'}
           ]
         },
-        pieChartOption: {
-          tooltip: {
-            trigger: 'item',
-            formatter: "{a} <br/>{b} : {c} ({d}%)"
-          },
-          legend: {
-            orient: 'vertical',
-            left: 'left',
-            data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
-          },
-          series: [
-            {
-              name: '访问来源',
-              type: 'pie',
-              radius: '55%',
-              center: ['60%', '30%'],
-              data: [],
-              itemStyle: {
-                emphasis: {
-                  shadowBlur: 10,
-                  shadowOffsetX: 0,
-                  shadowColor: 'rgba(0, 0, 0, 0.5)'
-                }
-              }
-            }
-          ]
+        // 左边栏数据
+        treeData: [{
+          "label": "上海",
+          "children": [{
+            "label": "工厂1",
+            "children": [{
+              "label": "车间1",
+            }]
+          }, {
+            "label": "工厂2",
+            "children": [{
+              "label": "车间2",
+            }]
+          }, {
+            "label": "工厂3",
+            "children": [{
+              "label": "车间3",
+            }]
+          }]
+        }, {
+          "label": "长沙",
+          "children": [{
+            "label": "工厂1",
+            "children": [{
+              "label": "车间1",
+            }]
+          }, {
+            "label": "工厂2",
+            "children": [{
+              "label": "车间2",
+            }]
+          }, {
+            "label": "工厂3",
+            "children": [{
+              "label": "车间3",
+            }]
+          }]
+        }, {
+          "label": "武汉",
+          "children": [{
+            "label": "工厂1",
+            "children": [{
+              "label": "车间1",
+            }]
+          }, {
+            "label": "工厂2",
+            "children": [{
+              "label": "车间2",
+            }]
+          }, {
+            "label": "工厂3",
+            "children": [{
+              "label": "车间3"
+            }]
+          }]
+        }],
+        defaultProps: {
+          children: 'children',
+          label: 'label'
         }
       }
     },
     async mounted() {
       // 默认获取统计表
-      let histogramData = await getReportStaticMonthlyHistogram(this.selectedType, this.selectedSource, this.time);
-      this.histogramOption.dataset.source = histogramData.data.d;
-      let pieChartData = await getReportStaticMonthlyPieChart(this.selectedType, this.selectedSource, this.time);
-      this.pieChartOption.series[0].data = pieChartData.data.d;
+      // let histogramData = await getRegionalDimensionHistogram(this.selectedType, this.selectedSource, this.time);
+      // this.histogramOption.dataset.source = histogramData.data.d;
+      // let pieChartData = await getReportStaticDaithlyPieChart(this.selectedType, this.selectedSource, this.time);
+      // this.pieChartOption.series[0].data = pieChartData.data.d;
       this.initTypeChart();
-      this.initSubClassChart();
+      // this.initSubClassChart();
     },
     methods: {
       initTypeChart() {
-        this.chart = echarts.init(document.getElementsByClassName('report-statistic-monthly-histogram')[0]);
+        this.chart = echarts.init(document.getElementsByClassName('report-statistic-daily-histogram')[0]);
         // 把配置和数据放这里
-        this.chart.setOption(this.histogramOption)
-      },
-      initSubClassChart() {
-        this.chart = echarts.init(document.getElementsByClassName('report-statistic-monthly-piechart')[0]);
-        // 把配置和数据放这里
-        this.chart.setOption(this.pieChartOption)
-      },
+        this.chart.setOption(this.histogramOption);
+        let vm=this;
+        this.chart.on('click', function (params) {
+          // 控制台打印数据的名称
+          vm.histogramOption.dataset.source=[
+            ['product', '平均在线时间', '告警次数', '设备数量'],
+            ['1月', 72.4, 53.9, 39.1],
+            ['2月', 72.4, 53.9, 39.1],
+            ['3月', 72.4, 53.9, 39.1],
+            ['4月', 43.3, 85.8, 93.7],
+            ['5月', 83.1, 73.4, 55.1],
+            ['6月', 86.4, 65.2, 82.5],
+            ['7月', 72.4, 53.9, 39.1],
+            ['8月', 72.4, 53.9, 39.1],
+            ['9月', 72.4, 53.9, 39.1],
+            ['10月', 43.3, 85.8, 93.7],
+            ['11月', 83.1, 73.4, 55.1],
+            ['12月', 86.4, 65.2, 82.5],
+          ];
+          vm.initTypeChart();
+          console.log(params.name,vm);
+        });
+      }
     },
   }
 </script>
 
 <style lang="scss" scoped>
-  .report-statistic-monthly {
-    .report-statistic-monthly-histogram {
+  .regional-dimension-container {
+    .head-container {
+      margin: 20px;
+    }
+
+    .report-statistic-daily-histogram {
       height: 500px;
     }
 
-    .report-statistic-monthly-piechart {
+    .report-statistic-daily-piechart {
       height: 400px;
     }
   }
 </style>
+
