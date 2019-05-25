@@ -33,7 +33,7 @@
   import echarts from 'echarts';
   import io from 'socket.io-client';
   import {getDevicesApi,getDeviceProperty,getDevicePropertyData} from '../../api/api';
-  const socket = io('ws://localhost:3000')
+  // const socket = io('ws://localhost:3000')
   export default {
     name: "DashboardLineChart",
     data() {
@@ -100,15 +100,15 @@
       }
     },
     async mounted() {
-      socket.emit('open');
+      // socket.emit('open');
       this.initChart();
-      socket.on('updateData', data => {
-        this.option.series[0].data.shift();
-        this.option.series[0].data.push(parseInt(data.value));
-        this.option.xAxis.data.shift();
-        this.option.xAxis.data.push(data.time);
-        this.initChart();
-      });
+      // socket.on('updateData', data => {
+      //   this.option.series[0].data.shift();
+      //   this.option.series[0].data.push(parseInt(data.value));
+      //   this.option.xAxis.data.shift();
+      //   this.option.xAxis.data.push(data.time);
+      //   this.initChart();
+      // });
       this.deviceSelectorOptions=((await getDevicesApi()).data.d).map(el=>{
         return {
           value: el.hardwareDeviceID,
