@@ -1,28 +1,35 @@
 <template>
   <div class="regional-dimension-container">
-    <div class="head-container">
-      选择车间
-      <el-cascader
-        :options="nameOptions"
-        v-model="selectedOptions"
-        @change="handleChange">
-      </el-cascader>
-      <span class="demonstration">选择日期</span>
-      <el-date-picker
-        v-model="selectedDate"
-        type="daterange"
-        range-separator="至"
-        start-placeholder="开始月份"
-        end-placeholder="结束月份">
-      </el-date-picker>
-    </div>
     <el-row>
-      <div class="report-statistic-daily-histogram">
-      </div>
+      <el-col :span="3">
+        <el-tree :data="treeData" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+      </el-col>
+      <el-col :span="21">
+        <div class="head-container">
+          <!--选择车间-->
+          <!--<el-cascader-->
+            <!--:options="nameOptions"-->
+            <!--v-model="selectedOptions"-->
+            <!--@change="handleChange">-->
+          <!--</el-cascader>-->
+          <span class="demonstration">选择时间</span>
+          <el-date-picker
+            v-model="selectedDate"
+            type="daterange"
+            range-separator="至"
+            start-placeholder="开始月份"
+            end-placeholder="结束月份"
+            :default-time="['00:00:00', '23:59:59']">
+          </el-date-picker>
+        </div>
+        <el-row>
+          <div class="report-statistic-daily-histogram">
+          </div>
+        </el-row>
+      </el-col>
     </el-row>
-
     <!--<el-steps style="margin: 20px 0" simple>-->
-      <!--<el-step title="资源类别统计" icon="el-icon-upload"></el-step>-->
+    <!--<el-step title="资源类别统计" icon="el-icon-upload"></el-step>-->
     <!--</el-steps>-->
     <!--<div class="report-statistic-daily-piechart">-->
     <!--</div>-->
@@ -30,7 +37,6 @@
 </template>
 
 <script>
-  import {getRegionalDimensionHistogram, getReportStaticDaithlyPieChart} from '../../api/api';
   import echarts from 'echarts';
 
   export default {
@@ -177,10 +183,14 @@
           dataset: {
             source: [
               ['product', '平均在线时间', '告警次数', '设备数量'],
-              ['Matcha Latte', 43.3, 85.8, 93.7],
-              ['Milk Tea', 83.1, 73.4, 55.1],
-              ['Cheese Cocoa', 86.4, 65.2, 82.5],
-              ['Walnut Brownie', 72.4, 53.9, 39.1]
+              ['车间1', 43.3, 85.8, 93.7],
+              ['车间2', 83.1, 73.4, 55.1],
+              ['车间3', 86.4, 65.2, 82.5],
+              ['车间4', 72.4, 53.9, 39.1],
+              ['车间5', 72.4, 53.9, 39.1],
+              ['车间6', 72.4, 53.9, 39.1],
+              ['车间7', 72.4, 53.9, 39.1],
+              ['车间8', 72.4, 53.9, 39.1],
             ]
           },
           xAxis: {type: 'category'},
@@ -193,6 +203,66 @@
             {type: 'bar'}
           ]
         },
+        // 左边栏数据
+        treeData: [{
+          "label": "上海",
+          "children": [{
+            "label": "工厂1",
+            "children": [{
+              "label": "车间1",
+            }]
+          }, {
+            "label": "工厂2",
+            "children": [{
+              "label": "车间2",
+            }]
+          }, {
+            "label": "工厂3",
+            "children": [{
+              "label": "车间3",
+            }]
+          }]
+        }, {
+          "label": "长沙",
+          "children": [{
+            "label": "工厂1",
+            "children": [{
+              "label": "车间1",
+            }]
+          }, {
+            "label": "工厂2",
+            "children": [{
+              "label": "车间2",
+            }]
+          }, {
+            "label": "工厂3",
+            "children": [{
+              "label": "车间3",
+            }]
+          }]
+        }, {
+          "label": "武汉",
+          "children": [{
+            "label": "工厂1",
+            "children": [{
+              "label": "车间1",
+            }]
+          }, {
+            "label": "工厂2",
+            "children": [{
+              "label": "车间2",
+            }]
+          }, {
+            "label": "工厂3",
+            "children": [{
+              "label": "车间3"
+            }]
+          }]
+        }],
+        defaultProps: {
+          children: 'children',
+          label: 'label'
+        }
       }
     },
     async mounted() {
@@ -221,9 +291,10 @@
 
 <style lang="scss" scoped>
   .regional-dimension-container {
-    .head-container{
-      margin:20px;
+    .head-container {
+      margin: 20px;
     }
+
     .report-statistic-daily-histogram {
       height: 500px;
     }
