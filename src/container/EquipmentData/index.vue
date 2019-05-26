@@ -27,7 +27,6 @@
           width="55">
         </el-table-column>
         <el-table-column
-          fixed
           prop="ID"
           label="数据编号"
           width="120">

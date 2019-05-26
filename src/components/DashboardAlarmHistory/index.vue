@@ -4,34 +4,48 @@
       :data="tableData"
       border>
       <el-table-column
-        fixed
         prop="date"
-        label="日期"
+        label="告警时间"
         width="150">
       </el-table-column>
       <el-table-column
-        prop="name"
-        label="姓名"
+        prop="deviceName"
+        label="设备名称"
         width="120">
       </el-table-column>
       <el-table-column
-        prop="province"
-        label="省份"
+        prop="dataName"
+        label="数据名称"
+        width="120">
+      </el-table-column>
+      <el-table-column
+        prop="content"
+        label="告警内容"
+        width="120">
+      </el-table-column>
+      <el-table-column
+        prop="type"
+        label="告警类型"
+        width="120">
+      </el-table-column>
+      <el-table-column
+        prop="status"
+        label="处理状态"
         width="120">
       </el-table-column>
       <el-table-column
         prop="city"
-        label="市区"
+        label="城市"
         width="120">
       </el-table-column>
       <el-table-column
-        prop="address"
-        label="地址"
-        width="300">
+        prop="factory"
+        label="工厂"
+        width="120">
       </el-table-column>
       <el-table-column
-        prop="zip"
-        label="邮编"
+        prop="department"
+        label="车间"
         width="120">
       </el-table-column>
       <el-table-column
@@ -59,34 +73,57 @@
     data() {
       return {
         tableData: [{
-          date: '2016-05-03',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }, {
-          date: '2016-05-02',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        }]
+          date: '2016-05-03 16:11:11',
+          deviceName: '设备1',
+          dataName: '告警1',
+          content: '端口异常',
+          type: ' 异常',
+          status: '在线',
+          city:'上海',
+          factory:'工厂1',
+          department:'车间1'
+        },
+          {
+            date: '2016-05-03 16:11:11',
+            deviceName: '设备1',
+            dataName: '告警1',
+            content: '端口异常',
+            type: ' 异常',
+            status: '在线',
+            city:'上海',
+            factory:'工厂1',
+            department:'车间1'
+          },{
+            date: '2016-05-03 16:11:11',
+            deviceName: '设备1',
+            dataName: '告警1',
+            content: '端口异常',
+            type: ' 异常',
+            status: '在线',
+            city:'上海',
+            factory:'工厂1',
+            department:'车间1'
+          },{
+            date: '2016-05-03 16:11:11',
+            deviceName: '设备1',
+            dataName: '告警1',
+            content: '端口异常',
+            type: ' 异常',
+            status: '在线',
+            city:'上海',
+            factory:'工厂1',
+            department:'车间1'
+          },{
+            date: '2016-05-03 16:11:11',
+            deviceName: '设备1',
+            dataName: '告警1',
+            content: '端口异常',
+            type: ' 异常',
+            status: '在线',
+            city:'上海',
+            factory:'工厂1',
+            department:'车间1'
+          }]
       }
     }
   }

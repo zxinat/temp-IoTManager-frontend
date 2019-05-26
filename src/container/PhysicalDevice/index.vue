@@ -27,7 +27,6 @@
           width="55">
         </el-table-column>
         <el-table-column
-          fixed
           prop="hardwareDeviceID"
           label="设备编号"
           width="120">

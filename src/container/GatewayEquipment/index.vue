@@ -27,7 +27,6 @@
           width="55">
         </el-table-column>
         <el-table-column
-          fixed
           prop="hardwareGatewayID"
           label="网关编号"
           width="120">
