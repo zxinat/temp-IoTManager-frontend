@@ -73,27 +73,27 @@
     </div>
 
     <el-dialog title="修改用户" :visible.sync="dialogFormVisible">
-      <!--<el-tag-->
-        <!--:key="tag"-->
-        <!--v-for="tag in dynamicTags"-->
-        <!--closable-->
-        <!--:disable-transitions="false"-->
-        <!--@close="handleClose(tag)">-->
-        <!--{{tag}}-->
-      <!--</el-tag>-->
-      <!--<el-select v-model="inputValue"-->
-                 <!--v-if="inputVisible"-->
-                 <!--ref="saveTagInput"-->
-                 <!--@keyup.enter.native="handleInputConfirm"-->
-                 <!--placeholder="请选择">-->
-        <!--<el-option-->
-          <!--v-for="item in options"-->
-          <!--:key="item.value"-->
-          <!--:label="item.label"-->
-          <!--:value="item.label">-->
-        <!--</el-option>-->
-      <!--</el-select>-->
-      <!--<el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>-->
+      <el-tag
+        :key="tag"
+        v-for="tag in dynamicTags"
+        closable
+        :disable-transitions="false"
+        @close="handleClose(tag)">
+        {{tag}}
+      </el-tag>
+      <el-select v-model="inputValue"
+                 v-if="inputVisible"
+                 ref="saveTagInput"
+                 @keyup.enter.native="handleInputConfirm"
+                 placeholder="请选择">
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.label">
+        </el-option>
+      </el-select>
+      <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
       <el-form :model="editedUser">
         <el-form-item label="用户名">
           <el-input v-model="editedUser.userName"></el-input>
