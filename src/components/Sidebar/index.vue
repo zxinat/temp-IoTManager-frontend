@@ -29,14 +29,14 @@
           <router-link to="/monitoringConfiguration"  class="hide-underline"><el-menu-item index="4-1">监控配置</el-menu-item></router-link>
           <router-link to="/warningMessage"  class="hide-underline"><el-menu-item index="4-2">告警信息</el-menu-item></router-link>
         </el-submenu>
-        <el-submenu index="5">
-          <template slot="title">
-            <!--<i class="el-icon-location"></i>-->
-            <span>数据智能</span>
-          </template>
-          <router-link to="/modelTraining"  class="hide-underline"><el-menu-item index="5-1">模型训练</el-menu-item></router-link>
-          <router-link to="/intelligentAnalysis"  class="hide-underline"><el-menu-item index="5-2">智能分析</el-menu-item></router-link>
-        </el-submenu>
+        <!--<el-submenu index="5">-->
+          <!--<template slot="title">-->
+            <!--&lt;!&ndash;<i class="el-icon-location"></i>&ndash;&gt;-->
+            <!--<span>数据智能</span>-->
+          <!--</template>-->
+          <!--<router-link to="/modelTraining"  class="hide-underline"><el-menu-item index="5-1">模型训练</el-menu-item></router-link>-->
+          <!--<router-link to="/intelligentAnalysis"  class="hide-underline"><el-menu-item index="5-2">智能分析</el-menu-item></router-link>-->
+        <!--</el-submenu>-->
         <el-submenu index="6">
           <template slot="title">
             <!--<i class="el-icon-location"></i>-->

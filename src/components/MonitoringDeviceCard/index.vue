@@ -1,7 +1,7 @@
 <template>
   <div class="monitoring-device-card-container">
     <el-row>
-      <el-col :span="8" :offset="1">
+      <el-col :span="6">
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <img src="../../assets/img/chilunzu.svg">
@@ -27,17 +27,43 @@
           </div>
         </el-card>
       </el-col>
-      <el-col :span="8" :offset="5">
+      <el-col :span="6" :offset="2">
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <img src="../../assets/img/chilunzu.svg">
+            <span>设备状态</span>
+          </div>
+          <div  class="text item">
+            {{'启动时间：'+deviceData.startTime}}
+          </div>
+          <div  class="text item">
+            {{'运行时长：'+deviceData.runningTime}}
+          </div>
+          <div  class="text item">
+            {{'报警次数：'+deviceData.alarmTimes}}
+          </div>
+          <div  class="text item">
+            {{'最近报警时间：'+deviceData.recentAlarmTime}}
+          </div>
+          <div  class="text item">
+            {{'温度：'+deviceData.temperature}}
+          </div>
+          <div  class="text item">
+            {{'湿度：'+deviceData.humidity}}
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="8" :offset="2">
+        <div style="padding: 5px;">
+          <span>设备快照</span>
+          <div class="bottom clearfix">
+            <time class="time">{{deviceData.updateTime}}</time>
+            <!--<el-button class="button">操作按钮</el-button>-->
+          </div>
+        </div>
         <el-card :body-style="{ padding: '0px' }">
           <img v-if="!deviceData.imageUrl" src="../../assets/img/cat.jpg" class="image">
           <img v-else :src="deviceData.imageUrl" class="image">
-          <div style="padding: 14px;">
-            <span>设备快照</span>
-            <div class="bottom clearfix">
-              <time class="time">{{deviceData.updateTime}}</time>
-              <!--<el-button class="button">操作按钮</el-button>-->
-            </div>
-          </div>
         </el-card>
       </el-col>
     </el-row>

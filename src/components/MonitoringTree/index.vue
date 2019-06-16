@@ -20,6 +20,7 @@
     },
     methods: {
       async handleNodeClick(data) {
+        console.log(data);
           if(data.id){
             const result= (await getDeviceApi(data.id)).data.d;
             this.$store.dispatch('device/setCurrentDeviceData',result);

@@ -22,7 +22,15 @@ const state = {
     "deviceType": "类型1",
     "createTime": "2018-1-1",
     "updateTime": "2001-1-1",
-    "remark": "miaoshumiaoshu"
+    "remark": "miaoshumiaoshu",
+    "startTime":"2018-9-9 14:00:00",
+    "runningTime":"1:30:30s",
+    "alarmTimes":"18次",
+    "recentAlarmTime":"2019-5-9 14:00:00",
+    "temperature":"25℃" ,
+    "humidity":"80%",
+    "faultTolerantNumber": '2',
+    "saveInterval": '3s'
   }
 };
 

@@ -1,20 +1,39 @@
 <template>
   <div>
     <div class="search-container">
-      <el-form :inline="true" :model="searchGatewayId" class="demo-form-inline">
-        <el-form-item label="网关编号">
-          <el-input v-model="searchGatewayId"></el-input>
+      <el-form :inline="true" :model="searchGateway" class="header">
+        <el-form-item label="城市">
+          <el-select v-model="searchGateway.city" @change="getFactoryList" placeholder="上海">
+            <el-option
+              v-for="item in cityOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.label">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="工厂">
+          <el-select v-model="searchGateway.factory" @change="getWorkshopList"  placeholder="南洋万邦">
+            <el-option
+              v-for="item in factoryOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.label">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="车间">
+          <el-select v-model="searchGateway.workshop" placeholder="车间1">
+            <el-option
+              v-for="item in workshopOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.label">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="search"><img src="../../assets/img/find.svg">查询</el-button>
-        </el-form-item>
-      </el-form>
-      <el-form :inline="true" :model="searchGatewayName" class="demo-form-inline">
-        <el-form-item label="网关名称">
-          <el-input v-model="searchGatewayName"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="search"><img src="../../assets/img/find.svg">查询</el-button>
+          <el-button type="primary" @click="filter"><img src="../../assets/img/find.svg">筛选</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -376,17 +395,68 @@
           inputValue: '',
           dynamicTags: ['标签一', '标签二', '标签三'],
         },
-        searchData: {
-          gatewayID: '',
-          gatewayName: ''
+        searchGateway: {
+          city: '上海',
+          factory:'南洋万邦',
+          workshop:'车间1',
         },
-        searchGatewayId: '',
-        searchGatewayName: ''
+        cityOptions: [{
+          value: '选项1',
+          label: '城市1'
+        }, {
+          value: '选项2',
+          label: '城市2'
+        }, {
+          value: '选项3',
+          label: '城市3'
+        }, {
+          value: '选项4',
+          label: '城市4'
+        }, {
+          value: '选项5',
+          label: '城市5'
+        }],
+        factoryOptions: [{
+          value: '选项1',
+          label: '工厂1'
+        }, {
+          value: '选项2',
+          label: '工厂2'
+        }, {
+          value: '选项3',
+          label: '工厂3'
+        }, {
+          value: '选项4',
+          label: '工厂4'
+        }, {
+          value: '选项5',
+          label: '工厂5'
+        }],
+        workshopOptions: [{
+          value: '选项1',
+          label: '车间1'
+        }, {
+          value: '选项2',
+          label: '车间2'
+        }, {
+          value: '选项3',
+          label: '车间3'
+        }, {
+          value: '选项4',
+          label: '车间4'
+        }, {
+          value: '选项5',
+          label: '车间5'
+        }],
+        searchData: {
+          deviceID: '',
+          deviceName: ''
+        },
       }
     },
 
     methods: {
-      async searchDeviceByName() {
+      async searchGatewayByName() {
         const data = await searchGatewaysApi(this.searchData);
         this.tableData = data.data.d;
       },
@@ -492,9 +562,25 @@
         }
         this.newGatewayData.inputVisible = false;
         this.newGatewayData.inputValue = '';
+      },
+      filter(){
+        console.log(this.searchGateway);
+        //调接口，传searchGateway参数
+      },
+      getCityList(){
+        // 调获取城市接口
+      },
+      getFactoryList(){
+        console.log(this.searchGateway.city);
+        // 调获取工厂接口，searchGateway.city参数
+      }, 
+      getWorkshopList(){
+        console.log(this.searchGateway.city,this.searchGateway.factory);
+        // 调获取车间接口，searchGateway.city，searchGateway.factory参数
       }
     },
     async mounted() {
+      this.getCityList();
       //获取所有网关信息
       this.getGateways();
       this.city = (await getCity()).data.d;
