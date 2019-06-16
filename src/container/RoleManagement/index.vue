@@ -228,7 +228,7 @@
       }
     },
     methods: {
-      async search() {
+      async searchDeviceByName() {
         let result = (await getUserTable(this.username, this.department));
         if(result.data.c===200){
           this.$message({

@@ -47,9 +47,9 @@ export default {
   methods:{
     async login(){
       const res=await loginApi(this.form);
-      setCookie('userSessionID',res.data.d.sessionId,20);
-      setItemToLocalstorage('userInfo',res.data.d.user);
-      await this.$store.dispatch('userInfo/setUserInfo',this.form);
+      //setCookie('userSessionID',res.data.d.sessionId,20);
+      //setItemToLocalstorage('userInfo',res.data.d.user);
+      //await this.$store.dispatch('userInfo/setUserInfo',this.form);
       this.$router.push('/dashBoard');
     }
   }

@@ -1,15 +1,20 @@
 <template>
   <div>
     <div class="search-container">
-      <el-form :inline="true" :model="searchData" class="demo-form-inline">
+      <el-form :inline="true" :model="searchDeviceId" class="demo-form-inline">
         <el-form-item label="设备编号">
-          <el-input v-model="searchData.hardwareDeviceID"></el-input>
-        </el-form-item>
-        <el-form-item label="设备名称">
-          <el-input v-model="searchData.deviceName"></el-input>
+          <el-input v-model="searchDeviceId.deviceId"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="search"><img src="../../assets/img/find.svg">查询</el-button>
+          <el-button type="primary" @click="searchDeviceById"><img src="../../assets/img/find.svg">查询</el-button>
+        </el-form-item>
+      </el-form>
+      <el-form :inline="true" :model="searchDeviceName" class="demo-form-inline">
+        <el-form-item label="设备名称">
+          <el-input v-model="searchDeviceName.deviceName"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="searchDeviceByName"><img src="../../assets/img/find.svg">查询</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -322,10 +327,10 @@
     addDeviceApi,
     deleteDeviceApi,
     getDevicesApi,
-    searchDevicesApi,
+    searchDevicesByDeviceNameApi,
     updateDeviceApi,
     deleteMultipleDeviceApi,
-    getCity, getFactory, getDeviceState, getDeviceType, getWorkshop, getAllDepartments
+    getCity, getFactory, getDeviceState, getDeviceType, getWorkshop, getAllDepartments, searchDevicesByDeviceIdApi
   } from '../../api/api';
   import UploadImg from "../../components/UploadImg/index";
     export default {
@@ -393,9 +398,18 @@
             inputValue: '',
             dynamicTags: ['标签一', '标签二', '标签三'],
           },
+          searchDeviceId: {
+            deviceId: ''
+          },
+          searchDeviceName: {
+            deviceName: ''
+          },
           searchData: {
             deviceID: '',
             deviceName: ''
+          },
+          deleteData: {
+            number: []
           }
         }
       },
@@ -404,13 +418,18 @@
         addImage(file){
           this.newDeviceData.img=file;
         },
-        async search() {
-          const data = await searchDevicesApi(this.searchData);
+        async searchDeviceByName() {
+          console.log(this.searchDeviceName);
+          const data = await searchDevicesByDeviceNameApi(this.searchDeviceName.deviceName);
+          this.tableData = data.data.d;
+        },
+        async searchDeviceById() {
+          const data = await searchDevicesByDeviceIdApi(this.searchDeviceId.deviceId);
           this.tableData = data.data.d;
         },
         async add() {
           try {
-            console.log('yyy',this.newDeviceData);
+            console.log(this.deviceState);
             const data = await addDeviceApi(this.newDeviceData);
             this.newFormVisible = false;
             if (data.data.c === 200) {
@@ -478,7 +497,8 @@
           try {
             this.$confirm('确认删除？')
               .then(async _ => {
-                const data = await deleteMultipleDeviceApi(this.multipleSelection.map(el => el.id));
+                this.deleteData.number = this.multipleSelection.map(el => el.id);
+                const data = await deleteMultipleDeviceApi(this.deleteData);
                 if (data.data.c === 200) {
                   this.$message({
                     message: '删除成功',

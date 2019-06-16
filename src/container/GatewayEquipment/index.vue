@@ -1,12 +1,17 @@
 <template>
   <div>
     <div class="search-container">
-      <el-form :inline="true" :model="searchData" class="demo-form-inline">
+      <el-form :inline="true" :model="searchGatewayId" class="demo-form-inline">
         <el-form-item label="网关编号">
-          <el-input v-model="searchData.hardwareGatewayID"></el-input>
+          <el-input v-model="searchGatewayId"></el-input>
         </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="search"><img src="../../assets/img/find.svg">查询</el-button>
+        </el-form-item>
+      </el-form>
+      <el-form :inline="true" :model="searchGatewayName" class="demo-form-inline">
         <el-form-item label="网关名称">
-          <el-input v-model="searchData.gatewayName"></el-input>
+          <el-input v-model="searchGatewayName"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="search"><img src="../../assets/img/find.svg">查询</el-button>
@@ -14,7 +19,7 @@
       </el-form>
     </div>
     <div class="addbutton-container">
-      <el-button type="primary" @click="newFormVisible = true">新增网关</el-button>
+        <el-button type="primary" @click="newFormVisible = true">新增网关</el-button>
     </div>
     <div class="table-container">
       <el-table
@@ -200,7 +205,7 @@
           <el-select v-model="newGatewayData.gatewayType" placeholder="选择网关类型">
             <el-option
               v-for="gt in gatewayType"
-              :key="gt.id"
+              :key="gt.gatewayTypeName"
               :label="gt.gatewayTypeName"
               :value="gt.gatewayTypeName">
             </el-option>
@@ -240,7 +245,7 @@
           <el-select v-model="newGatewayData.gatewayState" placeholder="选择网关状态">
             <el-option
               v-for="gs in gatewayState"
-              :key="gs.id"
+              :key="gs.stateName"
               :label="gs.stateName"
               :value="gs.stateName">
             </el-option>
@@ -262,42 +267,30 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item class="tag-center">
-          <el-tag
-            :key="tag"
-            v-for="tag in newGatewayData.dynamicTags"
-            closable
-            :disable-transitions="false"
-            @close="handleClose(tag)">
-            {{tag}}
-          </el-tag>
-          <el-input
-          class="input-new-tag"
-          v-if="newGatewayData.inputVisible"
-          v-model="newGatewayData.inputValue"
-          ref="saveTagInput"
-          size="small"
-          @blur="handleInputConfirm"
-          >
-          </el-input>
-          <!--<el-select v-model="newGatewayData.inputValue"-->
-                     <!--v-if="newGatewayData.inputVisible"-->
-                     <!--ref="saveTagInput"-->
-          <!--@keyup.enter.native="handleInputConfirm"-->
-                     <!--@onChange.native="handleInputConfirm"-->
-                     <!--placeholder="请选择">-->
-            <!--<el-option-->
-              <!--v-for="item in newGatewayData.options"-->
-              <!--:key="item.value"-->
-              <!--:label="item.label"-->
-              <!--:value="item.label">-->
-            <!--</el-option>-->
-          <!--</el-select>-->
-          <el-button v-else class="button-new-tag" size="small" @click="showInput">+</el-button>
-        </el-form-item>
+        <!--<el-form-item class="tag-center">-->
+          <!--<el-tag-->
+            <!--:key="tag"-->
+            <!--v-for="tag in newGatewayData.dynamicTags"-->
+            <!--closable-->
+            <!--:disable-transitions="false"-->
+            <!--@close="handleClose(tag)">-->
+            <!--{{tag}}-->
+          <!--</el-tag>-->
+          <!--<el-input-->
+            <!--class="input-new-tag"-->
+            <!--v-if="newGatewayData.inputVisible"-->
+            <!--v-model="newGatewayData.inputValue"-->
+            <!--ref="saveTagInput"-->
+            <!--size="small"-->
+            <!--@keyup.enter.native="handleInputConfirm"-->
+            <!--@blur="handleInputConfirm"-->
+          <!--&gt;-->
+          <!--</el-input>-->
+          <!--<el-button v-else class="button-new-tag" size="small" @click="showInput">+</el-button>-->
+        <!--</el-form-item>-->
         <!--<el-form-item class="gateway-radio">-->
-        <!--<el-radio v-model="newGatewayData.radio" label="gateway">网关设备</el-radio>-->
-        <!--<el-radio v-model="newGatewayData.radio" label="device">物理设备</el-radio>-->
+          <!--<el-radio v-model="newGatewayData.radio" label="gateway">网关设备</el-radio>-->
+          <!--<el-radio v-model="newGatewayData.radio" label="device">物理设备</el-radio>-->
         <!--</el-form-item>-->
         <el-form-item>
           <UploadImg></UploadImg>
@@ -315,16 +308,11 @@
   import {
     addGatewayApi,
     deleteGatewayApi,
-    deleteMultipleGatewayApi,
-    getAllDepartments,
-    getCity,
-    getFactory,
     getGatewaysApi,
-    getGatewayState,
-    getGatewayType,
-    getWorkshop,
     searchGatewaysApi,
-    updateGatewayApi
+    updateGatewayApi,
+    deleteMultipleGatewayApi,
+    getCity, getFactory, getGatewayType, getGatewayState, getAllDepartments, getWorkshop
   } from '../../api/api';
   import UploadImg from "../../components/UploadImg/index";
 
@@ -369,26 +357,6 @@
           imageUrl: '',
           remark: '',
           department: '',
-          // 标签
-          inputVisible: false,
-          inputValue: '',
-          dynamicTags: ['标签一', '标签二', '标签三'],
-          options: [{
-            value: '选项1',
-            label: '权限1'
-          }, {
-            value: '选项2',
-            label: '权限2'
-          }, {
-            value: '选项3',
-            label: '权限3'
-          }, {
-            value: '选项4',
-            label: '权限4'
-          }, {
-            value: '选项5',
-            label: '权限5'
-          }]
         },
         newGatewayData: {
           hardwareGatewayID: '',
@@ -407,38 +375,24 @@
           inputVisible: false,
           inputValue: '',
           dynamicTags: ['标签一', '标签二', '标签三'],
-          options: [{
-            value: '选项1',
-            label: '权限1'
-          }, {
-            value: '选项2',
-            label: '权限2'
-          }, {
-            value: '选项3',
-            label: '权限3'
-          }, {
-            value: '选项4',
-            label: '权限4'
-          }, {
-            value: '选项5',
-            label: '权限5'
-          }]
         },
         searchData: {
           gatewayID: '',
           gatewayName: ''
         },
+        searchGatewayId: '',
+        searchGatewayName: ''
       }
     },
 
     methods: {
-      async search() {
+      async searchDeviceByName() {
         const data = await searchGatewaysApi(this.searchData);
         this.tableData = data.data.d;
       },
       async add() {
         try {
-          console.log('add', this.newGatewayData);
+          console.log(this.gatewayState);
           const data = await addGatewayApi(this.newGatewayData);
           this.newFormVisible = false;
           if (data.data.c === 200) {
@@ -476,7 +430,7 @@
       async deleteGateway(row) {
         try {
           this.$confirm('确认删除？')
-            .then(async _ => {
+            .then(async _=> {
               const data = await deleteGatewayApi(row.id);
               if (data.data.c === 200) {
                 this.$message({
@@ -487,8 +441,7 @@
                 this.getGateways();
               }
             })
-            .catch(_ => {
-            });
+            .catch(_ => {});
         } catch (e) {
           console.log(e)
         }
@@ -498,14 +451,14 @@
         this.tableData = data.data.d;
       },
       handleSelectionChange(val) {
-        console.log('change', this.multipleSelection);
+        console.log('change',this.multipleSelection);
         this.multipleSelection = val;
       },
-      async multipleDelete() {
+      async multipleDelete(){
         try {
           this.$confirm('确认删除？')
-            .then(async _ => {
-              const data = await deleteMultipleGatewayApi(this.multipleSelection.map(el => el.id));
+            .then(async _=> {
+              const data = await deleteMultipleGatewayApi(this.multipleSelection.map(el=>el.id));
               if (data.data.c === 200) {
                 this.$message({
                   message: '删除成功',
@@ -515,8 +468,7 @@
                 this.getDevices();
               }
             })
-            .catch(_ => {
-            });
+            .catch(_ => {});
         } catch (e) {
           console.log(e)
         }
@@ -529,8 +481,6 @@
       showInput() {
         this.newGatewayData.inputVisible = true;
         this.$nextTick(_ => {
-
-          console.log(this.$refs.saveTagInput);
           this.$refs.saveTagInput.$refs.input.focus();
         });
       },
@@ -542,36 +492,33 @@
         }
         this.newGatewayData.inputVisible = false;
         this.newGatewayData.inputValue = '';
-      },
+      }
     },
     async mounted() {
       //获取所有网关信息
       this.getGateways();
       this.city = (await getCity()).data.d;
       this.factory = (await getFactory()).data.d;
-      this.workshop = (await getWorkshop()).data.d;
-      this.department = (await getAllDepartments()).data.d;
+      this.workshop = (await  getWorkshop()).data.d;
       this.gatewayState = (await getGatewayState()).data.d;
       this.gatewayType = (await getGatewayType()).data.d;
+      this.department = (await getAllDepartments()).data.d;
     }
   }
 </script>
 
 <style scoped>
-  .search-container, .addbutton-container, .table-container {
-    margin: 1% 1%;
+  .search-container, .addbutton-container ,.table-container{
+    margin:1% 1%;
     text-align: left;
   }
-
-  .gateway-radio {
+  .gateway-radio{
     margin: 0 auto 10px;
     width: 200px;
   }
-
-  .add-gateway-container {
+  .add-gateway-container{
 
   }
-
   /*标签处理*/
   .button-new-tag {
     margin-left: 10px;
@@ -580,14 +527,12 @@
     padding-top: 0;
     padding-bottom: 0;
   }
-
   .input-new-tag {
     width: 90px;
     margin-left: 10px;
     vertical-align: bottom;
   }
-
-  .tag-center {
+  .tag-center{
     text-align: center;
   }
 </style>

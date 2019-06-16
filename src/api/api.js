@@ -1,6 +1,6 @@
 import axios from "axios";
 
-axios.defaults.baseURL = 'https://www.easy-mock.com/mock/5c22475a4e21841210a7015f';
+axios.defaults.baseURL = 'http://localhost:5000';
 // axios.defaults.baseURL='https://localhost:44373';
 //带cookie
 axios.defaults.withCredentials = true;
@@ -82,11 +82,8 @@ export function deleteDeviceApi(id) {
 }
 
 export function deleteMultipleDeviceApi(id) {
-  return axios.delete(`/api/multipleDevice`, {
-    params: {
-      ...id
-    }
-  });
+  console.log({...id});
+  return axios.post(`/api/device/batch/devices`, {...id});
 }
 
 export function getCity() {
@@ -128,12 +125,20 @@ export function addDeviceApi(data) {
   return axios.post(`/api/device`, {...data});
 }
 
-export function searchDevicesApi(data) {
-  return axios.get('/api/device', {
-    params: {
-      ...data
-    }
-  });
+export function searchDevicesByDeviceNameApi(data) {
+  return axios.get(`/api/device/devicename/${data}`);
+}
+
+export function searchDevicesByDeviceIdApi(data) {
+  return axios.get(`/api/device/deviceid/${data}`);
+}
+
+export function searchGatewaysByGatewayIdApi(data) {
+  return axios.get(`/api/gateway/gatewayname/${data}`);
+}
+
+export function searchGatewaysByGatewayNameApi(data) {
+  return axios.get(`/api/gateway/gatewayid/${data}`);
 }
 
 

@@ -151,7 +151,7 @@
       },
 
       methods: {
-        async search() {
+        async searchDeviceByName() {
           const data = await searchAlarmInformationApi(this.searchData);
           this.tableData = data.data.d;
         },

@@ -7,7 +7,7 @@ const en = {
     'roleManagement': 'roleManagement',//用户管理
     'allUser':'allUser',//所有用户
     'allDepartment':'allDepartment',//所有部门
-    'search':'search',//搜索
+    'searchDeviceByName':'search',//搜索
     'userID':'userID',//用户编号
   },
   ...enLocale
