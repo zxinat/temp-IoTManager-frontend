@@ -7,7 +7,7 @@ const cn = {
     'roleManagement': '用户管理',
     'allUser': '所有用户',
     'allDepartment': '所有部门',
-    'search': '搜索',
+    'searchDeviceByName': '搜索',
     'userID': '用户编号'
   },
   ...zhLocale

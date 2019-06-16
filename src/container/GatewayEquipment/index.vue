@@ -1,12 +1,17 @@
 <template>
   <div>
     <div class="search-container">
-      <el-form :inline="true" :model="searchData" class="demo-form-inline">
+      <el-form :inline="true" :model="searchGatewayId" class="demo-form-inline">
         <el-form-item label="网关编号">
-          <el-input v-model="searchData.hardwareGatewayID"></el-input>
+          <el-input v-model="searchGatewayId"></el-input>
         </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="search"><img src="../../assets/img/find.svg">查询</el-button>
+        </el-form-item>
+      </el-form>
+      <el-form :inline="true" :model="searchGatewayName" class="demo-form-inline">
         <el-form-item label="网关名称">
-          <el-input v-model="searchData.gatewayName"></el-input>
+          <el-input v-model="searchGatewayName"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="search"><img src="../../assets/img/find.svg">查询</el-button>
@@ -200,7 +205,7 @@
           <el-select v-model="newGatewayData.gatewayType" placeholder="选择网关类型">
             <el-option
               v-for="gt in gatewayType"
-              :key="gt.id"
+              :key="gt.gatewayTypeName"
               :label="gt.gatewayTypeName"
               :value="gt.gatewayTypeName">
             </el-option>
@@ -240,7 +245,7 @@
           <el-select v-model="newGatewayData.gatewayState" placeholder="选择网关状态">
             <el-option
               v-for="gs in gatewayState"
-              :key="gs.id"
+              :key="gs.stateName"
               :label="gs.stateName"
               :value="gs.stateName">
             </el-option>
@@ -375,17 +380,19 @@
           gatewayID: '',
           gatewayName: ''
         },
+        searchGatewayId: '',
+        searchGatewayName: ''
       }
     },
 
     methods: {
-      async search() {
+      async searchDeviceByName() {
         const data = await searchGatewaysApi(this.searchData);
         this.tableData = data.data.d;
       },
       async add() {
         try {
-          console.log('add',this.newGatewayData);
+          console.log(this.gatewayState);
           const data = await addGatewayApi(this.newGatewayData);
           this.newFormVisible = false;
           if (data.data.c === 200) {
@@ -493,9 +500,9 @@
       this.city = (await getCity()).data.d;
       this.factory = (await getFactory()).data.d;
       this.workshop = (await  getWorkshop()).data.d;
-      this.department = (await getAllDepartments()).data.d;
       this.gatewayState = (await getGatewayState()).data.d;
       this.gatewayType = (await getGatewayType()).data.d;
+      this.department = (await getAllDepartments()).data.d;
     }
   }
 </script>

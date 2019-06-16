@@ -190,7 +190,7 @@
       },
 
       methods: {
-        async search() {
+        async searchDeviceByName() {
           const data = await searchDeviceDataApi(this.searchData);
           this.tableData = data.data.d;
         },
