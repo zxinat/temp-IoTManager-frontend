@@ -12,8 +12,8 @@
         <div v-if="currentPage==='1'"><monitoring-device-card></monitoring-device-card></div>
         <!--<div v-if="currentPage==='2'">2</div>-->
       <div v-if="currentPage==='3'"><device-property></device-property></div>
-        <div v-if="currentPage==='4'">4</div>
-        <div v-if="currentPage==='5'">5</div>
+      <div v-if="currentPage==='4'"><data-statistic></data-statistic></div>
+      <div v-if="currentPage==='5'"><alarm-record></alarm-record></div>
         <div v-if="currentPage==='6'">6</div>
         <MonitoringMap></MonitoringMap>
     </div>
@@ -23,6 +23,8 @@
     import MonitoringMap from "../MonitoringMap/index";
     import MonitoringDeviceCard from "../MonitoringDeviceCard/index";
     import DeviceProperty from '../../components/DeviceProperty/index';
+    import DataStatistic from "../DataStatistic/index";
+    import AlarmRecord from "../AlarmRecord/index";
     export default {
       name: "MonitoringConfig",
       data(){
@@ -50,7 +52,7 @@
           console.log('currentpage',typeof this.currentPage);
         }
       },
-      components: {MonitoringDeviceCard, MonitoringMap,DeviceProperty}
+      components: {AlarmRecord, DataStatistic, MonitoringDeviceCard, MonitoringMap,DeviceProperty}
     }
 </script>
 
