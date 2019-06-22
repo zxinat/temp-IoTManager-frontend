@@ -35,6 +35,9 @@
         <el-form-item>
           <el-button type="primary" @click="filter"><img src="../../assets/img/find.svg">筛选</el-button>
         </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="exportExcel">导出Excel</el-button>
+        </el-form-item>
       </el-form>
     </div>
     <div class="addbutton-container">
@@ -45,7 +48,8 @@
         :data="tableData"
         border
         style="width: 100%"
-        @selection-change="handleSelectionChange">
+        @selection-change="handleSelectionChange"
+      id="physical-device-out-table">
         <el-table-column
           type="selection"
           width="55">
@@ -352,6 +356,9 @@
     getCity, getFactory, getDeviceState, getDeviceType, getWorkshop, getAllDepartments, searchDevicesByDeviceIdApi
   } from '../../api/api';
   import UploadImg from "../../components/UploadImg/index";
+  import FileSaver from 'file-saver'
+  import XLSX from 'xlsx'
+
     export default {
         name: "PhysicalDevice",
       components: {UploadImg},
@@ -481,6 +488,16 @@
       },
 
       methods: {
+        exportExcel () {
+          /* generate workbook object from table */
+          var wb = XLSX.utils.table_to_book(document.querySelector('#physical-device-out-table'))
+          /* get binary string as output */
+          var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
+          try {
+            FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '物理设备.xlsx')
+          } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
+          return wbout
+        },
         addImage(file){
           this.newDeviceData.img=file;
         },
