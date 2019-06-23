@@ -17,13 +17,23 @@
         :default-time="['00:00:00', '23:59:59']">
       </el-date-picker>
     </div>
-    <div class="report-statistic-daily-histogram">
-    </div>
+
+    <el-row>
+      <el-col :span="22">
+        <div class="report-statistic-daily-histogram">
+        </div>
+      </el-col>
+    </el-row>
     <!--<el-steps style="margin: 20px 0" simple>-->
     <!--<el-step title="资源类别统计" icon="el-icon-upload"></el-step>-->
     <!--</el-steps>-->
-    <div v-show="showMonth" class="report-statistic-daily-histogram2">
-    </div>
+
+    <el-row>
+      <el-col :span="22">
+        <div v-show="showMonth" class="report-statistic-daily-histogram2">
+        </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -249,14 +259,14 @@
                   return table;
                 }
               },
-              saveAsImage : {show: true}
+              saveAsImage: {show: true}
             }
           },
         },
         histogramOption2: {
           xAxis: {
             type: 'category',
-            data: ['1月', '2月', '3月', '4月', '5月', '6月','7月','8月','9月','10月','11月','12月'],
+            data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
           },
           legend: {
             show: true,
@@ -267,15 +277,15 @@
           },
           series: [{
             name: '平均在线时间',
-            data: [43.3, 83.1, 86.4, 72.4, 72.40, 110,43.3, 83.1, 86.4, 72.4, 72.40, 110],
+            data: [43.3, 83.1, 86.4, 72.4, 72.40, 110, 43.3, 83.1, 86.4, 72.4, 72.40, 110],
             type: 'bar',
           }, {
             name: '告警次数',
-            data: [85.8, 73.4, 65.2, 53.9, 70, 11,85.8, 73.4, 65.2, 53.9, 70, 11],
+            data: [85.8, 73.4, 65.2, 53.9, 70, 11, 85.8, 73.4, 65.2, 53.9, 70, 11],
             type: 'bar',
           }, {
             name: '设备数量',
-            data: [93.7, 55.1, 82.5, 39.1, 70, 20,93.7, 55.1, 82.5, 39.1, 70, 20],
+            data: [93.7, 55.1, 82.5, 39.1, 70, 20, 93.7, 55.1, 82.5, 39.1, 70, 20],
             type: 'bar',
           }],
           toolbox: {
@@ -329,7 +339,7 @@
                   return table;
                 }
               },
-              saveAsImage : {show: true}
+              saveAsImage: {show: true}
             }
           },
         },
@@ -414,9 +424,9 @@
         this.chart.on('click', function (params) {
           vm.showMonth = true;
           // 控制台打印数据的名称
-          vm.histogramOption2.series[0].data= [43.3, 83.1, 86.4, 72.4, 72.40, 110,43.3, 83.1, 86.4, 72.4, 72.40, 110];
-          vm.histogramOption2.series[1].data= [85.8, 73.4, 65.2, 53.9, 70, 11,85.8, 73.4, 65.2, 53.9, 70, 11];
-          vm.histogramOption2.series[2].data=  [93.7, 55.1, 82.5, 39.1, 70, 20,93.7, 55.1, 82.5, 39.1, 70, 20];
+          vm.histogramOption2.series[0].data = [43.3, 83.1, 86.4, 72.4, 72.40, 110, 43.3, 83.1, 86.4, 72.4, 72.40, 110];
+          vm.histogramOption2.series[1].data = [85.8, 73.4, 65.2, 53.9, 70, 11, 85.8, 73.4, 65.2, 53.9, 70, 11];
+          vm.histogramOption2.series[2].data = [93.7, 55.1, 82.5, 39.1, 70, 20, 93.7, 55.1, 82.5, 39.1, 70, 20];
 
           // 异步f防止bug
           vm.$nextTick(() => {
