@@ -38,6 +38,18 @@
         <el-form-item>
           <el-button type="primary" @click="exportExcel">导出Excel</el-button>
         </el-form-item>
+        <el-form-item>
+          <el-upload
+            ref="upload"
+            action="/sss"
+            :show-file-list="false"
+            :on-success="readExcel"
+            :on-error="uploadFailed">
+            <el-button slot="trigger"
+                       type="primary">导入excel
+            </el-button>
+          </el-upload>
+        </el-form-item>
       </el-form>
     </div>
     <div class="addbutton-container">
@@ -488,15 +500,87 @@
       },
 
       methods: {
+        uploadFailed(){
+          this.$message.error('导入失败');
+        },
+        readExcel(res,file) {
+          let vm = this;
+          const fileReader = new FileReader();
+          fileReader.onload = (ev) => {
+            try {
+              const data = ev.target.result;
+              const workbook = XLSX.read(data, {
+                type: 'binary'
+              });
+              let sheetArray;
+              for (let sheet in workbook.Sheets) {
+                sheetArray = XLSX.utils.sheet_to_json(workbook.Sheets[sheet]);
+              }
+              let dictionary = {
+                "设备编号":"hardwareDeviceID",
+                "设备名称":"deviceName",
+                "设备类型":"deviceType",
+                "城市":"city",
+                "工厂":"factory",
+                "车间":"workshop",
+                "设备图像链接":"imageUrl",
+                "所属网关ID":"gatewayID",
+                "Mac地址":"mac",
+                "设备状态":"deviceState",
+                "上次连接时间":"lastConnectionTime",
+                "创建时间":"createTime",
+                "更新时间":"updateTime",
+                "描述":"remark",
+                "部门":"department",
+              };
+              let newData = sheetArray.map((item) => {
+                let obj={};
+                for(let key in item){
+                  obj[dictionary[key]]=item[key];
+                }
+                return obj;
+              });
+              // 导入接口，将数据导入后端
+              vm.tableData.push(...newData);
+              this.$message({
+                message: '导入成功',
+                type: 'success'
+              });
+            } catch
+              (e) {
+              this.$message.warning('文件类型不正确！');
+              return false;
+            }
+          };
+          fileReader.readAsBinaryString(file.raw);
+        },
         exportExcel () {
-          /* generate workbook object from table */
-          var wb = XLSX.utils.table_to_book(document.querySelector('#physical-device-out-table'))
+          var fix = document.querySelector('.el-table__fixed-right');
+          var wb;
+          if (fix) {
+            wb = XLSX.utils.table_to_book(document.querySelector('#physical-device-out-table').removeChild(fix));
+            console.log("test");
+            document.querySelector('#physical-device-out-table').appendChild(fix);
+          } else {
+            wb = XLSX.utils.table_to_book(document.querySelector('#physical-device-out-table'));
+          }
           /* get binary string as output */
-          var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
+          var wbout = XLSX.write(wb, {
+            bookType: 'xlsx',
+            bookSST: true,
+            type: 'array'
+          });
           try {
-            FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '物理设备.xlsx')
-          } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
-          return wbout
+            FileSaver.saveAs(
+              new Blob([wbout], {
+                type: 'application/octet-stream'
+              }),
+              '物理设备.xlsx'
+            );
+          } catch (e) {
+            if (typeof console !== 'undefined') console.log(e, wbout);
+          }
+          return wbout;
         },
         addImage(file){
           this.newDeviceData.img=file;

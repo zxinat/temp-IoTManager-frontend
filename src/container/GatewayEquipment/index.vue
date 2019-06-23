@@ -13,7 +13,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="工厂">
-          <el-select v-model="searchGateway.factory" @change="getWorkshopList"  placeholder="南洋万邦">
+          <el-select v-model="searchGateway.factory" @change="getWorkshopList" placeholder="南洋万邦">
             <el-option
               v-for="item in factoryOptions"
               :key="item.value"
@@ -38,10 +38,20 @@
         <el-form-item>
           <el-button type="primary" @click="exportExcel">导出Excel</el-button>
         </el-form-item>
+        <el-form-item>
+          <el-upload
+            ref="upload"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            :show-file-list="false"
+            :on-success="readExcel"
+            :on-error="uploadFailed"
+            :file-list="fileList">
+            <el-button slot="trigger"
+                       type="primary">导入excel
+            </el-button>
+          </el-upload>
+        </el-form-item>
       </el-form>
-    </div>
-    <div class="addbutton-container">
-        <el-button type="primary" @click="newFormVisible = true">新增网关</el-button>
     </div>
     <div class="table-container">
       <el-table
@@ -291,29 +301,29 @@
           </el-select>
         </el-form-item>
         <!--<el-form-item class="tag-center">-->
-          <!--<el-tag-->
-            <!--:key="tag"-->
-            <!--v-for="tag in newGatewayData.dynamicTags"-->
-            <!--closable-->
-            <!--:disable-transitions="false"-->
-            <!--@close="handleClose(tag)">-->
-            <!--{{tag}}-->
-          <!--</el-tag>-->
-          <!--<el-input-->
-            <!--class="input-new-tag"-->
-            <!--v-if="newGatewayData.inputVisible"-->
-            <!--v-model="newGatewayData.inputValue"-->
-            <!--ref="saveTagInput"-->
-            <!--size="small"-->
-            <!--@keyup.enter.native="handleInputConfirm"-->
-            <!--@blur="handleInputConfirm"-->
-          <!--&gt;-->
-          <!--</el-input>-->
-          <!--<el-button v-else class="button-new-tag" size="small" @click="showInput">+</el-button>-->
+        <!--<el-tag-->
+        <!--:key="tag"-->
+        <!--v-for="tag in newGatewayData.dynamicTags"-->
+        <!--closable-->
+        <!--:disable-transitions="false"-->
+        <!--@close="handleClose(tag)">-->
+        <!--{{tag}}-->
+        <!--</el-tag>-->
+        <!--<el-input-->
+        <!--class="input-new-tag"-->
+        <!--v-if="newGatewayData.inputVisible"-->
+        <!--v-model="newGatewayData.inputValue"-->
+        <!--ref="saveTagInput"-->
+        <!--size="small"-->
+        <!--@keyup.enter.native="handleInputConfirm"-->
+        <!--@blur="handleInputConfirm"-->
+        <!--&gt;-->
+        <!--</el-input>-->
+        <!--<el-button v-else class="button-new-tag" size="small" @click="showInput">+</el-button>-->
         <!--</el-form-item>-->
         <!--<el-form-item class="gateway-radio">-->
-          <!--<el-radio v-model="newGatewayData.radio" label="gateway">网关设备</el-radio>-->
-          <!--<el-radio v-model="newGatewayData.radio" label="device">物理设备</el-radio>-->
+        <!--<el-radio v-model="newGatewayData.radio" label="gateway">网关设备</el-radio>-->
+        <!--<el-radio v-model="newGatewayData.radio" label="device">物理设备</el-radio>-->
         <!--</el-form-item>-->
         <el-form-item>
           <UploadImg></UploadImg>
@@ -331,11 +341,16 @@
   import {
     addGatewayApi,
     deleteGatewayApi,
-    getGatewaysApi,
-    searchGatewaysApi,
-    updateGatewayApi,
     deleteMultipleGatewayApi,
-    getCity, getFactory, getGatewayType, getGatewayState, getAllDepartments, getWorkshop
+    getAllDepartments,
+    getCity,
+    getFactory,
+    getGatewaysApi,
+    getGatewayState,
+    getGatewayType,
+    getWorkshop,
+    searchGatewaysApi,
+    updateGatewayApi
   } from '../../api/api';
   import UploadImg from "../../components/UploadImg/index";
   import FileSaver from 'file-saver'
@@ -403,8 +418,8 @@
         },
         searchGateway: {
           city: '上海',
-          factory:'南洋万邦',
-          workshop:'车间1',
+          factory: '南洋万邦',
+          workshop: '车间1',
         },
         cityOptions: [{
           value: '选项1',
@@ -458,19 +473,91 @@
           deviceID: '',
           deviceName: ''
         },
+        fileList: []
       }
     },
 
     methods: {
-      exportExcel () {
-        /* generate workbook object from table */
-        var wb = XLSX.utils.table_to_book(document.querySelector('#gateway-equipment-out-table'))
+      uploadFailed(){
+        this.$message.error('导入失败');
+      },
+      readExcel(res,file) {
+        console.log('testss',file);
+        let vm = this;
+        const fileReader = new FileReader();
+        fileReader.onload = (ev) => {
+          try {
+            const data = ev.target.result;
+            const workbook = XLSX.read(data, {
+              type: 'binary'
+            });
+            let sheetArray;
+            for (let sheet in workbook.Sheets) {
+              sheetArray = XLSX.utils.sheet_to_json(workbook.Sheets[sheet]);
+            }
+            let dictionary = {
+              "网关编号": "hardwareGatewayID",
+              "网关名称": "gatewayName",
+              "更新时间": "gatewayType",
+              "城市": "city",
+              "工厂": "factory",
+              "车间": "workshop",
+              "网关状态": "gatewayState",
+              "上次连接时间": "lastConnectionTime",
+              "网关图像链接": "imageUrl",
+              "创建时间": "createTime",
+              "更新时间": "updateTime",
+              "描述": "remark",
+              "部门": "department"
+            };
+            let newData = sheetArray.map((item) => {
+              let obj={};
+                for(let key in item){
+                  obj[dictionary[key]]=item[key];
+                }
+                return obj;
+            });
+            // 导入接口，将数据导入后端
+            vm.tableData.push(...newData);
+            this.$message({
+              message: '导入成功',
+              type: 'success'
+            });
+          } catch
+            (e) {
+            this.$message.warning('文件类型不正确！');
+            return false;
+          }
+        };
+        fileReader.readAsBinaryString(file.raw);
+      },
+      exportExcel() {
+        var fix = document.querySelector('.el-table__fixed-right');
+        var wb;
+        if (fix) {
+          wb = XLSX.utils.table_to_book(document.querySelector('#gateway-equipment-out-table').removeChild(fix));
+          console.log("test");
+          document.querySelector('#gateway-equipment-out-table').appendChild(fix);
+        } else {
+          wb = XLSX.utils.table_to_book(document.querySelector('#gateway-equipment-out-table'));
+        }
         /* get binary string as output */
-        var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
+        var wbout = XLSX.write(wb, {
+          bookType: 'xlsx',
+          bookSST: true,
+          type: 'array'
+        });
         try {
-          FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '网关设备.xlsx')
-        } catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
-        return wbout
+          FileSaver.saveAs(
+            new Blob([wbout], {
+              type: 'application/octet-stream'
+            }),
+            '网关设备.xlsx'
+          );
+        } catch (e) {
+          if (typeof console !== 'undefined') console.log(e, wbout);
+        }
+        return wbout;
       },
       async searchGatewayByName() {
         const data = await searchGatewaysApi(this.searchData);
@@ -516,7 +603,7 @@
       async deleteGateway(row) {
         try {
           this.$confirm('确认删除？')
-            .then(async _=> {
+            .then(async _ => {
               const data = await deleteGatewayApi(row.id);
               if (data.data.c === 200) {
                 this.$message({
@@ -527,7 +614,8 @@
                 this.getGateways();
               }
             })
-            .catch(_ => {});
+            .catch(_ => {
+            });
         } catch (e) {
           console.log(e)
         }
@@ -537,14 +625,14 @@
         this.tableData = data.data.d;
       },
       handleSelectionChange(val) {
-        console.log('change',this.multipleSelection);
+        console.log('change', this.multipleSelection);
         this.multipleSelection = val;
       },
-      async multipleDelete(){
+      async multipleDelete() {
         try {
           this.$confirm('确认删除？')
-            .then(async _=> {
-              const data = await deleteMultipleGatewayApi(this.multipleSelection.map(el=>el.id));
+            .then(async _ => {
+              const data = await deleteMultipleGatewayApi(this.multipleSelection.map(el => el.id));
               if (data.data.c === 200) {
                 this.$message({
                   message: '删除成功',
@@ -554,7 +642,8 @@
                 this.getDevices();
               }
             })
-            .catch(_ => {});
+            .catch(_ => {
+            });
         } catch (e) {
           console.log(e)
         }
@@ -579,29 +668,30 @@
         this.newGatewayData.inputVisible = false;
         this.newGatewayData.inputValue = '';
       },
-      filter(){
+      filter() {
         console.log(this.searchGateway);
         //调接口，传searchGateway参数
       },
-      getCityList(){
+      getCityList() {
         // 调获取城市接口
       },
-      getFactoryList(){
+      getFactoryList() {
         console.log(this.searchGateway.city);
         // 调获取工厂接口，searchGateway.city参数
-      }, 
-      getWorkshopList(){
-        console.log(this.searchGateway.city,this.searchGateway.factory);
+      },
+      getWorkshopList() {
+        console.log(this.searchGateway.city, this.searchGateway.factory);
         // 调获取车间接口，searchGateway.city，searchGateway.factory参数
       }
-    },
+    }
+    ,
     async mounted() {
       this.getCityList();
       //获取所有网关信息
       this.getGateways();
       this.city = (await getCity()).data.d;
       this.factory = (await getFactory()).data.d;
-      this.workshop = (await  getWorkshop()).data.d;
+      this.workshop = (await getWorkshop()).data.d;
       this.gatewayState = (await getGatewayState()).data.d;
       this.gatewayType = (await getGatewayType()).data.d;
       this.department = (await getAllDepartments()).data.d;
@@ -610,17 +700,20 @@
 </script>
 
 <style scoped>
-  .search-container, .addbutton-container ,.table-container{
-    margin:1% 1%;
+  .search-container, .addbutton-container, .table-container {
+    margin: 1% 1%;
     text-align: left;
   }
-  .gateway-radio{
+
+  .gateway-radio {
     margin: 0 auto 10px;
     width: 200px;
   }
-  .add-gateway-container{
+
+  .add-gateway-container {
 
   }
+
   /*标签处理*/
   .button-new-tag {
     margin-left: 10px;
@@ -629,12 +722,14 @@
     padding-top: 0;
     padding-bottom: 0;
   }
+
   .input-new-tag {
     width: 90px;
     margin-left: 10px;
     vertical-align: bottom;
   }
-  .tag-center{
+
+  .tag-center {
     text-align: center;
   }
 </style>
