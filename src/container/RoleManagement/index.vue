@@ -25,7 +25,7 @@
         </el-col>
         <el-col :span="4">
           <div class="grid-content bg-purple-dark">
-            <el-button type="primary" @click="search">{{$t('message.search')}}</el-button>
+            <el-button type="primary" @click="search">{{$t('message.searchDeviceByName')}}</el-button>
           </div>
         </el-col>
       </el-row>
@@ -332,6 +332,7 @@
 
 <style lang="scss" scoped>
   .role-management-container {
+    margin: 10px;
     .top-header {
       margin: 15px 0;
 
