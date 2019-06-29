@@ -107,7 +107,7 @@
       <h1 style="display: inline-block;margin-left: 10px">{{alarmRules.affectNumber}}</h1>个设备被此规则控制
       <div slot="footer" class="dialog-footer">
         <el-button @click="showAlarmRules = false">取 消</el-button>
-        <el-button type="primary" @click="submitAlarmRules()">确 定</el-button>
+        <el-button type="primary" @click="submitAlarmRules">确 定</el-button>
       </div>
     </el-dialog>
     <el-row>
@@ -258,17 +258,16 @@
         // console.log(this.$refs[formName]);
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            alert('submit!');
+            this.showAlarmRules=false;
+            return true;
           } else {
-            console.log('error submit!!');
             return false;
           }
         });
       },
       submitAlarmRules() {
-        console.log(this.alarmRules);
-        this.submitForm('alarmRulesForm');
-        // this.showAlarmRules = false
+        this.submitForm('alarmRulesForm')
+          // 调用提交规则接口，参数alarmRules。
       },
       addCondition() {
         this.alarmRules.condition.push({
