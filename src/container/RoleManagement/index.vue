@@ -25,7 +25,7 @@
         </el-col>
         <el-col :span="4">
           <div class="grid-content bg-purple-dark">
-            <el-button type="primary" @click="search">{{$t('message.searchDeviceByName')}}</el-button>
+            <el-button type="primary" @click="">{{$t('message.searchDeviceByName')}}</el-button>
           </div>
         </el-col>
       </el-row>
@@ -322,7 +322,7 @@
     },
     async mounted() {
       // 获取所有部门和所有用户信息
-      this.departmentOptions = (await getAllDepartments()).data.d;
+      // this.departmentOptions = (await getAllDepartments()).data.d;
       this.tableData = (await getUserTable()).data.d;
       this.options = (await getAllAuthorities()).data.d;
       this.tableData = (await getUserTable(this.username, this.department)).data.d;

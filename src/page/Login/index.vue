@@ -44,16 +44,22 @@
     methods: {
       async login() {
         this.submitForm('form')
-        const res = await loginApi(this.form);
+        // const res = await loginApi(this.form);
         //setCookie('userSessionID',res.data.d.sessionId,20);
         //setItemToLocalstorage('userInfo',res.data.d.user);
         //await this.$store.dispatch('userInfo/setUserInfo',this.form);
       },
-      submitForm(formName) {
+      async submitForm(formName) {
         // console.log(this.$refs[formName]);
-        this.$refs[formName].validate((valid) => {
+        this.$refs[formName].validate(async (valid) => {
           if (valid) {
-            this.$router.push('/dashBoard');
+            const res = await loginApi(this.form);
+            if(res.data.d === 'success') {
+              console.log('success');
+              this.$router.push('/dashBoard');
+            } else {
+              this.$message.error('Wrong Username Or Password');
+            }
             return true;
           } else {
             console.log('error submit!!');

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-axios.defaults.baseURL = ' https://www.easy-mock.com/mock/5c22475a4e21841210a7015f';
+axios.defaults.baseURL = 'http://139.217.219.205:8080';
 // axios.defaults.baseURL = 'http://localhost:5000';
 // axios.defaults.baseURL='https://localhost:44373';
 //带cookie
@@ -324,7 +324,7 @@ export function checkMonthlyReport(order, date) {
 // 用户管理
 // 获取所有部门 下拉框要用
 export function getAllDepartments() {
-  return axios.get('/api/department');
+  return axios.get(`/api/city`);
 }
 
 // crud

@@ -38,6 +38,7 @@
     name: "DashboardLineChart",
     data() {
       return {
+        data: [98, 97, 96, 99, 101, 106, 100],
         deviceSelectorOptions: [],
         deviceSelectorValue: '',
         propertySelectorOptions: [],
@@ -74,19 +75,20 @@
           },
           yAxis: {},
           series: [
-            // {
-          //   type: 'line',
-          //   name: 'temperature',
-          //   label: {
-          //     show: true,
-          //     // position: 'top'
-          //   },
-          //   itemStyle: {
-          //     normal: {
-          //     }
-          //   },
-          //   data: [393, 438, 485, 631, 689, 824, 987]
-          // },
+            {
+            type: 'line',
+            name: 'temperature',
+            label: {
+              show: true,
+              // position: 'top'
+            },
+            itemStyle: {
+              normal: {
+              }
+            },
+            data: this.data
+          }
+          // ,
           //   {
           //   type: 'line',
           //   name: 'humidity',
@@ -130,7 +132,14 @@
         this.chart = echarts.init(document.getElementsByClassName('dashboard-line-chart-container')[0]);
         // 把配置和数据放这里
         console.log(this.option);
-        this.chart.setOption(this.option)
+        this.chart.setOption(this.option);
+        this.chart.setOption({series:[{data: this.data}]});
+        setInterval(() => {
+          let val = Math.round(Math.random() * 5) + 95;
+          this.data.shift();
+          this.data.push(val);
+          this.chart.setOption({series:[{data: this.data}]});
+        }, 5000);
       },
       async searchLineChartData(){
         if(this.deviceSelectorValue&&this.propertySelectorValue){

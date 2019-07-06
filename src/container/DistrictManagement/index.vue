@@ -390,7 +390,7 @@
     },
     async mounted() {
       // 获取所有部门和所有用户信息
-      this.departmentOptions = (await getAllDepartments()).data.d;
+      // this.departmentOptions = (await getAllDepartments()).data.d;
       this.tableData = (await getUserTable()).data.d;
       this.options = (await getAllAuthorities()).data.d;
       this.tableData = (await getUserTable(this.username, this.department)).data.d;
