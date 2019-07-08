@@ -86,10 +86,16 @@
     <el-dialog title="告警处理" :visible.sync="updateFormVisible">
       <el-form :model="updateData">
         <el-form-item label="处理状态" label-width="120px">
-          <el-input v-model="updateData.handleState" autocomplete="off"></el-input>
+          <el-select v-model="updateData.handleState" placeholder="请选择">
+            <el-option label="未处理" value="unhandled"></el-option>
+            <el-option label="处理中" value="handling"></el-option>
+            <el-option label="已处理" value="handled"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="处理方式" label-width="120px">
-          <el-input v-model="updateData.handleMethod" autocomplete="off"></el-input>
+          <el-select v-model="updateData.handleMethod" placeholder="请选择">
+            <el-option label="电子邮件通知" value="email"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="处理内容" label-width="120px">
           <el-input v-model="updateData.handleContent" autocomplete="off"></el-input>
@@ -103,10 +109,16 @@
     <el-dialog title="快速处理" :visible.sync="newFormVisible">
       <el-form :model="handleData">
         <el-form-item label="处理状态" label-width="120px">
-          <el-input v-model="handleData.handleState" autocomplete="off"></el-input>
+          <el-select v-model="handleData.handleState" placeholder="请选择">
+            <el-option label="未处理" value="unhandled"></el-option>
+            <el-option label="处理中" value="handling"></el-option>
+            <el-option label="已处理" value="handled"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="处理方式" label-width="120px">
-          <el-input v-model="handleData.handleMethod" autocomplete="off"></el-input>
+          <el-select v-model="handleData.handleMethod" placeholder="请选择">
+            <el-option label="电子邮件通知" value="email"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="处理内容" label-width="120px">
           <el-input v-model="handleData.handleContent" autocomplete="off"></el-input>
@@ -121,8 +133,14 @@
 </template>
 
 <script>
-  import {getAlarmInformationApi,updateAlarmInformationApi,handleAllAlarmInformationApi,searchAlarmInformationApi} from '../../api/api';
-    export default {
+  import {
+    getAlarmInformationApi,
+    handleAllAlarmInformationApi,
+    searchAlarmInformationApi,
+    updateAlarmInformationApi
+  } from '../../api/api';
+
+  export default {
         name: "WarningMessage",
       data() {
         return {

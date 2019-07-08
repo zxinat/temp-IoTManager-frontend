@@ -10,15 +10,20 @@
           <el-form-item prop="pwd" label="密码" :rules="[{ required: true, message: '密码必填'}]">
             <el-input type="password" v-model="form.pwd" autocomplete="off"></el-input>
           </el-form-item>
+          <!--<el-form-item prop="pwd" label="确认密码" :rules="[{-->
+                                                    <!--required:true,message:'确认密码',trigger:'blur'-->
+                                                    <!--}]">-->
+            <!--<el-input type="password" v-model="form.confirmPwd" autocomplete="off"></el-input>-->
+          <!--</el-form-item>-->
           <!--<span class="right"><router-link to="/register" class="hide-underline">没有账号?注册一个</router-link></span>-->
 
-          <el-form-item prop="type"  style="text-align: left" label="用户类别" :rules="[{ required: true, message: '用户类别必填'}]">
-            <el-select v-model="form.type" placeholder="请选择用户类别">
-              <el-option label="用户" value="normal"></el-option>
-              <el-option label="管理" value="management"></el-option>
-              <el-option label="超级管理员" value="superManagement"></el-option>
-            </el-select>
-          </el-form-item>
+          <!--<el-form-item prop="type"  style="text-align: left" label="用户类别" :rules="[{ required: true, message: '用户类别必填'}]">-->
+            <!--<el-select v-model="form.type" placeholder="请选择用户类别">-->
+              <!--<el-option label="用户" value="normal"></el-option>-->
+              <!--<el-option label="管理" value="management"></el-option>-->
+              <!--<el-option label="超级管理员" value="superManagement"></el-option>-->
+            <!--</el-select>-->
+          <!--</el-form-item>-->
           <el-button type="primary" @click="login">登录</el-button>
         </el-form>
       </div>
@@ -36,6 +41,7 @@
         form: {
           name: '',
           pwd: '',
+          confirmPwd: '',
           type: 'normal',
         }
       }
@@ -43,7 +49,7 @@
     computed: {},
     methods: {
       async login() {
-        this.submitForm('form')
+          this.submitForm('form');
         // const res = await loginApi(this.form);
         //setCookie('userSessionID',res.data.d.sessionId,20);
         //setItemToLocalstorage('userInfo',res.data.d.user);

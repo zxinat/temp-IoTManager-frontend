@@ -97,11 +97,6 @@
           width="120">
         </el-table-column>
         <el-table-column
-          prop="imageUrl"
-          label="设备图像链接"
-          width="120">
-        </el-table-column>
-        <el-table-column
           prop="gatewayID"
           label="所属网关ID"
           width="120">
@@ -139,6 +134,11 @@
         <el-table-column
           prop="department"
           label="部门"
+          width="120">
+        </el-table-column>
+        <el-table-column
+          prop="imageUrl"
+          label="设备图像链接"
           width="120">
         </el-table-column>
         <el-table-column
@@ -361,17 +361,23 @@
   import {
     addDeviceApi,
     deleteDeviceApi,
-    getDevicesApi,
-    searchDevicesByDeviceNameApi,
-    updateDeviceApi,
     deleteMultipleDeviceApi,
-    getCity, getFactory, getDeviceState, getDeviceType, getWorkshop, getAllDepartments, searchDevicesByDeviceIdApi
+    getAllDepartments,
+    getCity,
+    getDevicesApi,
+    getDeviceState,
+    getDeviceType,
+    getFactory,
+    getWorkshop,
+    searchDevicesByDeviceIdApi,
+    searchDevicesByDeviceNameApi,
+    updateDeviceApi
   } from '../../api/api';
   import UploadImg from "../../components/UploadImg/index";
   import FileSaver from 'file-saver'
   import XLSX from 'xlsx'
 
-    export default {
+  export default {
         name: "PhysicalDevice",
       components: {UploadImg},
       data() {

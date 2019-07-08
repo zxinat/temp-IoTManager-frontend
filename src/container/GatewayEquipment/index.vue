@@ -53,6 +53,9 @@
         </el-form-item>
       </el-form>
     </div>
+    <div class="addbutton-container">
+      <el-button type="primary" @click="newFormVisible = true">新增网关</el-button>
+    </div>
     <div class="table-container">
       <el-table
         :data="tableData"
@@ -100,11 +103,6 @@
           width="120">
         </el-table-column>
         <el-table-column
-          prop="imageUrl"
-          label="网关图像链接"
-          width="120">
-        </el-table-column>
-        <el-table-column
           prop="lastConnectionTime"
           label="上次连接时间"
           width="120">
@@ -127,6 +125,11 @@
         <el-table-column
           prop="remark"
           label="描述"
+          width="120">
+        </el-table-column>
+        <el-table-column
+          prop="imageUrl"
+          label="网关图像链接"
           width="120">
         </el-table-column>
         <el-table-column
@@ -597,7 +600,8 @@
         }
       },
       async openUpdateForm(row) {//打开更新表单
-        this.updateData = row;
+        console.log('test',row);
+        this.updateData = JSON.parse(JSON.stringify(row));
         this.updateFormVisible = true
       },
       async deleteGateway(row) {

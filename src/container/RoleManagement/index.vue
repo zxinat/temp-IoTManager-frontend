@@ -124,23 +124,26 @@
       </div>
     </el-dialog>
     <el-dialog title="添加用户" :visible.sync="createNewDialogFormVisible">
-      <el-form :model="newUser">
-        <el-form-item label="用户名" label-width="120px">
+      <el-form :rules="rules" ref="newUser" :model="newUser">
+        <el-form-item label="用户名" prop="userName" label-width="120px">
           <el-input v-model="newUser.userName"></el-input>
         </el-form-item>
-        <el-form-item label="昵称" label-width="120px">
+        <el-form-item label="昵称" prop="displayName" label-width="120px">
           <el-input v-model="newUser.displayName"></el-input>
         </el-form-item>
-        <el-form-item label="密码" label-width="120px">
-          <el-input v-model="newUser.password"></el-input>
+        <el-form-item label="密码" prop="password" label-width="120px">
+          <el-input type="password" v-model="newUser.password"></el-input>
         </el-form-item>
-        <el-form-item label="邮箱" label-width="120px">
+        <el-form-item label="确认密码" prop="passwordConfirm" label-width="120px">
+          <el-input type="password" v-model="newUser.passwordConfirm"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱" prop="email" label-width="120px">
           <el-input v-model="newUser.email"></el-input>
         </el-form-item>
-        <el-form-item label="电话" label-width="120px">
+        <el-form-item label="电话" prop="phoneNumber" label-width="120px">
           <el-input v-model="newUser.phoneNumber"></el-input>
         </el-form-item>
-        <el-form-item label="部门"  label-width="120px">
+        <el-form-item label="部门" prop="department" label-width="120px">
           <el-select v-model="newUser.department" placeholder="请选择部门">
             <el-option
               v-for="item in departmentOptions"
@@ -183,20 +186,56 @@
 </template>
 
 <script>
-  import {
-    deleteUser,
-    editAuthorities,
-    getAllAuthorities,
-    getAllDepartments,
-    getAuthorities,
-    getUserTable,
-    createNewUser, editUser, getUserById
-  } from '../../api/api';
+  import {createNewUser, deleteUser, editUser, getAllAuthorities, getUserById, getUserTable} from '../../api/api';
+  import {isvalidPhone} from '../../common/validate';
+
+  var validPhone=(rule, value,callback)=>{
+    if (!value){
+      callback(new Error('请输入电话号码'))
+    }else  if (!isvalidPhone(value)){
+      callback(new Error('请输入正确的11位手机号码'))
+    }else {
+      callback()
+    }
+  }
+  var validatePass2 = (rule, value, callback) => {
+    if (value === '') {
+      callback(new Error('请再次输入密码'))
+    } else if (value !== this.info.password) {
+      callback(new Error('两次输入密码不一致!'))
+    } else {
+      callback()
+    }
+  }
 
   export default {
     name: "RoleManagement",
     data() {
       return {
+        rules: {
+          userName: [
+            { required: true, message: '名称必填', trigger: 'blur' }
+          ],
+          displayName: [
+            { required: true, message: '昵称必填', trigger: 'blur' }
+          ],
+          password: [
+            {required: true, message: '密码必填', trigger: 'blur' }
+          ],
+          passwordConfirm: [
+            { required: true, validator: validatePass2, trigger: 'blur' }
+          ],
+          email: [
+            { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+            { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
+          ],
+          phoneNumber: [
+            { required: true,  trigger: 'blur' , validator: validPhone}
+          ],
+          department: [
+            { required: true, message: '请填写部门', trigger: 'blur' }
+          ]
+        },
         username: '',
         departmentOptions: [],
         department: '',
@@ -212,6 +251,7 @@
           userName:'',
           displayName:'',
           password:'',
+          passwordConfirm:'',
           email:'',
           phoneNumber: '',
           department:''
