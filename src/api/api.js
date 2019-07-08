@@ -378,3 +378,11 @@ export function getAllAuthorities() {
 export function getAuthorities(userID) {
   return axios.get(`/api/getAuthorities/${userID}`)
 }
+
+export function getFields() {
+  return axios.get(`/api/field`);
+}
+
+export function addRule(rule) {
+  return axios.get(`/api/threshold`, {...rule})
+}
