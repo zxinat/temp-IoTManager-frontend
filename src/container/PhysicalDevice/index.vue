@@ -296,7 +296,7 @@
           <el-input v-model="newDeviceData.imageUrl" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="所属网关编号" label-width="120px">
-          <el-input v-model="newDeviceData.gatewayID" autocomplete="off"></el-input>
+          <el-input v-model="newDeviceData.gatewayId" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="MAC地址" label-width="120px">
           <el-input v-model="newDeviceData.mac" autocomplete="off"></el-input>
@@ -311,16 +311,16 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="部门" label-width="120px">
-          <el-select v-model="newDeviceData.department" placeholder="选择部门">
-            <el-option
-              v-for="d in department"
-              :key="d.id"
-              :label="d.departmentName"
-              :value="d.departmentName">
-            </el-option>
-          </el-select>
-        </el-form-item>
+        <!--<el-form-item label="部门" label-width="120px">-->
+          <!--<el-select v-model="newDeviceData.department" placeholder="选择部门">-->
+            <!--<el-option-->
+              <!--v-for="d in department"-->
+              <!--:key="d.id"-->
+              <!--:label="d.departmentName"-->
+              <!--:value="d.departmentName">-->
+            <!--</el-option>-->
+          <!--</el-select>-->
+        <!--</el-form-item>-->
         <el-form-item label="描述" label-width="120px">
           <el-input v-model="newDeviceData.remark" autocomplete="off"></el-input>
         </el-form-item>
@@ -417,11 +417,11 @@
             workshop: '',
             deviceState: '',
             imageUrl: '',
-            gatewayID:'',
+            gatewayID: 0,
             mac: '',
             deviceType: '',
             remark: '',
-            department: '',
+            // department: '',
           },
           newDeviceData: {
             // 标签
@@ -432,11 +432,11 @@
             workshop: '',
             deviceState: '',
             imageUrl: '',
-            gatewayID:'',
+            gatewayId: 0,
             mac: '',
             deviceType: '',
             remark: '',
-            department: '',
+            // department: '',
 
             inputVisible: false,
             inputValue: '',
@@ -602,7 +602,7 @@
         },
         async add() {
           try {
-            console.log(this.deviceState);
+            console.log(this.newDeviceData);
             const data = await addDeviceApi(this.newDeviceData);
             this.newFormVisible = false;
             if (data.data.c === 200) {

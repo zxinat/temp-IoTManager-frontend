@@ -56,51 +56,58 @@
         <el-form-item label="规则描述">
           <el-input type="textarea" v-model="alarmRules.description"></el-input>
         </el-form-item>
-        <el-form-item prop="deviceGroup" label="设备组" :rules="[{ required: true, message: '项目组必选'}]">
-          <el-select  @change="getAffectNumber()" v-model="alarmRules.deviceGroup" placeholder="请选择设备组">
+        <el-form-item prop="deviceGroup" label="设备" :rules="[{ required: true, message: '项目必选'}]">
+          <el-select  @change="getAffectNumber()" v-model="alarmRules.deviceGroup" placeholder="请选择设备">
             <el-option
-              v-for="item in deviceGroupOptions"
+              v-for="item in devices"
               :key="item.id"
-              :label="item.label"
-              :value="item.value">
+              :label="item.deviceName"
+              :value="item.hardwareDeviceID">
             </el-option>
           </el-select>
         </el-form-item>
-        <template v-for="(item,index) in alarmRules.condition">
-          <h3 style="margin-left: 10px">规则{{index+1}}</h3>
-          <el-form-item :prop="'condition.' + index + '.field'" label="告警属性" :rules="[{ required: true, message: '属性名称必选'}]">
-            <el-select v-model="item.field" placeholder="请选择设备组">
-              <el-option label="温度" value="temperature"></el-option>
-              <el-option label="湿度" value="humidity"></el-option>
+        <!--<template v-for="(item,index) in alarmRules.condition">-->
+          <!--<h3 style="margin-left: 10px">规则{{index+1}}</h3>-->
+          <!--<el-form-item :prop="'condition.' + index + '.field'" label="告警属性" :rules="[{ required: true, message: '属性名称必选'}]">-->
+          <!--<el-form-item :prop="'condition.' + index + '.field'" label="告警属性" :rules="[{ required: true, message: '属性名称必选'}]">-->
+          <el-form-item prop="field" label="告警属性" :rules="[{ required: true, message: '告警属性必选'}]">
+            <el-select v-model="alarmRules.field" placeholder="请选择告警属性">
+              <el-option
+                v-for="item in fieldOptions"
+                :key="item.id"
+                :label="item.fieldName"
+                :value="item.fieldId"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item :prop="'condition['+index+'].operator'" label="运算" :rules="[{ required: true, message: '运算方式必选'}]">
-            <el-select v-model="item.operator" placeholder="请选择设备组">
-              <el-option label="=" value="0"></el-option>
-              <el-option label=">" value="1"></el-option>
-              <el-option label="<" value="2"></el-option>
+          <!--<el-form-item :prop="'condition['+index+'].operator'" label="运算" :rules="[{ required: true, message: '运算方式必选'}]">-->
+          <el-form-item prop="Operator" label="运算" :rules="[{ required: true, message: '运算方式必选'}]">
+            <el-select v-model="alarmRules.Operator" placeholder="请选择运算">
+              <el-option label="=" value="equal"></el-option>
+              <el-option label=">" value="greater"></el-option>
+              <el-option label="<" value="less"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item :prop="'condition['+index+'].value'" label="报警阈值" :rules="[{ required: true, message: '报警阈值必选'}]">
-            <el-input v-model="item.value"></el-input>
+          <!--<el-form-item :prop="'condition['+index+'].value'" label="报警阈值" :rules="[{ required: true, message: '报警阈值必选'}]">-->
+          <el-form-item prop="value" label="报警阈值" :rules="[{ required: true, message: '报警阈值必选'}]">
+            <el-input v-model="alarmRules.value"></el-input>
           </el-form-item>
-        </template>
-        <el-form-item label="添加规则">
-          <el-button type="primary" @click="addCondition"><i class="el-icon-circle-plus-outline"></i></el-button>
-        </el-form-item>
-        <el-form-item label="严重等级">
-          <el-radio-group v-model="alarmRules.severityLevel">
-            <el-radio label="critical" name="critical"></el-radio>
-            <el-radio label="warning" name="warning"></el-radio>
-            <el-radio label="info" name="info"></el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="开启规则">
-          <el-switch v-model="alarmRules.ruleStatus"></el-switch>
-        </el-form-item>
-        <el-form-item label="邮件通知">
-          <el-switch v-model="alarmRules.email"></el-switch>
-        </el-form-item>
+        <!--</template>-->
+        <!--<el-form-item label="添加规则">-->
+          <!--<el-button type="primary" @click="addCondition"><i class="el-icon-circle-plus-outline"></i></el-button>-->
+        <!--</el-form-item>-->
+        <!--<el-form-item label="严重等级">-->
+          <!--<el-radio-group v-model="alarmRules.severityLevel">-->
+            <!--<el-radio label="critical" name="critical"></el-radio>-->
+            <!--<el-radio label="warning" name="warning"></el-radio>-->
+            <!--<el-radio label="info" name="info"></el-radio>-->
+          <!--</el-radio-group>-->
+        <!--</el-form-item>-->
+        <!--<el-form-item label="开启规则">-->
+          <!--<el-switch v-model="alarmRules.ruleStatus"></el-switch>-->
+        <!--</el-form-item>-->
+        <!--<el-form-item label="邮件通知">-->
+          <!--<el-switch v-model="alarmRules.email"></el-switch>-->
+        <!--</el-form-item>-->
       </el-form>
       <hr/>
       <h1>总结</h1>
@@ -124,6 +131,7 @@
 <script>
   import MonitoringTree from "../../components/MonitoringTree/index";
   import MonitoringConfig from "../../components/MonitoringConfig/index";
+  import {addRule, getDevicesApi, getFields} from "../../api/api";
 
   export default {
     name: "MonitoringConfiguration",
@@ -162,6 +170,8 @@
           value: '选项5',
           label: '工厂5'
         }],
+        fieldOptions: [],
+        devices: [],
 
         form: {
           city: '上海',
@@ -175,14 +185,17 @@
           name: '',
           description: '',
           deviceGroup: '',
-          condition: [{
-            field: '',
-            operator: '',
-            value: '',
-            severityLevel: '',
-            ruleStatus: ''
-          }],
-          affectNumber: 0
+          // condition: [{
+          //   field: '',
+          //   operator: '',
+          //   value: '',
+          //   severityLevel: '',
+          //   ruleStatus: ''
+          // }],
+          field: '',
+          Operator: '',
+          value: '',
+          // affectNumber: 0
         },
         deviceGroupOptions: [{
           value: '0',
@@ -256,9 +269,14 @@
       },
       submitForm(formName) {
         // console.log(this.$refs[formName]);
-        this.$refs[formName].validate((valid) => {
+        this.$refs[formName].validate(async (valid) => {
           if (valid) {
+            console.log(this.alarmRules);
+            let res = await addRule(this.alarmRules);
             this.showAlarmRules=false;
+            if(res.data.d === "success") {
+              this.$message.success('新增规则成功');
+            }
             return true;
           } else {
             return false;
@@ -280,12 +298,21 @@
       },
       getAffectNumber() {
         // 接口，获取受影响的设备数，传入alarmRules.deviceGroup,获取的结果返回
-        let result = 13; //要被替换
-        this.alarmRules.affectNumber=result;
+        // let result = 13; //要被替换
+        // this.alarmRules.affectNumber=result;
+      },
+      async getField() {
+        this.fieldOptions = (await getFields()).data.d;
+      },
+      async getDevices() {
+        this.devices = (await getDevicesApi()).data.d;
+        console.log(this.devices);
       }
     },
     mounted() {
       this.getCityList();
+      this.getField();
+      this.getDevices();
     },
     components: {MonitoringConfig, MonitoringTree},
   }

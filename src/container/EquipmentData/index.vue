@@ -459,7 +459,7 @@
       },
       // 标签处理函数
       handleClose(tag) {
-        this.newDeviceData.dynamicTags.splice(this.newDeviceData.dynamicTags.indexOf(tag), 1);
+        //this.newDeviceData.dynamicTags.splice(this.newDeviceData.dynamicTags.indexOf(tag), 1);
       },
 
       showInput() {
