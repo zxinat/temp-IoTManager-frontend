@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-form :inline="true" :model="form" class="header">
-      <el-form-item label="城市">
+      <el-form-item :label="GLOBAL.firstLevel">
         <el-select v-model="form.city" @change="getFactoryList" placeholder="上海">
           <el-option
             v-for="item in cityOptions"
@@ -11,7 +11,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="工厂">
+      <el-form-item :label="GLOBAL.secondLevel">
         <el-select v-model="form.factory" placeholder="南洋万邦">
           <el-option
             v-for="item in factoryOptions"

@@ -12,10 +12,10 @@
             <el-form-item label="设备类型">
               <el-input v-model="form.deviceType"></el-input>
             </el-form-item>
-            <el-form-item label="城市">
+            <el-form-item :label="GLOBAL.firstLevel">
               <el-input v-model="form.city"></el-input>
             </el-form-item>
-            <el-form-item label="工厂">
+            <el-form-item :label="GLOBAL.secondLevel">
               <el-input v-model="form.factory"></el-input>
             </el-form-item>
             <el-form-item label="报警容错次数">

@@ -1,14 +1,14 @@
 <template>
   <div class="district-management-container">
     <div class="top-header">
-      <span style="font-size: 25px">城市工厂管理</span>
+      <span style="font-size: 25px">配置管理</span>
     </div>
     <div class="search">
       <el-row>
         <el-col :span="8">
           <div class="grid-content bg-purple-dark">
-            选择城市
-            <el-select v-model="city" :placeholder="选择城市">
+            选择{{GLOBAL.firstLevel}}
+            <el-select v-model="city" :placeholder="请选择">
               <el-option
                 v-for="item in cityOptions"
                 :key="item.value"
@@ -21,7 +21,7 @@
         <el-col :span="8">
           <div class="grid-content bg-purple-dark">
             选择工厂
-            <el-select v-model="factory" :placeholder="选择工厂">
+            <el-select v-model="factory" :placeholder="请选择">
               <el-option
                 v-for="item in factoryOptions"
                 :key="item.value"
@@ -191,8 +191,6 @@
 </template>
 
 <script>
-  import {
-  } from '../../api/api';
 
   export default {
     name: "DistrictManagement",

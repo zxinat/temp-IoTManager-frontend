@@ -45,7 +45,7 @@
       </el-table-column>
       <el-table-column
         prop="department"
-        label="车间"
+        :label="GLOBAL.thirdLevel"
         width="120">
       </el-table-column>
       <el-table-column

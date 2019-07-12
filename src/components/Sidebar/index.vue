@@ -60,15 +60,16 @@
         <router-link to="/districtManagement"  class="hide-underline">
           <el-menu-item index="8">
             <!--<i class="el-icon-location"></i>-->
-            <span>城市工厂管理</span>
+            <span>配置管理</span>
           </el-menu-item>
         </router-link>
       </el-menu>
 </template>
 
 <script>
-    import  {mainColor} from '../../common/globalvariaties'
-    export default {
+  import {mainColor} from '../../common/globalvariaties'
+
+  export default {
       name: "Sidebar",
       data(){
         return{

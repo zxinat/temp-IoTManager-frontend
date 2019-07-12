@@ -2,7 +2,7 @@
   <div>
     <div class="search-container">
       <el-form :inline="true" :model="searchDevice" class="header">
-        <el-form-item label="城市">
+        <el-form-item :label="GLOBAL.firstLevel">
           <el-select v-model="searchDevice.city" @change="getFactoryList" placeholder="上海">
             <el-option
               v-for="item in cityOptions"
@@ -12,7 +12,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="工厂">
+        <el-form-item :label="GLOBAL.secondLevel">
           <el-select v-model="searchDevice.factory" @change="getWorkshopList"  placeholder="南洋万邦">
             <el-option
               v-for="item in factoryOptions"
@@ -22,8 +22,8 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="车间">
-          <el-select v-model="searchDevice.workshop" placeholder="车间1">
+        <el-form-item :label="GLOBAL.thirdLevel">
+          <el-select v-model="searchDevice.workshop" placeholder="请选择">
             <el-option
               v-for="item in workshopOptions"
               :key="item.value"
@@ -83,17 +83,17 @@
         </el-table-column>
         <el-table-column
           prop="city"
-          label="城市"
+          :label="GLOBAL.firstLevel"
           width="120">
         </el-table-column>
         <el-table-column
           prop="factory"
-          label="工厂"
+          :label="GLOBAL.secondLevel"
           width="120">
         </el-table-column>
         <el-table-column
           prop="workshop"
-          label="车间"
+          :label="GLOBAL.thirdLevel"
           width="120">
         </el-table-column>
         <el-table-column
@@ -163,8 +163,8 @@
         <el-form-item label="设备名称" label-width="120px">
           <el-input v-model="updateData.deviceName" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="城市" label-width="120px">
-          <el-select v-model="updateData.city" placeholder="选择城市">
+        <el-form-item :label="GLOBAL.firstLevel" label-width="120px">
+          <el-select v-model="updateData.city" placeholder="请选择">
             <el-option
               v-for="c in city"
               :key="c.id"
@@ -173,8 +173,8 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="工厂" label-width="120px">
-          <el-select v-model="updateData.factory" placeholder="选择工厂">
+        <el-form-item :label="GLOBAL.secondLevel" label-width="120px">
+          <el-select v-model="updateData.factory" placeholder="请选择">
             <el-option
               v-for="f in factory"
               :key="f.id"
@@ -183,8 +183,8 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="车间" label-width="120px">
-          <el-select v-model="updateData.workshop" placeholder="选择车间">
+        <el-form-item :label="GLOBAL.thirdLevel" label-width="120px">
+          <el-select v-model="updateData.workshop" placeholder="请选择">
             <el-option
               v-for="w in workshop"
               :key="w.id"
@@ -252,8 +252,8 @@
         <el-form-item label="设备名称" label-width="120px">
           <el-input v-model="newDeviceData.deviceName" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="城市" label-width="120px">
-          <el-select v-model="newDeviceData.city" placeholder="选择城市">
+        <el-form-item :label="GLOBAL.firstLevel" label-width="120px">
+          <el-select v-model="newDeviceData.city" placeholder="请选择">
             <el-option
               v-for="c in city"
               :key="c.id"
@@ -262,8 +262,8 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="工厂" label-width="120px">
-          <el-select v-model="newDeviceData.factory" placeholder="选择工厂">
+        <el-form-item :label="GLOBAL.secondLevel" label-width="120px">
+          <el-select v-model="newDeviceData.factory" placeholder="请选择">
             <el-option
               v-for="f in factory"
               :key="f.id"
@@ -272,8 +272,8 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="车间" label-width="120px">
-          <el-select v-model="newDeviceData.workshop" placeholder="选择车间">
+        <el-form-item :label="GLOBAL.thirdLevel" label-width="120px">
+          <el-select v-model="newDeviceData.workshop" placeholder="请选择">
             <el-option
               v-for="w in workshop"
               :key="w.id"

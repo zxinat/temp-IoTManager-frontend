@@ -2,7 +2,7 @@
   <div>
     <div class="search-container">
       <el-form :inline="true" :model="searchGatewayData" class="header">
-        <el-form-item label="城市">
+        <el-form-item :label="GLOBAL.firstLevel">
           <el-select v-model="searchGatewayData.city" @change="getFactoryList" placeholder="上海">
             <el-option
               v-for="item in cityOptions"
@@ -12,7 +12,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="工厂">
+        <el-form-item :label="GLOBAL.secondLevel">
           <el-select v-model="searchGatewayData.factory" @change="getWorkshopList" placeholder="南洋万邦">
             <el-option
               v-for="item in factoryOptions"
@@ -22,8 +22,8 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="车间">
-          <el-select v-model="searchGatewayData.workshop" placeholder="车间1">
+        <el-form-item :label="GLOBAL.thirdLevel">
+          <el-select v-model="searchGatewayData.workshop" placeholder="请选择">
             <el-option
               v-for="item in workshopOptions"
               :key="item.value"
