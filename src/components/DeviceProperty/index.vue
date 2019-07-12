@@ -36,7 +36,8 @@
 
 <script>
   import {updateDeviceApi} from '../../api/api';
-    export default {
+
+  export default {
         name: "DeviceProperty",
       data(){
         return {
@@ -69,7 +70,7 @@
         }
       },
       computed:{
-        deviceData:{
+        form:{
           // getter
           get: function () {
             return this.$store.state.device.currentDeviceData;

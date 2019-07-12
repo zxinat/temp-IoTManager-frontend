@@ -35,25 +35,25 @@
         <el-form-item>
           <el-button type="primary" @click="filter"><img src="../../assets/img/find.svg">筛选</el-button>
         </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="exportExcel">导出Excel</el-button>
-        </el-form-item>
-        <el-form-item>
-          <el-upload
-            ref="upload"
-            action="https://jsonplaceholder.typicode.com/posts/"
-            :show-file-list="false"
-            :on-success="readExcel"
-            :on-error="uploadFailed">
-            <el-button slot="trigger"
-                       type="primary">导入excel
-            </el-button>
-          </el-upload>
-        </el-form-item>
+        <!--<el-form-item>-->
+          <!--<el-button type="primary" @click="exportExcel">导出Excel</el-button>-->
+        <!--</el-form-item>-->
+        <!--<el-form-item>-->
+          <!--<el-upload-->
+            <!--ref="upload"-->
+            <!--action="https://jsonplaceholder.typicode.com/posts/"-->
+            <!--:show-file-list="false"-->
+            <!--:on-success="readExcel"-->
+            <!--:on-error="uploadFailed">-->
+            <!--<el-button slot="trigger"-->
+                       <!--type="primary">导入excel-->
+            <!--</el-button>-->
+          <!--</el-upload>-->
+        <!--</el-form-item>-->
       </el-form>
     </div>
     <div class="addbutton-container">
-      <el-button type="primary" @click="newFormVisible = true">新增数据</el-button>
+      <!--<el-button type="primary" @click="newFormVisible = true">新增数据</el-button>-->
     </div>
     <div class="table-container">
       <el-table
@@ -104,21 +104,21 @@
         <el-table-column
           prop="remark"
           label="描述"
-          width="300">
+          width="400">
         </el-table-column>
-        <el-table-column
-          fixed="right"
-          label="操作"
-          width="100">
-          <template slot-scope="scope">
-            <el-button @click="openUpdateForm(scope.row)" type="text" size="small">修改</el-button>
-            <el-button @click="deleteDevice(scope.row)" type="text" size="small">删除</el-button>
-          </template>
-        </el-table-column>
+        <!--<el-table-column-->
+          <!--fixed="right"-->
+          <!--label="操作"-->
+          <!--width="100">-->
+          <!--<template slot-scope="scope">-->
+            <!--<el-button @click="openUpdateForm(scope.row)" type="text" size="small">修改</el-button>-->
+            <!--<el-button @click="deleteDevice(scope.row)" type="text" size="small">删除</el-button>-->
+          <!--</template>-->
+        <!--</el-table-column>-->
       </el-table>
     </div>
     <div class="addbutton-container">
-      <el-button type="primary" @click="multipleDelete">批量删除</el-button>
+      <!--<el-button type="primary" @click="multipleDelete">批量删除</el-button>-->
     </div>
     <el-dialog title="修改数据" :visible.sync="updateFormVisible">
       <el-form :model="updateData">

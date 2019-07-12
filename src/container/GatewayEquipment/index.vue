@@ -194,32 +194,32 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="网关状态" label-width="120px">
-          <el-select v-model="updateData.gatewayState" placeholder="选择网关类型">
-            <el-option
-              v-for="gs in gatewayState"
-              :key="gs.id"
-              :label="gs.stateName"
-              :value="gs.stateName">
-            </el-option>
-          </el-select>
-        </el-form-item>
+        <!--<el-form-item label="网关状态" label-width="120px">-->
+          <!--<el-select v-model="updateData.gatewayState" placeholder="选择网关类型">-->
+            <!--<el-option-->
+              <!--v-for="gs in gatewayState"-->
+              <!--:key="gs.id"-->
+              <!--:label="gs.stateName"-->
+              <!--:value="gs.stateName">-->
+            <!--</el-option>-->
+          <!--</el-select>-->
+        <!--</el-form-item>-->
         <el-form-item label="网关图像链接" label-width="120px">
           <el-input v-model="updateData.imageUrl" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="描述" label-width="120px">
           <el-input v-model="updateData.remark" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="部门" label-width="120px">
-          <el-select v-model="updateData.department" placeholder="选择网关类型">
-            <el-option
-              v-for="d in department"
-              :key="d.id"
-              :label="d.departmentName"
-              :value="d.departmentName">
-            </el-option>
-          </el-select>
-        </el-form-item>
+        <!--<el-form-item label="部门" label-width="120px">-->
+          <!--<el-select v-model="updateData.department" placeholder="选择网关类型">-->
+            <!--<el-option-->
+              <!--v-for="d in department"-->
+              <!--:key="d.id"-->
+              <!--:label="d.departmentName"-->
+              <!--:value="d.departmentName">-->
+            <!--</el-option>-->
+          <!--</el-select>-->
+        <!--</el-form-item>-->
         <el-form-item>
           <UploadImg></UploadImg>
         </el-form-item>
@@ -277,32 +277,32 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="网关状态" label-width="120px">
-          <el-select v-model="newGatewayData.gatewayState" placeholder="选择网关状态">
-            <el-option
-              v-for="gs in gatewayState"
-              :key="gs.stateName"
-              :label="gs.stateName"
-              :value="gs.stateName">
-            </el-option>
-          </el-select>
-        </el-form-item>
+        <!--<el-form-item label="网关状态" label-width="120px">-->
+          <!--<el-select v-model="newGatewayData.gatewayState" placeholder="选择网关状态">-->
+            <!--<el-option-->
+              <!--v-for="gs in gatewayState"-->
+              <!--:key="gs.stateName"-->
+              <!--:label="gs.stateName"-->
+              <!--:value="gs.stateName">-->
+            <!--</el-option>-->
+          <!--</el-select>-->
+        <!--</el-form-item>-->
         <el-form-item label="网关图像链接" label-width="120px">
           <el-input v-model="newGatewayData.imageUrl" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="描述" label-width="120px">
           <el-input v-model="newGatewayData.remark" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="部门" label-width="120px">
-          <el-select v-model="newGatewayData.department" placeholder="选择部门">
-            <el-option
-              v-for="d in department"
-              :key="d.id"
-              :label="d.departmentName"
-              :value="d.departmentName">
-            </el-option>
-          </el-select>
-        </el-form-item>
+        <!--<el-form-item label="部门" label-width="120px">-->
+          <!--<el-select v-model="newGatewayData.department" placeholder="选择部门">-->
+            <!--<el-option-->
+              <!--v-for="d in department"-->
+              <!--:key="d.id"-->
+              <!--:label="d.departmentName"-->
+              <!--:value="d.departmentName">-->
+            <!--</el-option>-->
+          <!--</el-select>-->
+        <!--</el-form-item>-->
         <!--<el-form-item class="tag-center">-->
         <!--<el-tag-->
         <!--:key="tag"-->

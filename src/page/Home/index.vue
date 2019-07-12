@@ -16,6 +16,7 @@
 <script>
   import Navigation from "../../components/Navigation/index";
   import Sidebar from "../../components/Sidebar/index";
+
   export default {
     name: "Home",
     components: {Sidebar, Navigation},
@@ -54,7 +55,7 @@
     }
   }
   .full-screen{
-    height: 100%;
+    height:  calc(100% -  #{$nav-height});
   }
   .router-view{
     position: absolute;
