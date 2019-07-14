@@ -26,4 +26,14 @@
     margin: 0;
     overflow-x: hidden;
   }
+  /*更改最大高度*/
+  .el-table .cell {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    white-space: normal;
+    word-break: break-all;
+    line-height: 23px;
+    max-height: 70px;
+    overflow: auto;
+  }
 </style>

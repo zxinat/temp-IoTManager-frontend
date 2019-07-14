@@ -33,6 +33,8 @@
 
 <script>
   import {loginApi} from '../../api/api';
+  import {setCookie} from '../../../utils/package-cookies';
+  import {setItemToLocalstorage} from '../../../utils/package-localstorage';
 
   export default {
     name: 'Login',
@@ -62,6 +64,9 @@
             const res = await loginApi(this.form);
             if(res.data.d === 'success') {
               console.log('success');
+              setCookie('userSessionID',res.data.d.sessionId,20);//存储sessionID
+              setItemToLocalstorage('userInfo',res.data.d.user);//存储用户信息
+              await this.$store.dispatch('userInfo/setUserInfo',this.form);
               this.$router.push('/dashBoard');
             } else {
               this.$message.error('Wrong Username Or Password');
