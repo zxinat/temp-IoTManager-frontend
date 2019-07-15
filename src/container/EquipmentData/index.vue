@@ -62,50 +62,46 @@
         style="width: 100%"
         @selection-change="handleSelectionChange"
         id="equipment-data-out-table">
+        <!--<el-table-column-->
+          <!--type="selection"-->
+          <!--width="55">-->
+        <!--</el-table-column>-->
         <el-table-column
-          type="selection"
-          width="55">
+          prop="indexId"
+          label="数据编号">
         </el-table-column>
         <el-table-column
-          prop="ID"
-          label="数据编号"
-          width="120">
+          prop="indexName"
+          label="数据名称">
+        </el-table-column>
+        <!--<el-table-column-->
+          <!--prop="hardwareGatewayID"-->
+          <!--label="所属网关编号">-->
+        <!--</el-table-column>-->
+        <!--<el-table-column-->
+          <!--prop="gatewayName"-->
+          <!--label="所属网关名称">-->
+        <!--</el-table-column>-->
+        <el-table-column
+          prop="deviceId"
+          label="所属设备编号">
+        </el-table-column>
+        <!--<el-table-column-->
+          <!--prop="deviceName"-->
+          <!--label="所属设备名称">-->
+        <!--</el-table-column>-->
+        <el-table-column
+          prop="indexValue"
+          label="数据">
         </el-table-column>
         <el-table-column
-          prop="hardwareGatewayID"
-          label="所属网关编号"
-          width="120">
+          prop="timestamp"
+          label="创建时间">
         </el-table-column>
-        <el-table-column
-          prop="gatewayName"
-          label="所属网关名称"
-          width="120">
-        </el-table-column>
-        <el-table-column
-          prop="hardwareDeviceID"
-          label="所属设备编号"
-          width="120">
-        </el-table-column>
-        <el-table-column
-          prop="deviceName"
-          label="所属设备名称"
-          width="120">
-        </el-table-column>
-        <el-table-column
-          prop="data"
-          label="数据"
-          width="150">
-        </el-table-column>
-        <el-table-column
-          prop="createTime"
-          label="创建时间"
-          width="120">
-        </el-table-column>
-        <el-table-column
-          prop="remark"
-          label="描述"
-          width="400">
-        </el-table-column>
+        <!--<el-table-column-->
+          <!--prop="remark"-->
+          <!--label="描述">-->
+        <!--</el-table-column>-->
         <!--<el-table-column-->
           <!--fixed="right"-->
           <!--label="操作"-->

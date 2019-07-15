@@ -413,3 +413,7 @@ export function getGatewayByWorkshop(workshop) {
 export function getDeviceAmount() {
   return axios.get(`/api/device/amount`);
 }
+
+export function getDashboardAlarmInfo() {
+  return axios.get(`/api/alarmInfo/dashboard`);
+}
