@@ -1,8 +1,8 @@
 import axios from "axios";
 
-axios.defaults.baseURL = 'https://www.easy-mock.com/mock/5c22475a4e21841210a7015f';
+// axios.defaults.baseURL = 'https://www.easy-mock.com/mock/5c22475a4e21841210a7015f';
 // axios.defaults.baseURL = 'http://139.217.219.205:8080';
-// axios.defaults.baseURL = 'http://localhost:5000';
+axios.defaults.baseURL = 'http://localhost:5000';
 // axios.defaults.baseURL='https://localhost:44373';
 //带cookie
 axios.defaults.withCredentials = true;
@@ -32,8 +32,7 @@ export function getDeviceProperty(id) {
 }
 
 export function getDevicePropertyData(deviceid, propertyid) {
-  return axios.get(`/api/devicePropertyData/${deviceid}/${propertyid}`);
-
+  return axios.get(`/api/deviceData/${deviceid}/${propertyid}`);
 }
 
 

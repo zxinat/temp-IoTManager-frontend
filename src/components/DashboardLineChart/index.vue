@@ -11,12 +11,12 @@
         </el-option>
       </el-select>
       属性
-      <el-select v-model="propertySelectorValue" multiple placeholder="请选择属性">
+      <el-select v-model="propertySelectorValue" placeholder="请选择属性">
         <el-option
           v-for="item in propertySelectorOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
+          :key="item.id"
+          :label="item.fieldName"
+          :value="item.fieldId">
         </el-option>
       </el-select>
       <el-button type="primary" plain @click="searchLineChartData">确认</el-button>
@@ -32,17 +32,18 @@
 <script>
   import echarts from 'echarts';
   import io from 'socket.io-client';
-  import {getDevicesApi,getDeviceProperty,getDevicePropertyData} from '../../api/api';
+  import {getDevicesApi, getDeviceProperty, getDevicePropertyData, getFields} from '../../api/api';
   // const socket = io('ws://localhost:3000')
   export default {
     name: "DashboardLineChart",
     data() {
       return {
         data: [98, 97, 96, 99, 101, 106, 100],
+        xAxisData: ['14:43:00', '14:43:01', '14:43:02', '14:43:03', '14:43:04', '14:43:05', '14:43:06'],
         deviceSelectorOptions: [],
         deviceSelectorValue: '',
         propertySelectorOptions: [],
-        propertySelectorValue: [],
+        propertySelectorValue: '',
         chart: null,
         option: {
           title: {
@@ -55,7 +56,7 @@
               // 'temperature', 'humidity'
             ],
           },
-          xAxis: {
+          xAxis: [{
             type: 'category',
             boundaryGap: true,
             axisLine: { //坐标轴轴线相关设置。数学上的x轴
@@ -67,12 +68,13 @@
               textStyle: {
                 margin: 15,
               },
+              interval: 0
             },
             axisTick: {
               show: false,
             },
-            data: ['14:43:00', '14:43:01', '14:43:02', '14:43:03', '14:43:04', '14:43:05', '14:43:06']
-          },
+            data: this.xAxisData
+          }],
           yAxis: {},
           series: [
             {
@@ -116,6 +118,7 @@
           value: el.hardwareDeviceID,
           label: el.deviceName}
       });
+      this.propertySelectorOptions=(await getFields()).data.d;
     },
     watch:{
       async 'deviceSelectorValue'(newVal,oldVal){
@@ -131,34 +134,30 @@
       initChart() {
         this.chart = echarts.init(document.getElementsByClassName('dashboard-line-chart-container')[0]);
         // 把配置和数据放这里
-        console.log(this.option);
         this.chart.setOption(this.option);
-        this.chart.setOption({series:[{data: this.data}]});
-        setInterval(() => {
-          let val = Math.round(Math.random() * 5) + 95;
-          this.data.shift();
-          this.data.push(val);
-          this.chart.setOption({series:[{data: this.data}]});
-        }, 5000);
+        // this.chart.setOption({series:[{data: this.data}]});
       },
       async searchLineChartData(){
         if(this.deviceSelectorValue&&this.propertySelectorValue){
           //获取数据
-          let result= (await getDevicePropertyData(this.deviceSelectorValue,this.propertySelectorValue)).data.d;
-          console.log('manman',result);
-          this.option.series=result.map(el=>{
-            return {
-              type: 'line',
-              name: el.name,
-              label: {
-                show:true
-              },
-              data: el.data
-            }
-          });
-          this.option.legend.data=result.map(el=>{
-            return el.name;
-          });
+          // this.option.series=result.map(el=>{
+          //   return {
+          //     type: 'line',
+          //     name: el.name,
+          //     label: {
+          //       show:true
+          //     },
+          //     data: el.data
+          //   }
+          // });
+          // this.option.legend.data=result.map(el=>{
+          //   return el.name;
+          // });
+          setInterval(async () => {
+            let result= (await getDevicePropertyData(this.deviceSelectorValue,this.propertySelectorValue)).data.d;
+            console.log(result);
+            this.chart.setOption({xAxis: [{data: result.xAxis}], series:[{data: result.series}]});
+          }, 10000);
           this.initChart();
         }
 
