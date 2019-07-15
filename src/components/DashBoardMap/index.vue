@@ -289,7 +289,7 @@
               {name: '上海', value: [121.52, 31.03, amount]}
             ],
           }
-        ]
+        ];
         this.chinaConfigure();
       }
     }
