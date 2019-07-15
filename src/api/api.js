@@ -193,7 +193,7 @@ export function getDeviceTreeApi() {
 
 //告警信息
 export function getAlarmInformationApi() {
-  return axios.get('/api/alarmInformation');
+  return axios.get('/api/alarmInfo');
 }
 
 export function updateAlarmInformationApi(data) {

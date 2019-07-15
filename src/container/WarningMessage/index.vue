@@ -65,74 +65,65 @@
         <!--</el-table-column>-->
       </el-table>
     </div>
-    <div class="addbutton-container">
-      <el-button type="primary" @click="newFormVisible = true">快速处理</el-button>
-    </div>
+    <br>
+    <h2 style="margin-left: 10px">告警信息</h2>
+    <!--<div class="addbutton-container">-->
+      <!--<el-button type="primary" @click="newFormVisible = true">快速处理</el-button>-->
+    <!--</div>-->
     <div class="table-container">
       <el-table
         :data="tableData"
         border
         style="width: 100%"
         @selection-change="handleSelectionChange">
-        <el-table-column
-          type="selection"
-          width="55">
-        </el-table-column>
+        <!--<el-table-column-->
+          <!--type="selection">-->
+        <!--</el-table-column>-->
         <el-table-column
           fixed
-          prop="deviceName"
-          label="设备名称"
-          width="120">
+          prop="deviceId"
+          label="设备名称">
         </el-table-column>
         <el-table-column
-          prop="dataName"
-          label="数据名称"
-          width="120">
+          prop="indexId"
+          label="数据名称">
+        </el-table-column>
+        <!--<el-table-column-->
+          <!--prop="alarmType"-->
+          <!--label="告警类型">-->
+        <!--</el-table-column>-->
+        <!--<el-table-column-->
+          <!--prop="handleState"-->
+          <!--label="处理状态">-->
+        <!--</el-table-column>-->
+        <el-table-column
+          prop="alarmInfo"
+          label="告警内容">
         </el-table-column>
         <el-table-column
-          prop="alarmType"
-          label="告警类型"
-          width="120">
+          prop="timestamp"
+          label="告警时间">
         </el-table-column>
-        <el-table-column
-          prop="handleState"
-          label="处理状态"
-          width="120">
-        </el-table-column>
-        <el-table-column
-          prop="alarmContent"
-          label="告警内容"
-          width="120">
-        </el-table-column>
-        <el-table-column
-          prop="alarmTime"
-          label="告警时间"
-          width="120">
-        </el-table-column>
-        <el-table-column
-          prop="handleTime"
-          label="处理时间"
-          width="120">
-        </el-table-column>
-        <el-table-column
-          prop="handleMethod"
-          label="处理方式"
-          width="120">
-        </el-table-column>
-        <el-table-column
-          prop="handleContent"
-          label="处理内容"
-          width="120">
-        </el-table-column>
-        <el-table-column
-          fixed="right"
-          label="操作"
-          width="100">
-          <template slot-scope="scope">
-            <el-button @click="openUpdateForm(scope.row)" type="text" size="small">处理</el-button>
-            <!--<el-button @click="deleteDevice(scope.row)" type="text" size="small">删除</el-button>-->
-          </template>
-        </el-table-column>
+        <!--<el-table-column-->
+          <!--prop="handleTime"-->
+          <!--label="处理时间">-->
+        <!--</el-table-column>-->
+        <!--<el-table-column-->
+          <!--prop="handleMethod"-->
+          <!--label="处理方式">-->
+        <!--</el-table-column>-->
+        <!--<el-table-column-->
+          <!--prop="handleContent"-->
+          <!--label="处理内容">-->
+        <!--</el-table-column>-->
+        <!--<el-table-column-->
+          <!--fixed="right"-->
+          <!--label="操作">-->
+          <!--<template slot-scope="scope">-->
+            <!--<el-button @click="openUpdateForm(scope.row)" type="text" size="small">处理</el-button>-->
+            <!--&lt;!&ndash;<el-button @click="deleteDevice(scope.row)" type="text" size="small">删除</el-button>&ndash;&gt;-->
+          <!--</template>-->
+        <!--</el-table-column>-->
       </el-table>
     </div>
     <el-dialog title="告警处理" :visible.sync="updateFormVisible">
@@ -222,7 +213,8 @@
             "alarmContent": "警报警报哈哈哈哈",
             "handleTime":"",
             "handleMethod":"",
-            "handleContent":""
+            "handleContent":"",
+            "timestamp": "oaisdjboiadjfb"
           }],
           multipleSelection: [],
           updateData: {},
@@ -302,7 +294,7 @@
       },
       async mounted() {
         //获取所有设备信息
-        // this.getAlarmInformation();
+        this.getAlarmInformation();
         this.rulesData = (await getAllRules()).data.d;
         // 此处需要获取所有告警规则信息的接口，返回态如rulesData。
       }
