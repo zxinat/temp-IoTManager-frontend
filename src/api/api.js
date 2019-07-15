@@ -389,3 +389,4 @@ export function addRule(rule) {
 export function getAllRules() {
   return axios.get(`/api/threshold`);
 }
+
