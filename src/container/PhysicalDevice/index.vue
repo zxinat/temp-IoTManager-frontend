@@ -3,7 +3,7 @@
     <div class="search-container">
       <el-form :inline="true" :model="searchDevice" class="header">
         <el-form-item :label="GLOBAL.firstLevel">
-          <el-select v-model="searchDevice.city" @change="getFactoryList" placeholder="上海">
+          <el-select v-model="searchDevice.city" @change="getFactoryList(searchDevice.city)" placeholder="请选择城市">
             <el-option
               v-for="item in cityOptions"
               :key="item.value"
@@ -13,7 +13,7 @@
           </el-select>
         </el-form-item>
         <el-form-item :label="GLOBAL.secondLevel">
-          <el-select v-model="searchDevice.factory" @change="getWorkshopList"  placeholder="南洋万邦">
+          <el-select v-model="searchDevice.factory" @change="getWorkshopList(searchDevice.factory)"  placeholder="请选择工厂">
             <el-option
               v-for="item in factoryOptions"
               :key="item.value"
@@ -23,7 +23,7 @@
           </el-select>
         </el-form-item>
         <el-form-item :label="GLOBAL.thirdLevel">
-          <el-select v-model="searchDevice.workshop" placeholder="请选择">
+          <el-select v-model="searchDevice.workshop" placeholder="请选择车间">
             <el-option
               v-for="item in workshopOptions"
               :key="item.value"
@@ -33,7 +33,7 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="filter"><img src="../../assets/img/find.svg">筛选</el-button>
+          <el-button type="primary" @click="filter(searchDevice.workshop)"><img src="../../assets/img/find.svg">筛选</el-button>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="exportExcel">导出Excel</el-button>
@@ -363,12 +363,12 @@
     deleteDeviceApi,
     deleteMultipleDeviceApi,
     getAllDepartments,
-    getCity,
+    getCity, getCityOptions, getDeviceByWorkshop,
     getDevicesApi,
     getDeviceState,
     getDeviceType,
-    getFactory,
-    getWorkshop,
+    getFactory, getFactoryOptions,
+    getWorkshop, getWorkshopOptions,
     searchDevicesByDeviceIdApi,
     searchDevicesByDeviceNameApi,
     updateDeviceApi
@@ -443,9 +443,9 @@
             dynamicTags: ['标签一', '标签二', '标签三'],
           },
           searchDevice: {
-            city: '上海',
-            factory:'南洋万邦',
-            workshop:'车间1',
+            city: '',
+            factory:'',
+            workshop:'',
           },
           cityOptions: [{
             value: '选项1',
@@ -707,19 +707,33 @@
           this.newDeviceData.inputVisible = false;
           this.newDeviceData.inputValue = '';
         },
-        filter(){
-          console.log(this.searchDevice);
+        async filter(workshop){
+          const data = await getDeviceByWorkshop(workshop);
+          this.tableData = data.data.d;
           //调接口，传searchDevice参数
         },
         getCityList(){
           // 调获取城市接口
         },
-        getFactoryList(){
-          console.log(this.searchDevice.city);
+        async getFactoryList(city){
+          this.factoryOptions = (await getFactoryOptions(city)).data.d;
+          if (this.factoryOptions[0] != null) {
+            this.searchDevice.factory = this.factoryOptions[0].value;
+            this.getWorkshopList(this.searchDevice.factory);
+          } else {
+            this.searchDevice.factory = "";
+            this.searchDevice.workshop = "";
+            this.workshopOptions = [];
+          }
           // 调获取工厂接口，searchDevice.city参数
         },
-        getWorkshopList(){
-          console.log(this.searchDevice.city,this.searchDevice.factory);
+        async getWorkshopList(factory){
+          this.workshopOptions = (await getWorkshopOptions(factory)).data.d;
+          if (this.workshopOptions[0] != null) {
+            this.searchDevice.workshop = this.workshopOptions[0].value;
+          } else {
+            this.searchDevice.workshop = "";
+          }
           // 调获取车间接口，searchDevice.city，searchDevice.factory参数
         }
       },
@@ -727,6 +741,18 @@
         this.getCityList();
         //获取所有设备信息
         this.getDevices();
+        this.cityOptions = (await getCityOptions()).data.d;
+        if (this.cityOptions[0] != null) {
+          this.searchDevice.city = this.cityOptions[0].value;
+          this.getFactoryList(this.cityOptions[0].value);
+        } else {
+          this.searchDevice.city = "";
+          this.searchDevice.factory = "";
+          this.searchDevice.workshop = "";
+          this.cityOptions = [];
+          this.factoryOptions = [];
+          this.workshopOptions = [];
+        }
         this.city = (await getCity()).data.d;
         this.factory = (await getFactory()).data.d;
         this.workshop = (await getWorkshop()).data.d;

@@ -390,3 +390,22 @@ export function getAllRules() {
   return axios.get(`/api/threshold`);
 }
 
+export function getCityOptions() {
+  return axios.get(`/api/city/cityOptions`);
+}
+
+export function getFactoryOptions(cityname) {
+  return axios.get(`/api/factory/factoryOptions/${cityname}`);
+}
+
+export function getWorkshopOptions(factoryname) {
+  return axios.get(`/api/workshop/workshopOptions/${factoryname}`);
+}
+
+export function getDeviceByWorkshop(workshop) {
+  return axios.get(`/api/device/workshop/${workshop}`);
+}
+
+export function getGatewayByWorkshop(workshop) {
+  return axios.get(`/api/gateway/workshop/${workshop}`);
+}

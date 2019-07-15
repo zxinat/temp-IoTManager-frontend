@@ -3,7 +3,7 @@
     <div class="search-container">
       <el-form :inline="true" :model="searchGateway" class="header">
         <el-form-item :label="GLOBAL.firstLevel">
-          <el-select v-model="searchGateway.city" @change="getFactoryList" placeholder="上海">
+          <el-select v-model="searchGateway.city" @change="getFactoryList(searchGateway.city)" placeholder="上海">
             <el-option
               v-for="item in cityOptions"
               :key="item.value"
@@ -13,7 +13,7 @@
           </el-select>
         </el-form-item>
         <el-form-item :label="GLOBAL.secondLevel">
-          <el-select v-model="searchGateway.factory" @change="getWorkshopList" placeholder="南洋万邦">
+          <el-select v-model="searchGateway.factory" @change="getWorkshopList(searchGateway.factory)" placeholder="南洋万邦">
             <el-option
               v-for="item in factoryOptions"
               :key="item.value"
@@ -33,7 +33,7 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="filter"><img src="../../assets/img/find.svg">筛选</el-button>
+          <el-button type="primary" @click="filter(searchGateway.workshop)"><img src="../../assets/img/find.svg">筛选</el-button>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="exportExcel">导出Excel</el-button>
@@ -346,12 +346,12 @@
     deleteGatewayApi,
     deleteMultipleGatewayApi,
     getAllDepartments,
-    getCity,
-    getFactory,
+    getCity, getCityOptions,
+    getFactory, getFactoryOptions, getGatewayByWorkshop,
     getGatewaysApi,
     getGatewayState,
     getGatewayType,
-    getWorkshop,
+    getWorkshop, getWorkshopOptions,
     searchGatewaysApi,
     updateGatewayApi
   } from '../../api/api';
@@ -672,19 +672,33 @@
         this.newGatewayData.inputVisible = false;
         this.newGatewayData.inputValue = '';
       },
-      filter() {
-        console.log(this.searchGateway);
+      async filter(workshop) {
+        const data = await getGatewayByWorkshop(workshop);
+        this.tableData = data.data.d;
         //调接口，传searchGateway参数
       },
       getCityList() {
         // 调获取城市接口
       },
-      getFactoryList() {
-        console.log(this.searchGateway.city);
+      async getFactoryList(city) {
+        this.factoryOptions = (await getFactoryOptions(city)).data.d;
+        if (this.factoryOptions[0] != null) {
+          this.searchGateway.factory = this.factoryOptions[0].value;
+          this.getWorkshopList(this.searchGateway.factory);
+        } else {
+          this.searchGateway.factory = "";
+          this.searchGateway.workshop = "";
+          this.workshopOptions = [];
+        }
         // 调获取工厂接口，searchGateway.city参数
       },
-      getWorkshopList() {
-        console.log(this.searchGateway.city, this.searchGateway.factory);
+      async getWorkshopList(factory) {
+        this.workshopOptions = (await getWorkshopOptions(factory)).data.d;
+        if (this.workshopOptions[0] != null) {
+          this.searchGateway.workshop = this.workshopOptions[0].value;
+        } else {
+          this.searchGateway.workshop = "";
+        }
         // 调获取车间接口，searchGateway.city，searchGateway.factory参数
       }
     }
@@ -693,6 +707,18 @@
       this.getCityList();
       //获取所有网关信息
       this.getGateways();
+      this.cityOptions = (await getCityOptions()).data.d;
+      if (this.cityOptions[0] != null) {
+        this.searchGateway.city = this.cityOptions[0].value;
+        this.getFactoryList(this.cityOptions[0].value);
+      } else {
+        this.searchGateway.city = "";
+        this.searchGateway.factory = "";
+        this.searchGateway.workshop = "";
+        this.cityOptions = [];
+        this.factoryOptions = [];
+        this.workshopOptions = [];
+      }
       this.city = (await getCity()).data.d;
       this.factory = (await getFactory()).data.d;
       this.workshop = (await getWorkshop()).data.d;
