@@ -409,3 +409,7 @@ export function getDeviceByWorkshop(workshop) {
 export function getGatewayByWorkshop(workshop) {
   return axios.get(`/api/gateway/workshop/${workshop}`);
 }
+
+export function getDeviceAmount() {
+  return axios.get(`/api/device/amount`);
+}

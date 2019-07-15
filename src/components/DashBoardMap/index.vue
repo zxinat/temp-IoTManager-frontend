@@ -1,12 +1,12 @@
 <template>
   <div>
     <div class="block">
-      <span class="demonstration">地域筛选</span>
-      <el-cascader
-        :options="selectorOptions"
-        v-model="selectedArea"
-        @change="areaFilter">
-      </el-cascader>
+      <!--<span class="demonstration">地域筛选</span>-->
+      <!--<el-cascader-->
+        <!--:options="selectorOptions"-->
+        <!--v-model="selectedArea"-->
+        <!--@change="areaFilter">-->
+      <!--</el-cascader>-->
       <div class="dashboard-map-container">
         <!--<h2>-->
         <!--中国地图-->
@@ -24,6 +24,7 @@
   import echarts from 'echarts';
   // 一定要引入才能正常显示
   import 'echarts/map/js/china';
+  import {getDeviceAmount} from "../../api/api";
 
   export default {
     name: "DashBoardMap",
@@ -59,14 +60,12 @@
               type: 'scatter', // series图表类型
               coordinateSystem: 'geo', // series坐标系类型
               data: [
-                {name: '海门', value: [121.15, 31.89, 90]},
-                {name: '鄂尔多斯', value: [109.781327, 39.608266, 120]},
-                {name: '招远', value: [120.38, 37.35, 142]},
-                {name: '舟山', value: [122.207216, 29.985295, 123]}
+                {name: '上海', value: []}
               ],
             }
           ]
         },
+        mapInfo: [],
         selectorOptions: [{
           value: 'zhinan',
           label: '指南',
@@ -266,17 +265,32 @@
       };
     },
     mounted() {
+      this.setMapInfo();
       this.chinaConfigure();
     },
     methods: {
       chinaConfigure() {
         let myChart = echarts.init(document.getElementsByClassName('dashboard-map-container')[0]); //这里是为了获得容器所在位置
         window.onresize = myChart.resize;
-        myChart.setOption(this.option)
+        myChart.setOption(this.option);
         console.log(this.option);
       },
       areaFilter(value) {
         console.log(value);
+      },
+      async setMapInfo() {
+        const amount = (await getDeviceAmount()).data.d;
+        this.option.series = [
+          {
+            name: '设备分布', // series名称
+            type: 'scatter', // series图表类型
+            coordinateSystem: 'geo', // series坐标系类型
+            data: [
+              {name: '上海', value: [121.52, 31.03, amount]}
+            ],
+          }
+        ]
+        this.chinaConfigure();
       }
     }
   }
