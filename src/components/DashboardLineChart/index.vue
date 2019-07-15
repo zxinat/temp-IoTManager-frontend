@@ -2,7 +2,7 @@
   <div class="dashboard-line-chart">
     <div class="selector-container">
       设备
-      <el-select v-model="deviceSelectorValue" placeholder="请选择设备">
+      <el-select v-model="tmpDeviceSelectorValue" placeholder="请选择设备">
         <el-option
           v-for="item in deviceSelectorOptions"
           :key="item.value"
@@ -11,7 +11,7 @@
         </el-option>
       </el-select>
       属性
-      <el-select v-model="propertySelectorValue" placeholder="请选择属性">
+      <el-select v-model="tmpPropertySelectorValue" placeholder="请选择属性">
         <el-option
           v-for="item in propertySelectorOptions"
           :key="item.id"
@@ -42,8 +42,10 @@
         xAxisData: ['14:43:00', '14:43:01', '14:43:02', '14:43:03', '14:43:04', '14:43:05', '14:43:06'],
         deviceSelectorOptions: [],
         deviceSelectorValue: '',
+        tmpDeviceSelectorValue: '',
         propertySelectorOptions: [],
         propertySelectorValue: '',
+        tmpPropertySelectorValue: '',
         chart: null,
         option: {
           title: {
@@ -138,7 +140,7 @@
         // this.chart.setOption({series:[{data: this.data}]});
       },
       async searchLineChartData(){
-        if(this.deviceSelectorValue&&this.propertySelectorValue){
+        if(this.tmpDeviceSelectorValue&&this.tmpPropertySelectorValue){
           //获取数据
           // this.option.series=result.map(el=>{
           //   return {
@@ -153,9 +155,14 @@
           // this.option.legend.data=result.map(el=>{
           //   return el.name;
           // });
+          this.deviceSelectorValue = this.tmpDeviceSelectorValue;
+          this.propertySelectorValue = this.tmpPropertySelectorValue;
+          setTimeout(async () => {
+            let result= (await getDevicePropertyData(this.deviceSelectorValue,this.propertySelectorValue)).data.d;
+            this.chart.setOption({xAxis: [{data: result.xAxis}], series:[{data: result.series}]});
+          }, 200);
           setInterval(async () => {
             let result= (await getDevicePropertyData(this.deviceSelectorValue,this.propertySelectorValue)).data.d;
-            console.log(result);
             this.chart.setOption({xAxis: [{data: result.xAxis}], series:[{data: result.series}]});
           }, 10000);
           this.initChart();
