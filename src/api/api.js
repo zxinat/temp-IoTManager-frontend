@@ -383,5 +383,9 @@ export function getFields() {
 }
 
 export function addRule(rule) {
-  return axios.post(`/api/threshold`, {...rule})
+  return axios.post(`/api/threshold`, {...rule});
+}
+
+export function getAllRules() {
+  return axios.get(`/api/threshold`);
 }

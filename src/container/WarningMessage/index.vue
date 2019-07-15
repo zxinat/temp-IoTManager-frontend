@@ -20,44 +20,40 @@
         border>
         <el-table-column
           prop="name"
-          label="规则名称"
-          width="150">
+          label="规则名称">
         </el-table-column>
         <el-table-column
           prop="description"
-          label="规则描述"
-          width="223">
+          label="规则描述">
         </el-table-column>
         <el-table-column
           prop="deviceGroup"
-          label="设备组"
-          width="150">
+          label="设备">
         </el-table-column>
-        <el-table-column
-          prop="handleState"
-          label="处理状态"
-          width="150">
-        </el-table-column>
+        <!--<el-table-column-->
+          <!--prop="handleState"-->
+          <!--label="处理状态"-->
+          <!--width="150">-->
+        <!--</el-table-column>-->
         <el-table-column
           prop="conditionString"
-          label="规则"
-          width="200">
+          label="规则">
         </el-table-column>
-        <el-table-column
-          prop="severityLevel"
-          label="严重等级"
-          width="150">
-        </el-table-column>
-        <el-table-column
-        prop="ruleStatus"
-        label="开启规则"
-        width="150">
-       </el-table-column>
-        <el-table-column
-          prop="affectNumber"
-          label="影响数目"
-          width="150">
-        </el-table-column>
+        <!--<el-table-column-->
+          <!--prop="severityLevel"-->
+          <!--label="严重等级"-->
+          <!--width="150">-->
+        <!--</el-table-column>-->
+        <!--<el-table-column-->
+        <!--prop="ruleStatus"-->
+        <!--label="开启规则"-->
+        <!--width="150">-->
+       <!--</el-table-column>-->
+        <!--<el-table-column-->
+          <!--prop="affectNumber"-->
+          <!--label="影响数目"-->
+          <!--width="150">-->
+        <!--</el-table-column>-->
         <!--<el-table-column-->
           <!--fixed="right"-->
           <!--label="操作"-->
@@ -190,7 +186,7 @@
 
 <script>
   import {
-    getAlarmInformationApi,
+    getAlarmInformationApi, getAllRules,
     handleAllAlarmInformationApi,
     searchAlarmInformationApi,
     updateAlarmInformationApi
@@ -306,7 +302,8 @@
       },
       async mounted() {
         //获取所有设备信息
-        this.getAlarmInformation();
+        // this.getAlarmInformation();
+        this.rulesData = (await getAllRules()).data.d;
         // 此处需要获取所有告警规则信息的接口，返回态如rulesData。
       }
     }
