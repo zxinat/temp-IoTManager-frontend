@@ -165,7 +165,7 @@
           </el-select>
         </el-form-item>
         <el-form-item :label="GLOBAL.firstLevel" label-width="120px">
-          <el-select v-model="updateData.city" placeholder="选择网关类型">
+          <el-select v-model="updateData.city" placeholder="选择城市">
             <el-option
               v-for="c in city"
               :key="c.id"
@@ -173,9 +173,10 @@
               :value="c.cityName">
             </el-option>
           </el-select>
+          <el-button type="primary" @click="cityAddVisible = true">+</el-button>
         </el-form-item>
         <el-form-item :label="GLOBAL.secondLevel+'名称'" label-width="120px">
-          <el-select v-model="updateData.factory" placeholder="选择网关类型">
+          <el-select v-model="updateData.factory" placeholder="选择工厂">
             <el-option
               v-for="f in factory"
               :key="f.id"
@@ -183,9 +184,10 @@
               :value="f.factoryName">
             </el-option>
           </el-select>
+          <el-button type="primary" @click="factoryAddVisible = true">+</el-button>
         </el-form-item>
         <el-form-item :label="GLOBAL.thirdLevel" label-width="120px">
-          <el-select v-model="updateData.workshop" placeholder="选择网关类型">
+          <el-select v-model="updateData.workshop" placeholder="选择车间">
             <el-option
               v-for="w in workshop"
               :key="w.id"
@@ -193,6 +195,7 @@
               :value="w.workshopName">
             </el-option>
           </el-select>
+          <el-button type="primary" @click="workshopAddVisible = true">+</el-button>
         </el-form-item>
         <!--<el-form-item label="网关状态" label-width="120px">-->
           <!--<el-select v-model="updateData.gatewayState" placeholder="选择网关类型">-->
@@ -256,6 +259,7 @@
               :value="c.cityName">
             </el-option>
           </el-select>
+          <el-button type="primary" @click="cityAddVisible = true">+</el-button>
         </el-form-item>
         <el-form-item :label="GLOBAL.secondLevel+'名称'" label-width="120px">
           <el-select v-model="newGatewayData.factory" placeholder="请选择">
@@ -266,6 +270,7 @@
               :value="f.factoryName">
             </el-option>
           </el-select>
+          <el-button type="primary" @click="factoryAddVisible = true">+</el-button>
         </el-form-item>
         <el-form-item :label="GLOBAL.thirdLevel" label-width="120px">
           <el-select v-model="newGatewayData.workshop" placeholder="请选择">
@@ -276,6 +281,7 @@
               :value="w.workshopName">
             </el-option>
           </el-select>
+          <el-button type="primary" @click="workshopAddVisible = true">+</el-button>
         </el-form-item>
         <!--<el-form-item label="网关状态" label-width="120px">-->
           <!--<el-select v-model="newGatewayData.gatewayState" placeholder="选择网关状态">-->
@@ -337,12 +343,87 @@
         <el-button type="primary" @click="add">确 定</el-button>
       </div>
     </el-dialog>
+    <el-dialog title="新增城市" :visible.sync="cityAddVisible">
+      <el-form :model="cityTable">
+        <el-form-item label="城市名" label-width="120px">
+          <el-input v-model="cityTable.cityName" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="备注" label-width="120px">
+          <el-input v-model="cityTable.remark" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="cityAddVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addCity">确 定</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog title="新增工厂" :visible.sync="factoryAddVisible">
+      <el-form :model="factoryTable">
+        <el-form-item label="工厂名" label-width="120px">
+          <el-input v-model="factoryTable.factoryName" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="工厂电话" label-width="120px">
+          <el-input v-model="factoryTable.factoryPhoneNumber" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="工厂地址" label-width="120px">
+          <el-input v-model="factoryTable.factoryAddress" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="所属城市名" label-width="120px">
+          <el-select v-model="factoryTable.city" placeholder="请选择">
+            <el-option
+              v-for="c in city"
+              :key="c.id"
+              :label="c.cityName"
+              :value="c.cityName">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="备注" label-width="120px">
+          <el-input v-model="factoryTable.remark" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="factoryAddVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addFactory">确 定</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog title="新增车间" :visible.sync="workshopAddVisible">
+      <el-form :model="workshopTable">
+        <el-form-item label="车间名" label-width="120px">
+          <el-input v-model="workshopTable.workshopName" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="车间电话" label-width="120px">
+          <el-input v-model="workshopTable.workshopPhoneNumber" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="车间地址" label-width="120px">
+          <el-input v-model="workshopTable.workshopAddress" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="所属工厂名" label-width="120px">
+          <el-select v-model="workshopTable.factory" placeholder="请选择">
+            <el-option
+              v-for="f in factory"
+              :key="f.id"
+              :label="f.factoryName"
+              :value="f.factoryName">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="备注" label-width="120px">
+          <el-input v-model="workshopTable.remark" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="workshopAddVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addWorkshop">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
   import {
-    addGatewayApi,
+    addCity, addFactory,
+    addGatewayApi, addWorkshop,
     deleteGatewayApi,
     deleteMultipleGatewayApi,
     getAllDepartments,
@@ -364,6 +445,9 @@
     components: {UploadImg},
     data() {
       return {
+        cityAddVisible: false,
+        factoryAddVisible: false,
+        workshopAddVisible:false,
         updateFormVisible: false,
         newFormVisible: false,
         city: [],
@@ -388,6 +472,24 @@
           "remark": "",
           "department": ""
         }],
+        cityTable: {
+          cityName: "",
+          remark: ""
+        },
+        factoryTable: {
+          factoryName: "",
+          factoryPhoneNumber: "",
+          factoryAddress: "",
+          remark: "",
+          city: ""
+        },
+        workshopTable: {
+          workshopName: "",
+          workshopPhoneNumber: "",
+          workshopAddress: "",
+          remark: "",
+          factory: ""
+        },
         multipleSelection: [],
         updateData: {
           hardwareGatewayID: '',
@@ -581,6 +683,54 @@
         } catch (e) {
           this.newFormVisible = false;
           this.$message.error('添加网关未成功');
+        }
+      },
+      async addCity() {
+        try {
+          const data = await addCity(this.cityTable);
+          this.cityAddVisible = false;
+          if (data.data.d === "success") {
+            this.$message({
+              message: '添加成功',
+              type: 'success'
+            });
+            this.city = (await getCity()).data.d;
+          }
+        } catch (e) {
+          this.cityAddVisible = false;
+          this.$message.error('城市添加失败');
+        }
+      },
+      async addFactory() {
+        try {
+          const data = await addFactory(this.factoryTable);
+          this.factoryAddVisible = false;
+          if (data.data.d === "success") {
+            this.$message({
+              message: '添加成功',
+              type: 'success'
+            });
+            this.factory = (await getFactory()).data.d;
+          }
+        } catch (e) {
+          this.factoryAddVisible = false;
+          this.$message.error('工厂添加失败');
+        }
+      },
+      async addWorkshop() {
+        try {
+          const data = await addWorkshop(this.workshopTable);
+          this.workshopAddVisible = false;
+          if (data.data.d === "success") {
+            this.$message({
+              message: '添加成功',
+              type: 'success'
+            });
+            this.workshop = (await getWorkshop()).data.d;
+          }
+        } catch (e) {
+          this.workshopAddVisible = false;
+          this.$message.error('车间添加失败');
         }
       },
       async update() {

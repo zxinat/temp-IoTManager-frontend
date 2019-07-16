@@ -441,3 +441,15 @@ export function getDeviceStatus(id) {
 export function getSeverity() {
   return axios.get(`/api/severity`);
 }
+
+export function addCity(city) {
+  return axios.post(`/api/city`, {...city});
+}
+
+export function addFactory(factory) {
+  return axios.post(`/api/factory`, {...factory});
+}
+
+export function addWorkshop(workshop) {
+  return axios.post(`/api/workshop`, {...workshop});
+}
