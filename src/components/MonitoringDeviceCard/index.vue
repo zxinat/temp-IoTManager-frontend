@@ -1,7 +1,7 @@
 <template>
   <div class="monitoring-device-card-container">
     <el-row>
-      <el-col :span="6">
+      <el-col style="margin: 5px; width: 45%; float: left">
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <img src="../../assets/img/chilunzu.svg">
@@ -16,18 +16,18 @@
           <div  class="text item">
             {{'设备类型：'+deviceData.deviceType}}
           </div>
-          <div  class="text item">
-            {{'东经：    '+deviceData.deviceName}}
-          </div>
-          <div  class="text item">
-            {{'北纬：    '+deviceData.deviceName}}
-          </div>
+          <!--<div  class="text item">-->
+            <!--{{'东经：    '+deviceData.deviceName}}-->
+          <!--</div>-->
+          <!--<div  class="text item">-->
+            <!--{{'北纬：    '+deviceData.deviceName}}-->
+          <!--</div>-->
           <div  class="text item">
             {{'设备状态：'+deviceData.deviceState}}
           </div>
         </el-card>
       </el-col>
-      <el-col :span="6" :offset="2">
+      <el-col style="margin: 5px;  width: 45%; float: left">
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <img src="../../assets/img/chilunzu.svg">
@@ -45,19 +45,19 @@
           <div  class="text item">
             {{'最近报警时间：'+deviceData.recentAlarmTime}}
           </div>
-          <div  class="text item">
-            {{'温度：'+deviceData.temperature}}
-          </div>
-          <div  class="text item">
-            {{'湿度：'+deviceData.humidity}}
-          </div>
+          <!--<div  class="text item">-->
+            <!--{{'温度：'+deviceData.temperature}}-->
+          <!--</div>-->
+          <!--<div  class="text item">-->
+            <!--{{'湿度：'+deviceData.humidity}}-->
+          <!--</div>-->
         </el-card>
       </el-col>
-      <el-col :span="8" :offset="2">
+      <el-col style="margin-left: 30%;margin-right: 30% ; width: 30%">
         <div style="padding: 5px;">
           <span>设备快照</span>
           <div class="bottom clearfix">
-            <time class="time">{{deviceData.updateTime}}</time>
+            <!--<time class="time">{{deviceData.updateTime}}</time>-->
             <!--<el-button class="button">操作按钮</el-button>-->
           </div>
         </div>

@@ -425,3 +425,7 @@ export function getDeviceDataAmount() {
 export function getAlarmInfoAmount() {
   return axios.get(`/api/alarmInfo/amount`);
 }
+
+export function getDeviceStatus(id) {
+  return axios.get(`/api/deviceData/status/${id}`);
+}

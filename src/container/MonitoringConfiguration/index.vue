@@ -138,7 +138,7 @@
     addRule,
     getCityOptions,
     getDeviceApi,
-    getDevicesApi,
+    getDevicesApi, getDeviceStatus,
     getDeviceTreeApi,
     getFactoryOptions,
     getFields
@@ -224,7 +224,6 @@
     methods: {
       async filter() {
         this.treeData = (await getDeviceTreeApi(this.form.city, this.form.factory)).data.d;
-        console.log(this.form);
         //调接口，传form参数
       },
       async getCityList() {
@@ -252,7 +251,7 @@
       async handleNodeClick(data) {
         console.log(data);
         if(data.id){
-          const result= (await getDeviceApi(data.id)).data.d;
+          const result= (await getDeviceStatus(data.id)).data.d;
           this.$store.dispatch('device/setCurrentDeviceData',result);
         }
       },
@@ -347,10 +346,11 @@
         console.log(this.devices);
       }
     },
-    mounted() {
-      this.getCityList();
-      this.getField();
-      this.getDevices();
+    async mounted() {
+      await this.getCityList();
+      await this.getField();
+      await this.getDevices();
+      this.treeData = (await getDeviceTreeApi(this.form.city, this.form.factory)).data.d;
     },
     components: {MonitoringConfig, MonitoringTree},
   }
