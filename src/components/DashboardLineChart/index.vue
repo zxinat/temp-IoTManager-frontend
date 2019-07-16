@@ -81,7 +81,7 @@
           series: [
             {
             type: 'line',
-            name: 'temperature',
+            name: 'Value',
             label: {
               show: true,
               // position: 'top'
