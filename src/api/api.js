@@ -187,8 +187,8 @@ export function searchDeviceDataApi(data) {
 }
 
 //监控
-export function getDeviceTreeApi() {
-  return axios.get('/api/deviceTree');
+export function getDeviceTreeApi(city, factory) {
+  return axios.get(`/api/device/tree/${city}/${factory}`);
 }
 
 //告警信息

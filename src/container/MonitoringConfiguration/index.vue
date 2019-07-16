@@ -2,7 +2,7 @@
   <div>
     <el-form :inline="true" :model="form" class="header">
       <el-form-item :label="GLOBAL.firstLevel">
-        <el-select v-model="form.city" @change="getFactoryList" placeholder="上海">
+        <el-select v-model="form.city" @change="getFactoryList(form.city)" placeholder="请选择城市">
           <el-option
             v-for="item in cityOptions"
             :key="item.value"
@@ -12,7 +12,7 @@
         </el-select>
       </el-form-item>
       <el-form-item :label="GLOBAL.secondLevel">
-        <el-select v-model="form.factory" placeholder="南洋万邦">
+        <el-select v-model="form.factory" placeholder="请选择工厂">
           <el-option
             v-for="item in factoryOptions"
             :key="item.value"
@@ -119,7 +119,10 @@
     </el-dialog>
     <el-row>
       <el-col :span="3">
-        <MonitoringTree></MonitoringTree>
+        <!--<MonitoringTree></MonitoringTree>-->
+        <div class="monitoring-tree-container">
+          <el-tree :data="treeData" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+        </div>
       </el-col>
       <el-col :span="21">
         <monitoring-config></monitoring-config>
@@ -131,7 +134,15 @@
 <script>
   import MonitoringTree from "../../components/MonitoringTree/index";
   import MonitoringConfig from "../../components/MonitoringConfig/index";
-  import {addRule, getDevicesApi, getFields} from "../../api/api";
+  import {
+    addRule,
+    getCityOptions,
+    getDeviceApi,
+    getDevicesApi,
+    getDeviceTreeApi,
+    getFactoryOptions,
+    getFields
+  } from "../../api/api";
 
   export default {
     name: "MonitoringConfiguration",
@@ -174,8 +185,8 @@
         devices: [],
 
         form: {
-          city: '上海',
-          factory: '南洋万邦',
+          city: '',
+          factory: '',
         },
         // 弹框
         showExportDeviceData: false,
@@ -197,6 +208,10 @@
           value: '',
           // affectNumber: 0
         },
+        treeData: [],
+        defaultProps: [{
+          label: 'label'
+        }],
         deviceGroupOptions: [{
           value: '0',
           label: '全部设备'
@@ -207,16 +222,39 @@
       }
     },
     methods: {
-      filter() {
+      async filter() {
+        this.treeData = (await getDeviceTreeApi(this.form.city, this.form.factory)).data.d;
         console.log(this.form);
         //调接口，传form参数
       },
-      getCityList() {
+      async getCityList() {
+        this.cityOptions = (await getCityOptions()).data.d;
+        if (this.cityOptions[0] != null) {
+          this.form.city = this.cityOptions[0].value;
+          this.getFactoryList(this.cityOptions[0].value);
+        } else {
+          this.form.city = "";
+          this.form.factory = "";
+          this.cityOptions = [];
+          this.factoryOptions = [];
+        }
         // 调获取城市接口
       },
-      getFactoryList() {
-        console.log(this.form.city);
+      async getFactoryList(city) {
+        this.factoryOptions = (await getFactoryOptions(city)).data.d;
+        if(this.factoryOptions[0] != null) {
+          this.form.factory = this.factoryOptions[0].value;
+        } else {
+          this.form.factory = "";
+        }
         // 调获取工厂接口，传form.city参数
+      },
+      async handleNodeClick(data) {
+        console.log(data);
+        if(data.id){
+          const result= (await getDeviceApi(data.id)).data.d;
+          this.$store.dispatch('device/setCurrentDeviceData',result);
+        }
       },
       exportDeviceData() {
         //导出设备数据接口，传入exportDeviceTime参数，返回内容格式如jsondata
