@@ -1,23 +1,25 @@
 <template>
   <div class="alarm-record-container">
+    <h3>设备告警信息（只显示最新10条）</h3>
     <el-table
-      :data="tableData"
+      :data="deviceData.alarmInfo"
       stripe
-      style="width: 540px;margin: auto;transform: translateX(-50px)">
+      style="width: 80%; margin: 5px">
       <el-table-column
-        prop="date"
-        label="时间"
-        width="180">
+        prop="deviceId"
+        label="时间">
       </el-table-column>
       <el-table-column
-        prop="data"
-        label="数据"
-        width="180">
+        prop="indexName"
+        label="告警属性">
       </el-table-column>
       <el-table-column
-        prop="alarm"
-        label="报警(0正常1报警)"
-        width="180">
+        prop="indexValue"
+        label="告警数值">
+      </el-table-column>
+      <el-table-column
+        prop="thresholdValue"
+        label="告警阈值">
       </el-table-column>
     </el-table>
   </div>
@@ -45,6 +47,18 @@
           data: '25',
           alarm: '0'
         }]
+      }
+    },
+    computed:{
+      deviceData:{
+        // getter
+        get: function () {
+          return this.$store.state.device.currentDeviceData;
+        },
+        // setter
+        set: function (newValue) {
+          console.log('newvalue',newValue)
+        }
       }
     }
   }

@@ -53,13 +53,13 @@
           <!--</div>-->
         </el-card>
       </el-col>
-      <el-col style="margin-left: 30%;margin-right: 30% ; width: 30%">
+      <el-col style="margin-left: 30%;margin-right: 30%; margin-top: 5px; width: 30%">
         <div style="padding: 5px;">
           <span>设备快照</span>
-          <div class="bottom clearfix">
+          <!--<div class="bottom clearfix">-->
             <!--<time class="time">{{deviceData.updateTime}}</time>-->
             <!--<el-button class="button">操作按钮</el-button>-->
-          </div>
+          <!--</div>-->
         </div>
         <el-card :body-style="{ padding: '0px' }">
           <img v-if="!deviceData.imageUrl" src="../../assets/img/cat.jpg" class="image">

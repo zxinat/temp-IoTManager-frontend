@@ -223,7 +223,11 @@
     },
     methods: {
       async filter() {
-        this.treeData = (await getDeviceTreeApi(this.form.city, this.form.factory)).data.d;
+        if(this.form.city !== "" && this.form.factory !== "") {
+          this.treeData = (await getDeviceTreeApi(this.form.city, this.form.factory)).data.d;
+        } else {
+          this.treeData = [];
+        }
         //调接口，传form参数
       },
       async getCityList() {
