@@ -57,7 +57,7 @@
           <el-input type="textarea" v-model="alarmRules.description"></el-input>
         </el-form-item>
         <el-form-item prop="deviceGroup" label="设备" :rules="[{ required: true, message: '项目必选'}]">
-          <el-select  @change="getAffectNumber()" v-model="alarmRules.deviceGroup" placeholder="请选择设备">
+          <el-select @change="getAffectNumber()" v-model="alarmRules.deviceGroup" placeholder="请选择设备">
             <el-option
               v-for="item in devices"
               :key="item.id"
@@ -67,46 +67,55 @@
           </el-select>
         </el-form-item>
         <!--<template v-for="(item,index) in alarmRules.condition">-->
-          <!--<h3 style="margin-left: 10px">规则{{index+1}}</h3>-->
-          <!--<el-form-item :prop="'condition.' + index + '.field'" label="告警属性" :rules="[{ required: true, message: '属性名称必选'}]">-->
-          <!--<el-form-item :prop="'condition.' + index + '.field'" label="告警属性" :rules="[{ required: true, message: '属性名称必选'}]">-->
-          <el-form-item prop="field" label="告警属性" :rules="[{ required: true, message: '告警属性必选'}]">
-            <el-select v-model="alarmRules.field" placeholder="请选择告警属性">
-              <el-option
-                v-for="item in fieldOptions"
-                :key="item.id"
-                :label="item.fieldName"
-                :value="item.fieldId"></el-option>
-            </el-select>
-          </el-form-item>
-          <!--<el-form-item :prop="'condition['+index+'].operator'" label="运算" :rules="[{ required: true, message: '运算方式必选'}]">-->
-          <el-form-item prop="Operator" label="运算" :rules="[{ required: true, message: '运算方式必选'}]">
-            <el-select v-model="alarmRules.Operator" placeholder="请选择运算">
-              <el-option label="=" value="equal"></el-option>
-              <el-option label=">" value="greater"></el-option>
-              <el-option label="<" value="less"></el-option>
-            </el-select>
-          </el-form-item>
-          <!--<el-form-item :prop="'condition['+index+'].value'" label="报警阈值" :rules="[{ required: true, message: '报警阈值必选'}]">-->
-          <el-form-item prop="value" label="报警阈值" :rules="[{ required: true, message: '报警阈值必选'}]">
-            <el-input v-model="alarmRules.value"></el-input>
-          </el-form-item>
+        <!--<h3 style="margin-left: 10px">规则{{index+1}}</h3>-->
+        <!--<el-form-item :prop="'condition.' + index + '.field'" label="告警属性" :rules="[{ required: true, message: '属性名称必选'}]">-->
+        <!--<el-form-item :prop="'condition.' + index + '.field'" label="告警属性" :rules="[{ required: true, message: '属性名称必选'}]">-->
+        <el-form-item prop="field" label="告警属性" :rules="[{ required: true, message: '告警属性必选'}]">
+          <el-select v-model="alarmRules.field" placeholder="请选择告警属性">
+            <el-option
+              v-for="item in fieldOptions"
+              :key="item.id"
+              :label="item.fieldName"
+              :value="item.fieldId"></el-option>
+          </el-select>
+        </el-form-item>
+        <!--<el-form-item :prop="'condition['+index+'].operator'" label="运算" :rules="[{ required: true, message: '运算方式必选'}]">-->
+        <el-form-item prop="Operator" label="运算" :rules="[{ required: true, message: '运算方式必选'}]">
+          <el-select v-model="alarmRules.Operator" placeholder="请选择运算">
+            <el-option label="=" value="equal"></el-option>
+            <el-option label=">" value="greater"></el-option>
+            <el-option label="<" value="less"></el-option>
+          </el-select>
+        </el-form-item>
+        <!--<el-form-item :prop="'condition['+index+'].value'" label="报警阈值" :rules="[{ required: true, message: '报警阈值必选'}]">-->
+        <el-form-item prop="value" label="报警阈值" :rules="[{ required: true, message: '报警阈值必选'}]">
+          <el-input v-model="alarmRules.value"></el-input>
+        </el-form-item>
+        <el-form-item prop="severity" label="告警等级">
+          <el-select v-model="alarmRules.severity" placeholder="请选择运算">
+            <el-option
+              v-for="item in severityOptions"
+              :key="item.id"
+              :label="item.severityName"
+              :value="item.severityName"></el-option>
+          </el-select>
+        </el-form-item>
         <!--</template>-->
         <!--<el-form-item label="添加规则">-->
-          <!--<el-button type="primary" @click="addCondition"><i class="el-icon-circle-plus-outline"></i></el-button>-->
+        <!--<el-button type="primary" @click="addCondition"><i class="el-icon-circle-plus-outline"></i></el-button>-->
         <!--</el-form-item>-->
         <!--<el-form-item label="严重等级">-->
-          <!--<el-radio-group v-model="alarmRules.severityLevel">-->
-            <!--<el-radio label="critical" name="critical"></el-radio>-->
-            <!--<el-radio label="warning" name="warning"></el-radio>-->
-            <!--<el-radio label="info" name="info"></el-radio>-->
-          <!--</el-radio-group>-->
+        <!--<el-radio-group v-model="alarmRules.severityLevel">-->
+        <!--<el-radio label="critical" name="critical"></el-radio>-->
+        <!--<el-radio label="warning" name="warning"></el-radio>-->
+        <!--<el-radio label="info" name="info"></el-radio>-->
+        <!--</el-radio-group>-->
         <!--</el-form-item>-->
         <!--<el-form-item label="开启规则">-->
-          <!--<el-switch v-model="alarmRules.ruleStatus"></el-switch>-->
+        <!--<el-switch v-model="alarmRules.ruleStatus"></el-switch>-->
         <!--</el-form-item>-->
         <!--<el-form-item label="邮件通知">-->
-          <!--<el-switch v-model="alarmRules.email"></el-switch>-->
+        <!--<el-switch v-model="alarmRules.email"></el-switch>-->
         <!--</el-form-item>-->
       </el-form>
       <hr/>
@@ -141,7 +150,7 @@
     getDevicesApi, getDeviceStatus,
     getDeviceTreeApi,
     getFactoryOptions,
-    getFields
+    getFields, getSeverity
   } from "../../api/api";
 
   export default {
@@ -182,6 +191,7 @@
           label: '工厂5'
         }],
         fieldOptions: [],
+        severityOptions: [],
         devices: [],
 
         form: {
@@ -206,6 +216,7 @@
           field: '',
           Operator: '',
           value: '',
+          severity: ''
           // affectNumber: 0
         },
         treeData: [],
@@ -223,7 +234,7 @@
     },
     methods: {
       async filter() {
-        if(this.form.city !== "" && this.form.factory !== "") {
+        if (this.form.city !== "" && this.form.factory !== "") {
           this.treeData = (await getDeviceTreeApi(this.form.city, this.form.factory)).data.d;
         } else {
           this.treeData = [];
@@ -245,7 +256,7 @@
       },
       async getFactoryList(city) {
         this.factoryOptions = (await getFactoryOptions(city)).data.d;
-        if(this.factoryOptions[0] != null) {
+        if (this.factoryOptions[0] != null) {
           this.form.factory = this.factoryOptions[0].value;
         } else {
           this.form.factory = "";
@@ -254,9 +265,9 @@
       },
       async handleNodeClick(data) {
         console.log(data);
-        if(data.id){
-          const result= (await getDeviceStatus(data.id)).data.d;
-          this.$store.dispatch('device/setCurrentDeviceData',result);
+        if (data.id) {
+          const result = (await getDeviceStatus(data.id)).data.d;
+          this.$store.dispatch('device/setCurrentDeviceData', result);
         }
       },
       exportDeviceData() {
@@ -314,8 +325,8 @@
           if (valid) {
             console.log(this.alarmRules);
             let res = await addRule(this.alarmRules);
-            this.showAlarmRules=false;
-            if(res.data.d === "success") {
+            this.showAlarmRules = false;
+            if (res.data.d === "success") {
               this.$message.success('新增规则成功');
             }
             return true;
@@ -326,7 +337,7 @@
       },
       submitAlarmRules() {
         this.submitForm('alarmRulesForm')
-          // 调用提交规则接口，参数alarmRules。
+        // 调用提交规则接口，参数alarmRules。
       },
       addCondition() {
         this.alarmRules.condition.push({
@@ -354,6 +365,7 @@
       await this.getCityList();
       await this.getField();
       await this.getDevices();
+      this.severityOptions = (await getSeverity()).data.d;
       this.treeData = (await getDeviceTreeApi(this.form.city, this.form.factory)).data.d;
     },
     components: {MonitoringConfig, MonitoringTree},

@@ -15,12 +15,19 @@
 
 <script>
   import echarts from 'echarts';
-  import {getAlarmInfoAmount, getDeviceDataAmount} from "../../api/api";
+  import {
+    getNoticeAlarmInfoAmount,
+    getDeviceDataAmount,
+    getSeriousAlarmInfoAmount,
+    getVerySeriousAlarmInfoAmount
+  } from "../../api/api";
     export default {
         name: "DashboardStatistics",
       data(){
           return{
-            alarmInfoAmount: 0,
+            noticeAlarmInfoAmount: 0,
+            seriousAlarmInfoAmount: 0,
+            verySeriousAlarmInfoAmount: 0,
             deviceDataAmount: 0,
             alarmOption : {
               title : {
@@ -34,7 +41,7 @@
               legend: {
                 orient: 'vertical',
                 x: 'left',
-                data:['异常','正常工作']
+                data:['通知','严重','非常严重']
               },
               series: [
                 {
@@ -124,8 +131,10 @@
         async initAlarmChart() {
           this.chart = echarts.init(document.getElementsByClassName('alarm-container')[0]);
           // 把配置和数据放这里
-          this.deviceDataAmount = (await getDeviceDataAmount()).data.d;
-          this.alarmInfoAmount = (await getAlarmInfoAmount()).data.d;
+          // this.deviceDataAmount = (await getDeviceDataAmount()).data.d;
+          this.noticeAlarmInfoAmount = (await getNoticeAlarmInfoAmount()).data.d;
+          this.seriousAlarmInfoAmount = (await getSeriousAlarmInfoAmount()).data.d;
+          this.verySeriousAlarmInfoAmount = (await getVerySeriousAlarmInfoAmount()).data.d;
           this.alarmOption.series = [
             {
               name:'告警等级',
@@ -151,8 +160,9 @@
                 }
               },
               data:[
-                {value: this.alarmInfoAmount, name:'异常'},
-                {value: this.deviceDataAmount - this.alarmInfoAmount, name:'正常工作'},
+                {value: this.noticeAlarmInfoAmount, name:'通知'},
+                {value: this.seriousAlarmInfoAmount, name:'严重'},
+                {value: this.verySeriousAlarmInfoAmount, name:'非常严重'}
               ]
             }
           ];

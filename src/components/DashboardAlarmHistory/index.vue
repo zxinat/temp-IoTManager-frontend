@@ -23,6 +23,10 @@
         prop="thresholdValue"
         label="告警阈值">
       </el-table-column>
+      <el-table-column
+        prop="severity"
+        label="告警等级">
+      </el-table-column>
       <!--<el-table-column-->
         <!--prop="status"-->
         <!--label="处理状态"-->

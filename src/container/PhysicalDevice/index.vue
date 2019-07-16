@@ -38,18 +38,18 @@
         <el-form-item>
           <el-button type="primary" @click="exportExcel">导出Excel</el-button>
         </el-form-item>
-        <el-form-item>
-          <el-upload
-            ref="upload"
-            action="/sss"
-            :show-file-list="false"
-            :on-success="readExcel"
-            :on-error="uploadFailed">
-            <el-button slot="trigger"
-                       type="primary">导入excel
-            </el-button>
-          </el-upload>
-        </el-form-item>
+        <!--<el-form-item>-->
+          <!--<el-upload-->
+            <!--ref="upload"-->
+            <!--action="/sss"-->
+            <!--:show-file-list="false"-->
+            <!--:on-success="readExcel"-->
+            <!--:on-error="uploadFailed">-->
+            <!--<el-button slot="trigger"-->
+                       <!--type="primary">导入excel-->
+            <!--</el-button>-->
+          <!--</el-upload>-->
+        <!--</el-form-item>-->
       </el-form>
     </div>
     <div class="addbutton-container">

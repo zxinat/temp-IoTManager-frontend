@@ -36,8 +36,12 @@
           <!--width="150">-->
         <!--</el-table-column>-->
         <el-table-column
-          prop="conditionString"
-          label="规则">
+        prop="conditionString"
+        label="规则">
+      </el-table-column>
+        <el-table-column
+          prop="severity"
+          label="告警等级">
         </el-table-column>
         <!--<el-table-column-->
           <!--prop="severityLevel"-->
@@ -99,6 +103,10 @@
         <el-table-column
           prop="alarmInfo"
           label="告警内容">
+        </el-table-column>
+        <el-table-column
+          prop="severity"
+          label="告警等级">
         </el-table-column>
         <el-table-column
           prop="timestamp"

@@ -422,10 +422,22 @@ export function getDeviceDataAmount() {
   return axios.get(`/api/deviceData/amount`);
 }
 
-export function getAlarmInfoAmount() {
-  return axios.get(`/api/alarmInfo/amount`);
+export function getNoticeAlarmInfoAmount() {
+  return axios.get(`/api/alarmInfo/noticeAmount`);
+}
+
+export function getSeriousAlarmInfoAmount() {
+  return axios.get(`/api/alarmInfo/seriousAmount`);
+}
+
+export function getVerySeriousAlarmInfoAmount() {
+  return axios.get(`/api/alarmInfo/verySeriousAmount`);
 }
 
 export function getDeviceStatus(id) {
   return axios.get(`/api/deviceData/status/${id}`);
+}
+
+export function getSeverity() {
+  return axios.get(`/api/severity`);
 }
