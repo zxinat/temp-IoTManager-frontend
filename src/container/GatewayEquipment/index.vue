@@ -4,6 +4,7 @@
       <el-form :inline="true" :model="searchGateway" class="header">
         <el-form-item :label="GLOBAL.firstLevel">
           <el-select v-model="searchGateway.city" @change="getFactoryList(searchGateway.city)" placeholder="上海">
+            <el-option key="1" label="全部" value="全部"></el-option>
             <el-option
               v-for="item in cityOptions"
               :key="item.value"
@@ -33,7 +34,7 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="filter(searchGateway.workshop)"><img src="../../assets/img/find.svg">筛选</el-button>
+          <el-button type="primary" @click="filter(searchGateway.city, searchGateway.factory, searchGateway.workshop)"><img src="../../assets/img/find.svg">筛选</el-button>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="exportExcel">导出Excel</el-button>
@@ -165,23 +166,23 @@
           </el-select>
         </el-form-item>
         <el-form-item :label="GLOBAL.firstLevel" label-width="120px">
-          <el-select v-model="updateData.city" placeholder="选择城市">
+          <el-select v-model="updateData.city" @change="getUpdateFactory(updateData.city)" placeholder="选择城市">
             <el-option
-              v-for="c in city"
-              :key="c.id"
-              :label="c.cityName"
-              :value="c.cityName">
+              v-for="c in updateCity"
+              :key="c.value"
+              :label="c.label"
+              :value="c.label">
             </el-option>
           </el-select>
           <el-button type="primary" @click="cityAddVisible = true">+</el-button>
         </el-form-item>
         <el-form-item :label="GLOBAL.secondLevel+'名称'" label-width="120px">
-          <el-select v-model="updateData.factory" placeholder="选择工厂">
+          <el-select v-model="updateData.factory" @change="getUpdateWorkshop(updateData.factory)" placeholder="选择工厂">
             <el-option
-              v-for="f in factory"
-              :key="f.id"
-              :label="f.factoryName"
-              :value="f.factoryName">
+              v-for="f in updateFactory"
+              :key="f.value"
+              :label="f.label"
+              :value="f.label">
             </el-option>
           </el-select>
           <el-button type="primary" @click="factoryAddVisible = true">+</el-button>
@@ -189,10 +190,10 @@
         <el-form-item :label="GLOBAL.thirdLevel" label-width="120px">
           <el-select v-model="updateData.workshop" placeholder="选择车间">
             <el-option
-              v-for="w in workshop"
-              :key="w.id"
-              :label="w.workshopName"
-              :value="w.workshopName">
+              v-for="w in updateWorkshop"
+              :key="w.value"
+              :label="w.label"
+              :value="w.label">
             </el-option>
           </el-select>
           <el-button type="primary" @click="workshopAddVisible = true">+</el-button>
@@ -251,23 +252,23 @@
           </el-select>
         </el-form-item>
         <el-form-item :label="GLOBAL.firstLevel" label-width="120px">
-          <el-select v-model="newGatewayData.city" placeholder="请选择">
+          <el-select v-model="newGatewayData.city" @change="getNewFactory(newGatewayData.city)" placeholder="请选择">
             <el-option
               v-for="c in city"
-              :key="c.id"
-              :label="c.cityName"
-              :value="c.cityName">
+              :key="c.value"
+              :label="c.label"
+              :value="c.label">
             </el-option>
           </el-select>
           <el-button type="primary" @click="cityAddVisible = true">+</el-button>
         </el-form-item>
         <el-form-item :label="GLOBAL.secondLevel+'名称'" label-width="120px">
-          <el-select v-model="newGatewayData.factory" placeholder="请选择">
+          <el-select v-model="newGatewayData.factory" @change="getNewWorkshop(newGatewayData.factory)" placeholder="请选择">
             <el-option
               v-for="f in factory"
-              :key="f.id"
-              :label="f.factoryName"
-              :value="f.factoryName">
+              :key="f.value"
+              :label="f.label"
+              :value="f.label">
             </el-option>
           </el-select>
           <el-button type="primary" @click="factoryAddVisible = true">+</el-button>
@@ -276,9 +277,9 @@
           <el-select v-model="newGatewayData.workshop" placeholder="请选择">
             <el-option
               v-for="w in workshop"
-              :key="w.id"
-              :label="w.workshopName"
-              :value="w.workshopName">
+              :key="w.value"
+              :label="w.label"
+              :value="w.label">
             </el-option>
           </el-select>
           <el-button type="primary" @click="workshopAddVisible = true">+</el-button>
@@ -453,6 +454,9 @@
         city: [],
         factory: [],
         workshop: [],
+        updateCity: [],
+        updateFactory: [],
+        updateWorkshop: [],
         department: [],
         gatewayState: [],
         gatewayType: [],
@@ -526,54 +530,9 @@
           factory: '南洋万邦',
           workshop: '车间1',
         },
-        cityOptions: [{
-          value: '选项1',
-          label: '城市1'
-        }, {
-          value: '选项2',
-          label: '城市2'
-        }, {
-          value: '选项3',
-          label: '城市3'
-        }, {
-          value: '选项4',
-          label: '城市4'
-        }, {
-          value: '选项5',
-          label: '城市5'
-        }],
-        factoryOptions: [{
-          value: '选项1',
-          label: '工厂1'
-        }, {
-          value: '选项2',
-          label: '工厂2'
-        }, {
-          value: '选项3',
-          label: '工厂3'
-        }, {
-          value: '选项4',
-          label: '工厂4'
-        }, {
-          value: '选项5',
-          label: '工厂5'
-        }],
-        workshopOptions: [{
-          value: '选项1',
-          label: '车间1'
-        }, {
-          value: '选项2',
-          label: '车间2'
-        }, {
-          value: '选项3',
-          label: '车间3'
-        }, {
-          value: '选项4',
-          label: '车间4'
-        }, {
-          value: '选项5',
-          label: '车间5'
-        }],
+        cityOptions: [],
+        factoryOptions: [],
+        workshopOptions: [],
         searchData: {
           deviceID: '',
           deviceName: ''
@@ -733,6 +692,18 @@
           this.$message.error('车间添加失败');
         }
       },
+      async getUpdateFactory(city) {
+        this.updateFactory = (await getFactoryOptions(city)).data.d;
+      },
+      async getUpdateWorkshop(factory) {
+        this.updateWorkshop = (await getWorkshopOptions(factory)).data.d;
+      },
+      async getNewFactory(city) {
+        this.factory = (await getFactoryOptions(city)).data.d;
+      },
+      async getNewWorkshop(factory) {
+        this.workshop = (await getWorkshopOptions(factory)).data.d;
+      },
       async update() {
         try {
           const data = await updateGatewayApi(this.updateData);
@@ -822,23 +793,34 @@
         this.newGatewayData.inputVisible = false;
         this.newGatewayData.inputValue = '';
       },
-      async filter(workshop) {
-        const data = await getGatewayByWorkshop(workshop);
-        this.tableData = data.data.d;
+      async filter(city, factory, workshop) {
+        if(city !== '全部') {
+          const data = await getGatewayByWorkshop(city, factory, workshop);
+          this.tableData = data.data.d;
+        } else {
+          this.getGateways();
+        }
         //调接口，传searchGateway参数
       },
       getCityList() {
         // 调获取城市接口
       },
       async getFactoryList(city) {
-        this.factoryOptions = (await getFactoryOptions(city)).data.d;
-        if (this.factoryOptions[0] != null) {
-          this.searchGateway.factory = this.factoryOptions[0].value;
-          this.getWorkshopList(this.searchGateway.factory);
+        if (city !== '全部') {
+          this.factoryOptions = (await getFactoryOptions(city)).data.d;
+          if (this.factoryOptions[0] != null) {
+            this.searchGateway.factory = this.factoryOptions[0].value;
+            this.getWorkshopList(this.searchGateway.factory);
+          } else {
+            this.searchGateway.factory = "";
+            this.searchGateway.workshop = "";
+            this.workshopOptions = [];
+          }
         } else {
-          this.searchGateway.factory = "";
-          this.searchGateway.workshop = "";
+          this.factoryOptions = [];
           this.workshopOptions = [];
+          this.searchGateway.factory = '全部';
+          this.searchGateway.workshop = '全部';
         }
         // 调获取工厂接口，searchGateway.city参数
       },
@@ -858,20 +840,24 @@
       //获取所有网关信息
       this.getGateways();
       this.cityOptions = (await getCityOptions()).data.d;
-      if (this.cityOptions[0] != null) {
-        this.searchGateway.city = this.cityOptions[0].value;
-        this.getFactoryList(this.cityOptions[0].value);
-      } else {
-        this.searchGateway.city = "";
-        this.searchGateway.factory = "";
-        this.searchGateway.workshop = "";
-        this.cityOptions = [];
-        this.factoryOptions = [];
-        this.workshopOptions = [];
-      }
-      this.city = (await getCity()).data.d;
-      this.factory = (await getFactory()).data.d;
-      this.workshop = (await getWorkshop()).data.d;
+      this.searchGateway.city = "全部";
+      this.searchGateway.factory = "全部";
+      this.searchGateway.workshop = "全部";
+      // if (this.cityOptions[0] != null) {
+      //   this.searchGateway.city = this.cityOptions[0].value;
+      //   this.getFactoryList(this.cityOptions[0].value);
+      // } else {
+      //   this.searchGateway.city = "";
+      //   this.searchGateway.factory = "";
+      //   this.searchGateway.workshop = "";
+      //   this.cityOptions = [];
+      //   this.factoryOptions = [];
+      //   this.workshopOptions = [];
+      // }
+      this.city = (await getCityOptions()).data.d;
+      this.updateCity = (await getCityOptions()).data.d;
+      // this.factory = (await getFactory()).data.d;
+      // this.workshop = (await getWorkshop()).data.d;
       this.gatewayState = (await getGatewayState()).data.d;
       this.gatewayType = (await getGatewayType()).data.d;
       this.department = (await getAllDepartments()).data.d;

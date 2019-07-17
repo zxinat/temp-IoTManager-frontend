@@ -402,12 +402,12 @@ export function getWorkshopOptions(factoryname) {
   return axios.get(`/api/workshop/workshopOptions/${factoryname}`);
 }
 
-export function getDeviceByWorkshop(workshop) {
-  return axios.get(`/api/device/workshop/${workshop}`);
+export function getDeviceByWorkshop(city, factory, workshop) {
+  return axios.get(`/api/device/workshop/${city}/${factory}/${workshop}`);
 }
 
-export function getGatewayByWorkshop(workshop) {
-  return axios.get(`/api/gateway/workshop/${workshop}`);
+export function getGatewayByWorkshop(city, factory, workshop) {
+  return axios.get(`/api/gateway/workshop/${city}/${factory}/${workshop}`);
 }
 
 export function getDeviceAmount() {
