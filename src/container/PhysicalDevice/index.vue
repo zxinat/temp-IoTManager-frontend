@@ -197,16 +197,16 @@
           </el-select>
           <el-button type="primary" @click="workshopAddVisible = true">+</el-button>
         </el-form-item>
-        <el-form-item label="设备状态" label-width="120px">
-          <el-select v-model="updateData.deviceState" placeholder="选择设备状态">
-            <el-option
-              v-for="ds in deviceState"
-              :key="ds.id"
-              :label="ds.stateName"
-              :value="ds.stateName">
-            </el-option>
-          </el-select>
-        </el-form-item>
+        <!--<el-form-item label="设备状态" label-width="120px">-->
+          <!--<el-select v-model="updateData.deviceState" placeholder="选择设备状态">-->
+            <!--<el-option-->
+              <!--v-for="ds in deviceState"-->
+              <!--:key="ds.id"-->
+              <!--:label="ds.stateName"-->
+              <!--:value="ds.stateName">-->
+            <!--</el-option>-->
+          <!--</el-select>-->
+        <!--</el-form-item>-->
         <el-form-item label="设备图像链接" label-width="120px">
           <el-input v-model="updateData.imageUrl" autocomplete="off"></el-input>
         </el-form-item>
@@ -225,6 +225,7 @@
               :value="dt.deviceTypeName">
             </el-option>
           </el-select>
+          <el-button type="primary" @click="typeAddVisible = true">+</el-button>
         </el-form-item>
         <el-form-item label="部门" label-width="120px">
           <el-select v-model="updateData.department" placeholder="选择部门">
@@ -317,6 +318,7 @@
               :value="dt.deviceTypeName">
             </el-option>
           </el-select>
+          <el-button type="primary" @click="typeAddVisible = true">+</el-button>
         </el-form-item>
         <!--<el-form-item label="部门" label-width="120px">-->
           <!--<el-select v-model="newDeviceData.department" placeholder="选择部门">-->
@@ -359,6 +361,17 @@
       <div slot="footer" class="dialog-footer">
         <el-button @click="newFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="add">确 定</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog title="新增设备类型" :visible.sync="typeAddVisible">
+      <el-form :model="typeTable">
+        <el-form-item label="设备类型名" label-width="120px">
+          <el-input v-model="typeTable.type" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="typeAddVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addType">确 定</el-button>
       </div>
     </el-dialog>
     <el-dialog title="新增城市" :visible.sync="cityAddVisible">
@@ -441,7 +454,7 @@
 <script>
   import {
     addCity,
-    addDeviceApi, addFactory, addWorkshop,
+    addDeviceApi, addFactory, addWorkshop, createDeviceType,
     deleteDeviceApi,
     deleteMultipleDeviceApi,
     getAllDepartments,
@@ -464,6 +477,7 @@
       components: {UploadImg},
       data() {
         return {
+          typeAddVisible: false,
           cityAddVisible: false,
           factoryAddVisible: false,
           workshopAddVisible:false,
@@ -496,6 +510,9 @@
             "remark": "",
             "department": "",
           }],
+          typeTable: {
+            type: ''
+          },
           cityTable: {
             cityName: "",
             remark: ""
@@ -675,6 +692,22 @@
           } catch (e) {
             this.newFormVisible = false;
             this.$message.error('添加设备未成功');
+          }
+        },
+        async addType() {
+          try {
+            const data = await createDeviceType(this.typeTable.type);
+            this.typeAddVisible = false;
+            if (data.data.d === "success") {
+              this.$message({
+                message: '添加成功',
+                type: 'success'
+              });
+              this.deviceType = (await getDeviceType()).data.d;
+            }
+          } catch (e) {
+            this.typeAddVisible = false;
+            this.$message.error('设备类型添加失败');
           }
         },
         async addCity() {

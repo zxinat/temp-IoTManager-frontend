@@ -164,6 +164,7 @@
               :value="gt.gatewayTypeName">
             </el-option>
           </el-select>
+          <el-button type="primary" @click="typeAddVisible = true">+</el-button>
         </el-form-item>
         <el-form-item :label="GLOBAL.firstLevel" label-width="120px">
           <el-select v-model="updateData.city" @change="getUpdateFactory(updateData.city)" placeholder="选择城市">
@@ -250,6 +251,7 @@
               :value="gt.gatewayTypeName">
             </el-option>
           </el-select>
+          <el-button type="primary" @click="typeAddVisible = true">+</el-button>
         </el-form-item>
         <el-form-item :label="GLOBAL.firstLevel" label-width="120px">
           <el-select v-model="newGatewayData.city" @change="getNewFactory(newGatewayData.city)" placeholder="请选择">
@@ -344,6 +346,17 @@
         <el-button type="primary" @click="add">确 定</el-button>
       </div>
     </el-dialog>
+    <el-dialog title="新增网关类型" :visible.sync="typeAddVisible">
+      <el-form :model="typeTable">
+        <el-form-item label="网关类型名" label-width="120px">
+          <el-input v-model="typeTable.type" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="typeAddVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addType">确 定</el-button>
+      </div>
+    </el-dialog>
     <el-dialog title="新增城市" :visible.sync="cityAddVisible">
       <el-form :model="cityTable">
         <el-form-item label="城市名" label-width="120px">
@@ -424,7 +437,7 @@
 <script>
   import {
     addCity, addFactory,
-    addGatewayApi, addWorkshop,
+    addGatewayApi, addWorkshop, createGatewayType,
     deleteGatewayApi,
     deleteMultipleGatewayApi,
     getAllDepartments,
@@ -446,6 +459,7 @@
     components: {UploadImg},
     data() {
       return {
+        typeAddVisible: false,
         cityAddVisible: false,
         factoryAddVisible: false,
         workshopAddVisible:false,
@@ -476,6 +490,9 @@
           "remark": "",
           "department": ""
         }],
+        typeTable: {
+          type: ''
+        },
         cityTable: {
           cityName: "",
           remark: ""
@@ -645,6 +662,22 @@
         } catch (e) {
           this.newFormVisible = false;
           this.$message.error('添加网关未成功');
+        }
+      },
+      async addType() {
+        try {
+          const data = await createGatewayType(this.typeTable.type);
+          this.typeAddVisible = false;
+          if (data.data.d === "success") {
+            this.$message({
+              message: '添加成功',
+              type: 'success'
+            });
+            this.gatewayType = (await getGatewayType()).data.d;
+          }
+        } catch (e) {
+          this.typeAddVisible = false;
+          this.$message.error('网关类型添加失败');
         }
       },
       async addCity() {

@@ -469,3 +469,11 @@ export function getAlarmInfoByDeviceid(deviceid) {
 export function createNewField(field) {
   return axios.post(`/api/field`, {...field});
 }
+
+export function createDeviceType(type) {
+  return axios.post(`/api/device/type/${type}`);
+}
+
+export function createGatewayType(type) {
+  return axios.post(`/api/gateway/type/${type}`);
+}
