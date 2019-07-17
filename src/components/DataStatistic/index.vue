@@ -54,7 +54,7 @@
             }
           },
           toolbox: {
-            left: 'center',
+            left: 'left',
             feature: {
               saveAsImage: {}
             }
