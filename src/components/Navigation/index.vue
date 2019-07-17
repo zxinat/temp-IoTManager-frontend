@@ -54,9 +54,10 @@
           console.log(key, keyPath);
         },
         logout(){
-          let sessionID=getCookie('userSessionID');
-          signOut(sessionID);
+          // let sessionID=getCookie('userSessionID');
+          // signOut(sessionID);
           delCookie('userSessionID');
+          localStorage.removeItem('userInfo');
           this.$router.push('/login');
         },
         changeColor(color){

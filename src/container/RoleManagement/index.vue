@@ -132,11 +132,11 @@
           <el-input v-model="newUser.displayName"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password" label-width="120px">
-          <el-input type="password" v-model="newUser.password"></el-input>
+          <el-input v-model="newUser.password"></el-input>
         </el-form-item>
-        <el-form-item label="确认密码" prop="passwordConfirm" label-width="120px">
-          <el-input type="password" v-model="newUser.passwordConfirm"></el-input>
-        </el-form-item>
+        <!--<el-form-item label="确认密码" prop="passwordConfirm" label-width="120px">-->
+          <!--<el-input type="password" v-model="newUser.passwordConfirm"></el-input>-->
+        <!--</el-form-item>-->
         <el-form-item label="邮箱" prop="email" label-width="120px">
           <el-input v-model="newUser.email"></el-input>
         </el-form-item>
@@ -205,16 +205,16 @@
     } else {
       callback()
     }
-  }
+  };
   var validatePass2 = (rule, value, callback) => {
     if (value === '') {
       callback(new Error('请再次输入密码'))
-    } else if (value !== this.info.password) {
+    } else if (value !== this.newUser.password) {
       callback(new Error('两次输入密码不一致!'))
     } else {
       callback()
     }
-  }
+  };
 
   export default {
     name: "RoleManagement",
