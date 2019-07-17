@@ -5,11 +5,11 @@
         <el-form-item label="设备ID">
           <el-input v-model="searchData.hardwareDeviceID"></el-input>
         </el-form-item>
-        <el-form-item label="设备名称">
-          <el-input v-model="searchData.deviceName"></el-input>
-        </el-form-item>
+        <!--<el-form-item label="设备名称">-->
+          <!--<el-input v-model="searchData.deviceName"></el-input>-->
+        <!--</el-form-item>-->
         <el-form-item>
-          <el-button type="primary" @click="search"><img src="../../assets/img/find.svg">查询</el-button>
+          <el-button type="primary" @click="getAlarmInformationByDeviceId(searchData.hardwareDeviceID)"><img src="../../assets/img/find.svg">查询</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -86,11 +86,11 @@
         <el-table-column
           fixed
           prop="deviceId"
-          label="设备名称">
+          label="设备ID">
         </el-table-column>
         <el-table-column
           prop="indexId"
-          label="数据名称">
+          label="数据ID">
         </el-table-column>
         <!--<el-table-column-->
           <!--prop="alarmType"-->
@@ -185,6 +185,7 @@
 
 <script>
   import {
+    getAlarmInfoByDeviceid,
     getAlarmInformationApi, getAllRules,
     handleAllAlarmInformationApi,
     searchAlarmInformationApi,
@@ -275,6 +276,10 @@
         async openUpdateForm(row) {//打开更新表单
           this.updateData = row;
           this.updateFormVisible = true
+        },
+        async getAlarmInformationByDeviceId(deviceId) {
+          const data = await getAlarmInfoByDeviceid(deviceId);
+          this.tableData = data.data.d;
         },
         async getAlarmInformation() {
           const data = await getAlarmInformationApi();

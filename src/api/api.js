@@ -461,3 +461,7 @@ export function getUserByName(username) {
 export function updatePassword(username, password){
   return axios.post(`/api/user/password/${username}`, {...password});
 }
+
+export function getAlarmInfoByDeviceid(deviceid) {
+  return axios.get(`/api/alarmInfo/deviceId/${deviceid}`);
+}
