@@ -119,9 +119,9 @@
         <!--<el-switch v-model="alarmRules.email"></el-switch>-->
         <!--</el-form-item>-->
       </el-form>
-      <hr/>
-      <h1>总结</h1>
-      <h1 style="display: inline-block;margin-left: 10px">{{alarmRules.affectNumber}}</h1>个设备被此规则控制
+      <!--<hr/>-->
+      <!--<h1>总结</h1>-->
+      <!--<h1 style="display: inline-block;margin-left: 10px">{{alarmRules.affectNumber}}</h1>个设备被此规则控制-->
       <div slot="footer" class="dialog-footer">
         <el-button @click="showAlarmRules = false">取 消</el-button>
         <el-button type="primary" @click="submitAlarmRules">确 定</el-button>
