@@ -78,6 +78,7 @@
               :label="item.fieldName"
               :value="item.fieldId"></el-option>
           </el-select>
+          <el-button type="primary" @click="addFieldVisible = true">+</el-button>
         </el-form-item>
         <!--<el-form-item :prop="'condition['+index+'].operator'" label="运算" :rules="[{ required: true, message: '运算方式必选'}]">-->
         <el-form-item prop="Operator" label="运算" :rules="[{ required: true, message: '运算方式必选'}]">
@@ -137,6 +138,20 @@
         <monitoring-config></monitoring-config>
       </el-col>
     </el-row>
+    <el-dialog title="新增设备属性" :visible.sync="addFieldVisible">
+      <el-form :model="fieldTable">
+        <el-form-item label="属性名" label-width="120px">
+          <el-input v-model="fieldTable.fieldName" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="属性ID" label-width="120px">
+          <el-input v-model="fieldTable.fieldId" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="addFieldVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addField">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -144,7 +159,7 @@
   import MonitoringTree from "../../components/MonitoringTree/index";
   import MonitoringConfig from "../../components/MonitoringConfig/index";
   import {
-    addRule,
+    addRule, createNewField,
     getCityOptions,
     getDeviceApi,
     getDevicesApi, getDeviceStatus,
@@ -202,6 +217,11 @@
         showExportDeviceData: false,
         exportDeviceTime: [],
         showAlarmRules: false,
+        addFieldVisible: false,
+        fieldTable: {
+          fieldName: '',
+          fieldId: ''
+        },
         alarmRules: {
           name: '',
           description: '',
@@ -262,6 +282,22 @@
           this.form.factory = "";
         }
         // 调获取工厂接口，传form.city参数
+      },
+      async addField(){
+        try {
+          const data = await createNewField(this.fieldTable);
+          this.addFieldVisible = false;
+          if(data.data.d === 'success') {
+            this.$message({
+              message: '添加成功',
+              type: 'success'
+            });
+            this.getField();
+          }
+        } catch (e) {
+          this.addFieldVisible = false;
+          this.$message.error('设备属性添加失败');
+        }
       },
       async handleNodeClick(data) {
         console.log(data);

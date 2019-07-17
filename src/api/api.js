@@ -465,3 +465,7 @@ export function updatePassword(username, password){
 export function getAlarmInfoByDeviceid(deviceid) {
   return axios.get(`/api/alarmInfo/deviceId/${deviceid}`);
 }
+
+export function createNewField(field) {
+  return axios.post(`/api/field`, {...field});
+}
