@@ -7,8 +7,8 @@
           <el-form-item prop="name" label="用户名" :rules="[{ required: true, message: '用户名必填'}]">
             <el-input v-model="form.name"></el-input>
           </el-form-item>
-          <el-form-item prop="pwd" label="密码" :rules="[{ required: true, message: '密码必填'}]">
-            <el-input type="password" v-model="form.pwd" autocomplete="off"></el-input>
+          <el-form-item prop="password" label="密码" :rules="[{ required: true, message: '密码必填'}]">
+            <el-input type="password" v-model="form.password" autocomplete="off"></el-input>
           </el-form-item>
           <!--<el-form-item prop="pwd" label="确认密码" :rules="[{-->
                                                     <!--required:true,message:'确认密码',trigger:'blur'-->
@@ -42,9 +42,9 @@
       return {
         form: {
           name: '',
-          pwd: '',
-          confirmPwd: '',
-          type: 'normal',
+          password: ''
+          // confirmPwd: '',
+          // type: 'normal',
         }
       }
     },
@@ -67,7 +67,7 @@
               setCookie('userSessionID',res.data.d.sessionId,20);//存储sessionID
               setItemToLocalstorage('userInfo',res.data.d.user);//存储用户信息
               await this.$store.dispatch('userInfo/setUserInfo',this.form);
-              this.$router.push('/dashBoard');
+              this.$router.push('/dashboard');
             } else {
               this.$message.error('Wrong Username Or Password');
             }

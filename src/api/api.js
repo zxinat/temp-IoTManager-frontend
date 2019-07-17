@@ -7,9 +7,9 @@ axios.defaults.baseURL = 'http://localhost:5000';
 //带cookie
 axios.defaults.withCredentials = true;
 //登陆注册
-export function loginApi({name, pwd, type}) {
+export function loginApi(form) {
   return axios.post('/api/login', {
-    ...{name, pwd, type,}
+    ...form
   });
 }
 
