@@ -22,9 +22,9 @@
       <el-button type="primary" plain @click="searchLineChartData">确认</el-button>
     </div>
     <div class="dashboard-line-chart-container">
-    <!--<h2>-->
-    <!--折线图-->
-    <!--</h2>-->
+      <!--<h2>-->
+      <!--折线图-->
+      <!--</h2>-->
     </div>
   </div>
 </template>
@@ -63,8 +63,7 @@
             boundaryGap: true,
             axisLine: { //坐标轴轴线相关设置。数学上的x轴
               show: true,
-              lineStyle: {
-              },
+              lineStyle: {},
             },
             axisLabel: { //坐标轴刻度标签的相关设置
               textStyle: {
@@ -80,27 +79,26 @@
           yAxis: {},
           series: [
             {
-            type: 'line',
-            name: 'Value',
-            label: {
-              show: true,
-              // position: 'top'
-            },
-            itemStyle: {
-              normal: {
-              }
-            },
-            data: this.data
-          }
-          // ,
-          //   {
-          //   type: 'line',
-          //   name: 'humidity',
-          //   label: {
-          //     show:true
-          //   },
-          //   data: [200.500, 382, 102, 267, 186, 315, 316]
-          // }
+              type: 'line',
+              name: 'Value',
+              label: {
+                show: true,
+                // position: 'top'
+              },
+              itemStyle: {
+                normal: {}
+              },
+              data: this.data
+            }
+            // ,
+            //   {
+            //   type: 'line',
+            //   name: 'humidity',
+            //   label: {
+            //     show:true
+            //   },
+            //   data: [200.500, 382, 102, 267, 186, 315, 316]
+            // }
           ]
         },
       }
@@ -115,20 +113,31 @@
       //   this.option.xAxis.data.push(data.time);
       //   this.initChart();
       // });
-      this.deviceSelectorOptions=((await getDevicesApi()).data.d).map(el=>{
+      this.deviceSelectorOptions = ((await getDevicesApi()).data.d).map(el => {
         return {
           value: el.hardwareDeviceID,
-          label: el.deviceName}
+          label: el.deviceName
+        }
       });
-      this.propertySelectorOptions=(await getFields()).data.d;
+      this.propertySelectorOptions = (await getFields()).data.d;
+
+      if (this.deviceSelectorOptions[0] != null && this.propertySelectorOptions[0] != null) {
+        this.tmpDeviceSelectorValue = this.deviceSelectorOptions[0].value;
+        this.tmpPropertySelectorValue = this.propertySelectorOptions[0].fieldId;
+        console.log(this.tmpPropertySelectorValue);
+        this.searchLineChartData();
+
+      }
+
     },
-    watch:{
-      async 'deviceSelectorValue'(newVal,oldVal){
+    watch: {
+      async 'deviceSelectorValue'(newVal, oldVal) {
         // console.log('manmantest',newVal);
-        this.propertySelectorOptions=((await getDeviceProperty(newVal)).data.d).map(el=>{
+        this.propertySelectorOptions = ((await getDeviceProperty(newVal)).data.d).map(el => {
           return {
             value: el.devicePropertyId,
-            label: el.propertyName}
+            label: el.propertyName
+          }
         });
       }
     },
@@ -139,8 +148,8 @@
         this.chart.setOption(this.option);
         // this.chart.setOption({series:[{data: this.data}]});
       },
-      async searchLineChartData(){
-        if(this.tmpDeviceSelectorValue&&this.tmpPropertySelectorValue){
+      async searchLineChartData() {
+        if (this.tmpDeviceSelectorValue && this.tmpPropertySelectorValue) {
           //获取数据
           // this.option.series=result.map(el=>{
           //   return {
@@ -158,12 +167,12 @@
           this.deviceSelectorValue = this.tmpDeviceSelectorValue;
           this.propertySelectorValue = this.tmpPropertySelectorValue;
           setTimeout(async () => {
-            let result= (await getDevicePropertyData(this.deviceSelectorValue,this.propertySelectorValue)).data.d;
-            this.chart.setOption({xAxis: [{data: result.xAxis}], series:[{data: result.series}]});
+            let result = (await getDevicePropertyData(this.deviceSelectorValue, this.propertySelectorValue)).data.d;
+            this.chart.setOption({xAxis: [{data: result.xAxis}], series: [{data: result.series}]});
           }, 200);
           setInterval(async () => {
-            let result= (await getDevicePropertyData(this.deviceSelectorValue,this.propertySelectorValue)).data.d;
-            this.chart.setOption({xAxis: [{data: result.xAxis}], series:[{data: result.series}]});
+            let result = (await getDevicePropertyData(this.deviceSelectorValue, this.propertySelectorValue)).data.d;
+            this.chart.setOption({xAxis: [{data: result.xAxis}], series: [{data: result.series}]});
           }, 10000);
           this.initChart();
         }
@@ -184,9 +193,11 @@
 
 <style lang="scss" scoped>
   @import "../../assets/scss/variaties";
-  .selector-container{
+
+  .selector-container {
     margin: 10px 0 10px 10px
   }
+
   .dashboard-line-chart-container {
     height: $dashboard-block-height;
     margin: 10px;
