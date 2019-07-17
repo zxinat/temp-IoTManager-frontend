@@ -1,36 +1,58 @@
 <template>
     <div class="container">
-      <el-row>
-        <el-col :span="8" :offset="6">
-          <el-form ref="form" :model="form" label-width="100px">
-            <el-form-item label="设备名称">
-              <el-input v-model="form.deviceName"></el-input>
-            </el-form-item>
-            <el-form-item label="设备编号">
-              <el-input v-model="form.hardwareDeviceID"></el-input>
-            </el-form-item>
-            <el-form-item label="设备类型">
-              <el-input v-model="form.deviceType"></el-input>
-            </el-form-item>
-            <el-form-item :label="GLOBAL.firstLevel">
-              <el-input v-model="form.city"></el-input>
-            </el-form-item>
-            <el-form-item :label="GLOBAL.secondLevel">
-              <el-input v-model="form.factory"></el-input>
-            </el-form-item>
-            <el-form-item label="报警容错次数">
-              <el-input v-model="form.faultTolerantNumber"></el-input>
-            </el-form-item>
-            <el-form-item label="保存分钟间隔">
-              <el-input v-model="form.saveInterval"></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="onSubmit">保存修改</el-button>
-              <el-button>放弃修改</el-button>
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </el-row>
+      <h3>设备数据信息（只显示最新10条）</h3>
+      <el-table
+        :data="deviceData.deviceData"
+        stripe
+        style="width: 80%; margin: 5px">
+        <el-table-column
+          prop="deviceId"
+          label="时间">
+        </el-table-column>
+        <el-table-column
+          prop="indexName"
+          label="设备属性">
+        </el-table-column>
+        <el-table-column
+          prop="indexValue"
+          label="属性数值">
+        </el-table-column>
+        <el-table-column
+          prop="indexUnit"
+          label="属性单位">
+        </el-table-column>
+      </el-table>
+      <!--<el-row>-->
+        <!--<el-col :span="8" :offset="6">-->
+          <!--<el-form ref="form" :model="form" label-width="100px">-->
+            <!--<el-form-item label="设备名称">-->
+              <!--<el-input v-model="form.deviceName"></el-input>-->
+            <!--</el-form-item>-->
+            <!--<el-form-item label="设备编号">-->
+              <!--<el-input v-model="form.hardwareDeviceID"></el-input>-->
+            <!--</el-form-item>-->
+            <!--<el-form-item label="设备类型">-->
+              <!--<el-input v-model="form.deviceType"></el-input>-->
+            <!--</el-form-item>-->
+            <!--<el-form-item :label="GLOBAL.firstLevel">-->
+              <!--<el-input v-model="form.city"></el-input>-->
+            <!--</el-form-item>-->
+            <!--<el-form-item :label="GLOBAL.secondLevel">-->
+              <!--<el-input v-model="form.factory"></el-input>-->
+            <!--</el-form-item>-->
+            <!--<el-form-item label="报警容错次数">-->
+              <!--<el-input v-model="form.faultTolerantNumber"></el-input>-->
+            <!--</el-form-item>-->
+            <!--<el-form-item label="保存分钟间隔">-->
+              <!--<el-input v-model="form.saveInterval"></el-input>-->
+            <!--</el-form-item>-->
+            <!--<el-form-item>-->
+              <!--<el-button type="primary" @click="onSubmit">保存修改</el-button>-->
+              <!--<el-button>放弃修改</el-button>-->
+            <!--</el-form-item>-->
+          <!--</el-form>-->
+        <!--</el-col>-->
+      <!--</el-row>-->
     </div>
 </template>
 
@@ -69,29 +91,18 @@
           }
         }
       },
-      computed:{
-        form:{
-          // getter
-          get: function () {
-            return this.$store.state.device.currentDeviceData;
-          },
-          // setter
-           set:async function (newValue) {
-            console.log('newvalue',newValue);
-            // 修改接口
-            let result= await updateDeviceApi(newValue);
-            if(result.data.c===200){
-              this.$message({
-                message: '修改成功',
-                type: 'success'
-              });
-              this.$store.dispatch('device/setCurrentDeviceData',newValue);
-            }else{
-              this.$message.error('修改失败');
-            }
-          }
+    computed:{
+      deviceData:{
+        // getter
+        get: function () {
+          return this.$store.state.device.currentDeviceData;
+        },
+        // setter
+        set: function (newValue) {
+          console.log('newvalue',newValue)
         }
-      },
+      }
+    },
       methods: {
         onSubmit() {
           this.deviceData=this.form;

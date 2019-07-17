@@ -1,49 +1,28 @@
 <template>
   <div class="data-statistic-container">
-    <!--<el-date-picker-->
-      <!--v-model="timeDuration"-->
-      <!--type="daterange"-->
-      <!--range-separator="至"-->
-      <!--start-placeholder="开始日期"-->
-      <!--end-placeholder="结束日期">-->
-    <!--</el-date-picker>-->
-    <!--<el-button type="primary" @click="getData">确定</el-button>-->
-    <!--<div class="data-statistic-line-chart"></div>-->
-    <!--<el-row style="margin-left: 10px">-->
-      <!--<el-col :span="6">-->
-        <!--<el-button type="primary" @click="setTimeDuration">最近100个数据</el-button>-->
-      <!--</el-col>-->
-      <!--<el-col :span="6">-->
-        <!--<el-button type="primary" @click="setTimeDuration('day')">日数据</el-button>-->
-      <!--</el-col>-->
-      <!--<el-col :span="6">-->
-        <!--<el-button type="primary" @click="setTimeDuration('week')">周数据</el-button>-->
-      <!--</el-col>-->
-      <!--<el-col :span="6">-->
-        <!--<el-button type="primary" @click="setTimeDuration('month')">月数据</el-button>-->
-      <!--</el-col>-->
-    <!--</el-row>-->
-    <el-table
-      :data="deviceData.deviceData"
-      stripe
-      style="width: 80%; margin: 5px">
-      <el-table-column
-        prop="deviceId"
-        label="时间">
-      </el-table-column>
-      <el-table-column
-        prop="indexName"
-        label="设备属性">
-      </el-table-column>
-      <el-table-column
-        prop="indexValue"
-        label="属性数值">
-      </el-table-column>
-      <el-table-column
-        prop="indexUnit"
-        label="属性单位">
-      </el-table-column>
-    </el-table>
+    <el-date-picker
+      v-model="timeDuration"
+      type="daterange"
+      range-separator="至"
+      start-placeholder="开始日期"
+      end-placeholder="结束日期">
+    </el-date-picker>
+    <el-button type="primary" @click="getData">确定</el-button>
+    <div class="data-statistic-line-chart"></div>
+    <el-row style="margin-left: 10px">
+      <el-col :span="6">
+        <el-button type="primary" @click="setTimeDuration">最近100个数据</el-button>
+      </el-col>
+      <el-col :span="6">
+        <el-button type="primary" @click="setTimeDuration('day')">日数据</el-button>
+      </el-col>
+      <el-col :span="6">
+        <el-button type="primary" @click="setTimeDuration('week')">周数据</el-button>
+      </el-col>
+      <el-col :span="6">
+        <el-button type="primary" @click="setTimeDuration('month')">月数据</el-button>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
