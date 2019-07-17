@@ -453,3 +453,7 @@ export function addFactory(factory) {
 export function addWorkshop(workshop) {
   return axios.post(`/api/workshop`, {...workshop});
 }
+
+export function searchUsers(username){
+  return axios.get(`/api/user/name/${username}`);
+}

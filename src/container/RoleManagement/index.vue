@@ -6,26 +6,26 @@
     </div>
     <div class="search">
       <el-row>
-        <el-col :span="16">
+        <el-col :span="20">
           <div class="grid-content bg-purple-dark">
             <el-input v-model="username" :placeholder="$t('message.allUser')"></el-input>
           </div>
         </el-col>
+        <!--<el-col :span="4">-->
+          <!--<div class="grid-content bg-purple-dark">-->
+            <!--<el-select v-model="department" :placeholder="$t('message.allDepartment')">-->
+              <!--<el-option-->
+                <!--v-for="item in departmentOptions"-->
+                <!--:key="item.value"-->
+                <!--:label="item.label"-->
+                <!--:value="item.label">-->
+              <!--</el-option>-->
+            <!--</el-select>-->
+          <!--</div>-->
+        <!--</el-col>-->
         <el-col :span="4">
           <div class="grid-content bg-purple-dark">
-            <el-select v-model="department" :placeholder="$t('message.allDepartment')">
-              <el-option
-                v-for="item in departmentOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.label">
-              </el-option>
-            </el-select>
-          </div>
-        </el-col>
-        <el-col :span="4">
-          <div class="grid-content bg-purple-dark">
-            <el-button type="primary" @click="">{{$t('message.searchDeviceByName')}}</el-button>
+            <el-button type="primary" @click="searchUser">{{$t('message.searchDeviceByName')}}</el-button>
           </div>
         </el-col>
       </el-row>
@@ -186,7 +186,15 @@
 </template>
 
 <script>
-  import {createNewUser, deleteUser, editUser, getAllAuthorities, getUserById, getUserTable} from '../../api/api';
+  import {
+    createNewUser,
+    deleteUser,
+    editUser,
+    getAllAuthorities,
+    getUserById,
+    getUserTable,
+    searchUsers
+  } from '../../api/api';
   import {isvalidPhone} from '../../common/validate';
 
   var validPhone=(rule, value,callback)=>{
@@ -358,14 +366,17 @@
         }
         this.inputVisible = false;
         this.inputValue = '';
+      },
+      async searchUser(){
+        this.tableData = (await searchUsers(this.username)).data.d;
       }
     },
     async mounted() {
       // 获取所有部门和所有用户信息
       // this.departmentOptions = (await getAllDepartments()).data.d;
       this.tableData = (await getUserTable()).data.d;
-      this.options = (await getAllAuthorities()).data.d;
-      this.tableData = (await getUserTable(this.username, this.department)).data.d;
+      // this.options = (await getAllAuthorities()).data.d;
+      // this.tableData = (await getUserTable(this.username, this.department)).data.d;
     }
   }
 </script>
