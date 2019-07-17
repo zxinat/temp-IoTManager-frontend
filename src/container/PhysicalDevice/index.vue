@@ -64,38 +64,31 @@
         @selection-change="handleSelectionChange"
       id="physical-device-out-table">
         <el-table-column
-          type="selection"
-          width="55">
+          type="selection">
         </el-table-column>
         <el-table-column
           prop="hardwareDeviceID"
-          label="设备编号"
-          width="120">
+          label="设备编号">
         </el-table-column>
         <el-table-column
           prop="deviceName"
-          label="设备名称"
-          width="120">
+          label="设备名称">
         </el-table-column>
         <el-table-column
           prop="deviceType"
-          label="设备类型"
-          width="120">
+          label="设备类型">
         </el-table-column>
         <el-table-column
           prop="city"
-          :label="GLOBAL.firstLevel"
-          width="120">
+          :label="GLOBAL.firstLevel">
         </el-table-column>
         <el-table-column
           prop="factory"
-          :label="GLOBAL.secondLevel"
-          width="120">
+          :label="GLOBAL.secondLevel">
         </el-table-column>
         <el-table-column
           prop="workshop"
-          :label="GLOBAL.thirdLevel"
-          width="120">
+          :label="GLOBAL.thirdLevel">
         </el-table-column>
         <!--<el-table-column
           prop="deviceState"
@@ -109,28 +102,23 @@
         </el-table-column>-->
         <el-table-column
           prop="createTime"
-          label="创建时间"
-          width="120">
+          label="创建时间">
         </el-table-column>
         <el-table-column
           prop="updateTime"
-          label="更新时间"
-          width="120">
+          label="更新时间">
         </el-table-column>
         <el-table-column
           prop="gatewayID"
-          label="所属网关ID"
-          width="120">
+          label="所属网关ID">
         </el-table-column>
         <el-table-column
           prop="mac"
-          label="Mac地址"
-          width="120">
+          label="Mac地址">
         </el-table-column>
         <el-table-column
           prop="remark"
-          label="描述"
-          width="120">
+          label="描述">
         </el-table-column>
         <!--<el-table-column
           prop="department"
@@ -139,13 +127,11 @@
         </el-table-column>-->
         <el-table-column
           prop="imageUrl"
-          label="设备图像链接"
-          width="120">
+          label="设备图像链接">
         </el-table-column>
         <el-table-column
           fixed="right"
-          label="操作"
-          width="100">
+          label="操作">
           <template slot-scope="scope">
             <el-button @click="openUpdateForm(scope.row)" type="text" size="small">修改</el-button>
             <el-button @click="deleteDevice(scope.row)" type="text" size="small">删除</el-button>
@@ -388,18 +374,18 @@
         <el-button type="primary" @click="addCity">确 定</el-button>
       </div>
     </el-dialog>
-    <el-dialog title="新增工厂" :visible.sync="factoryAddVisible">
+    <el-dialog :title="'新增'+GLOBAL.secondLevel" :visible.sync="factoryAddVisible">
       <el-form :model="factoryTable">
-        <el-form-item label="工厂名" label-width="120px">
+        <el-form-item :label="GLOBAL.secondLevel+'名'" label-width="120px">
           <el-input v-model="factoryTable.factoryName" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="工厂电话" label-width="120px">
+        <el-form-item :label="GLOBAL.secondLevel+'电话'" label-width="120px">
           <el-input v-model="factoryTable.factoryPhoneNumber" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="工厂地址" label-width="120px">
+        <el-form-item :label="GLOBAL.secondLevel+'地址'" label-width="120px">
           <el-input v-model="factoryTable.factoryAddress" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="所属城市名" label-width="120px">
+        <el-form-item :label="所属城市名" label-width="120px">
           <el-select v-model="factoryTable.city" placeholder="请选择">
             <el-option
               v-for="c in newCityList"
@@ -418,18 +404,18 @@
         <el-button type="primary" @click="addFactory">确 定</el-button>
       </div>
     </el-dialog>
-    <el-dialog title="新增车间" :visible.sync="workshopAddVisible">
+    <el-dialog :title="'新增'+GLOBAL.thirdLevel" :visible.sync="workshopAddVisible">
       <el-form :model="workshopTable">
-        <el-form-item label="车间名" label-width="120px">
+        <el-form-item :label="GLOBAL.thirdLevel+'名'" label-width="120px">
           <el-input v-model="workshopTable.workshopName" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="车间电话" label-width="120px">
+        <el-form-item :label="GLOBAL.thirdLevel+'电话'" label-width="120px">
           <el-input v-model="workshopTable.workshopPhoneNumber" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="车间地址" label-width="120px">
+        <el-form-item :label="GLOBAL.thirdLevel+'地址'" label-width="120px">
           <el-input v-model="workshopTable.workshopAddress" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="所属工厂名" label-width="120px">
+        <el-form-item :label="'所属'+GLOBAL.secondLevel+'名'" label-width="120px">
           <el-select v-model="workshopTable.factory" placeholder="请选择">
             <el-option
               v-for="f in newFactoryList"
@@ -741,7 +727,7 @@
             }
           } catch (e) {
             this.factoryAddVisible = false;
-            this.$message.error('工厂添加失败');
+            this.$message.error('添加失败');
           }
         },
         async addWorkshop() {
@@ -757,7 +743,7 @@
             }
           } catch (e) {
             this.workshopAddVisible = false;
-            this.$message.error('车间添加失败');
+            this.$message.error('添加失败');
           }
         },
         async getUpdateFactory(city) {
