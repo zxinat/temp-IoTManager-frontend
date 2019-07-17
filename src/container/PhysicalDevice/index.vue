@@ -191,7 +191,7 @@
             <el-option
               v-for="w in updateWorkshop"
               :key="w.value"
-              :label="w.lable"
+              :label="w.label"
               :value="w.label">
             </el-option>
           </el-select>
@@ -402,7 +402,7 @@
         <el-form-item label="所属城市名" label-width="120px">
           <el-select v-model="factoryTable.city" placeholder="请选择">
             <el-option
-              v-for="c in city"
+              v-for="c in newCityList"
               :key="c.id"
               :label="c.cityName"
               :value="c.cityName">
@@ -432,7 +432,7 @@
         <el-form-item label="所属工厂名" label-width="120px">
           <el-select v-model="workshopTable.factory" placeholder="请选择">
             <el-option
-              v-for="f in factory"
+              v-for="f in newFactoryList"
               :key="f.id"
               :label="f.factoryName"
               :value="f.factoryName">
@@ -484,6 +484,8 @@
           updateFormVisible: false,
           newFormVisible: false,
           deviceState: [],
+          newCityList: [],
+          newFactoryList: [],
           city: [],
           factory: [],
           workshop: [],
@@ -950,6 +952,8 @@
         // }
         this.city = (await getCityOptions()).data.d;
         this.updateCity = (await getCityOptions()).data.d;
+        this.newCityList = (await getCity()).data.d;
+        this.newFactoryList = (await getFactory()).data.d;
         // this.factory = (await getFactory()).data.d;
         // this.workshop = (await getWorkshop()).data.d;
         this.deviceState = (await getDeviceState()).data.d;
