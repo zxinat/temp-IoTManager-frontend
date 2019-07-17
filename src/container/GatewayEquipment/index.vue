@@ -537,7 +537,10 @@
           deviceID: '',
           deviceName: ''
         },
-        fileList: []
+        fileList: [],
+        deleteData: {
+          number: []
+        }
       }
     },
 
@@ -757,14 +760,15 @@
         try {
           this.$confirm('确认删除？')
             .then(async _ => {
-              const data = await deleteMultipleGatewayApi(this.multipleSelection.map(el => el.id));
+              this.deleteData.number = this.multipleSelection.map(el => el.id);
+              const data = await deleteMultipleGatewayApi(this.deleteData);
               if (data.data.c === 200) {
                 this.$message({
                   message: '删除成功',
                   type: 'success'
                 });
                 //再获取一次所有网关信息
-                this.getDevices();
+                this.getGateways();
               }
             })
             .catch(_ => {

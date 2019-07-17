@@ -46,11 +46,8 @@ export function deleteGatewayApi(id) {
 }
 
 export function deleteMultipleGatewayApi(id) {
-  return axios.delete(`/api/multipleGateway`, {
-    params: {
-      ...id
-    }
-  });
+  console.log({...id});
+  return axios.post(`/api/gateway/batch/gateways`, {...id});
 }
 
 export function updateGatewayApi(data) {
@@ -83,7 +80,6 @@ export function deleteDeviceApi(id) {
 }
 
 export function deleteMultipleDeviceApi(id) {
-  console.log({...id});
   return axios.post(`/api/device/batch/devices`, {...id});
 }
 
