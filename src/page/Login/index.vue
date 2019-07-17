@@ -62,7 +62,7 @@
         this.$refs[formName].validate(async (valid) => {
           if (valid) {
             const res = await loginApi(this.form);
-            if(res.data.d === 'success') {
+            if(res.data.d.status === 'success') {
               console.log('success');
               setCookie('userSessionID',res.data.d.sessionId,20);//存储sessionID
               setItemToLocalstorage('userInfo',res.data.d.user);//存储用户信息

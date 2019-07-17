@@ -457,3 +457,11 @@ export function addWorkshop(workshop) {
 export function searchUsers(username){
   return axios.get(`/api/user/name/${username}`);
 }
+
+export function getUserByName(username) {
+  return axios.get(`/api/user/username/${username}`);
+}
+
+export function updatePassword(username, password){
+  return axios.post(`/api/user/password/${username}`, {...password});
+}
