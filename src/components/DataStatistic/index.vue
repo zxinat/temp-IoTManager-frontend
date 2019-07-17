@@ -9,20 +9,20 @@
     </el-date-picker>
     <el-button type="primary" @click="getData">确定</el-button>
     <div class="data-statistic-line-chart"></div>
-    <el-row style="margin-left: 10px">
-      <el-col :span="6">
-        <el-button type="primary" @click="setTimeDuration">最近100个数据</el-button>
-      </el-col>
-      <el-col :span="6">
-        <el-button type="primary" @click="setTimeDuration('day')">日数据</el-button>
-      </el-col>
-      <el-col :span="6">
-        <el-button type="primary" @click="setTimeDuration('week')">周数据</el-button>
-      </el-col>
-      <el-col :span="6">
-        <el-button type="primary" @click="setTimeDuration('month')">月数据</el-button>
-      </el-col>
-    </el-row>
+    <!--<el-row style="margin-left: 10px">-->
+      <!--&lt;!&ndash;<el-col :span="6">&ndash;&gt;-->
+        <!--&lt;!&ndash;<el-button type="primary" @click="setTimeDuration">最近100个数据</el-button>&ndash;&gt;-->
+      <!--&lt;!&ndash;</el-col>&ndash;&gt;-->
+      <!--<el-col :span="8">-->
+        <!--<el-button type="primary" @click="setTimeDuration('day')">日数据</el-button>-->
+      <!--</el-col>-->
+      <!--<el-col :span="8">-->
+        <!--<el-button type="primary" @click="setTimeDuration('week')">周数据</el-button>-->
+      <!--</el-col>-->
+      <!--<el-col :span="8">-->
+        <!--<el-button type="primary" @click="setTimeDuration('month')">月数据</el-button>-->
+      <!--</el-col>-->
+    <!--</el-row>-->
   </div>
 </template>
 
@@ -152,8 +152,8 @@
         }
         this.chart = echarts.init(document.getElementsByClassName('data-statistic-line-chart')[0]);
         // // 把配置和数据放这里
-        this.chart.setOption(this.dynamicChartOption)
-        this.polling()
+        this.chart.setOption(this.chartOption);
+        // this.polling()
       },
       initDynamicChart() {
         this.stopPolling();
@@ -188,6 +188,7 @@
         }
       },
       getData() {  // 替换为查询数据接口,参数为value(时间值)
+        console.log(this.timeDuration);
         let oneDay = 24 * 3600 * 1000;
         this.now = new Date(+this.now + oneDay);
         this.value = this.value + Math.random() * 100 - 50;
