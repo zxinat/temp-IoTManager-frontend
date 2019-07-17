@@ -760,15 +760,41 @@
         },
         async getUpdateFactory(city) {
           this.updateFactory = (await getFactoryOptions(city)).data.d;
+          if (this.updateFactory[0] != null) {
+            this.updateData.factory = this.updateFactory[0].value;
+            this.getUpdateWorkshop(this.updateData.factory);
+          } else {
+            this.updateData.factory = "";
+            this.updateData.workshop = "";
+            this.updateFactory = [];
+          }
         },
         async getUpdateWorkshop(factory) {
           this.updateWorkshop = (await getWorkshopOptions(factory)).data.d;
+          if (this.updateWorkshop[0] != null) {
+            this.updateData.workshop = this.updateWorkshop[0].value;
+          } else {
+            this.updateData.workshop = "";
+          }
         },
         async getNewFactory(city) {
           this.factory = (await getFactoryOptions(city)).data.d;
+          if (this.factory[0] != null) {
+            this.newDeviceData.factory = this.factory[0].value;
+            this.getNewWorkshop(this.newDeviceData.factory);
+          } else {
+            this.newDeviceData.factory = "";
+            this.newDeviceData.workshop = "";
+            this.factory = [];
+          }
         },
         async getNewWorkshop(factory) {
           this.workshop = (await getWorkshopOptions(factory)).data.d;
+          if (this.workshop[0] != null) {
+            this.newDeviceData.workshop = this.workshop[0].value;
+          } else {
+            this.newDeviceData.workshop = "";
+          }
         },
         async update() {
           try {
