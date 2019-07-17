@@ -97,26 +97,16 @@
           :label="GLOBAL.thirdLevel"
           width="120">
         </el-table-column>
-        <el-table-column
-          prop="gatewayID"
-          label="所属网关ID"
-          width="120">
-        </el-table-column>
-        <el-table-column
-          prop="mac"
-          label="Mac地址"
-          width="120">
-        </el-table-column>
-        <el-table-column
+        <!--<el-table-column
           prop="deviceState"
           label="设备状态"
           width="120">
-        </el-table-column>
-        <el-table-column
+        </el-table-column>-->
+        <!--<el-table-column
           prop="lastConnectionTime"
           label="上次连接时间"
           width="120">
-        </el-table-column>
+        </el-table-column>-->
         <el-table-column
           prop="createTime"
           label="创建时间"
@@ -128,15 +118,25 @@
           width="120">
         </el-table-column>
         <el-table-column
+          prop="gatewayID"
+          label="所属网关ID"
+          width="120">
+        </el-table-column>
+        <el-table-column
+          prop="mac"
+          label="Mac地址"
+          width="120">
+        </el-table-column>
+        <el-table-column
           prop="remark"
           label="描述"
           width="120">
         </el-table-column>
-        <el-table-column
+        <!--<el-table-column
           prop="department"
           label="部门"
           width="120">
-        </el-table-column>
+        </el-table-column>-->
         <el-table-column
           prop="imageUrl"
           label="设备图像链接"
@@ -197,6 +197,17 @@
           </el-select>
           <el-button type="primary" @click="workshopAddVisible = true">+</el-button>
         </el-form-item>
+        <el-form-item label="设备类型" label-width="120px">
+          <el-select v-model="updateData.deviceType" placeholder="选择设备类型">
+            <el-option
+              v-for="dt in deviceType"
+              :key="dt.id"
+              :label="dt.deviceTypeName"
+              :value="dt.deviceTypeName">
+            </el-option>
+          </el-select>
+          <el-button type="primary" @click="typeAddVisible = true">+</el-button>
+        </el-form-item>
         <!--<el-form-item label="设备状态" label-width="120px">-->
           <!--<el-select v-model="updateData.deviceState" placeholder="选择设备状态">-->
             <!--<el-option-->
@@ -216,18 +227,7 @@
         <el-form-item label="MAC地址" label-width="120px">
           <el-input v-model="updateData.mac" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="设备类型" label-width="120px">
-          <el-select v-model="updateData.deviceType" placeholder="选择设备类型">
-            <el-option
-              v-for="dt in deviceType"
-              :key="dt.id"
-              :label="dt.deviceTypeName"
-              :value="dt.deviceTypeName">
-            </el-option>
-          </el-select>
-          <el-button type="primary" @click="typeAddVisible = true">+</el-button>
-        </el-form-item>
-        <el-form-item label="部门" label-width="120px">
+        <!--<el-form-item label="部门" label-width="120px">
           <el-select v-model="updateData.department" placeholder="选择部门">
             <el-option
               v-for="d in department"
@@ -236,13 +236,13 @@
               :value="d.departmentName">
             </el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item>-->
         <el-form-item label="描述" label-width="120px">
           <el-input v-model="updateData.remark" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item>
+        <!--<el-form-item>
           <UploadImg @upload="addImage"></UploadImg>
-        </el-form-item>
+        </el-form-item>-->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="updateFormVisible = false">取 消</el-button>
@@ -290,6 +290,17 @@
           </el-select>
           <el-button type="primary" @click="workshopAddVisible = true">+</el-button>
         </el-form-item>
+        <el-form-item label="设备类型" label-width="120px">
+          <el-select v-model="newDeviceData.deviceType" placeholder="选择设备类型">
+            <el-option
+              v-for="dt in deviceType"
+              :key="dt.id"
+              :label="dt.deviceTypeName"
+              :value="dt.deviceTypeName">
+            </el-option>
+          </el-select>
+          <el-button type="primary" @click="typeAddVisible = true">+</el-button>
+        </el-form-item>
         <!--<el-form-item label="设备状态" label-width="120px">-->
           <!--<el-select v-model="newDeviceData.deviceState" placeholder="选择设备状态">-->
             <!--<el-option-->
@@ -308,17 +319,6 @@
         </el-form-item>
         <el-form-item label="MAC地址" label-width="120px">
           <el-input v-model="newDeviceData.mac" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="设备类型" label-width="120px">
-          <el-select v-model="newDeviceData.deviceType" placeholder="选择设备类型">
-            <el-option
-              v-for="dt in deviceType"
-              :key="dt.id"
-              :label="dt.deviceTypeName"
-              :value="dt.deviceTypeName">
-            </el-option>
-          </el-select>
-          <el-button type="primary" @click="typeAddVisible = true">+</el-button>
         </el-form-item>
         <!--<el-form-item label="部门" label-width="120px">-->
           <!--<el-select v-model="newDeviceData.department" placeholder="选择部门">-->

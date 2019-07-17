@@ -62,7 +62,7 @@
           <!--</div>-->
         </div>
         <el-card :body-style="{ padding: '0px' }">
-          <img v-if="!deviceData.imageUrl" src="../../assets/img/cat.jpg" class="image">
+          <img v-if="!deviceData.imageUrl" src="../../assets/img/equipment.png" class="image">
           <img v-else :src="deviceData.imageUrl" class="image">
         </el-card>
       </el-col>
@@ -126,7 +126,7 @@
 
     .image {
       padding: 1%;
-      width: 100%;
+      width: 80%;
       display: block;
     }
 

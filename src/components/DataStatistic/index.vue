@@ -38,6 +38,10 @@
         chart: {},
         tableData: [],
         dynamicChartOption: {
+          title: {
+            text: '数据统计',
+            show: false
+          },
           tooltip: {
             trigger: 'axis',
             formatter: function (params) {
@@ -47,6 +51,12 @@
             },
             axisPointer: {
               animation: false
+            }
+          },
+          toolbox: {
+            left: 'right',
+            feature: {
+              saveAsImage: {}
             }
           },
           xAxis: {

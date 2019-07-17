@@ -98,16 +98,16 @@
           :label="GLOBAL.thirdLevel"
           width="120">
         </el-table-column>
-        <el-table-column
+        <!--<el-table-column
           prop="gatewayState"
           label="网关状态"
           width="120">
-        </el-table-column>
-        <el-table-column
+        </el-table-column>-->
+        <!--<el-table-column
           prop="lastConnectionTime"
           label="上次连接时间"
           width="120">
-        </el-table-column>
+        </el-table-column>-->
         <el-table-column
           prop="createTime"
           label="创建时间"
@@ -118,21 +118,21 @@
           label="更新时间"
           width="120">
         </el-table-column>
-        <el-table-column
+        <!--<el-table-column
           prop="department"
           label="部门"
           width="120">
-        </el-table-column>
+        </el-table-column>-->
         <el-table-column
           prop="remark"
           label="描述"
           width="120">
         </el-table-column>
-        <el-table-column
+        <!--<el-table-column
           prop="imageUrl"
           label="网关图像链接"
           width="120">
-        </el-table-column>
+        </el-table-column>-->
         <el-table-column
           fixed="right"
           label="操作"
@@ -209,9 +209,9 @@
             <!--</el-option>-->
           <!--</el-select>-->
         <!--</el-form-item>-->
-        <el-form-item label="网关图像链接" label-width="120px">
+        <!--<el-form-item label="网关图像链接" label-width="120px">
           <el-input v-model="updateData.imageUrl" autocomplete="off"></el-input>
-        </el-form-item>
+        </el-form-item>-->
         <el-form-item label="描述" label-width="120px">
           <el-input v-model="updateData.remark" autocomplete="off"></el-input>
         </el-form-item>
@@ -225,9 +225,9 @@
             <!--</el-option>-->
           <!--</el-select>-->
         <!--</el-form-item>-->
-        <el-form-item>
+        <!--<el-form-item>
           <UploadImg></UploadImg>
-        </el-form-item>
+        </el-form-item>-->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="updateFormVisible = false">取 消</el-button>
@@ -296,9 +296,9 @@
             <!--</el-option>-->
           <!--</el-select>-->
         <!--</el-form-item>-->
-        <el-form-item label="网关图像链接" label-width="120px">
+        <!--<el-form-item label="网关图像链接" label-width="120px">
           <el-input v-model="newGatewayData.imageUrl" autocomplete="off"></el-input>
-        </el-form-item>
+        </el-form-item>-->
         <el-form-item label="描述" label-width="120px">
           <el-input v-model="newGatewayData.remark" autocomplete="off"></el-input>
         </el-form-item>
@@ -337,9 +337,9 @@
         <!--<el-radio v-model="newGatewayData.radio" label="gateway">网关设备</el-radio>-->
         <!--<el-radio v-model="newGatewayData.radio" label="device">物理设备</el-radio>-->
         <!--</el-form-item>-->
-        <el-form-item>
+        <!--<el-form-item>
           <UploadImg></UploadImg>
-        </el-form-item>
+        </el-form-item>-->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="newFormVisible = false">取 消</el-button>

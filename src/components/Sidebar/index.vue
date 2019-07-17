@@ -49,10 +49,10 @@
     <!--</el-submenu>-->
     <!--<el-submenu index="6">-->
       <!--<template slot="title">-->
-        <!--&lt;!&ndash;<i class="el-icon-location"></i>&ndash;&gt;-->
+        <!--<i class="el-icon-location"></i>-->
         <!--<span>报表中心</span>-->
       <!--</template>-->
-      <!--&lt;!&ndash;<router-link to="/reportCenter"  class="hide-underline"><el-menu-item index="6-1">概览</el-menu-item></router-link>&ndash;&gt;-->
+      <!--<router-link to="/reportCenter"  class="hide-underline"><el-menu-item index="6-1">概览</el-menu-item></router-link>-->
       <!--<router-link to="/RegionalDimension" class="hide-underline">-->
         <!--<el-menu-item index="6-2">按地域维度</el-menu-item>-->
       <!--</router-link>-->
@@ -65,9 +65,9 @@
       <!--<router-link to="/TagDimension" class="hide-underline">-->
         <!--<el-menu-item index="6-5">按标签维度</el-menu-item>-->
       <!--</router-link>-->
-      <!--&lt;!&ndash;<router-link to="/ReportStaticByCategory"  class="hide-underline"><el-menu-item index="6-5">按资源类别费用统计</el-menu-item></router-link>&ndash;&gt;-->
-      <!--&lt;!&ndash;<router-link to="/ReportStaticBySubscribe"  class="hide-underline"><el-menu-item index="6-6">按订阅费用统计</el-menu-item></router-link>&ndash;&gt;-->
-      <!--&lt;!&ndash;<router-link to="/ReportOfMonthlyExpense"  class="hide-underline"><el-menu-item index="6-7">月度费用报告</el-menu-item></router-link>&ndash;&gt;-->
+      <!--<router-link to="/ReportStaticByCategory"  class="hide-underline"><el-menu-item index="6-5">按资源类别费用统计</el-menu-item></router-link>-->
+      <!--<router-link to="/ReportStaticBySubscribe"  class="hide-underline"><el-menu-item index="6-6">按订阅费用统计</el-menu-item></router-link>-->
+      <!--<router-link to="/ReportOfMonthlyExpense"  class="hide-underline"><el-menu-item index="6-7">月度费用报告</el-menu-item></router-link>-->
     <!--</el-submenu>-->
     <router-link to="/roleManagement" class="hide-underline">
       <el-menu-item index="7">

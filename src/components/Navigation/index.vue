@@ -6,7 +6,7 @@
       :background-color=mainColor
       text-color="#fff"
       active-text-color="#ffffff">
-      <el-menu-item index="1">南洋IoT管理平台</el-menu-item>
+      <el-menu-item index="1">Solvay智能实验室</el-menu-item>
       <el-menu-item index="2" style="float: right">
         <el-dropdown trigger="click">
         <span class="el-dropdown-link" style="color: white">
