@@ -5,14 +5,14 @@
           <el-menu-item index="1">设备概况</el-menu-item>
           <!--<el-menu-item index="2">设备状态</el-menu-item>-->
           <el-menu-item index="3">设备数据</el-menu-item>
-          <!--<el-menu-item index="4">数据统计</el-menu-item>-->
+          <el-menu-item index="4">数据统计</el-menu-item>
           <el-menu-item index="5">报警记录</el-menu-item>
           <!--<el-menu-item index="6">维保记录</el-menu-item>-->
         </el-menu>
         <div v-if="currentPage==='1'"><monitoring-device-card></monitoring-device-card></div>
         <!--<div v-if="currentPage==='2'">2</div>-->
       <div v-if="currentPage==='3'"><device-property></device-property></div>
-      <!--<div v-if="currentPage==='4'"><data-statistic></data-statistic></div>-->
+      <div v-if="currentPage==='4'"><data-statistic></data-statistic></div>
       <div v-if="currentPage==='5'"><alarm-record></alarm-record></div>
         <!--<div v-if="currentPage==='6'">6</div>-->
         <!--<MonitoringMap></MonitoringMap>-->

@@ -109,7 +109,7 @@
           label="更新时间">
         </el-table-column>
         <el-table-column
-          prop="gatewayID"
+          prop="gatewayId"
           label="所属网关ID">
         </el-table-column>
         <el-table-column
@@ -207,8 +207,18 @@
         <el-form-item label="设备图像链接" label-width="120px">
           <el-input v-model="updateData.imageUrl" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="所属网关编号" label-width="120px">
-          <el-input v-model="updateData.gatewayID" autocomplete="off"></el-input>
+        <!--<el-form-item label="所属网关编号" label-width="120px">-->
+          <!--<el-input v-model="updateData.gatewayID" autocomplete="off"></el-input>-->
+        <!--</el-form-item>-->
+        <el-form-item label="所属网关" label-width="120px">
+          <el-select v-model="updateData.gatewayId" placeholder="选择设备类型">
+            <el-option
+              v-for="dt in affiliateGateways"
+              :key="dt.id"
+              :label="dt.gatewayName"
+              :value="dt.id">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="MAC地址" label-width="120px">
           <el-input v-model="updateData.mac" autocomplete="off"></el-input>
@@ -300,8 +310,18 @@
         <el-form-item label="设备图像链接" label-width="120px">
           <el-input v-model="newDeviceData.imageUrl" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="所属网关编号" label-width="120px">
-          <el-input v-model="newDeviceData.gatewayId" autocomplete="off"></el-input>
+        <!--<el-form-item label="所属网关编号" label-width="120px">-->
+          <!--<el-input v-model="newDeviceData.gatewayId" autocomplete="off"></el-input>-->
+        <!--</el-form-item>-->
+        <el-form-item label="所属网关" label-width="120px">
+          <el-select v-model="newDeviceData.gatewayId" placeholder="选择设备类型">
+            <el-option
+              v-for="dt in affiliateGateways"
+              :key="dt.id"
+              :label="dt.gatewayName"
+              :value="dt.id">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="MAC地址" label-width="120px">
           <el-input v-model="newDeviceData.mac" autocomplete="off"></el-input>
@@ -385,7 +405,7 @@
         <el-form-item :label="GLOBAL.secondLevel+'地址'" label-width="120px">
           <el-input v-model="factoryTable.factoryAddress" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item :label="所属城市名" label-width="120px">
+        <el-form-item label="所属城市名" label-width="120px">
           <el-select v-model="factoryTable.city" placeholder="请选择">
             <el-option
               v-for="c in newCityList"
@@ -448,7 +468,7 @@
     getDevicesApi,
     getDeviceState,
     getDeviceType,
-    getFactory, getFactoryOptions,
+    getFactory, getFactoryOptions, getGatewaysApi,
     getWorkshop, getWorkshopOptions,
     searchDevicesByDeviceIdApi,
     searchDevicesByDeviceNameApi,
@@ -480,6 +500,7 @@
           updateWorkshop: [],
           deviceType: [],
           department: [],
+          affiliateGateways: [],
           tableData: [{
             "id": "",
             "hardwareDeviceID": "",
@@ -528,7 +549,7 @@
             workshop: '',
             deviceState: '',
             imageUrl: '',
-            gatewayID: 0,
+            gatewayId: '',
             mac: '',
             deviceType: '',
             remark: '',
@@ -543,7 +564,7 @@
             workshop: '',
             deviceState: '',
             imageUrl: '',
-            gatewayId: 0,
+            gatewayId: '',
             mac: '',
             deviceType: '',
             remark: '',
@@ -940,6 +961,8 @@
         this.updateCity = (await getCityOptions()).data.d;
         this.newCityList = (await getCity()).data.d;
         this.newFactoryList = (await getFactory()).data.d;
+        this.affiliateGateways = (await getGatewaysApi()).data.d;
+        console.log(this.affiliateGateways);
         // this.factory = (await getFactory()).data.d;
         // this.workshop = (await getWorkshop()).data.d;
         this.deviceState = (await getDeviceState()).data.d;
