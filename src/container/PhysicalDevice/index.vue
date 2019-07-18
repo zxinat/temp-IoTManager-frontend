@@ -110,7 +110,7 @@
         </el-table-column>
         <el-table-column
           prop="gatewayId"
-          label="所属网关ID">
+          label="所属网关">
         </el-table-column>
         <el-table-column
           prop="mac"
@@ -851,6 +851,7 @@
         async getDevices() {
           const data = await getDevicesApi();
           this.tableData = data.data.d;
+          console.log(this.tableData);
         },
         handleSelectionChange(val) {
           console.log('change',this.multipleSelection);
@@ -962,7 +963,6 @@
         this.newCityList = (await getCity()).data.d;
         this.newFactoryList = (await getFactory()).data.d;
         this.affiliateGateways = (await getGatewaysApi()).data.d;
-        console.log(this.affiliateGateways);
         // this.factory = (await getFactory()).data.d;
         // this.workshop = (await getWorkshop()).data.d;
         this.deviceState = (await getDeviceState()).data.d;
