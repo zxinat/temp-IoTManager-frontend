@@ -2,8 +2,15 @@
   <div>
     <div class="search-container">
       <el-form :inline="true" :model="searchData" class="demo-form-inline">
-        <el-form-item label="设备ID">
-          <el-input v-model="searchData.hardwareDeviceID"></el-input>
+        <el-form-item label="选择设备">
+          <el-select v-model="searchData.hardwareDeviceID" placeholder="请选择">
+            <el-option
+              v-for="c in dropdownDevices"
+              :key="c.id"
+              :label="c.deviceName"
+              :value="c.hardwareDeviceID">
+            </el-option>
+          </el-select>
         </el-form-item>
         <!--<el-form-item label="设备名称">-->
           <!--<el-input v-model="searchData.deviceName"></el-input>-->
@@ -186,7 +193,7 @@
 <script>
   import {
     getAlarmInfoByDeviceid,
-    getAlarmInformationApi, getAllRules,
+    getAlarmInformationApi, getAllRules, getDevicesApi,
     handleAllAlarmInformationApi,
     searchAlarmInformationApi,
     updateAlarmInformationApi
@@ -226,6 +233,7 @@
             "timestamp": "oaisdjboiadjfb"
           }],
           multipleSelection: [],
+          dropdownDevices: [],
           updateData: {},
           handleData: {},
           searchData: {
@@ -309,6 +317,8 @@
         //获取所有设备信息
         this.getAlarmInformation();
         this.rulesData = (await getAllRules()).data.d;
+        this.dropdownDevices = (await getDevicesApi()).data.d;
+        console.log(this.dropdownDevices);
         // 此处需要获取所有告警规则信息的接口，返回态如rulesData。
       }
     }
