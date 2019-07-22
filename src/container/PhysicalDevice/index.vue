@@ -728,7 +728,8 @@
                 message: '添加成功',
                 type: 'success'
               });
-              this.city = (await getCity()).data.d;
+              this.city = (await getCityOptions()).data.d;
+              this.newCityList = (await getCity()).data.d;
             }
           } catch (e) {
             this.cityAddVisible = false;
@@ -744,7 +745,8 @@
                 message: '添加成功',
                 type: 'success'
               });
-              this.factory = (await getFactory()).data.d;
+              this.factory = (await getFactoryOptions(this.factoryTable.city)).data.d;
+              this.newFactoryList = (await getFactory()).data.d;
             }
           } catch (e) {
             this.factoryAddVisible = false;
@@ -760,7 +762,7 @@
                 message: '添加成功',
                 type: 'success'
               });
-              this.workshop = (await getWorkshop()).data.d;
+              this.workshop = (await getWorkshopOptions(this.workshopTable.factory)).data.d;
             }
           } catch (e) {
             this.workshopAddVisible = false;
