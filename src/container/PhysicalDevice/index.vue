@@ -216,7 +216,7 @@
               v-for="dt in affiliateGateways"
               :key="dt.id"
               :label="dt.gatewayName"
-              :value="dt.id">
+              :value="dt.gatewayName">
             </el-option>
           </el-select>
         </el-form-item>
@@ -319,7 +319,7 @@
               v-for="dt in affiliateGateways"
               :key="dt.id"
               :label="dt.gatewayName"
-              :value="dt.id">
+              :value="dt.gatewayName">
             </el-option>
           </el-select>
         </el-form-item>
@@ -807,6 +807,7 @@
         },
         async update() {
           try {
+            console.log(this.updateData);
             const data = await updateDeviceApi(this.updateData);
             this.updateFormVisible = false;
             if (data.data.c === 200) {
