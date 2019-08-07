@@ -9,13 +9,19 @@
     <router-link to="/dashBoard" class="hide-underline">
       <el-menu-item index="2">
         <!--<i class="el-icon-location"></i>-->
-        <span>仪表盘</span>
+        <span>
+          <img src="../../assets/img/dashboard.png" class="image" />
+          仪表盘
+        </span>
       </el-menu-item>
     </router-link>
     <el-submenu index="3">
       <template slot="title">
         <!--<i class="el-icon-location"></i>-->
-        <span>设备管理</span>
+        <span>
+          <img src="../../assets/img/equipmentManager.png" class="image" />
+          设备管理
+        </span>
       </template>
       <router-link to="/gatewayEquipment" class="hide-underline">
         <el-menu-item index="3-1">网关设备</el-menu-item>
@@ -30,7 +36,10 @@
     <el-submenu index="4">
       <template slot="title">
         <!--<i class="el-icon-location"></i>-->
-        <span>监控告警</span>
+        <span>
+          <img src="../../assets/img/alert.png" class="image" />
+          监控告警
+        </span>
       </template>
       <router-link to="/monitoringConfiguration" class="hide-underline">
         <el-menu-item index="4-1">监控配置</el-menu-item>
@@ -72,7 +81,10 @@
     <router-link to="/roleManagement" class="hide-underline">
       <el-menu-item index="7">
         <!--<i class="el-icon-location"></i>-->
-        <span>用户管理</span>
+        <span>
+          <img src="../../assets/img/users.png" class="image" />
+          用户管理
+        </span>
       </el-menu-item>
     </router-link>
     <!--<router-link to="/districtManagement" class="hide-underline">-->
@@ -117,6 +129,10 @@
     }
     .hide-underline {
       text-decoration: none;
+    }
+
+    .image{
+      height: 30%;
     }
 
   }
