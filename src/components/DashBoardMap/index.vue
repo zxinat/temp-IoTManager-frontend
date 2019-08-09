@@ -1,12 +1,12 @@
 <template>
   <div>
     <div class="block">
-      <!--<span class="demonstration">地域筛选</span>-->
-      <!--<el-cascader-->
-        <!--:options="selectorOptions"-->
-        <!--v-model="selectedArea"-->
-        <!--@change="areaFilter">-->
-      <!--</el-cascader>-->
+      <span class="demonstration">地域筛选</span>
+      <el-cascader
+        :options="selectorOptions"
+        v-model="selectedArea"
+        @change="areaFilter">
+      </el-cascader>
       <div class="dashboard-map-container">
         <!--<h2>-->
         <!--中国地图-->
@@ -23,8 +23,11 @@
   // http://gallery.echartsjs.com/editor.html?c=xBJDR584vG
   import echarts from 'echarts';
   // 一定要引入才能正常显示
-  import 'echarts/map/js/china';
-  import {getDeviceAmount} from "../../api/api";
+  import 'echarts/map/js/world';
+  import {
+    getDeviceAmount,getCityOptions,getGatewayByWorkshop,
+    getFactoryOptions,getWorkshopOptions,
+  } from "../../api/api";
 
   export default {
     name: "DashBoardMap",
@@ -42,8 +45,8 @@
             }
           }, // 鼠标移到图里面的浮动提示框
           geo: { // 这个是重点配置区
-            map: 'china', // 表示中国地图
-            // roam: true,
+            map: 'world', // 表示世界地图
+            roam: true,
             itemStyle: {					// 定义样式
               normal: {					// 普通状态下的样式
                 areaColor: '#323c48',
@@ -264,7 +267,7 @@
         selectedArea: []
       };
     },
-    mounted() {
+    async mounted() {
       this.setMapInfo();
       this.chinaConfigure();
     },
@@ -291,7 +294,7 @@
           }
         ];
         this.chinaConfigure();
-      }
+      },
     }
   }
 </script>
@@ -305,5 +308,10 @@
 
   .dashboard-map-container {
     height: $dashboard-block-height;
+  }
+
+  .search-container {
+    margin: 1% 1%;
+    text-align: left;
   }
 </style>

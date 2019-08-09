@@ -2,7 +2,7 @@
   <div class="dashboard-line-chart">
     <div class="selector-container">
       设备
-      <el-select v-model="tmpDeviceSelectorValue" placeholder="请选择设备">
+      <el-select v-model="tmpDeviceSelectorValue" filterable="true" placeholder="请选择设备">
         <el-option
           v-for="item in deviceSelectorOptions"
           :key="item.value"
@@ -11,7 +11,7 @@
         </el-option>
       </el-select>
       属性
-      <el-select v-model="tmpPropertySelectorValue" placeholder="请选择属性">
+      <el-select v-model="tmpPropertySelectorValue" filterable="true" multiple="true" placeholder="请选择属性">
         <el-option
           v-for="item in propertySelectorOptions"
           :key="item.id"
