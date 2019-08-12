@@ -2,7 +2,7 @@
   <div class="dashboard-line-chart">
     <div class="selector-container">
       设备
-      <el-select v-model="tmpDeviceSelectorValue" filterable="true" placeholder="请选择设备">
+      <el-select v-model="tmpDeviceSelectorValue" filterable="true" placeholder="请选择设备" value="123">
         <el-option
           v-for="item in deviceSelectorOptions"
           :key="item.value"
@@ -11,7 +11,7 @@
         </el-option>
       </el-select>
       属性
-      <el-select v-model="tmpPropertySelectorValue" filterable="true" multiple="true" placeholder="请选择属性">
+      <el-select v-model="tmpPropertySelectorValue" filterable="true" multiple="true" placeholder="请选择属性" value="123">
         <el-option
           v-for="item in propertySelectorOptions"
           :key="item.id"
@@ -22,9 +22,6 @@
       <el-button type="primary" plain @click="searchLineChartData">确认</el-button>
     </div>
     <div class="dashboard-line-chart-container">
-      <!--<h2>-->
-      <!--折线图-->
-      <!--</h2>-->
     </div>
   </div>
 </template>
@@ -104,15 +101,7 @@
       }
     },
     async mounted() {
-      // socket.emit('open');
       this.initChart();
-      // socket.on('updateData', data => {
-      //   this.option.series[0].data.shift();
-      //   this.option.series[0].data.push(parseInt(data.value));
-      //   this.option.xAxis.data.shift();
-      //   this.option.xAxis.data.push(data.time);
-      //   this.initChart();
-      // });
       this.deviceSelectorOptions = ((await getDevicesApi()).data.d).map(el => {
         return {
           value: el.hardwareDeviceID,
@@ -150,20 +139,6 @@
       },
       async searchLineChartData() {
         if (this.tmpDeviceSelectorValue && this.tmpPropertySelectorValue) {
-          //获取数据
-          // this.option.series=result.map(el=>{
-          //   return {
-          //     type: 'line',
-          //     name: el.name,
-          //     label: {
-          //       show:true
-          //     },
-          //     data: el.data
-          //   }
-          // });
-          // this.option.legend.data=result.map(el=>{
-          //   return el.name;
-          // });
           this.deviceSelectorValue = this.tmpDeviceSelectorValue;
           this.propertySelectorValue = this.tmpPropertySelectorValue;
           setTimeout(async () => {

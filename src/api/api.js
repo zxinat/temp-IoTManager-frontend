@@ -2,7 +2,7 @@ import axios from "axios";
 
 // axios.defaults.baseURL = 'https://www.easy-mock.com/mock/5c22475a4e21841210a7015f';
 // axios.defaults.baseURL = 'http://139.217.219.205:8080';
-axios.defaults.baseURL = 'http://localhost:5000';
+axios.defaults.baseURL = 'http://localhost:5001';
 // axios.defaults.baseURL='https://localhost:44373';
 //带cookie
 axios.defaults.withCredentials = true;
@@ -37,8 +37,9 @@ export function getDevicePropertyData(deviceid, propertyid) {
 
 
 //网关管理
-export function getGatewaysApi() {
-  return axios.get('/api/gateway');
+export function getGatewaysApi(searchType='all', page=1, column='id', order='asc', city, factory, workshop) {
+  console.log(`/api/gateway?searchType=${searchType}&page=${page}&sortColumn=${column}&order=${order}&city=${city}&factory=${factory}&workshop=${workshop}`);
+  return axios.get(`/api/gateway?searchType=${searchType}&page=${page}&sortColumn=${column}&order=${order}&city=${city}&factory=${factory}&workshop=${workshop}`);
 }
 
 export function deleteGatewayApi(id) {
@@ -71,8 +72,16 @@ export function searchGatewaysApi(data) {
 }
 
 //设备管理
-export function getDevicesApi() {
-  return axios.get('/api/device');
+export function getDevicesApi(searchType='all', page=1, column='id', order='asc', city, factory, workshop) {
+  return axios.get(`/api/device?searchType=${searchType}&page=${page}&sortColumn=${column}&order=${order}&city=${city}&factory=${factory}&workshop=${workshop}`);
+}
+
+export function getDeviceNumber() {
+  return axios.get('/api/device/number');
+}
+
+export function getGatewayNumber() {
+  return axios.get('/api/gateway/number');
 }
 
 export function deleteDeviceApi(id) {
