@@ -76,12 +76,12 @@ export function getDevicesApi(searchType='all', page=1, column='id', order='asc'
   return axios.get(`/api/device?searchType=${searchType}&page=${page}&sortColumn=${column}&order=${order}&city=${city}&factory=${factory}&workshop=${workshop}`);
 }
 
-export function getDeviceNumber() {
-  return axios.get('/api/device/number');
+export function getDeviceNumber(searchType, city='all', factory='all', workshop='all') {
+  return axios.get(`/api/device/number?searchType=${searchType}&city=${city}&factory=${factory}&workshop=${workshop}`);
 }
 
-export function getGatewayNumber() {
-  return axios.get('/api/gateway/number');
+export function getGatewayNumber(searchType, city='all', factory='all', workshop='all') {
+  return axios.get(`/api/gateway/number?searchType=${searchType}&city=${city}&factory=${factory}&workshop=${workshop}`);
 }
 
 export function deleteDeviceApi(id) {
@@ -485,4 +485,8 @@ export function createDeviceType(type) {
 
 export function createGatewayType(type) {
   return axios.post(`/api/gateway/type/${type}`);
+}
+
+export function getMapInfo() {
+  return axios.get('/api/city/mapInfo');
 }

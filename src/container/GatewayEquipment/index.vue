@@ -2,12 +2,14 @@
   <div>
     <div class="search-container">
       <el-form :inline="true" :model="searchGateway" class="header">
-        <el-cascader
-          v-model="cascaderValue"
-          :placeholder="'选择' + GLOBAL.firstLevel + '/' + GLOBAL.secondLevel + '/' + GLOBAL.thirdLevel "
-          :options="cascaderOptions"
-          @change="searchCascader">
-        </el-cascader>
+        <el-form-item>
+          <el-cascader
+            v-model="cascaderValue"
+            :placeholder="'选择' + GLOBAL.firstLevel + '/' + GLOBAL.secondLevel + '/' + GLOBAL.thirdLevel "
+            :options="cascaderOptions"
+            @change="searchCascader">
+          </el-cascader>
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="exportExcel">导出Excel</el-button>
         </el-form-item>
@@ -30,10 +32,10 @@
       <el-button type="primary" @click="newFormVisible = true">新增网关</el-button>
     </div>
     <div class="table-container">
-      <el-pagination layout="prev, pager, next"
+      <el-pagination background layout="prev, pager, next"
                      :total="totalPage"
                      :current-page.sync="curPage"
-                     :page-count="12"
+                     :page-size="12"
                      @current-change="pageChange()">
       </el-pagination>
       <el-table
@@ -798,6 +800,7 @@
         const searchWorkshop = this.searchGateway.workshop === '全部' ? "all" : this.searchGateway.workshop;
         const data = await getGatewaysApi('search', this.curPage, searchColumn, searchOrder, searchCity, searchFactory, searchWorkshop);
         this.tableData = data.data.d;
+        this.getTotalPage('search', searchCity, searchFactory, searchWorkshop);
       },
       handleSelectionChange(val) {
         console.log('change', this.multipleSelection);
@@ -897,11 +900,21 @@
       },
       async getCascaderOptions() {
         this.cascaderOptions = (await getCityOptions()).data.d;
+      },
+      async getTotalPage(searchType, city='all', factory='all', workshop='all') {
+        if(searchType === 'all') {
+          this.totalPage = (await getGatewayNumber('all')).data.d;
+        } else if(searchType === 'search') {
+          const c = city === '全部' ? 'all' : city;
+          const f = factory === '全部' ? 'all' : factory;
+          const w = workshop === '全部' ? 'all' : workshop;
+          this.totalPage = (await getGatewayNumber('search', c, f, w)).data.d;
+        }
       }
     }
     ,
     async mounted() {
-      this.totalPage = (await getGatewayNumber()).data.d;
+      this.getTotalPage('all')
       this.getCascaderOptions();
       //获取所有网关信息
       this.getGateways();

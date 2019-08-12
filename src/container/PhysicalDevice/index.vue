@@ -31,10 +31,10 @@
       <el-button type="primary" @click="newFormVisible = true">新增设备</el-button>
     </div>
     <div class="table-container">
-      <el-pagination layout="prev, pager, next"
+      <el-pagination background layout="prev, pager, next"
                      :total="totalPage"
                      :current-page.sync="curPage"
-                     :page-count="12"
+                     :page-size="12"
                      @current-change="pageChange()">
       </el-pagination>
       <el-table
@@ -453,7 +453,7 @@
     getDevicesApi,
     getDeviceState,
     getDeviceType,
-    getFactory, getFactoryOptions, getGatewaysApi,
+    getFactory, getFactoryOptions, getGatewaysApi, getLocation,
     getWorkshop, getWorkshopOptions,
     searchDevicesByDeviceIdApi,
     searchDevicesByDeviceNameApi,
@@ -804,7 +804,6 @@
       },
       async update() {
         try {
-          console.log(this.updateData);
           const data = await updateDeviceApi(this.updateData);
           this.updateFormVisible = false;
           if (data.data.c === 200) {
@@ -856,6 +855,7 @@
         const searchWorkshop = this.searchDevice.workshop === '全部' ? "all" : this.searchDevice.workshop;
         const data = await getDevicesApi('search', this.curPage, searchColumn, searchOrder, searchCity, searchFactory, searchWorkshop);
         this.tableData = data.data.d;
+        this.getTotalPage('search', searchCity, searchFactory, searchWorkshop);
       },
       handleSelectionChange(val) {
         console.log('change', this.multipleSelection);
@@ -959,10 +959,20 @@
       },
       async getCascaderOptions() {
         this.cascaderOptions = (await getCityOptions()).data.d;
+      },
+      async getTotalPage(searchType, city='all', factory='all', workshop='all') {
+        if(searchType === 'all') {
+          this.totalPage = (await getDeviceNumber('all')).data.d;
+        } else if(searchType === 'search') {
+          const c = city === '全部' ? 'all' : city;
+          const f = factory === '全部' ? 'all' : factory;
+          const w = workshop === '全部' ? 'all' : workshop;
+          this.totalPage = (await getDeviceNumber('search', c, f, w)).data.d;
+        }
       }
     },
     async mounted() {
-      this.totalPage = (await getDeviceNumber()).data.d;
+      this.getTotalPage('all');
       this.getCascaderOptions();
       //获取所有设备信息
       this.getDevices();
