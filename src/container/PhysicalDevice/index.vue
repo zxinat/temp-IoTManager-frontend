@@ -593,6 +593,11 @@
       },
 
       methods: {
+        async getDevices() {
+          const data = await getDevicesApi();
+          this.tableData = data.data.d;
+          console.log(this.tableData);
+        },
         uploadFailed(){
           this.$message.error('导入失败');
         },
@@ -850,11 +855,6 @@
           } catch (e) {
             console.log(e)
           }
-        },
-        async getDevices() {
-          const data = await getDevicesApi();
-          this.tableData = data.data.d;
-          console.log(this.tableData);
         },
         handleSelectionChange(val) {
           console.log('change',this.multipleSelection);

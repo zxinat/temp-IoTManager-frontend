@@ -553,6 +553,10 @@
     },
 
     methods: {
+      async getGateways() {
+        const data = await getGatewaysApi();
+        this.tableData = data.data.d;
+      },
       uploadFailed(){
         this.$message.error('导入失败');
       },
@@ -799,10 +803,6 @@
         } catch (e) {
           console.log(e)
         }
-      },
-      async getGateways() {
-        const data = await getGatewaysApi();
-        this.tableData = data.data.d;
       },
       handleSelectionChange(val) {
         console.log('change', this.multipleSelection);
