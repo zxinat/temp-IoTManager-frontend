@@ -31,7 +31,7 @@
             deviceDataAmount: 0,
             alarmOption : {
               title : {
-                text: '报警次数',
+                text: 'Number Of Alarms',
                 x:'center'
               },
               tooltip: {
@@ -41,7 +41,7 @@
               legend: {
                 orient: 'vertical',
                 x: 'left',
-                data:['通知','严重','非常严重']
+                data:['Info','Warning','Critical']
               },
               series: [
                 {
@@ -160,9 +160,9 @@
                 }
               },
               data:[
-                {value: this.noticeAlarmInfoAmount, name:'通知'},
-                {value: this.seriousAlarmInfoAmount, name:'严重'},
-                {value: this.verySeriousAlarmInfoAmount, name:'非常严重'}
+                {value: this.verySeriousAlarmInfoAmount, name:'Critical'},
+                {value: this.seriousAlarmInfoAmount, name:'Warning'},
+                {value: this.noticeAlarmInfoAmount, name:'Info'}
               ]
             }
           ];
