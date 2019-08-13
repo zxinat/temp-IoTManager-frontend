@@ -2,7 +2,7 @@
   <div class="dashboard-line-chart">
     <div class="selector-container">
       设备
-      <el-select v-model="tmpDeviceSelectorValue" placeholder="请选择设备">
+      <el-select v-model="tmpDeviceSelectorValue" placeholder="请选择设备" @change="deviceChange">
         <el-option
           v-for="item in deviceSelectorOptions"
           :key="item.value"
@@ -14,7 +14,7 @@
       <el-select v-model="tmpPropertySelectorValue" placeholder="请选择属性">
         <el-option
           v-for="item in propertySelectorOptions"
-          :key="item.id"
+          :key="item.fieldId"
           :label="item.fieldName"
           :value="item.fieldId">
         </el-option>
@@ -29,7 +29,7 @@
 <script>
   import echarts from 'echarts';
   import io from 'socket.io-client';
-  import {getDevicesApi, getDeviceProperty, getDevicePropertyData, getFields} from '../../api/api';
+  import {getDevicesApi, getDeviceProperty, getDevicePropertyData, getFields, getAffiliateFields} from '../../api/api';
   // const socket = io('ws://localhost:3000')
   export default {
     name: "DashboardLineChart",
@@ -112,8 +112,8 @@
 
       if (this.deviceSelectorOptions[0] != null && this.propertySelectorOptions[0] != null) {
         this.tmpDeviceSelectorValue = this.deviceSelectorOptions[0].value;
+        this.propertySelectorOptions = (await getAffiliateFields(this.deviceSelectorOptions[0].label)).data.d;
         this.tmpPropertySelectorValue = this.propertySelectorOptions[0].fieldId;
-        console.log(this.tmpPropertySelectorValue);
         this.searchLineChartData();
 
       }
@@ -154,6 +154,11 @@
 
         // this.initChart();
 
+      },
+      async deviceChange() {
+        console.log(this.tmpDeviceSelectorValue);
+        this.propertySelectorOptions = (await getAffiliateFields(this.tmpDeviceSelectorValue)).data.d;
+        this.tmpPropertySelectorValue = '';
       }
     },
     beforeDestroy() {

@@ -490,3 +490,7 @@ export function createGatewayType(type) {
 export function getMapInfo() {
   return axios.get('/api/city/mapInfo');
 }
+
+export function getAffiliateFields(deviceName) {
+  return axios.get(`/api/field/affiliate/${deviceName}`);
+}
