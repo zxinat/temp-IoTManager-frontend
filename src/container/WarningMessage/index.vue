@@ -20,63 +20,6 @@
         </el-form-item>
       </el-form>
     </div>
-<!--    <h2 style="margin-left: 10px">告警规则</h2>-->
-<!--    <div class="table-container">-->
-<!--      <el-table-->
-<!--        :data="rulesData"-->
-<!--        border>-->
-<!--        <el-table-column-->
-<!--          prop="name"-->
-<!--          label="规则名称">-->
-<!--        </el-table-column>-->
-<!--        <el-table-column-->
-<!--          prop="description"-->
-<!--          label="规则描述">-->
-<!--        </el-table-column>-->
-<!--        <el-table-column-->
-<!--          prop="deviceGroup"-->
-<!--          label="设备">-->
-<!--        </el-table-column>-->
-<!--        <el-table-column-->
-<!--          prop="handleState"-->
-<!--          label="处理状态"-->
-<!--          width="150">-->
-<!--        </el-table-column>-->
-<!--        <el-table-column-->
-<!--        prop="conditionString"-->
-<!--        label="规则">-->
-<!--      </el-table-column>-->
-<!--        <el-table-column-->
-<!--          prop="severity"-->
-<!--          label="告警等级">-->
-<!--        </el-table-column>-->
-<!--        <el-table-column-->
-<!--          prop="severityLevel"-->
-<!--          label="严重等级"-->
-<!--          width="150">-->
-<!--        </el-table-column>-->
-<!--        <el-table-column-->
-<!--        prop="ruleStatus"-->
-<!--        label="开启规则"-->
-<!--        width="150">-->
-<!--       </el-table-column>-->
-<!--        <el-table-column-->
-<!--          prop="affectNumber"-->
-<!--          label="影响数目"-->
-<!--          width="150">-->
-<!--        </el-table-column>-->
-<!--        <el-table-column-->
-<!--          fixed="right"-->
-<!--          label="操作"-->
-<!--          width="100">-->
-<!--          <template slot-scope="scope">-->
-<!--            <el-button @click="openUpdateForm(scope.row)" type="text" size="small">处理</el-button>-->
-            <!--<el-button @click="deleteDevice(scope.row)" type="text" size="small">删除</el-button>-->
-<!--          </template>-->
-<!--        </el-table-column>-->
-<!--      </el-table>-->
-<!--    </div>-->
-<!--    <br>-->
     <h2 style="margin-left: 10px">告警信息</h2>
     <!--<div class="addbutton-container">-->
       <!--<el-button type="primary" @click="newFormVisible = true">快速处理</el-button>-->
@@ -131,14 +74,14 @@
           <!--prop="handleContent"-->
           <!--label="处理内容">-->
         <!--</el-table-column>-->
-        <!--<el-table-column-->
-          <!--fixed="right"-->
-          <!--label="操作">-->
-          <!--<template slot-scope="scope">-->
-            <!--<el-button @click="openUpdateForm(scope.row)" type="text" size="small">处理</el-button>-->
-            <!--&lt;!&ndash;<el-button @click="deleteDevice(scope.row)" type="text" size="small">删除</el-button>&ndash;&gt;-->
-          <!--</template>-->
-        <!--</el-table-column>-->
+        <el-table-column
+          fixed="right"
+          label="操作">
+          <template slot-scope="scope">
+            <el-button @click="openUpdateForm(scope.row)" type="text" size="small">处理</el-button>
+            <el-button @click="deleteDevice(scope.row)" type="text" size="small">删除</el-button>
+          </template>
+        </el-table-column>
       </el-table>
     </div>
     <el-dialog title="告警处理" :visible.sync="updateFormVisible">
