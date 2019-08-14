@@ -76,29 +76,29 @@
         <!--</el-table-column>-->
       </el-table>
     </div>
-    <br>
-    <h2 style="margin-left: 10px">告警信息</h2>
+<!--    <br>-->
+<!--    <h2 style="margin-left: 10px">告警信息</h2>-->
     <!--<div class="addbutton-container">-->
     <!--<el-button type="primary" @click="newFormVisible = true">快速处理</el-button>-->
     <!--</div>-->
-    <div class="table-container">
-      <el-table
-        :data="tableData"
-        border
-        style="width: 100%"
-        @selection-change="handleSelectionChange">
+<!--    <div class="table-container">-->
+<!--      <el-table-->
+<!--        :data="tableData"-->
+<!--        border-->
+<!--        style="width: 100%"-->
+<!--        @selection-change="handleSelectionChange">-->
         <!--<el-table-column-->
         <!--type="selection">-->
         <!--</el-table-column>-->
-        <el-table-column
-          fixed
-          prop="deviceId"
-          label="设备ID">
-        </el-table-column>
-        <el-table-column
-          prop="indexId"
-          label="数据ID">
-        </el-table-column>
+<!--        <el-table-column-->
+<!--          fixed-->
+<!--          prop="deviceId"-->
+<!--          label="设备ID">-->
+<!--        </el-table-column>-->
+<!--        <el-table-column-->
+<!--          prop="indexId"-->
+<!--          label="数据ID">-->
+<!--        </el-table-column>-->
         <!--<el-table-column-->
         <!--prop="alarmType"-->
         <!--label="告警类型">-->
@@ -107,19 +107,19 @@
         <!--prop="handleState"-->
         <!--label="处理状态">-->
         <!--</el-table-column>-->
-        <el-table-column
-          prop="alarmInfo"
-          label="告警内容">
-        </el-table-column>
-        <el-table-column
-          prop="severity"
-          label="告警等级">
-        </el-table-column>
-        <el-table-column
-          prop="timestamp"
-          label="告警时间">
-        </el-table-column>
-        <!--<el-table-column-->
+<!--        <el-table-column-->
+<!--          prop="alarmInfo"-->
+<!--          label="告警内容">-->
+<!--        </el-table-column>-->
+<!--        <el-table-column-->
+<!--          prop="severity"-->
+<!--          label="告警等级">-->
+<!--        </el-table-column>-->
+<!--        <el-table-column-->
+<!--          prop="timestamp"-->
+<!--          label="告警时间">-->
+<!--        </el-table-column>-->
+<!--        <el-table-column-->
         <!--prop="handleTime"-->
         <!--label="处理时间">-->
         <!--</el-table-column>-->
@@ -139,8 +139,8 @@
         <!--&lt;!&ndash;<el-button @click="deleteDevice(scope.row)" type="text" size="small">删除</el-button>&ndash;&gt;-->
         <!--</template>-->
         <!--</el-table-column>-->
-      </el-table>
-    </div>
+<!--      </el-table>-->
+<!--    </div>-->
     <el-dialog title="告警处理" :visible.sync="updateFormVisible">
       <el-form :model="updateData">
         <el-form-item label="处理状态" label-width="120px">

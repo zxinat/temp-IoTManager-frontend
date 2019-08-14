@@ -2,42 +2,17 @@
   <div>
     <div class="search-container">
       <el-form :inline="true" :model="searchGatewayData" class="header">
-        <el-form-item :label="GLOBAL.firstLevel">
-          <el-select v-model="searchGatewayData.city" @change="getFactoryList" placeholder="上海">
-            <el-option
-              v-for="item in cityOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.label">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="GLOBAL.secondLevel">
-          <el-select v-model="searchGatewayData.factory" @change="getWorkshopList" placeholder="南洋万邦">
-            <el-option
-              v-for="item in factoryOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.label">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="GLOBAL.thirdLevel">
-          <el-select v-model="searchGatewayData.workshop" placeholder="请选择">
-            <el-option
-              v-for="item in workshopOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.label">
-            </el-option>
-          </el-select>
+        <el-form-item>
+          <el-cascader
+            v-model="cascaderValue"
+            :placeholder="'选择' + GLOBAL.firstLevel + '/' + GLOBAL.secondLevel + '/' + GLOBAL.thirdLevel "
+            :options="cascaderOptions"
+            @change="searchCascader">
+          </el-cascader>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="filter"><img src="../../assets/img/find.svg">筛选</el-button>
+          <el-button type="primary" @click="exportExcel">导出Excel</el-button>
         </el-form-item>
-        <!--<el-form-item>-->
-          <!--<el-button type="primary" @click="exportExcel">导出Excel</el-button>-->
-        <!--</el-form-item>-->
         <!--<el-form-item>-->
           <!--<el-upload-->
             <!--ref="upload"-->
@@ -53,68 +28,74 @@
       </el-form>
     </div>
     <div class="addbutton-container">
-      <!--<el-button type="primary" @click="newFormVisible = true">新增数据</el-button>-->
+      <el-button type="primary" @click="newFormVisible = true">新增数据</el-button>
     </div>
     <div class="table-container">
+      <el-pagination background layout="prev, pager, next"
+                     :total="totalPage"
+                     :current-page.sync="curPage"
+                     :page-size="12"
+                     @current-change="pageChange()">
+      </el-pagination>
       <el-table
         :data="tableData"
         border
         style="width: 100%"
         @selection-change="handleSelectionChange"
         id="equipment-data-out-table">
-        <!--<el-table-column-->
-          <!--type="selection"-->
-          <!--width="55">-->
-        <!--</el-table-column>-->
         <el-table-column
-          prop="indexId"
+          type="selection"
+          width="55">
+        </el-table-column>
+        <el-table-column
+          prop="dataId"
           label="数据编号">
         </el-table-column>
         <el-table-column
-          prop="indexName"
+          prop="dataName"
           label="数据名称">
         </el-table-column>
-        <!--<el-table-column-->
-          <!--prop="hardwareGatewayID"-->
-          <!--label="所属网关编号">-->
-        <!--</el-table-column>-->
-        <!--<el-table-column-->
-          <!--prop="gatewayName"-->
-          <!--label="所属网关名称">-->
-        <!--</el-table-column>-->
+        <el-table-column
+          prop="hardwareGatewayID"
+          label="所属网关编号">
+        </el-table-column>
+        <el-table-column
+          prop="gatewayName"
+          label="所属网关名称">
+        </el-table-column>
         <el-table-column
           prop="deviceId"
           label="所属设备编号">
         </el-table-column>
-        <!--<el-table-column-->
-          <!--prop="deviceName"-->
-          <!--label="所属设备名称">-->
-        <!--</el-table-column>-->
         <el-table-column
-          prop="indexValue"
+          prop="deviceName"
+          label="所属设备名称">
+        </el-table-column>
+        <el-table-column
+          prop="data"
           label="数据">
         </el-table-column>
         <el-table-column
-          prop="timestamp"
+          prop="createTime"
           label="创建时间">
         </el-table-column>
-        <!--<el-table-column-->
-          <!--prop="remark"-->
-          <!--label="描述">-->
-        <!--</el-table-column>-->
-        <!--<el-table-column-->
-          <!--fixed="right"-->
-          <!--label="操作"-->
-          <!--width="100">-->
-          <!--<template slot-scope="scope">-->
-            <!--<el-button @click="openUpdateForm(scope.row)" type="text" size="small">修改</el-button>-->
-            <!--<el-button @click="deleteDevice(scope.row)" type="text" size="small">删除</el-button>-->
-          <!--</template>-->
-        <!--</el-table-column>-->
+        <el-table-column
+          prop="remark"
+          label="描述">
+        </el-table-column>
+        <el-table-column
+          fixed="right"
+          label="操作"
+          width="100">
+          <template slot-scope="scope">
+            <el-button @click="openUpdateForm(scope.row)" type="text" size="small">修改</el-button>
+            <el-button @click="deleteDevice(scope.row)" type="text" size="small">删除</el-button>
+          </template>
+        </el-table-column>
       </el-table>
     </div>
     <div class="addbutton-container">
-      <!--<el-button type="primary" @click="multipleDelete">批量删除</el-button>-->
+      <el-button type="primary" @click="multipleDelete">批量删除</el-button>
     </div>
     <el-dialog title="修改数据" :visible.sync="updateFormVisible">
       <el-form :model="updateData">
@@ -208,21 +189,43 @@
     name: "EquipmentData",
     data() {
       return {
+        totalPage: 0,
+        curPage: 1,
+        curSortColumn: '',
+        curOrder: '',
+        cascaderValue: [],
+        cascaderOptions: [],
         updateFormVisible: false,
         newFormVisible: false,
         tableData: [{
-          "ID": "1",
-          "hardwareGatewayID": "1",
-          "gatewayName": "1",
-          "hardwareDeviceID": "1",
+          "dataId": "1",
+          "dataName": "6",
+          "hardwareGatewayID": "2",
+          "gatewayName": "3",
+          //"hardwareDeviceID": "4",
           "deviceName": "设备1",
+          "deviceId": "8",
           "data": "bxhdcudc",
           "createTime": "2018-9-9",
           "remark": "描述",
         }],
         multipleSelection: [],
-        updateData: {},
+        updateData: {
+          hardwareDeviceID: '',
+          deviceName: '',
+          hardwareGatewayID: '',
+          gatewayName: '',
+          data: '',
+          remark: '',
+        },
         newDeviceData: {
+          hardwareDeviceID: '',
+          DeviceName: '',
+          hardwareGatewayID: '',
+          gatewayName: '',
+          data: '',
+          remark: '',
+
           // 标签
           inputVisible: false,
           inputValue: '',
@@ -233,9 +236,9 @@
           deviceName: ''
         },
         searchGatewayData: {
-          city: '上海',
-          factory: '南洋万邦',
-          workshop: '车间1',
+          city: 'all',
+          factory: 'all',
+          workshop: 'all',
         },
         cityOptions: [{
           value: '选项1',
@@ -487,9 +490,50 @@
       getWorkshopList() {
         console.log(this.searchGatewayData.city, this.searchGatewayData.factory);
         // 调获取车间接口，searchGatewayData.city，searchGatewayData.factory参数
+      },
+      async getDatas() {
+        const orderMap = {ascending: 'asc', descending: 'desc'};
+        const searchColumn = this.curSortColumn === '' ? "id" : this.curSortColumn;
+        const searchOrder = this.curOrder === '' ? "asc" : orderMap[this.curOrder];
+        const searchCity = this.searchDevice.city === '全部' ? "all" : this.searchDevice.city;
+        const searchFactory = this.searchDevice.factory === '全部' ? "all" : this.searchDevice.factory;
+        const searchWorkshop = this.searchDevice.workshop === '全部' ? "all" : this.searchDevice.workshop;
+        const data = await getDevicesApi('search', this.curPage, searchColumn, searchOrder, searchCity, searchFactory, searchWorkshop);
+        this.tableData = data.data.d;
+        this.getTotalPage('search', searchCity, searchFactory, searchWorkshop);
+      },
+      async pageChange() {
+        this.getDatas();
+      },
+      async sortChange(ob) {
+        this.curSortColumn = ob.prop;
+        this.curOrder = ob.order;
+        this.getDatas();
+      },
+      async searchCascader() {
+        this.curPage = 1;
+        this.searchGatewayData.city = this.cascaderValue[0];
+        this.searchGatewayData.factory = this.cascaderValue[1];
+        this.searchGatewayData.workshop = this.cascaderValue[2];
+        this.getDatas();
+      },
+      async getCascaderOptions() {
+        this.cascaderOptions = (await getCityOptions()).data.d;
+      },
+      async getTotalPage(searchType, city='all', factory='all', workshop='all') {
+        if(searchType === 'all') {
+          this.totalPage = (await getDataNumber('all')).data.d;
+        } else if(searchType === 'search') {
+          const c = city === '全部' ? 'all' : city;
+          const f = factory === '全部' ? 'all' : factory;
+          const w = workshop === '全部' ? 'all' : workshop;
+          this.totalPage = (await getDataNumber('search', c, f, w)).data.d;
+        }
       }
     },
     async mounted() {
+      this.getTotalPage('all');
+      this.getCascaderOptions();
       this.getCityList();
       //获取所有设备信息
       this.getDeviceDatas();

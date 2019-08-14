@@ -29,9 +29,9 @@
       <router-link to="/physicalDevice" class="hide-underline">
         <el-menu-item index="3-2">物理设备</el-menu-item>
       </router-link>
-      <!--<router-link to="/equipmentData" class="hide-underline">-->
-        <!--<el-menu-item index="3-3">设备数据</el-menu-item>-->
-      <!--</router-link>-->
+      <router-link to="/equipmentData" class="hide-underline">
+        <el-menu-item index="3-3">设备数据</el-menu-item>
+      </router-link>
     </el-submenu>
     <el-submenu index="4">
       <template slot="title">
@@ -44,8 +44,11 @@
       <router-link to="/monitoringConfiguration" class="hide-underline">
         <el-menu-item index="4-1">监控配置</el-menu-item>
       </router-link>
+      <router-link to="/warningRule" class="hide-underline">
+        <el-menu-item index="4-2">告警规则</el-menu-item>
+      </router-link>
       <router-link to="/warningMessage" class="hide-underline">
-        <el-menu-item index="4-2">告警信息</el-menu-item>
+        <el-menu-item index="4-3">告警信息</el-menu-item>
       </router-link>
     </el-submenu>
     <!--<el-submenu index="5">-->
