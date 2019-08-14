@@ -7,6 +7,7 @@
           <el-menu-item index="3">设备数据</el-menu-item>
           <el-menu-item index="4">数据统计</el-menu-item>
           <el-menu-item index="5">报警记录</el-menu-item>
+          <el-menu-item index="6">告警规则</el-menu-item>
           <!--<el-menu-item index="6">维保记录</el-menu-item>-->
         </el-menu>
         <div v-if="currentPage==='1'"><monitoring-device-card></monitoring-device-card></div>
