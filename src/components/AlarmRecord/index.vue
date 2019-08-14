@@ -21,6 +21,10 @@
         prop="thresholdValue"
         label="告警阈值">
       </el-table-column>
+      <el-table-column
+        prop="handlingStatus"
+        label="处理状态">
+      </el-table-column>
     </el-table>
   </div>
 </template>
