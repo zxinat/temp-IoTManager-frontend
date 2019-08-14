@@ -79,6 +79,14 @@ const routes = [
         },
       },
       {
+        path: '/warningRule',
+        name: 'WarningRule',
+        component: WarningRule,
+        meta: {
+          requireAuth: true
+        },
+      },
+      {
         path: '/personalInformation',
         name: 'PersonalInformation',
         component: PersonalInformation,
