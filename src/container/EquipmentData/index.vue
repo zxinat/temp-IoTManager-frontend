@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="search-container">
-      <el-form :inline="true" :model="searchGatewayData" class="header">
+      <el-form :inline="true" :model="searchDevice" class="header">
         <el-form-item>
           <el-cascader
             v-model="cascaderValue"
@@ -42,6 +42,7 @@
         border
         style="width: 100%"
         @selection-change="handleSelectionChange"
+        @sort-change="sortChange"
         id="equipment-data-out-table">
         <el-table-column
           type="selection"
@@ -49,19 +50,23 @@
         </el-table-column>
         <el-table-column
           prop="id"
-          label="数据编号">
+          label="数据编号"
+          sortable="custom">
         </el-table-column>
         <el-table-column
           prop="deviceId"
-          label="设备ID">
+          label="设备ID"
+          sortable="custom">
         </el-table-column>
         <el-table-column
           prop="indexName"
-          label="属性名称">
+          label="属性名称"
+          sortable="custom">
         </el-table-column>
         <el-table-column
           prop="indexId"
-          label="属性ID">
+          label="属性ID"
+          sortable="custom">
         </el-table-column>
         <el-table-column
           prop="indexType"
@@ -77,7 +82,8 @@
         </el-table-column>
         <el-table-column
           prop="timestamp"
-          label="时间">
+          label="时间"
+          sortable="custom">
         </el-table-column>
         <el-table-column
           fixed="right"
@@ -171,6 +177,7 @@
 
 <script>
   import {
+    getDataNumber,
     addDeviceDataApi,
     deleteDeviceDataApi,
     deleteMultipleDataApi, getCityCascaderOptions, getCityOptions, getDevicesApi,
@@ -194,16 +201,16 @@
         updateFormVisible: false,
         newFormVisible: false,
         tableData: [{
-          "dataId": "1",
+          "id": "1",
           "dataName": "6",
-          "hardwareGatewayID": "2",
-          "gatewayName": "3",
-          //"hardwareDeviceID": "4",
           "deviceName": "设备1",
           "deviceId": "8",
-          "data": "bxhdcudc",
-          "createTime": "2018-9-9",
-          "remark": "描述",
+          "indexName": "",
+          "indexType": "",
+          "indexId": "",
+          "indexValue": "",
+          "indexUnit": "",
+          "timestamp": ""
         }],
         multipleSelection: [],
         updateData: {
@@ -231,7 +238,7 @@
           deviceID: '',
           deviceName: ''
         },
-        searchGatewayData: {
+        searchDevice: {
           city: 'all',
           factory: 'all',
           workshop: 'all',
@@ -424,10 +431,10 @@
           console.log(e)
         }
       },
-      async getDeviceDatas() {
-        const data = await getDevicesDataApi();
-        this.tableData = data.data.d;
-      },
+      // async getDeviceDatas() {
+      //   const data = await getDevicesDataApi();
+      //   this.tableData = data.data.d;
+      // },
       handleSelectionChange(val) {
         console.log('change', this.multipleSelection);
         this.multipleSelection = val;
@@ -480,38 +487,38 @@
         // 调获取城市接口
       },
       getFactoryList() {
-        console.log(this.searchGatewayData.city);
+        console.log(this.searchDevice.city);
         // 调获取工厂接口，searchGatewayData.city参数
       },
       getWorkshopList() {
-        console.log(this.searchGatewayData.city, this.searchGatewayData.factory);
+        console.log(this.searchDevice.city, this.searchDevice.factory);
         // 调获取车间接口，searchGatewayData.city，searchGatewayData.factory参数
       },
-      async getDatas() {
+      async getDeviceDatas() {
         const orderMap = {ascending: 'asc', descending: 'desc'};
         const searchColumn = this.curSortColumn === '' ? "id" : this.curSortColumn;
         const searchOrder = this.curOrder === '' ? "asc" : orderMap[this.curOrder];
         const searchCity = this.searchDevice.city === '全部' ? "all" : this.searchDevice.city;
         const searchFactory = this.searchDevice.factory === '全部' ? "all" : this.searchDevice.factory;
         const searchWorkshop = this.searchDevice.workshop === '全部' ? "all" : this.searchDevice.workshop;
-        const data = await getDevicesApi('search', this.curPage, searchColumn, searchOrder, searchCity, searchFactory, searchWorkshop);
+        const data = await getDevicesDataApi('search', this.curPage, searchColumn, searchOrder, searchCity, searchFactory, searchWorkshop);
         this.tableData = data.data.d;
         this.getTotalPage('search', searchCity, searchFactory, searchWorkshop);
       },
       async pageChange() {
-        this.getDatas();
+        this.getDeviceDatas();
       },
       async sortChange(ob) {
         this.curSortColumn = ob.prop;
         this.curOrder = ob.order;
-        this.getDatas();
+        this.getDeviceDatas();
       },
       async searchCascader() {
         this.curPage = 1;
-        this.searchGatewayData.city = this.cascaderValue[0];
-        this.searchGatewayData.factory = this.cascaderValue[1];
-        this.searchGatewayData.workshop = this.cascaderValue[2];
-        this.getDatas();
+        this.searchDevice.city = this.cascaderValue[0];
+        this.searchDevice.factory = this.cascaderValue[1];
+        this.searchDevice.workshop = this.cascaderValue[2];
+        this.getDeviceDatas();
       },
       async getCascaderOptions() {
         this.cascaderOptions = (await getCityCascaderOptions()).data.d;
