@@ -57,7 +57,7 @@
           <el-input type="textarea" v-model="alarmRules.description"></el-input>
         </el-form-item>
         <el-form-item prop="deviceGroup" label="设备" :rules="[{ required: true, message: '项目必选'}]">
-          <el-select @change="getAffectNumber()" v-model="alarmRules.deviceGroup" placeholder="请选择设备">
+          <el-select v-model="alarmRules.deviceGroup" placeholder="请选择设备" @change="getAffiliateField(alarmRules.deviceGroup)">
             <el-option
               v-for="item in devices"
               :key="item.id"
@@ -165,7 +165,7 @@
   import MonitoringTree from "../../components/MonitoringTree/index";
   import MonitoringConfig from "../../components/MonitoringConfig/index";
   import {
-    addRule, createNewField,
+    addRule, createNewField, getAffiliateFields,
     getCityOptions,
     getDeviceApi,
     getDevicesApi, getDeviceStatus,
@@ -260,6 +260,9 @@
       }
     },
     methods: {
+      async getAffiliateField(deviceId) {
+        this.fieldOptions = (await getAffiliateFields(deviceId)).data.d;
+      },
       async filter() {
         if (this.form.city !== "" && this.form.factory !== "") {
           this.treeData = (await getDeviceTreeApi(this.form.city, this.form.factory)).data.d;
@@ -299,7 +302,7 @@
               message: '添加成功',
               type: 'success'
             });
-            this.getField();
+            this.getAffiliateField(this.alarmRules.deviceGroup);
           }
         } catch (e) {
           this.addFieldVisible = false;
@@ -406,7 +409,6 @@
     },
     async mounted() {
       await this.getCityList();
-      await this.getField();
       await this.getDevices();
       this.severityOptions = (await getSeverity()).data.d;
       this.treeData = (await getDeviceTreeApi(this.form.city, this.form.factory)).data.d;

@@ -25,6 +25,7 @@
       </el-pagination>
       <el-table
         :data="rulesData"
+        @selection-change="handleSelectionChange"
         @sort-change="sortChange"
         border>
         <el-table-column
@@ -74,7 +75,7 @@
             <el-input v-model="updateData.description" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="设备" label-width="120px">
-            <el-select v-model="updateData.deviceGroup" placeholder="选择网关类型">
+            <el-select v-model="updateData.deviceGroup" disabled placeholder="选择设备">
               <el-option
                 v-for="d in deviceOptions"
                 :key="d.id"
@@ -83,11 +84,35 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="规则" label-width="120px">
-            <el-input v-model="updateData.conditionString" autocomplete="off"></el-input>
+          <el-form-item label="设备属性" label-width="120px">
+            <el-select v-model="updateData.field" placeholder="选择设备属性">
+              <el-option
+                v-for="f in affiliateFieldOptions"
+                :key="f.id"
+                :label="f.fieldName"
+                :value="f.fieldId">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="运算" label-width="120px">
+            <el-select v-model="updateData.operator" placeholder="请选择运算">
+              <el-option label="=" value="equal"></el-option>
+              <el-option label=">" value="greater"></el-option>
+              <el-option label="<" value="less"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="报警阈值" label-width="120px">
+            <el-input v-model="updateData.value" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="告警等级" label-width="120px">
-            <el-input v-model="updateData.severityLevel" autocomplete="off"></el-input>
+            <el-select v-model="updateData.severity" placeholder="选择告警等级">
+              <el-option
+                v-for="s in severityOptions"
+                :key="s.id"
+                :label="s.severityName"
+                :value="s.severityName">
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -100,11 +125,13 @@
 
 <script>
   import {
+    batchDeleteThresholds,
+    deleteRule, getAffiliateFields,
     getAlarmInfoByDeviceid,
-    getAlarmInformationApi, getAllRules, getDevicesApi, getRuleNumber,
+    getAlarmInformationApi, getAllRules, getDevicesApi, getRuleNumber, getSeverity,
     handleAllAlarmInformationApi,
     searchAlarmInformationApi,
-    updateAlarmInformationApi,
+    updateAlarmInformationApi, updateThreshold,
     //deleteMultipleWarningRuleApi
   } from '../../api/api';
 
@@ -120,33 +147,28 @@
         updateFormVisible: false,
         newFormVisible: false,
         deviceOptions: [],
-        rulesData:[{
-          name: '规则1',
-          description: '规则描述',
-          deviceGroup: '',
-          condition: [{ //保留，以免增加需求
-            field: '',
-            operator: '',
-            value: '',
-          }],
-          conditionString:'',//这里把condition整合成字符串
-          severity: '',
-          ruleStatus: '',
-          affectNumber: 0
-        }],
+        severityOptions: [],
+        affiliateFieldOptions: [],
+        rulesData:[],
         multipleSelection: [],
         dropdownDevices: [],
         updateData: {
+          id: 0,
           name:'',
           description:'',
           deviceGroup: '',
           severity: '',
-          conditionString:''
+          field: '',
+          operator: '',
+          value: ''
         },
         handleData: {},
         searchData: {
           deviceID: '',
           deviceName: ''
+        },
+        deleteData: {
+          number: []
         }
       }
     },
@@ -173,18 +195,49 @@
         }
       },
       async update() {
-
+        try {
+          const data = await updateThreshold(this.updateData.id, this.updateData);
+          this.updateFormVisible = false;
+          if (data.data.c === 200) {
+            this.$message({
+              message: '更新成功',
+              type: 'success'
+            });
+            this.getRules();
+          }
+        } catch (e) {
+          this.updateFormVisible = false;
+          this.$message.error('更新规则未成功');
+        }
       },
       async openUpdateForm(row) {//打开更新表单
+        this.affiliateFieldOptions = (await getAffiliateFields(row.deviceGroup)).data.d;
         this.updateData = row;
+        console.log(this.updateData);
         this.updateFormVisible = true
       },
       handleSelectionChange(val) {
         console.log('change',this.multipleSelection);
         this.multipleSelection = val;
       },
-      async deleteRule(row) {
-        console.log(row);
+      async deleteRule(row) {console.log(row);
+        try {
+          this.$confirm('确认删除？')
+            .then(async _ => {
+              const data = await deleteRule(row.id);
+              if (data.data.c === 200) {
+                this.$message({
+                  message: '删除成功',
+                  type: 'success'
+                });
+                this.getRules();
+              }
+            })
+            .catch(_ => {
+            });
+        } catch (e) {
+          console.log(e)
+        }
       },
       async getRules() {
         const orderMap = {ascending: 'asc', descending: 'desc'};
@@ -213,10 +266,30 @@
         this.getRules();
       },
       async multipleDelete() {
+        try {
+          this.$confirm('确认删除？')
+            .then(async _ => {
+              this.deleteData.number = this.multipleSelection.map(el => el.id);
+              const data = await batchDeleteThresholds(this.deleteData);
+              if (data.data.c === 200) {
+                this.$message({
+                  message: '删除成功',
+                  type: 'success'
+                });
+                //再获取一次所有网关信息
+                this.getRules();
+              }
+            })
+            .catch(_ => {
+            });
+        } catch (e) {
+          console.log(e)
+        }
       },
     },
     async mounted() {
       //获取所有信息
+      this.severityOptions = (await getSeverity()).data.d;
       this.getTotalPage('all');
       this.getRules();
       this.dropdownDevices = (await getDevicesApi('all')).data.d;

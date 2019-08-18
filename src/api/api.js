@@ -37,7 +37,6 @@ export function getDevicePropertyData(deviceid, propertyid) {
 
 //网关管理
 export function getGatewaysApi(searchType='all', page=1, column='id', order='asc', city, factory, workshop) {
-  console.log(`/api/gateway?searchType=${searchType}&page=${page}&sortColumn=${column}&order=${order}&city=${city}&factory=${factory}&workshop=${workshop}`);
   return axios.get(`/api/gateway?searchType=${searchType}&page=${page}&sortColumn=${column}&order=${order}&city=${city}&factory=${factory}&workshop=${workshop}`);
 }
 
@@ -46,7 +45,6 @@ export function deleteGatewayApi(id) {
 }
 
 export function deleteMultipleGatewayApi(id) {
-  console.log({...id});
   return axios.post(`/api/gateway/batch/gateways`, {...id});
 }
 
@@ -54,6 +52,10 @@ export function updateGatewayApi(data) {
   return axios.put(`/api/gateway/${data.id}`, {
     ...data
   });
+}
+
+export function updateThreshold(id, data) {
+  return axios.put(`/api/threshold/${id}`, {...data});
 }
 
 export function addGatewayApi(data) {
@@ -513,4 +515,12 @@ export function getStatistic100(deviceId) {
 
 export function getRulesByDeviceId(deviceId) {
   return axios.get(`/api/threshold/${deviceId}`);
+}
+
+export function deleteRule(id) {
+  return axios.delete(`/api/threshold/${id}`);
+}
+
+export function batchDeleteThresholds(data) {
+  return axios.post('/api/threshold/batch/thresholds', {...data});
 }
