@@ -64,16 +64,16 @@
           <img v-else :src="deviceData.imageUrl" class="image">
         </div>
         </el-card>
-        <el-upload
-          class="upload-demo"
-          :on-preview="handlePreview"
-          :on-remove="handleRemove"
-          :before-remove="beforeRemove"
-          :limit="1"
-          :on-exceed="handleExceed"
-          show-file-list="false">
-          <el-button size="small" type="primary" class="upLoadButton">点击上传</el-button>
-        </el-upload>
+        <!--<el-upload-->
+          <!--class="upload-demo"-->
+          <!--:on-preview="handlePreview"-->
+          <!--:on-remove="handleRemove"-->
+          <!--:before-remove="beforeRemove"-->
+          <!--:limit="1"-->
+          <!--:on-exceed="handleExceed"-->
+          <!--show-file-list="false">-->
+          <!--<el-button size="small" type="primary" class="upLoadButton">点击上传</el-button>-->
+        <!--</el-upload>-->
       </el-col>
     </el-row>
   </div>

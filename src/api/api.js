@@ -505,3 +505,7 @@ export function getCityCascaderOptions() {
 export function getStatistic100(deviceId) {
   return axios.get(`/api/deviceData/statistic100?deviceId=${deviceId}`)
 }
+
+export function getRulesByDeviceId(deviceId) {
+  return axios.get(`/api/threshold/${deviceId}`);
+}

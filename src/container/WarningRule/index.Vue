@@ -94,10 +94,10 @@
           <el-form-item label="设备" label-width="120px">
             <el-select v-model="updateData.deviceGroup" placeholder="选择网关类型">
               <el-option
-                v-for="gt in gatewayType"
-                :key="gt.id"
-                :label="gt.gatewayTypeName"
-                :value="gt.gatewayTypeName">
+                v-for="d in deviceOptions"
+                :key="d.id"
+                :label="d.hardwareDeviceID"
+                :value="d.hardwareDeviceID">
               </el-option>
             </el-select>
           </el-form-item>
@@ -132,6 +132,7 @@
       return {
         updateFormVisible: false,
         newFormVisible: false,
+        deviceOptions: [],
         rulesData:[{
           name: '规则1',
           description: '规则描述',
@@ -201,6 +202,9 @@
           this.$message.error('警报处理未成功');
         }
       },
+      async update() {
+
+      },
       async openUpdateForm(row) {//打开更新表单
         this.updateData = row;
         this.updateFormVisible = true
@@ -259,7 +263,7 @@
       this.getAlarmInformation();
       this.rulesData = (await getAllRules()).data.d;
       this.dropdownDevices = (await getDevicesApi()).data.d;
-      console.log(this.dropdownDevices);
+      this.deviceOptions = (await getDevicesApi('all')).data.d;
       // 此处需要获取所有告警规则信息的接口，返回态如rulesData。
     }
   }
