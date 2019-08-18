@@ -498,3 +498,7 @@ export function getAffiliateFields(deviceName) {
 export function getCityCascaderOptions() {
   return axios.get('/api/city/cityCascaderOptions');
 }
+
+export function getStatistic100(deviceId) {
+  return axios.get(`/api/deviceData/statistic100?deviceId=${deviceId}`)
+}

@@ -43,17 +43,18 @@
         border
         style="width: 100%"
         @selection-change="handleSelectionChange"
+        @sort-change="sortChange"
         id="gateway-equipment-out-table">
         <el-table-column
           type="selection">
         </el-table-column>
         <el-table-column
           prop="hardwareGatewayID"
-          label="网关编号">
+          label="网关编号" sortable="custom">
         </el-table-column>
         <el-table-column
           prop="gatewayName"
-          label="网关名称">
+          label="网关名称" sortable="custom">
         </el-table-column>
         <el-table-column
           prop="gatewayType"
@@ -83,11 +84,11 @@
         </el-table-column>-->
         <el-table-column
           prop="createTime"
-          label="创建时间">
+          label="创建时间" sortable="custom">
         </el-table-column>
         <el-table-column
           prop="updateTime"
-          label="更新时间">
+          label="更新时间" sortable="custom">
         </el-table-column>
         <!--<el-table-column
           prop="department"
