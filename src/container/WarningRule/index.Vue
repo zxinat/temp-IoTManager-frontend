@@ -3,7 +3,8 @@
     <div class="search-container">
       <el-form :inline="true" :model="searchData" class="demo-form-inline">
         <el-form-item label="选择设备">
-          <el-select v-model="searchData.hardwareDeviceID" placeholder="请选择">
+          <el-select v-model="curSearchDevice" placeholder="请选择" @change="getRules">
+            <el-option value="全部" label="全部"></el-option>
             <el-option
               v-for="c in dropdownDevices"
               :key="c.id"
@@ -12,25 +13,26 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <!--<el-form-item label="设备名称">-->
-        <!--<el-input v-model="searchData.deviceName"></el-input>-->
-        <!--</el-form-item>-->
-        <el-form-item>
-          <el-button type="primary" @click="getAlarmInformationByDeviceId(searchData.hardwareDeviceID)"><img src="../../assets/img/find.svg">查询</el-button>
-        </el-form-item>
       </el-form>
     </div>
     <h2 style="margin-left: 10px">告警规则</h2>
     <div class="table-container">
+      <el-pagination background layout="prev, pager, next"
+                     :total="totalPage"
+                     :current-page.sync="curPage"
+                     :page-size="12"
+                     @current-change="pageChange()">
+      </el-pagination>
       <el-table
         :data="rulesData"
+        @sort-change="sortChange"
         border>
         <el-table-column
           type="selection"
           width="55"/>
         <el-table-column
           prop="name"
-          label="规则名称">
+          label="规则名称" sortable="custom">
         </el-table-column>
         <el-table-column
           prop="description"
@@ -40,41 +42,21 @@
           prop="deviceGroup"
           label="设备">
         </el-table-column>
-<!--        <el-table-column-->
-<!--        prop="handleState"-->
-<!--        label="处理状态"-->
-<!--        width="150">-->
-<!--        </el-table-column>-->
         <el-table-column
           prop="conditionString"
           label="规则">
         </el-table-column>
         <el-table-column
           prop="severity"
-          label="告警等级">
+          label="告警等级" sortable="custom">
         </el-table-column>
-        <!--<el-table-column-->
-        <!--prop="severityLevel"-->
-        <!--label="严重等级"-->
-        <!--width="150">-->
-        <!--</el-table-column>-->
-        <!--<el-table-column-->
-        <!--prop="ruleStatus"-->
-        <!--label="开启规则"-->
-        <!--width="150">-->
-        <!--</el-table-column>-->
-        <!--<el-table-column-->
-        <!--prop="affectNumber"-->
-        <!--label="影响数目"-->
-        <!--width="150">-->
-        <!--</el-table-column>-->
         <el-table-column
         fixed="right"
         label="操作"
         width="100">
         <template slot-scope="scope">
         <el-button @click="openUpdateForm(scope.row)" type="text" size="small">修改</el-button>
-        <el-button @click="deleteDevice(scope.row)" type="text" size="small">删除</el-button>
+        <el-button @click="deleteRule(scope.row)" type="text" size="small">删除</el-button>
         </template>
         </el-table-column>
       </el-table>
@@ -96,7 +78,7 @@
               <el-option
                 v-for="d in deviceOptions"
                 :key="d.id"
-                :label="d.hardwareDeviceID"
+                :label="d.deviceName"
                 :value="d.hardwareDeviceID">
               </el-option>
             </el-select>
@@ -119,7 +101,7 @@
 <script>
   import {
     getAlarmInfoByDeviceid,
-    getAlarmInformationApi, getAllRules, getDevicesApi,
+    getAlarmInformationApi, getAllRules, getDevicesApi, getRuleNumber,
     handleAllAlarmInformationApi,
     searchAlarmInformationApi,
     updateAlarmInformationApi,
@@ -130,6 +112,11 @@
     name: "WarningRule",
     data() {
       return {
+        totalPage: 0,
+        curPage: 1,
+        curSortColumn: '',
+        curOrder: '',
+        curSearchDevice: '全部',
         updateFormVisible: false,
         newFormVisible: false,
         deviceOptions: [],
@@ -185,23 +172,6 @@
           this.$message.error('警报处理未成功');
         }
       },
-      async handle() {
-        try {
-          console.log('update',this.updateData);
-          const data = await updateAlarmInformationApi(this.updateData);
-          this.updateFormVisible = false;
-          if (data.data.c === 200) {
-            this.$message({
-              message: '警报处理成功',
-              type: 'success'
-            });
-            this.getAlarmInformation();
-          }
-        } catch (e) {
-          this.updateFormVisible = false;
-          this.$message.error('警报处理未成功');
-        }
-      },
       async update() {
 
       },
@@ -209,60 +179,47 @@
         this.updateData = row;
         this.updateFormVisible = true
       },
-      async getAlarmInformationByDeviceId(deviceId) {
-        const data = await getAlarmInfoByDeviceid(deviceId);
-        this.tableData = data.data.d;
-      },
-      async getAlarmInformation() {
-        const data = await getAlarmInformationApi();
-        this.tableData = data.data.d;
-      },
       handleSelectionChange(val) {
         console.log('change',this.multipleSelection);
         this.multipleSelection = val;
       },
-      objectSpanMethod({ row, column, rowIndex, columnIndex }) {
-        if (columnIndex === 0) {
-          if (rowIndex % 2 === 0) {
-            return {
-              rowspan: 2,
-              colspan: 1
-            };
-          } else {
-            return {
-              rowspan: 0,
-              colspan: 0
-            };
-          }
+      async deleteRule(row) {
+        console.log(row);
+      },
+      async getRules() {
+        const orderMap = {ascending: 'asc', descending: 'desc'};
+        const searchColumn = this.curSortColumn === '' ? 'id' : this.curSortColumn;
+        const searchOrder = this.curOrder === '' ? 'asc' : orderMap[this.curOrder];
+        const searchDevice = this.curSearchDevice === '全部' ? 'all' : this.curSearchDevice;
+        const data = await getAllRules('search', searchDevice, this.curPage, searchOrder, searchColumn);
+        this.rulesData = data.data.d;
+        this.getTotalPage('search', searchDevice);
+      },
+      async getTotalPage(searchType, deviceName='all') {
+        if (searchType === 'all') {
+          this.totalPage = (await getRuleNumber('all')).data.d;
+        } else if(searchType === 'search') {
+          const d = deviceName === '全部' ? 'all' : deviceName;
+          this.totalPage = (await getRuleNumber('search', d)).data.d;
         }
       },
+      async pageChange() {
+        this.getRules();
+      },
+      async sortChange(ob) {
+        const columnMap = {'name': 'ruleName', 'severity': 'severity'}
+        this.curSortColumn = columnMap[ob.prop];
+        this.curOrder = ob.order;
+        this.getRules();
+      },
       async multipleDelete() {
-        try {
-          this.$confirm('确认删除？')
-            .then(async _ => {
-              this.deleteData.number = this.multipleSelection.map(el => el.id);
-              const data = await deleteMultipleWarningRuleApi(this.deleteData);
-              if (data.data.c === 200) {
-                this.$message({
-                  message: '删除成功',
-                  type: 'success'
-                });
-                //再获取一次所有信息
-                this.getAlarmInformation();
-              }
-            })
-            .catch(_ => {
-            });
-        } catch (e) {
-          console.log(e)
-        }
       },
     },
     async mounted() {
       //获取所有信息
-      this.getAlarmInformation();
-      this.rulesData = (await getAllRules()).data.d;
-      this.dropdownDevices = (await getDevicesApi()).data.d;
+      this.getTotalPage('all');
+      this.getRules();
+      this.dropdownDevices = (await getDevicesApi('all')).data.d;
       this.deviceOptions = (await getDevicesApi('all')).data.d;
       // 此处需要获取所有告警规则信息的接口，返回态如rulesData。
     }

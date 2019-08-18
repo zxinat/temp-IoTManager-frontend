@@ -158,7 +158,7 @@ export function getDeviceApi(id) {
 
 //设备数据
 export function getDevicesDataApi(searchType='all', page=1, sortColumn='Id', order='asc', city, factory, workshop) {
-  return axios.get('/api/deviceData?searchType=${searchType}&page=${page}&sortColumn=${column}&order=${order}&city=${city}&factory=${factory}&workshop=${workshop}');
+  return axios.get(`/api/deviceData?searchType=${searchType}&page=${page}&sortColumn=${sortColumn}&order=${order}&city=${city}&factory=${factory}&workshop=${workshop}`);
 }
 
 export function deleteDeviceDataApi(id) {
@@ -394,8 +394,13 @@ export function addRule(rule) {
   return axios.post(`/api/threshold`, {...rule});
 }
 
-export function getAllRules() {
-  return axios.get(`/api/threshold`);
+export function getAllRules(searchType, deviceName='all', page='1', order='asc', sortColumn='id') {
+  console.log(`/api/threshold?searchType=${searchType}&deviceName=${deviceName}&page=${page}&order=${order}&sortColumn=${sortColumn}`);
+  return axios.get(`/api/threshold?searchType=${searchType}&deviceName=${deviceName}&page=${page}&order=${order}&sortColumn=${sortColumn}`);
+}
+
+export function getRuleNumber(searchType, deviceName='all') {
+  return axios.get(`/api/threshold/number?searchType=${searchType}&deviceName=${deviceName}`);
 }
 
 export function getCityOptions() {
