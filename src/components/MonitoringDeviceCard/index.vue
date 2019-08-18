@@ -54,28 +54,41 @@
         </el-card>
       </el-col>
       <el-col style="margin-left: 30%;margin-right: 30%; margin-top: 5px; width: 30%">
-        <div style="padding: 5px;">
+        <el-card class="box-card" :body-style="{ padding: '0px' }">
+        <div slot="header" class="clearfix" style="padding: 5px;">
+          <img src="../../assets/img/chilunzu.svg">
           <span>设备快照</span>
-          <!--<div class="bottom clearfix">-->
-            <!--<time class="time">{{deviceData.updateTime}}</time>-->
-            <!--<el-button class="button">操作按钮</el-button>-->
-          <!--</div>-->
         </div>
-        <el-card :body-style="{ padding: '0px' }">
+        <div>
           <img v-if="!deviceData.imageUrl" src="../../assets/img/equipment.png" class="image">
           <img v-else :src="deviceData.imageUrl" class="image">
+        </div>
         </el-card>
+        <el-upload
+          class="upload-demo"
+          :on-preview="handlePreview"
+          :on-remove="handleRemove"
+          :before-remove="beforeRemove"
+          :limit="1"
+          :on-exceed="handleExceed"
+          show-file-list="false">
+          <el-button size="small" type="primary" class="upLoadButton">点击上传</el-button>
+        </el-upload>
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script>
+  import UploadImg from "../UploadImg/index";
   export default {
     name: "MonitoringDeviceCard",
+    components: {UploadImg},
     data(){
       return {
-
+        imgData: '',
+        deviceId: '',
+        pic:'',
       }
     },
     computed:{
@@ -92,12 +105,32 @@
     },
     watch:{
     },
+    methods:{
+      handleRemove(file, fileList) {
+        console.log(file, fileList);
+      },
+      handlePreview(file) {
+        console.log(file);
+      },
+      handleExceed(files, fileList) {
+        this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+      },
+      beforeRemove(file, fileList) {
+        return this.$confirm(`确定移除 ${ file.name }？`);
+      }
+
+    },
     mounted(){
     }
   }
 </script>
 
 <style lang="scss" scoped>
+  .upLoadButton {
+    margin-top: 5px;
+    margin-left: 100px;
+
+  }
   .monitoring-device-card-container {
     padding: 2%;
     .text {

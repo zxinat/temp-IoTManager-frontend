@@ -26,6 +26,9 @@
         :data="rulesData"
         border>
         <el-table-column
+          type="selection"
+          width="55"/>
+        <el-table-column
           prop="name"
           label="规则名称">
         </el-table-column>
@@ -37,11 +40,11 @@
           prop="deviceGroup"
           label="设备">
         </el-table-column>
-        <!--<el-table-column-->
-        <!--prop="handleState"-->
-        <!--label="处理状态"-->
-        <!--width="150">-->
-        <!--</el-table-column>-->
+<!--        <el-table-column-->
+<!--        prop="handleState"-->
+<!--        label="处理状态"-->
+<!--        width="150">-->
+<!--        </el-table-column>-->
         <el-table-column
           prop="conditionString"
           label="规则">
@@ -65,63 +68,51 @@
         <!--label="影响数目"-->
         <!--width="150">-->
         <!--</el-table-column>-->
-        <!--<el-table-column-->
-        <!--fixed="right"-->
-        <!--label="操作"-->
-        <!--width="100">-->
-        <!--<template slot-scope="scope">-->
-        <!--<el-button @click="openUpdateForm(scope.row)" type="text" size="small">处理</el-button>-->
-        <!--&lt;!&ndash;<el-button @click="deleteDevice(scope.row)" type="text" size="small">删除</el-button>&ndash;&gt;-->
-        <!--</template>-->
-        <!--</el-table-column>-->
+        <el-table-column
+        fixed="right"
+        label="操作"
+        width="100">
+        <template slot-scope="scope">
+        <el-button @click="openUpdateForm(scope.row)" type="text" size="small">修改</el-button>
+        <el-button @click="deleteDevice(scope.row)" type="text" size="small">删除</el-button>
+        </template>
+        </el-table-column>
       </el-table>
     </div>
-    <el-dialog title="告警处理" :visible.sync="updateFormVisible">
-      <el-form :model="updateData">
-        <el-form-item label="处理状态" label-width="120px">
-          <el-select v-model="updateData.handleState" placeholder="请选择">
-            <el-option label="未处理" value="unhandled"></el-option>
-            <el-option label="处理中" value="handling"></el-option>
-            <el-option label="已处理" value="handled"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="处理方式" label-width="120px">
-          <el-select v-model="updateData.handleMethod" placeholder="请选择">
-            <el-option label="电子邮件通知" value="email"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="处理内容" label-width="120px">
-          <el-input v-model="updateData.handleContent" autocomplete="off"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="updateFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="handle">确 定</el-button>
-      </div>
-    </el-dialog>
-    <el-dialog title="快速处理" :visible.sync="newFormVisible">
-      <el-form :model="handleData">
-        <el-form-item label="处理状态" label-width="120px">
-          <el-select v-model="handleData.handleState" placeholder="请选择">
-            <el-option label="未处理" value="unhandled"></el-option>
-            <el-option label="处理中" value="handling"></el-option>
-            <el-option label="已处理" value="handled"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="处理方式" label-width="120px">
-          <el-select v-model="handleData.handleMethod" placeholder="请选择">
-            <el-option label="电子邮件通知" value="email"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="处理内容" label-width="120px">
-          <el-input v-model="handleData.handleContent" autocomplete="off"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="newFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="handleAll">确 定</el-button>
-      </div>
-    </el-dialog>
+    <div class="addbutton-container">
+      <el-button type="primary" @click="multipleDelete">批量删除</el-button>
+    </div>
+
+      <el-dialog title="修改规则" :visible.sync="updateFormVisible">
+        <el-form :model="updateData">
+          <el-form-item label="规则名称" label-width="120px">
+            <el-input v-model="updateData.name" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="规则描述" label-width="120px">
+            <el-input v-model="updateData.description" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="设备" label-width="120px">
+            <el-select v-model="updateData.deviceGroup" placeholder="选择网关类型">
+              <el-option
+                v-for="gt in gatewayType"
+                :key="gt.id"
+                :label="gt.gatewayTypeName"
+                :value="gt.gatewayTypeName">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="规则" label-width="120px">
+            <el-input v-model="updateData.conditionString" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="告警等级" label-width="120px">
+            <el-input v-model="updateData.severityLevel" autocomplete="off"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="updateFormVisible = false">取 消</el-button>
+          <el-button type="primary" @click="update">确 定</el-button>
+        </div>
+      </el-dialog>
   </div>
 </template>
 
@@ -131,7 +122,8 @@
     getAlarmInformationApi, getAllRules, getDevicesApi,
     handleAllAlarmInformationApi,
     searchAlarmInformationApi,
-    updateAlarmInformationApi
+    updateAlarmInformationApi,
+    //deleteMultipleWarningRuleApi
   } from '../../api/api';
 
   export default {
@@ -150,26 +142,19 @@
             value: '',
           }],
           conditionString:'',//这里把condition整合成字符串
-          severityLevel: '',
+          severity: '',
           ruleStatus: '',
           affectNumber: 0
         }],
-        tableData: [{
-          "id": "1",
-          "deviceName": "设备1",
-          "dataName": "警报！",
-          "alarmType": "类型1",
-          "handleState": "未处理",
-          "alarmTime": "2018-9-9",
-          "alarmContent": "警报警报哈哈哈哈",
-          "handleTime":"",
-          "handleMethod":"",
-          "handleContent":"",
-          "timestamp": "oaisdjboiadjfb"
-        }],
         multipleSelection: [],
         dropdownDevices: [],
-        updateData: {},
+        updateData: {
+          name:'',
+          description:'',
+          deviceGroup: '',
+          severity: '',
+          conditionString:''
+        },
         handleData: {},
         searchData: {
           deviceID: '',
@@ -246,10 +231,31 @@
             };
           }
         }
-      }
+      },
+      async multipleDelete() {
+        try {
+          this.$confirm('确认删除？')
+            .then(async _ => {
+              this.deleteData.number = this.multipleSelection.map(el => el.id);
+              const data = await deleteMultipleWarningRuleApi(this.deleteData);
+              if (data.data.c === 200) {
+                this.$message({
+                  message: '删除成功',
+                  type: 'success'
+                });
+                //再获取一次所有信息
+                this.getAlarmInformation();
+              }
+            })
+            .catch(_ => {
+            });
+        } catch (e) {
+          console.log(e)
+        }
+      },
     },
     async mounted() {
-      //获取所有设备信息
+      //获取所有信息
       this.getAlarmInformation();
       this.rulesData = (await getAllRules()).data.d;
       this.dropdownDevices = (await getDevicesApi()).data.d;
