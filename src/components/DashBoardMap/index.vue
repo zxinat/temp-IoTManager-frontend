@@ -26,7 +26,7 @@
   import 'echarts/map/js/world';
   import {
     getDeviceAmount, getCityOptions, getGatewayByWorkshop,
-    getFactoryOptions, getWorkshopOptions, getMapInfo,
+    getFactoryOptions, getWorkshopOptions, getMapInfo, getCityCascaderOptions,
   } from "../../api/api";
 
   export default {
@@ -101,7 +101,7 @@
         this.chinaConfigure();
       },
       async getCascaderOptions() {
-        this.selectorOptions = (await getCityOptions()).data.d;
+        this.selectorOptions = (await getCityCascaderOptions()).data.d;
       }
     }
   }

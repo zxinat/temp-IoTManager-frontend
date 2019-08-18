@@ -449,7 +449,7 @@
     deleteDeviceApi,
     deleteMultipleDeviceApi,
     getAllDepartments,
-    getCity, getCityOptions, getDeviceByWorkshop, getDeviceNumber,
+    getCity, getCityCascaderOptions, getCityOptions, getDeviceByWorkshop, getDeviceNumber,
     getDevicesApi,
     getDeviceState,
     getDeviceType,
@@ -958,7 +958,7 @@
         this.getDevices();
       },
       async getCascaderOptions() {
-        this.cascaderOptions = (await getCityOptions()).data.d;
+        this.cascaderOptions = (await getCityCascaderOptions()).data.d;
       },
       async getTotalPage(searchType, city='all', factory='all', workshop='all') {
         if(searchType === 'all') {

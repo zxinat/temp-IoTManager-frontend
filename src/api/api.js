@@ -494,3 +494,7 @@ export function getMapInfo() {
 export function getAffiliateFields(deviceName) {
   return axios.get(`/api/field/affiliate/${deviceName}`);
 }
+
+export function getCityCascaderOptions() {
+  return axios.get('/api/city/cityCascaderOptions');
+}

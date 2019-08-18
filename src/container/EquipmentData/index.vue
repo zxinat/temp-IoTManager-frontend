@@ -27,9 +27,9 @@
         <!--</el-form-item>-->
       </el-form>
     </div>
-    <div class="addbutton-container">
-      <el-button type="primary" @click="newFormVisible = true">新增数据</el-button>
-    </div>
+    <!--<div class="addbutton-container">-->
+      <!--<el-button type="primary" @click="newFormVisible = true">新增数据</el-button>-->
+    <!--</div>-->
     <div class="table-container">
       <el-pagination background layout="prev, pager, next"
                      :total="totalPage"
@@ -48,40 +48,36 @@
           width="55">
         </el-table-column>
         <el-table-column
-          prop="dataId"
+          prop="id"
           label="数据编号">
         </el-table-column>
         <el-table-column
-          prop="dataName"
-          label="数据名称">
-        </el-table-column>
-        <el-table-column
-          prop="hardwareGatewayID"
-          label="所属网关编号">
-        </el-table-column>
-        <el-table-column
-          prop="gatewayName"
-          label="所属网关名称">
-        </el-table-column>
-        <el-table-column
           prop="deviceId"
-          label="所属设备编号">
+          label="设备ID">
         </el-table-column>
         <el-table-column
-          prop="deviceName"
-          label="所属设备名称">
+          prop="indexName"
+          label="属性名称">
         </el-table-column>
         <el-table-column
-          prop="data"
-          label="数据">
+          prop="indexId"
+          label="属性ID">
         </el-table-column>
         <el-table-column
-          prop="createTime"
-          label="创建时间">
+          prop="indexType"
+          label="属性类型">
         </el-table-column>
         <el-table-column
-          prop="remark"
-          label="描述">
+          prop="indexValue"
+          label="值">
+        </el-table-column>
+        <el-table-column
+          prop="indexUnit"
+          label="单位">
+        </el-table-column>
+        <el-table-column
+          prop="timestamp"
+          label="时间">
         </el-table-column>
         <el-table-column
           fixed="right"
@@ -177,7 +173,7 @@
   import {
     addDeviceDataApi,
     deleteDeviceDataApi,
-    deleteMultipleDataApi,
+    deleteMultipleDataApi, getCityCascaderOptions, getCityOptions, getDevicesApi,
     getDevicesDataApi,
     searchDeviceDataApi,
     updateDeviceDataApi
@@ -518,7 +514,7 @@
         this.getDatas();
       },
       async getCascaderOptions() {
-        this.cascaderOptions = (await getCityOptions()).data.d;
+        this.cascaderOptions = (await getCityCascaderOptions()).data.d;
       },
       async getTotalPage(searchType, city='all', factory='all', workshop='all') {
         if(searchType === 'all') {

@@ -108,7 +108,14 @@
           label: el.deviceName
         }
       });
-      this.propertySelectorOptions = (await getFields()).data.d;
+      if (this.deviceSelectorOptions[0] != null) {
+        this.tmpDeviceSelectorValue = this.deviceSelectorOptions[0].value;
+        this.propertySelectorOptions = (await getAffiliateFields(this.tmpDeviceSelectorValue)).data.d;
+        if (this.propertySelectorOptions[0] != null) {
+          console.log(this.propertySelectorOptions);
+          this.tmpPropertySelectorValue = this.propertySelectorOptions[0].fieldId;
+        }
+      }
 
       if (this.deviceSelectorOptions[0] != null && this.propertySelectorOptions[0] != null) {
         this.tmpDeviceSelectorValue = this.deviceSelectorOptions[0].value;
@@ -156,7 +163,6 @@
 
       },
       async deviceChange() {
-        console.log(this.tmpDeviceSelectorValue);
         this.propertySelectorOptions = (await getAffiliateFields(this.tmpDeviceSelectorValue)).data.d;
         this.tmpPropertySelectorValue = '';
       }

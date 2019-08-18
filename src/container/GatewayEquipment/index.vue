@@ -411,7 +411,7 @@
     deleteGatewayApi,
     deleteMultipleGatewayApi,
     getAllDepartments,
-    getCity, getCityOptions,
+    getCity, getCityCascaderOptions, getCityOptions,
     getFactory, getFactoryOptions, getGatewayByWorkshop, getGatewayNumber,
     getGatewaysApi,
     getGatewayState,
@@ -899,7 +899,7 @@
         this.getGateways();
       },
       async getCascaderOptions() {
-        this.cascaderOptions = (await getCityOptions()).data.d;
+        this.cascaderOptions = (await getCityCascaderOptions()).data.d;
       },
       async getTotalPage(searchType, city='all', factory='all', workshop='all') {
         if(searchType === 'all') {

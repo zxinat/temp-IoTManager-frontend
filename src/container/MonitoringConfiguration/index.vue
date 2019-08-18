@@ -146,6 +146,12 @@
         <el-form-item label="属性ID" label-width="120px">
           <el-input v-model="fieldTable.fieldId" autocomplete="off"></el-input>
         </el-form-item>
+        <el-form-item label="所属设备" label-width="120px">
+          <el-select v-model="fieldTable.device" placeholder="请选择">
+            <el-option v-for="d in devices" :key="d.id" :label="d.deviceName" :value="d.deviceName">
+            </el-option>
+          </el-select>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="addFieldVisible = false">取 消</el-button>
@@ -220,7 +226,8 @@
         addFieldVisible: false,
         fieldTable: {
           fieldName: '',
-          fieldId: ''
+          fieldId: '',
+          device: ''
         },
         alarmRules: {
           name: '',
@@ -283,11 +290,11 @@
         }
         // 调获取工厂接口，传form.city参数
       },
-      async addField(){
+      async addField() {
         try {
           const data = await createNewField(this.fieldTable);
           this.addFieldVisible = false;
-          if(data.data.d === 'success') {
+          if (data.data.d === 'success') {
             this.$message({
               message: '添加成功',
               type: 'success'
