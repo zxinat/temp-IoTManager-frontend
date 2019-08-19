@@ -671,7 +671,7 @@
             this.city = (await getCityOptions()).data.d;
             this.newCityList = (await getCity()).data.d;
             this.cityOptions = (await getCityOptions()).data.d;
-            this.getCascaderOptions();
+            this.getDeviceOptions();
           }
         } catch (e) {
           this.cityAddVisible = false;
@@ -689,7 +689,7 @@
             });
             this.factory = (await getFactoryOptions(this.factoryTable.city)).data.d;
             this.newFactoryList = (await getFactory()).data.d;
-            this.getCascaderOptions();
+            this.getDeviceOptions();
           }
         } catch (e) {
           this.factoryAddVisible = false;
@@ -706,7 +706,7 @@
               type: 'success'
             });
             this.workshop = (await getWorkshopOptions(this.workshopTable.factory)).data.d;
-            this.getCascaderOptions();
+            this.getDeviceOptions();
           }
         } catch (e) {
           this.workshopAddVisible = false;
@@ -899,7 +899,7 @@
         this.searchGateway.workshop = this.cascaderValue[2];
         this.getGateways();
       },
-      async getCascaderOptions() {
+      async getDeviceOptions() {
         this.cascaderOptions = (await getCityCascaderOptions()).data.d;
       },
       async getTotalPage(searchType, city='all', factory='all', workshop='all') {
@@ -916,7 +916,7 @@
     ,
     async mounted() {
       this.getTotalPage('all')
-      this.getCascaderOptions();
+      this.getDeviceOptions();
       //获取所有网关信息
       this.getGateways();
       this.cityOptions = (await getCityOptions()).data.d;

@@ -76,7 +76,7 @@
     async mounted() {
       this.setMapInfo();
       this.chinaConfigure();
-      this.getCascaderOptions();
+      this.getDeviceOptions();
     },
     methods: {
       chinaConfigure() {
@@ -100,7 +100,7 @@
         ];
         this.chinaConfigure();
       },
-      async getCascaderOptions() {
+      async getDeviceOptions() {
         this.selectorOptions = (await getCityCascaderOptions()).data.d;
       }
     }

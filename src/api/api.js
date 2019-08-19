@@ -85,8 +85,8 @@ export function getGatewayNumber(searchType, city='all', factory='all', workshop
   return axios.get(`/api/gateway/number?searchType=${searchType}&city=${city}&factory=${factory}&workshop=${workshop}`);
 }
 
-export function getDataNumber(searchType, city='all', factory='all', workshop='all') {
-  return axios.get(`/api/deviceData/number?searchType=${searchType}&city=${city}&factory=${factory}&workshop=${workshop}`);
+export function getDeviceDataNumber(searchType, deviceId = 'all') {
+  return axios.get(`/api/deviceData/number?searchType=${searchType}&deviceId=${deviceId}`);
 }
 
 export function deleteDeviceApi(id) {
@@ -159,8 +159,8 @@ export function getDeviceApi(id) {
 }
 
 //设备数据
-export function getDevicesDataApi(searchType='all', page=1, sortColumn='Id', order='asc', city, factory, workshop) {
-  return axios.get(`/api/deviceData?searchType=${searchType}&page=${page}&sortColumn=${sortColumn}&order=${order}&city=${city}&factory=${factory}&workshop=${workshop}`);
+export function getDevicesDataApi(searchType='all', page=1, sortColumn='Id', order='asc', deviceId) {
+  return axios.get(`/api/deviceData?searchType=${searchType}&page=${page}&sortColumn=${sortColumn}&order=${order}&deviceId=${deviceId}`);
 }
 
 export function deleteDeviceDataApi(id) {

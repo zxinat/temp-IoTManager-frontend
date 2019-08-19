@@ -3,12 +3,16 @@
     <div class="search-container">
       <el-form :inline="true" :model="searchDevice" class="header">
         <el-form-item>
-          <el-cascader
-            v-model="cascaderValue"
-            :placeholder="'选择' + GLOBAL.firstLevel + '/' + GLOBAL.secondLevel + '/' + GLOBAL.thirdLevel "
-            :options="cascaderOptions"
-            @change="searchCascader">
-          </el-cascader>
+          <el-select v-model="curSearchDevice" @change="getDeviceData" placeholder="请选择设备">
+            <el-option value="全部" label="全部"></el-option>
+            <el-option
+              v-for="d in deviceOptions"
+              :key="d.id"
+              :label="d.deviceName"
+              :value="d.hardwareDeviceID"
+              >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="exportExcel">导出Excel</el-button>
@@ -177,7 +181,7 @@
 
 <script>
   import {
-    getDataNumber,
+    getDeviceDataNumber,
     addDeviceDataApi,
     deleteDeviceDataApi,
     deleteMultipleDataApi, getCityCascaderOptions, getCityOptions, getDevicesApi,
@@ -200,6 +204,8 @@
         cascaderOptions: [],
         updateFormVisible: false,
         newFormVisible: false,
+        deviceOptions: [],
+        curSearchDevice: '全部',
         tableData: [{
           "id": "1",
           "dataName": "6",
@@ -384,7 +390,7 @@
               message: '添加成功',
               type: 'success'
             });
-            this.getDeviceDatas();
+            this.getDeviceData();
           }
         } catch (e) {
           this.newFormVisible = false;
@@ -400,7 +406,7 @@
               message: '更新成功',
               type: 'success'
             });
-            this.getDeviceDatas();
+            this.getDeviceData();
           }
         } catch (e) {
           this.updateFormVisible = false;
@@ -422,7 +428,7 @@
                   type: 'success'
                 });
                 //再获取一次所有网关信息
-                this.getDeviceDatas();
+                this.getDeviceData();
               }
             })
             .catch(_ => {
@@ -431,10 +437,6 @@
           console.log(e)
         }
       },
-      // async getDeviceDatas() {
-      //   const data = await getDevicesDataApi();
-      //   this.tableData = data.data.d;
-      // },
       handleSelectionChange(val) {
         console.log('change', this.multipleSelection);
         this.multipleSelection = val;
@@ -494,52 +496,42 @@
         console.log(this.searchDevice.city, this.searchDevice.factory);
         // 调获取车间接口，searchGatewayData.city，searchGatewayData.factory参数
       },
-      async getDeviceDatas() {
+      async getDeviceData() {
         const orderMap = {ascending: 'asc', descending: 'desc'};
-        const searchColumn = this.curSortColumn === '' ? "id" : this.curSortColumn;
+        const columnMap = {id: 'Id', deviceId: 'DeviceId', indexName: 'IndexName', indexId: 'IndexId', timestamp: 'Timestamp'};
+        const searchColumn = this.curSortColumn === '' ? "Id" : columnMap[this.curSortColumn];
         const searchOrder = this.curOrder === '' ? "asc" : orderMap[this.curOrder];
-        const searchCity = this.searchDevice.city === '全部' ? "all" : this.searchDevice.city;
-        const searchFactory = this.searchDevice.factory === '全部' ? "all" : this.searchDevice.factory;
-        const searchWorkshop = this.searchDevice.workshop === '全部' ? "all" : this.searchDevice.workshop;
-        const data = await getDevicesDataApi('search', this.curPage, searchColumn, searchOrder, searchCity, searchFactory, searchWorkshop);
+        const searchDeviceId = this.curSearchDevice === '全部' ? "all" : this.curSearchDevice;
+        const data = await getDevicesDataApi('search', this.curPage, searchColumn, searchOrder, searchDeviceId);
         this.tableData = data.data.d;
-        this.getTotalPage('search', searchCity, searchFactory, searchWorkshop);
+        this.getTotalPage('search', searchDeviceId);
       },
       async pageChange() {
-        this.getDeviceDatas();
+        this.getDeviceData();
       },
       async sortChange(ob) {
         this.curSortColumn = ob.prop;
         this.curOrder = ob.order;
-        this.getDeviceDatas();
+        this.getDeviceData();
       },
-      async searchCascader() {
-        this.curPage = 1;
-        this.searchDevice.city = this.cascaderValue[0];
-        this.searchDevice.factory = this.cascaderValue[1];
-        this.searchDevice.workshop = this.cascaderValue[2];
-        this.getDeviceDatas();
+      async getDeviceOptions() {
+        this.deviceOptions = (await getDevicesApi('all')).data.d;
       },
-      async getCascaderOptions() {
-        this.cascaderOptions = (await getCityCascaderOptions()).data.d;
-      },
-      async getTotalPage(searchType, city='all', factory='all', workshop='all') {
+      async getTotalPage(searchType, deviceId = 'all') {
         if(searchType === 'all') {
-          this.totalPage = (await getDataNumber('all')).data.d;
+          this.totalPage = (await getDeviceDataNumber('all')).data.d;
         } else if(searchType === 'search') {
-          const c = city === '全部' ? 'all' : city;
-          const f = factory === '全部' ? 'all' : factory;
-          const w = workshop === '全部' ? 'all' : workshop;
-          this.totalPage = (await getDataNumber('search', c, f, w)).data.d;
+          const d = deviceId === '全部' ? 'all' : deviceId;
+          this.totalPage = (await getDeviceDataNumber('search', d)).data.d;
         }
       }
     },
     async mounted() {
       this.getTotalPage('all');
-      this.getCascaderOptions();
+      this.getDeviceOptions();
       this.getCityList();
       //获取所有设备信息
-      this.getDeviceDatas();
+      this.getDeviceData();
     }
   }
 </script>
