@@ -524,3 +524,15 @@ export function deleteRule(id) {
 export function batchDeleteThresholds(data) {
   return axios.post('/api/threshold/batch/thresholds', {...data});
 }
+
+export function deleteDeviceData(id) {
+  return axios.delete(`/api/deviceData/${id}`);
+}
+
+export function batchDeleteDeviceData(data) {
+  return axios.post(`/api/deviceData/batch/deviceData`, {str: data});
+}
+
+export function updateDeviceData(id, data) {
+  return axios.put(`/api/deviceData/${id}`, {...data});
+}

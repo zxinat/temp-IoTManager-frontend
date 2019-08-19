@@ -17,23 +17,8 @@
         <el-form-item>
           <el-button type="primary" @click="exportExcel">导出Excel</el-button>
         </el-form-item>
-        <!--<el-form-item>-->
-          <!--<el-upload-->
-            <!--ref="upload"-->
-            <!--action="https://jsonplaceholder.typicode.com/posts/"-->
-            <!--:show-file-list="false"-->
-            <!--:on-success="readExcel"-->
-            <!--:on-error="uploadFailed">-->
-            <!--<el-button slot="trigger"-->
-                       <!--type="primary">导入excel-->
-            <!--</el-button>-->
-          <!--</el-upload>-->
-        <!--</el-form-item>-->
       </el-form>
     </div>
-    <!--<div class="addbutton-container">-->
-      <!--<el-button type="primary" @click="newFormVisible = true">新增数据</el-button>-->
-    <!--</div>-->
     <div class="table-container">
       <el-pagination background layout="prev, pager, next"
                      :total="totalPage"
@@ -105,75 +90,28 @@
     </div>
     <el-dialog title="修改数据" :visible.sync="updateFormVisible">
       <el-form :model="updateData">
-        <el-form-item label="所属设备编号" label-width="120px">
-          <el-input v-model="updateData.hardwareDeviceID" autocomplete="off"></el-input>
+        <el-form-item label="设备ID" label-width="120px">
+          <el-input v-model="updateData.deviceId" disabled autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="所属设备名称" label-width="120px">
-          <el-input v-model="updateData.deviceName" autocomplete="off"></el-input>
+        <el-form-item label="属性名称" label-width="120px">
+          <el-input v-model="updateData.indexName" disabled autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="所属网关编号" label-width="120px">
-          <el-input v-model="updateData.hardwareGatewayID" autocomplete="off"></el-input>
+        <el-form-item label="属性ID" label-width="120px">
+          <el-input v-model="updateData.indexId" disabled autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="所属网关名称" label-width="120px">
-          <el-input v-model="updateData.gatewayName" autocomplete="off"></el-input>
+        <el-form-item label="属性类型" label-width="120px">
+          <el-input v-model="updateData.indexType" disabled autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="数据" label-width="120px">
-          <el-input v-model="updateData.data" autocomplete="off"></el-input>
+        <el-form-item label="值" label-width="120px">
+          <el-input v-model="updateData.indexValue" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="描述" label-width="120px">
-          <el-input v-model="updateData.remark" autocomplete="off"></el-input>
+        <el-form-item label="单位" label-width="120px">
+          <el-input v-model="updateData.indexUnit" disabled autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="updateFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="update">确 定</el-button>
-      </div>
-    </el-dialog>
-    <el-dialog title="新增数据" :visible.sync="newFormVisible">
-      <el-form :model="newDeviceData">
-        <el-form-item label="所属设备编号" label-width="120px">
-          <el-input v-model="newDeviceData.hardwareDeviceID" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="所属设备名称" label-width="120px">
-          <el-input v-model="newDeviceData.deviceName" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="所属网关编号" label-width="120px">
-          <el-input v-model="newDeviceData.hardwareGatewayID" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="所属网关名称" label-width="120px">
-          <el-input v-model="newDeviceData.gatewayName" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="数据" label-width="120px">
-          <el-input v-model="newDeviceData.data" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="描述" label-width="120px">
-          <el-input v-model="newDeviceData.remark" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item class="tag-center">
-          <el-tag
-            :key="tag"
-            v-for="tag in newDeviceData.dynamicTags"
-            closable
-            :disable-transitions="false"
-            @close="handleClose(tag)">
-            {{tag}}
-          </el-tag>
-          <el-input
-            class="input-new-tag"
-            v-if="newDeviceData.inputVisible"
-            v-model="newDeviceData.inputValue"
-            ref="saveTagInput"
-            size="small"
-            @keyup.enter.native="handleInputConfirm"
-            @blur="handleInputConfirm"
-          >
-          </el-input>
-          <el-button v-else class="button-new-tag" size="small" @click="showInput">+</el-button>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="newFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="add">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -187,7 +125,7 @@
     deleteMultipleDataApi, getCityCascaderOptions, getCityOptions, getDevicesApi,
     getDevicesDataApi,
     searchDeviceDataApi,
-    updateDeviceDataApi
+    updateDeviceDataApi, deleteDeviceData, batchDeleteDeviceData, updateDeviceData
   } from '../../api/api';
   import FileSaver from 'file-saver'
   import XLSX from 'xlsx'
@@ -220,12 +158,12 @@
         }],
         multipleSelection: [],
         updateData: {
-          hardwareDeviceID: '',
-          deviceName: '',
-          hardwareGatewayID: '',
-          gatewayName: '',
-          data: '',
-          remark: '',
+          deviceId: '',
+          indexName: '',
+          indexId: '',
+          indexType: '',
+          indexValue: '',
+          indexUnit: ''
         },
         newDeviceData: {
           hardwareDeviceID: '',
@@ -249,54 +187,6 @@
           factory: 'all',
           workshop: 'all',
         },
-        cityOptions: [{
-          value: '选项1',
-          label: '城市1'
-        }, {
-          value: '选项2',
-          label: '城市2'
-        }, {
-          value: '选项3',
-          label: '城市3'
-        }, {
-          value: '选项4',
-          label: '城市4'
-        }, {
-          value: '选项5',
-          label: '城市5'
-        }],
-        factoryOptions: [{
-          value: '选项1',
-          label: '工厂1'
-        }, {
-          value: '选项2',
-          label: '工厂2'
-        }, {
-          value: '选项3',
-          label: '工厂3'
-        }, {
-          value: '选项4',
-          label: '工厂4'
-        }, {
-          value: '选项5',
-          label: '工厂5'
-        }],
-        workshopOptions: [{
-          value: '选项1',
-          label: '车间1'
-        }, {
-          value: '选项2',
-          label: '车间2'
-        }, {
-          value: '选项3',
-          label: '车间3'
-        }, {
-          value: '选项4',
-          label: '车间4'
-        }, {
-          value: '选项5',
-          label: '车间5'
-        }],
       }
     },
 
@@ -399,7 +289,7 @@
       },
       async update() {
         try {
-          const data = await updateDeviceDataApi(this.updateData);
+          const data = await updateDeviceData(this.updateData.id, this.updateData);
           this.updateFormVisible = false;
           if (data.data.c === 200) {
             this.$message({
@@ -414,6 +304,7 @@
         }
       },
       async openUpdateForm(row) {//打开更新表单
+        console.log(row.id);
         this.updateData = row;
         this.updateFormVisible = true
       },
@@ -421,7 +312,7 @@
         try {
           this.$confirm('确认删除？')
             .then(async _ => {
-              const data = await deleteDeviceDataApi(row.ID);
+              const data = await deleteDeviceData(row.id);
               if (data.data.c === 200) {
                 this.$message({
                   message: '删除成功',
@@ -438,21 +329,21 @@
         }
       },
       handleSelectionChange(val) {
-        console.log('change', this.multipleSelection);
         this.multipleSelection = val;
       },
       async multipleDelete() {
         try {
           this.$confirm('确认删除？')
             .then(async _ => {
-              const data = await deleteMultipleDataApi(this.multipleSelection.map(el => el.id));
+              console.log(this.multipleSelection.map(el => el.id));
+              const data = await batchDeleteDeviceData(this.multipleSelection.map(el => el.id));
               if (data.data.c === 200) {
                 this.$message({
                   message: '删除成功',
                   type: 'success'
                 });
                 //再获取一次所有网关信息
-                this.getDevices();
+                this.getDeviceData();
               }
             })
             .catch(_ => {
