@@ -230,18 +230,25 @@ const routes = [
 
 const router = new Router({routes});
 
-router.beforeEach((to, from, next) => {
-  if (to.meta.requireAuth||typeof to.meta.requireAuth=='undefined') {// 需要鉴权，或者未配置的路由
-    if (getCookie('userSessionID')) {
-      next()
-    } else {
-      next({
-        path: '/login'
-      });
-    }
-  }
-  else {
-    next();
-  }
-});
+// router.beforeEach((to, from, next) => {
+//   if (to.meta.requireAuth||typeof to.meta.requireAuth==='undefined') {// 需要鉴权，或者未配置的路由
+//     if (localStorage.getItem('userInfo')) {
+//       if (to.path === '/login') {
+//
+//       }
+//       next();
+//     } else {
+//       if (to.path === '/login') {
+//         next();
+//       } else {
+//         next({
+//           path: '/login'
+//         });
+//       }
+//     }
+//   }
+//   else {
+//     next();
+//   }
+// });
 export default router;
