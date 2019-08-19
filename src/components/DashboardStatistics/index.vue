@@ -76,7 +76,7 @@
             },
             statusOption : {
               title : {
-                text: '设备状态',
+                text: 'Status of Device',
                 x:'center'
               },
               tooltip: {
@@ -86,11 +86,11 @@
               legend: {
                 orient: 'vertical',
                 x: 'left',
-                data:['在线','离线']
+                data:['Info', 'Warning', 'Critical']
               },
               series: [
                 {
-                  name:'访问来源',
+                  name:'设备状态',
                   type:'pie',
                   radius: ['50%', '70%'],
                   avoidLabelOverlap: false,
@@ -113,9 +113,9 @@
                     }
                   },
                   data:[
-                    {value:335, name:'在线'},
-                    {value:310, name:'严重告警'},
-                    {value:234, name:'离线'},
+                    {value:335, name:'Info'},
+                    {value:310, name:'Warning'},
+                    {value:234, name:'Critical'},
                   ]
                 }
               ]
