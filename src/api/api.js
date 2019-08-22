@@ -202,8 +202,8 @@ export function getDeviceTreeApi(city, factory) {
 }
 
 //告警信息
-export function getAlarmInformationApi() {
-  return axios.get('/api/alarmInfo');
+export function getAlarmInformationApi(searchType, deviceId = 'all', page = 1, sortColumn = 'Id', order = 'asc') {
+  return axios.get(`/api/alarmInfo?searchType=${searchType}&deviceId=${deviceId}&page=${page}&sortColumn=${sortColumn}&order=${order}`);
 }
 
 export function updateAlarmInformationApi(data) {
@@ -535,4 +535,16 @@ export function batchDeleteDeviceData(data) {
 
 export function updateDeviceData(id, data) {
   return axios.put(`/api/deviceData/${id}`, {...data});
+}
+
+export function getAlarmInfoNumber(searchType, deviceId){
+  return axios.get(`/api/alarmInfo/number?searchType=${searchType}&deviceId=${deviceId}`);
+}
+
+export function deleteAlarmInfo(id) {
+  return axios.delete(`/api/alarmInfo/${id}`);
+}
+
+export function updateAlarmInfoProcessed(id) {
+  return axios.post(`/api/alarmInfo/processed/${id}`);
 }

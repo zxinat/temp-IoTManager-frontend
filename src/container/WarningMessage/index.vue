@@ -3,7 +3,8 @@
     <div class="search-container">
       <el-form :inline="true" :model="searchData" class="demo-form-inline">
         <el-form-item label="选择设备">
-          <el-select v-model="searchData.hardwareDeviceID" placeholder="请选择">
+          <el-select v-model="curSearchDevice" @change="getAlarmInformation" placeholder="请选择">
+            <el-option value="全部" label="全部"></el-option>
             <el-option
               v-for="c in dropdownDevices"
               :key="c.id"
@@ -12,12 +13,6 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <!--<el-form-item label="设备名称">-->
-          <!--<el-input v-model="searchData.deviceName"></el-input>-->
-        <!--</el-form-item>-->
-        <el-form-item>
-          <el-button type="primary" @click="getAlarmInformationByDeviceId(searchData.hardwareDeviceID)"><img src="../../assets/img/find.svg">查询</el-button>
-        </el-form-item>
       </el-form>
     </div>
     <h2 style="margin-left: 10px">告警信息</h2>
@@ -25,47 +20,48 @@
       <!--<el-button type="primary" @click="newFormVisible = true">快速处理</el-button>-->
     <!--</div>-->
     <div class="table-container">
+      <el-pagination background layout="prev, pager, next"
+                     :total="totalPage"
+                     :current-page.sync="curPage"
+                     :page-size="12"
+                     @current-change="pageChange()">
+      </el-pagination>
       <el-table
         :data="tableData"
         border
         style="width: 100%"
-        @selection-change="handleSelectionChange">
-        <!--<el-table-column-->
-          <!--type="selection">-->
-        <!--</el-table-column>-->
+        @selection-change="handleSelectionChange"
+        @sort-change="sortChange">
         <el-table-column
           fixed
           prop="deviceId"
-          label="设备ID">
+          label="设备ID"
+          sortable="custom">
         </el-table-column>
         <el-table-column
           prop="indexId"
-          label="数据ID">
+          label="数据ID"
+          sortable="custom">
         </el-table-column>
-        <!--<el-table-column-->
-          <!--prop="alarmType"-->
-          <!--label="告警类型">-->
-        <!--</el-table-column>-->
-        <!--<el-table-column-->
-          <!--prop="handleState"-->
-          <!--label="处理状态">-->
-        <!--</el-table-column>-->
         <el-table-column
           prop="alarmInfo"
-          label="告警内容">
+          label="告警内容"
+          sortable="custom">
         </el-table-column>
         <el-table-column
           prop="severity"
-          label="告警等级">
+          label="告警等级"
+          sortable="custom">
         </el-table-column>
         <el-table-column
           prop="timestamp"
-          label="告警时间">
+          label="告警时间"
+          sortable="custom">
         </el-table-column>
-        <!--<el-table-column-->
-          <!--prop="handleTime"-->
-          <!--label="处理时间">-->
-        <!--</el-table-column>-->
+        <el-table-column
+          prop="processed"
+          label="是否处理">
+        </el-table-column>
         <!--<el-table-column-->
           <!--prop="handleMethod"-->
           <!--label="处理方式">-->
@@ -86,13 +82,6 @@
     </div>
     <el-dialog title="告警处理" :visible.sync="updateFormVisible">
       <el-form :model="updateData">
-        <el-form-item label="处理状态" label-width="120px">
-          <el-select v-model="updateData.handleState" placeholder="请选择">
-            <el-option label="未处理" value="unhandled"></el-option>
-            <el-option label="处理中" value="handling"></el-option>
-            <el-option label="已处理" value="handled"></el-option>
-          </el-select>
-        </el-form-item>
         <el-form-item label="处理方式" label-width="120px">
           <el-select v-model="updateData.handleMethod" placeholder="请选择">
             <el-option label="电子邮件通知" value="email"></el-option>
@@ -135,10 +124,11 @@
 
 <script>
   import {
-    getAlarmInfoByDeviceid,
+    deleteAlarmInfo,
+    getAlarmInfoByDeviceid, getAlarmInfoNumber,
     getAlarmInformationApi, getAllRules, getDevicesApi,
     handleAllAlarmInformationApi,
-    searchAlarmInformationApi,
+    searchAlarmInformationApi, updateAlarmInfoProcessed,
     updateAlarmInformationApi
   } from '../../api/api';
 
@@ -146,6 +136,12 @@
         name: "WarningMessage",
       data() {
         return {
+          totalPage: 0,
+          curPage: 1,
+          curSortColumn: '',
+          curOrder: '',
+          curSearchDevice: '全部',
+          deviceOptions: [],
           updateFormVisible: false,
           newFormVisible: false,
           rulesData:[{
@@ -178,7 +174,11 @@
           multipleSelection: [],
           dropdownDevices: [],
           updateData: {},
-          handleData: {},
+          handleData: {
+            id: '',
+            handleMethod: '',
+            handleContent: ''
+          },
           searchData: {
             deviceID: '',
             deviceName: ''
@@ -209,8 +209,7 @@
         },
         async handle() {
           try {
-            console.log('update',this.updateData);
-            const data = await updateAlarmInformationApi(this.updateData);
+            const data = await updateAlarmInfoProcessed(this.updateData.id);
             this.updateFormVisible = false;
             if (data.data.c === 200) {
               this.$message({
@@ -233,8 +232,34 @@
           this.tableData = data.data.d;
         },
         async getAlarmInformation() {
-          const data = await getAlarmInformationApi();
+          const orderMap = {ascending: 'asc', descending: 'desc'};
+          const columnMap = {deviceId: 'DeviceId', indexId: 'IndexId', alarmInfo: 'AlarmInfo', severity: 'Severity', timestamp: 'Timestamp'};
+          const searchColumn = this.curSortColumn === '' ? "Id" : columnMap[this.curSortColumn];
+          const searchOrder = this.curOrder === '' ? "asc" : orderMap[this.curOrder];
+          const searchDeviceId = this.curSearchDevice === '全部' ? "all" : this.curSearchDevice;
+          const data = await getAlarmInformationApi('search', searchDeviceId, this.curPage, searchColumn, searchOrder);
           this.tableData = data.data.d;
+          this.getTotalPage('search', searchDeviceId);
+        },
+        async deleteDevice(row) {
+          try {
+            this.$confirm('确认删除？')
+              .then(async _ => {
+                const data = await deleteAlarmInfo(row.id);
+                if (data.data.c === 200) {
+                  this.$message({
+                    message: '删除成功',
+                    type: 'success'
+                  });
+                  //再获取一次所有网关信息
+                  this.getAlarmInformation();
+                }
+              })
+              .catch(_ => {
+              });
+          } catch (e) {
+            console.log(e)
+          }
         },
         handleSelectionChange(val) {
           console.log('change',this.multipleSelection);
@@ -254,10 +279,27 @@
               };
             }
           }
+        },
+        async pageChange() {
+          this.getAlarmInformation();
+        },
+        async sortChange(ob) {
+          this.curSortColumn = ob.prop;
+          this.curOrder = ob.order;
+          this.getAlarmInformation();
+        },
+        async getTotalPage(searchType, deviceId = 'all') {
+          if (searchType === 'all') {
+            this.totalPage = (await getAlarmInfoNumber('all')).data.d;
+          } else if (searchType === 'search') {
+            const d = deviceId === '全部' ? 'all' : deviceId;
+            this.totalPage = (await getAlarmInfoNumber('search', d)).data.d;
+          }
         }
       },
       async mounted() {
         //获取所有设备信息
+        this.getTotalPage('all');
         this.getAlarmInformation();
         this.rulesData = (await getAllRules()).data.d;
         this.dropdownDevices = (await getDevicesApi()).data.d;
