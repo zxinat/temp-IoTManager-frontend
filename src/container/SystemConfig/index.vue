@@ -5,12 +5,12 @@
       <el-menu-item index="2">数据库配置</el-menu-item>
     </el-menu>
     <div v-if="currentPage==='1'"><device-type-config></device-type-config></div>
-    <div v-if="currentPage==='2'"><device-property></device-property></div>
+    <div v-if="currentPage==='2'"><database-config></database-config></div>
   </div>
 </template>
 
 <script>
-    import DeviceProperty from '../../components/DeviceProperty/index';
+    import DatabaseConfig from '../../components/DatabaseConfig/index';
     import DeviceTypeConfig from '../../components/DeviceTypeConfig/index';
     export default {
       name: "SystemConfig",
@@ -30,19 +30,19 @@
             },
             // setter
             set: function (newValue) {
-              console.log('newvalue', newValue)
+              console.log('newValue', newValue)
             }
           }
         },
         methods:{
-          handleSelect(key, keyPath)
+          handleSelect(key)
           {
             this.currentPage = key;
-            console.log('currentpage', typeof this.currentPage);
+            console.log('currentPage', typeof this.currentPage);
           }
         },
         components: {
-        DeviceTypeConfig, DeviceProperty
+        DeviceTypeConfig, DatabaseConfig
         }
     }
 </script>

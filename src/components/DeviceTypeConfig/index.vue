@@ -20,7 +20,11 @@
     <el-table
       :data="tableData"
       border
-      style="width: 60%">
+      style="width: 60%"
+      @selection-change="handleSelectionChange">
+      <el-table-column
+        type="selection">
+      </el-table-column>
       <el-table-column
         prop="deviceType"
         label="设备类型">
@@ -39,6 +43,9 @@
       </el-table-column>
     </el-table>
   </div>
+    <div class="deleteButton-container">
+      <el-button type="primary" @click="multipleDelete">批量删除</el-button>
+    </div>
   </div>
 </template>
 
@@ -54,11 +61,16 @@
           newFormVisible: false,
           updateFormVisible: false,
           searchDeviceType: '',
+          multipleSelection: [],
 
         }
       },
 
       methods: {
+        handleSelectionChange(val) {
+          console.log('change', this.multipleSelection);
+          this.multipleSelection = val;
+        },
         delete(row){
 
         },
@@ -68,6 +80,9 @@
         searchByDeviceType(){
 
         },
+        multipleDelete(){
+
+        }
 
 
       },
@@ -78,7 +93,7 @@
 </script>
 
 <style scoped>
-  .search-container, .table-container {
+  .search-container, .table-container, .deleteButton-container {
     margin: 1% 1%;
     text-align: left;
   }

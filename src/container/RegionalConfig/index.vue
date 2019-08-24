@@ -44,7 +44,7 @@
     <el-dialog title="修改城市" :visible.sync="updateCityFormVisible">
       <el-form :model="updateCityData">
         <el-form-item label="城市" label-width="120px">
-          <el-select v-model="updateCityData.name" placeholder="选择城市">
+          <el-select v-model="updateCityData.cityName" placeholder="选择城市">
           <el-option
             v-for="c in cityList"
             :key="c.value"
@@ -204,7 +204,7 @@
             updateCityFormVisible: false,
             newCityFormVisible: false,
             updateCityData: {
-              name: '',
+              cityName: '',
               remark: '',
             },
             newCityData: {
@@ -240,7 +240,7 @@
         },
         async openCityUpdateForm(row){  //打开更新表单
             console.log('test', row);
-            this.updateData = JSON.parse(JSON.stringify(row));
+            this.updateCityData = JSON.parse(JSON.stringify(row));
             this.updateCityFormVisible = true;
         },
         async deleteCity(row) {
