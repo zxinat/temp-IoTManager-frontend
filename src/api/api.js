@@ -548,3 +548,24 @@ export function deleteAlarmInfo(id) {
 export function updateAlarmInfoProcessed(id) {
   return axios.post(`/api/alarmInfo/processed/${id}`);
 }
+
+//配置管理-地域配置
+export function getCityDataApi() {
+  return axios.get('/api/city')
+}
+
+export function updateCityApi(id) {
+  return axios.post(`/api/city/${id}`)
+}
+
+export function deleteCityApi(id) {
+  return axios.delete(`/api/city/${id}`)
+}
+
+export function addCityApi(city) {
+  return axios.post(`/api/city`,{...city})
+}
+
+export function searchCityApi(city) {
+  return axios.post(`/api/${city}`)
+}

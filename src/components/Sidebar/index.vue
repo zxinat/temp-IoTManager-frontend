@@ -34,23 +34,23 @@
       </router-link>
     </el-submenu>
     <el-submenu index="4">
-      <template slot="title">
-        <!--<i class="el-icon-location"></i>-->
-        <span>
+    <template slot="title">
+      <!--<i class="el-icon-location"></i>-->
+      <span>
           <img src="../../assets/img/alert.png" class="image" />
           监控告警
         </span>
-      </template>
-      <router-link to="/monitoringConfiguration" class="hide-underline">
-        <el-menu-item index="4-1">监控配置</el-menu-item>
-      </router-link>
-      <router-link to="/warningRule" class="hide-underline">
-        <el-menu-item index="4-2">告警规则</el-menu-item>
-      </router-link>
-      <router-link to="/warningMessage" class="hide-underline">
-        <el-menu-item index="4-3">告警信息</el-menu-item>
-      </router-link>
-    </el-submenu>
+    </template>
+    <router-link to="/monitoringConfiguration" class="hide-underline">
+      <el-menu-item index="4-1">监控配置</el-menu-item>
+    </router-link>
+    <router-link to="/warningRule" class="hide-underline">
+      <el-menu-item index="4-2">告警规则</el-menu-item>
+    </router-link>
+    <router-link to="/warningMessage" class="hide-underline">
+      <el-menu-item index="4-3">告警信息</el-menu-item>
+    </router-link>
+  </el-submenu>
     <!--<el-submenu index="5">-->
     <!--<template slot="title">-->
     <!--&lt;!&ndash;<i class="el-icon-location"></i>&ndash;&gt;-->
@@ -90,12 +90,29 @@
         </span>
       </el-menu-item>
     </router-link>
-    <!--<router-link to="/districtManagement" class="hide-underline">-->
-      <!--<el-menu-item index="8">-->
-        <!--&lt;!&ndash;<i class="el-icon-location"></i>&ndash;&gt;-->
-        <!--<span>配置管理</span>-->
-      <!--</el-menu-item>-->
-    <!--</router-link>-->
+    <el-submenu index="8">
+      <template slot="title">
+        <span>
+          <img src="../../assets/img/setting.png" class="image" />
+          配置管理
+        </span>
+      </template>
+      <router-link to="/regionalConfig" class="hide-underline">
+        <el-menu-item index="8-1">地域配置</el-menu-item>
+      </router-link>
+      <router-link to="/systemConfig" class="hide-underline">
+        <el-menu-item index="4-2">系统配置</el-menu-item>
+      </router-link>
+    </el-submenu>
+<!--    <router-link to="/districtManagement" class="hide-underline">-->
+<!--      <el-menu-item index="8">-->
+<!--        <i class="el-icon-location"></i>-->
+<!--        <span>-->
+<!--          <img src="../../assets/img/setting.png" class="image" />-->
+<!--          配置管理-->
+<!--        </span>-->
+<!--      </el-menu-item>-->
+<!--    </router-link>-->
   </el-menu>
 </template>
 

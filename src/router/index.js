@@ -25,6 +25,8 @@ import ReportOfMonthlyExpense from '../container/ReportOfMonthlyExpense';
 import DistrictManagement from '../container/DistrictManagement';
 import DeviceTypeDimension from '../container/DeviceTypeDimension';
 import TagDimension from '../container/TagDimension';
+import RegionalConfig from '../container/RegionalConfig';
+import SystemConfig from '../container/SystemConfig';
 
 import {getCookie} from '../../utils/package-cookies';
 
@@ -198,6 +200,22 @@ const routes = [
         meta: {
           requireAuth: true
         },
+      },
+      {
+        path: '/RegionalConfig',
+        name: 'RegionalConfig',
+        component: RegionalConfig,
+        meta: {
+          requireAuth: true
+        }
+      },
+      {
+        path: '/SystemConfig',
+        name: 'SystemConfig',
+        component: SystemConfig,
+        meta: {
+          requireAuth: true
+        }
       }
     ]
   },
