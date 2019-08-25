@@ -569,3 +569,7 @@ export function addCityApi(city) {
 export function searchCityApi(city) {
   return axios.post(`/api/${city}`)
 }
+
+export function getBuildingDataApi() {
+  return axios.get('/api/')
+}
