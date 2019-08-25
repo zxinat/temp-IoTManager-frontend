@@ -61,7 +61,7 @@
     <!--</el-submenu>-->
     <el-submenu index="6">
       <template slot="title">
-        <img src="../../assets/img/users.png" class="image" />
+        <img src="../../assets/img/chart.png" class="image" />
         <span>报表中心</span>
       </template>
       <!--<router-link to="/reportCenter"  class="hide-underline"><el-menu-item index="6-1">概览</el-menu-item></router-link>-->
