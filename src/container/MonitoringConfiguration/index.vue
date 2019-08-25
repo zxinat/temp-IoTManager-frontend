@@ -178,39 +178,8 @@
     name: "MonitoringConfiguration",
     data() {
       return {
-        cityOptions: [{
-          value: '选项1',
-          label: '城市1'
-        }, {
-          value: '选项2',
-          label: '城市2'
-        }, {
-          value: '选项3',
-          label: '城市3'
-        }, {
-          value: '选项4',
-          label: '城市4'
-        }, {
-          value: '选项5',
-          label: '城市5'
-        }],
-
-        factoryOptions: [{
-          value: '选项1',
-          label: '工厂1'
-        }, {
-          value: '选项2',
-          label: '工厂2'
-        }, {
-          value: '选项3',
-          label: '工厂3'
-        }, {
-          value: '选项4',
-          label: '工厂4'
-        }, {
-          value: '选项5',
-          label: '工厂5'
-        }],
+        cityOptions: [],
+        factoryOptions: [],
         fieldOptions: [],
         severityOptions: [],
         devices: [],
@@ -266,6 +235,9 @@
       async filter() {
         if (this.form.city !== "" && this.form.factory !== "") {
           this.treeData = (await getDeviceTreeApi(this.form.city, this.form.factory)).data.d;
+          if (this.treeData.length === 0) {
+            alert("无设备");
+          }
         } else {
           this.treeData = [];
         }
