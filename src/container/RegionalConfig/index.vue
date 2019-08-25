@@ -44,15 +44,18 @@
     <el-dialog title="修改城市" :visible.sync="updateCityFormVisible">
       <el-form :model="updateCityData">
         <el-form-item label="城市" label-width="120px">
-          <el-select v-model="updateCityData.cityName" placeholder="选择城市">
-          <el-option
-            v-for="c in cityList"
-            :key="c.value"
-            :label="c.label"
-            :value="c.label">
-          </el-option>
-        </el-select>
+          <el-input v-model="updateCityData.cityName" autocomplete="off"></el-input>
         </el-form-item>
+<!--        <el-form-item label="城市" label-width="120px">-->
+<!--          <el-select v-model="updateCityData.cityName" placeholder="选择城市">-->
+<!--          <el-option-->
+<!--            v-for="c in cityList"-->
+<!--            :key="c.value"-->
+<!--            :label="c.label"-->
+<!--            :value="c.label">-->
+<!--          </el-option>-->
+<!--        </el-select>-->
+<!--        </el-form-item>-->
         <el-form-item label="备注" label-width="120px">
           <el-input v-model="updateCityData.remark" autocomplete="off"></el-input>
         </el-form-item>
@@ -101,19 +104,19 @@
         border
         style="width: 100%">
         <el-table-column
-          prop="buildingName"
+          prop="factoryName"
           label="实验楼">
         </el-table-column>
         <el-table-column
-          prop="tel"
+          prop="factoryPhoneNumber"
           label="电话">
         </el-table-column>
         <el-table-column
-          prop="address"
+          prop="factoryAddress"
           label="地址">
         </el-table-column>
         <el-table-column
-          prop="associatedCity"
+          prop="city"
           label="所属城市">
         </el-table-column>
         <el-table-column
@@ -135,7 +138,7 @@
     <el-dialog title="修改实验楼" :visible.sync="updateBuildingFormVisible">
       <el-form :model="updateBuildingData">
         <el-form-item label="所属城市" label-width="120px">
-          <el-select v-model="updateBuildingData.associatedCity" @change="getUpdateBuildingList(updateBuildingData.associatedCity)" placeholder="选择城市">
+          <el-select v-model="updateBuildingData.city" placeholder="选择城市">
             <el-option
               v-for="c in cityList"
               :key="c.value"
@@ -145,20 +148,23 @@
           </el-select>
         </el-form-item>
         <el-form-item label="实验楼" label-width="120px">
-          <el-select v-model="updateBuildingData.buildingName" placeholder="选择实验楼">
-            <el-option
-              v-for="c in buildingList"
-              :key="c.value"
-              :label="c.label"
-              :value="c.label">
-            </el-option>
-          </el-select>
+          <el-input v-model="updateBuildingData.factoryName" autocomplete="off"></el-input>
         </el-form-item>
+<!--        <el-form-item label="实验楼" label-width="120px">-->
+<!--          <el-select v-model="updateBuildingData.buildingName" placeholder="选择实验楼">-->
+<!--            <el-option-->
+<!--              v-for="c in buildingList"-->
+<!--              :key="c.value"-->
+<!--              :label="c.label"-->
+<!--              :value="c.label">-->
+<!--            </el-option>-->
+<!--          </el-select>-->
+<!--        </el-form-item>-->
         <el-form-item label="电话" label-width="120px">
-          <el-input v-model="updateBuildingData.tel" autocomplete="off"></el-input>
+          <el-input v-model="updateBuildingData.factoryPhoneNumber" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="地址" label-width="120px">
-          <el-input v-model="updateBuildingData.address" autocomplete="off"></el-input>
+          <el-input v-model="updateBuildingData.factoryAddress" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="备注" label-width="120px">
           <el-input v-model="updateBuildingData.remark" autocomplete="off"></el-input>
@@ -173,7 +179,7 @@
     <el-dialog title="添加实验楼" :visible.sync="newBuildingFormVisible">
       <el-form :model="newBuildingData">
         <el-form-item label="所属城市" label-width="120px">
-          <el-select v-model="newBuildingData.associatedCity" placeholder="选择城市">
+          <el-select v-model="newBuildingData.city" placeholder="选择城市">
             <el-option
               v-for="c in cityList"
               :key="c.value"
@@ -183,13 +189,13 @@
           </el-select>
         </el-form-item>
         <el-form-item label="实验楼" label-width="120px">
-          <el-input v-model="newBuildingData.buildingName" autocomplete="off"></el-input>
+          <el-input v-model="newBuildingData.factoryName" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="电话" label-width="120px">
-          <el-input v-model="newBuildingData.tel" autocomplete="off"></el-input>
+          <el-input v-model="newBuildingData.factoryPhoneNumber" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="地址" label-width="120px">
-          <el-input v-model="newBuildingData.address" autocomplete="off"></el-input>
+          <el-input v-model="newBuildingData.factoryAddress" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="备注" label-width="120px">
           <el-input v-model="newBuildingData.remark" autocomplete="off"></el-input>
@@ -224,18 +230,18 @@
         border
         style="width: 100%">
         <el-table-column
-          prop="name"
+          prop="workshopName"
           label="实验室">
         </el-table-column>
         <el-table-column
-          prop="tel"
+          prop="workshopPhoneNumber"
           label="电话">
         </el-table-column><el-table-column
-          prop="address"
+          prop="workshopAddress"
           label="地址">
         </el-table-column>
         <el-table-column
-          prop="associatedBuilding"
+          prop="factory"
           label="所属实验楼">
         </el-table-column>
         <el-table-column
@@ -257,7 +263,7 @@
     <el-dialog title="修改实验室" :visible.sync="updateLabFormVisible">
       <el-form :model="updateLabData">
         <el-form-item label="所属实验楼" label-width="120px">
-          <el-select v-model="updateLabData.associatedBuilding" @change="getUpdateLabList(updateLabData.associatedBuilding)" placeholder="选择城市">
+          <el-select v-model="updateLabData.factory" placeholder="选择实验楼">
             <el-option
               v-for="c in buildingList"
               :key="c.value"
@@ -266,21 +272,24 @@
             </el-option>
           </el-select>
         </el-form-item>
+<!--        <el-form-item label="实验室" label-width="120px">-->
+<!--          <el-select v-model="updateLabData.labName" placeholder="选择实验室">-->
+<!--            <el-option-->
+<!--              v-for="c in labList"-->
+<!--              :key="c.value"-->
+<!--              :label="c.label"-->
+<!--              :value="c.label">-->
+<!--            </el-option>-->
+<!--          </el-select>-->
+<!--        </el-form-item>-->
         <el-form-item label="实验室" label-width="120px">
-          <el-select v-model="updateLabData.labName" placeholder="选择实验室">
-            <el-option
-              v-for="c in labList"
-              :key="c.value"
-              :label="c.label"
-              :value="c.label">
-            </el-option>
-          </el-select>
+          <el-input v-model="updateLabData.workshopName" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="电话" label-width="120px">
-          <el-input v-model="updateLabData.tel" autocomplete="off"></el-input>
+          <el-input v-model="updateLabData.workshopPhoneNumber" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="地址" label-width="120px">
-          <el-input v-model="updateLabData.address" autocomplete="off"></el-input>
+          <el-input v-model="updateLabData.workshopAddress" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="备注" label-width="120px">
           <el-input v-model="updateLabData.remark" autocomplete="off"></el-input>
@@ -295,7 +304,7 @@
     <el-dialog title="添加实验室" :visible.sync="newLabFormVisible">
       <el-form :model="newLabData">
         <el-form-item label="所属实验楼" label-width="120px">
-          <el-select v-model="newLabData.associatedBuilding" placeholder="选择实验楼">
+          <el-select v-model="newLabData.factory" placeholder="选择实验楼">
             <el-option
               v-for="c in buildingList"
               :key="c.value"
@@ -305,13 +314,13 @@
           </el-select>
         </el-form-item>
         <el-form-item label="实验室" label-width="120px">
-          <el-input v-model="newLabData.labName" autocomplete="off"></el-input>
+          <el-input v-model="newLabData.workshopName" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="电话" label-width="120px">
-          <el-input v-model="newLabData.tel" autocomplete="off"></el-input>
+          <el-input v-model="newLabData.workshopPhoneNumber" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="地址" label-width="120px">
-          <el-input v-model="newLabData.address" autocomplete="off"></el-input>
+          <el-input v-model="newLabData.workshopAddress" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="备注" label-width="120px">
           <el-input v-model="newLabData.remark" autocomplete="off"></el-input>
@@ -327,13 +336,13 @@
 
 <script>
   import {
-    getCityOptions, getCityDataApi,
-    getFactoryOptions, getBuildingDataApi,//无BuilingDataApi
-    getWorkshopOptions, getLabDataApi,
+    getCityOptions, getCity,
+    getFactoryOptions, getFactory,
+    getWorkshopOptions, getWorkshop,
     //无：
-    updateCityApi, deleteCityApi, addCityApi, searchCityApi,
-    updateBuildingApi, deleteBuildingApi, addBuildingApi, searchBuildingApi,
-    updateLabApi, deleteLabApi, addLabApi, searchLabApi,
+    updateCityApi, deleteCity, addCity, searchCityApi,
+    updateBuildingApi, deleteFactory, addFactory, searchBuildingApi,
+    updateLabApi, deleteWorkshop, addWorkshop, searchLabApi,
   } from '../../api/api';
 
 
@@ -355,54 +364,42 @@
               remark: '',
             },
             searchBuilding: "",
-            buildingData: [{
-              "buildingName": "1号楼",
-              "tel": "1888888888",
-              "address": "华鑫科技园",
-              "associatedCity": "上海",
-              "remark": "",
-            }],
+            buildingData: [],
             buildingList: [],
             updateBuildingFormVisible: false,
             newBuildingFormVisible: false,
             updateBuildingData: {
-              buildingName: '',
-              tel: '',
-              address: '',
-              associatedCity: '',
-              remark:'',
+              factoryName:'',
+              factoryPhoneNumber: '',
+              factoryAddress: '',
+              city: '',
+              remark: '',
             },
             newBuildingData: {
-              buildingName:'',
-              tel: '',
-              address: '',
-              associatedCity: '',
+              factoryName:'',
+              factoryPhoneNumber: '',
+              factoryAddress: '',
+              city: '',
               remark: '',
             },
             searchLab: "",
-            labData: [{
-              "name": "101",
-              "tel": "1888888888",
-              "address": "华鑫科技园",
-              "associatedBuilding": "1号楼",
-              "remark": ""
-            }],
+            labData: [],
             labList: [],
             updateLabFormVisible: false,
             newLabFormVisible: false,
             updateLabData: {
-              labName: '',
-              tel: '',
-              address: '',
-              associatedBuilding: '',
+              workshopName: '',
+              workshopPhoneNumber: '',
+              workshopAddress: '',
+              factory: '',
               remark:'',
             },
             newLabData: {
-              labName:'',
-              tel: '',
-              address: '',
-              associatedBuilding: '',
-              remark: '',
+              workshopName: '',
+              workshopPhoneNumber: '',
+              workshopAddress: '',
+              factory: '',
+              remark:'',
             },
 
 
@@ -414,7 +411,7 @@
           if(this.searchCity !== "") {
             this.cityData = (await searchCityApi(this.searchCity)).data.d;
           } else {
-            this.cityData = (await getCityDataApi()).data.d;
+            this.cityData = (await getCity()).data.d;
           }
         },
         async openCityUpdateForm(row){  //打开更新表单
@@ -426,14 +423,14 @@
           try {
             this.$confirm('确认删除？')
               .then(async _ => {
-                const data = await deleteCityApi(row.id);
+                const data = await deleteCity(row.id);
                 if (data.data.c === 200) {
                   this.$message({
                     message: '删除成功',
                     type: 'success'
                   });
                   //再获取一次所有城市信息
-                  this.cityData = (await getCityDataApi()).data.d;
+                  this.cityData = (await getCity()).data.d;
                 }
               })
               .catch(_ => {
@@ -452,7 +449,7 @@
                 type: 'success'
               });
               //再获取一次所有城市信息
-              this.cityData = (await getCityDataApi()).data.d;
+              this.cityData = (await getCity()).data.d;
             }
           } catch (e) {
             this.updateCityFormVisible = false;
@@ -461,7 +458,7 @@
         },
         async addCity() {
           try {
-            const data = await addCityApi(this.newCityData);
+            const data = await addCity(this.newCityData);
             this.newCityFormVisible = false;
             if (data.data.c === 200) {
               this.$message({
@@ -469,7 +466,7 @@
                 type: 'success'
               });
               //再获取一次所有城市信息
-              this.cityData = (await getCityDataApi()).data.d;
+              this.cityData = (await getCity()).data.d;
             }
           } catch (e) {
             this.newCityFormVisible = false;
@@ -480,7 +477,7 @@
           if(this.searchBuilding !== "") {
             this.buildingData = (await searchBuildingApi(this.searchBuilding)).data.d;
           } else {
-            this.buildingData = (await getBuildingDataApi()).data.d;
+            this.buildingData = (await getFactory()).data.d;
           }
         },
         async getUpdateBuildingList(city){
@@ -502,7 +499,7 @@
                 type: 'success'
               });
               //再获取一次所有实验楼信息
-              this.buildingData = (await getBuildingDataApi()).data.d;
+              this.buildingData = (await getFactory()).data.d;
             }
           } catch (e) {
             this.updateBuildingFormVisible = false;
@@ -517,7 +514,7 @@
         },
         async addBuilding(){
           try {
-            const data = await addBuildingApi(this.newBuildingData);
+            const data = await addFactory(this.newBuildingData);
             this.newBuildingFormVisible = false;
             if (data.data.c === 200) {
               this.$message({
@@ -525,7 +522,7 @@
                 type: 'success'
               });
               //再获取一次所有实验楼信息
-              this.buildingData = (await getBuildingDataApi()).data.d;
+              this.buildingData = (await getFactory()).data.d;
             }
           } catch (e) {
             this.newBuildingFormVisible = false;
@@ -537,14 +534,14 @@
           try {
             this.$confirm('确认删除？')
               .then(async _ => {
-                const data = await deleteBuildingApi(row.id);
+                const data = await deleteFactory(row.id);
                 if (data.data.c === 200) {
                   this.$message({
                     message: '删除成功',
                     type: 'success'
                   });
                   //再获取一次所有实验楼信息
-                  this.buildingData = (await getBuildingDataApi()).data.d;
+                  this.buildingData = (await getFactory()).data.d;
                 }
               })
               .catch(_ => {
@@ -554,12 +551,11 @@
           }
         },
 
-
         async searchByLab(){
           if(this.searchLab !== "") {
             this.LabData = (await searchLabApi(this.searchLab)).data.d;
           } else {
-            this.LabData = (await getLabDataApi()).data.d;
+            this.LabData = (await getWorkshop()).data.d;
           }
         },
         async getUpdateLabList(city){
@@ -581,7 +577,7 @@
                 type: 'success'
               });
               //再获取一次所有实验室信息
-              this.labData = (await getLabDataApi()).data.d;
+              this.labData = (await getWorkshop()).data.d;
             }
           } catch (e) {
             this.updateLabFormVisible = false;
@@ -596,7 +592,7 @@
         },
         async addLab(){
           try {
-            const data = await addLabApi(this.newLabData);
+            const data = await addWorkshop(this.newLabData);
             this.newLabFormVisible = false;
             if (data.data.c === 200) {
               this.$message({
@@ -604,7 +600,7 @@
                 type: 'success'
               });
               //再获取一次所有实验室信息
-              this.LabData = (await getLabDataApi()).data.d;
+              this.LabData = (await getWorkshop()).data.d;
             }
           } catch (e) {
             this.newLabFormVisible = false;
@@ -616,14 +612,14 @@
           try {
             this.$confirm('确认删除？')
               .then(async _ => {
-                const data = await deleteLabApi(row.id);
+                const data = await deleteWorkshop(row.id);
                 if (data.data.c === 200) {
                   this.$message({
                     message: '删除成功',
                     type: 'success'
                   });
                   //再获取一次所有实验室信息
-                  this.LabData = (await getLabDataApi()).data.d;
+                  this.LabData = (await getWorkshop()).data.d;
                 }
               })
               .catch(_ => {
@@ -636,12 +632,11 @@
       },
 
       async mounted() {
+        this.cityData = (await getCity()).data.d; //得到“城市管理”的表单数据
+        this.buildingData = (await getFactory()).data.d;
+        this.labData = (await getWorkshop()).data.d;
         this.cityList = (await getCityOptions()).data.d;
-        this.cityData = (await getCityDataApi()).data.d; //得到“城市管理”的表单数据
-        this.buildingData = (await getBuildingDataApi()).data.d;
-        this.labData = (await getLabDataApi()).data.d;
-
-
+        this.buildingList = (await getFactoryOptions('all')).data.d;
       }
     }
 </script>
