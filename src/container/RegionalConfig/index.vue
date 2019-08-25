@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="search-container">
-      <el-form :inline="true" :model="searchCity" class="header">
+      <el-form :inline="true" class="header">
         <el-form-item>
           <h2>城市管理</h2>
         </el-form-item>
@@ -46,16 +46,6 @@
         <el-form-item label="城市" label-width="120px">
           <el-input v-model="updateCityData.cityName" autocomplete="off"></el-input>
         </el-form-item>
-<!--        <el-form-item label="城市" label-width="120px">-->
-<!--          <el-select v-model="updateCityData.cityName" placeholder="选择城市">-->
-<!--          <el-option-->
-<!--            v-for="c in cityList"-->
-<!--            :key="c.value"-->
-<!--            :label="c.label"-->
-<!--            :value="c.label">-->
-<!--          </el-option>-->
-<!--        </el-select>-->
-<!--        </el-form-item>-->
         <el-form-item label="备注" label-width="120px">
           <el-input v-model="updateCityData.remark" autocomplete="off"></el-input>
         </el-form-item>
@@ -83,7 +73,7 @@
 
 
     <div class="search-container">
-      <el-form :inline="true" :model="searchBuilding" class="header">
+      <el-form :inline="true" class="header">
         <el-form-item>
           <h2>实验楼</h2>
         </el-form-item>
@@ -150,16 +140,6 @@
         <el-form-item label="实验楼" label-width="120px">
           <el-input v-model="updateBuildingData.factoryName" autocomplete="off"></el-input>
         </el-form-item>
-<!--        <el-form-item label="实验楼" label-width="120px">-->
-<!--          <el-select v-model="updateBuildingData.buildingName" placeholder="选择实验楼">-->
-<!--            <el-option-->
-<!--              v-for="c in buildingList"-->
-<!--              :key="c.value"-->
-<!--              :label="c.label"-->
-<!--              :value="c.label">-->
-<!--            </el-option>-->
-<!--          </el-select>-->
-<!--        </el-form-item>-->
         <el-form-item label="电话" label-width="120px">
           <el-input v-model="updateBuildingData.factoryPhoneNumber" autocomplete="off"></el-input>
         </el-form-item>
@@ -209,15 +189,15 @@
 
 
     <div class="search-container">
-      <el-form :inline="true" :model="searchByLab" class="header">
+      <el-form :inline="true" class="header">
         <el-form-item>
           <h2>实验室</h2>
         </el-form-item>
         <el-form-item>
-          <el-input placeholder="请输入实验室名"></el-input>
+          <el-input  v-model="searchLab" placeholder="请输入实验室名"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="searchLab">搜索</el-button>
+          <el-button type="primary" @click="searchByLab">搜索</el-button>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="newLabFormVisible = true">添加实验室</el-button>
@@ -272,16 +252,6 @@
             </el-option>
           </el-select>
         </el-form-item>
-<!--        <el-form-item label="实验室" label-width="120px">-->
-<!--          <el-select v-model="updateLabData.labName" placeholder="选择实验室">-->
-<!--            <el-option-->
-<!--              v-for="c in labList"-->
-<!--              :key="c.value"-->
-<!--              :label="c.label"-->
-<!--              :value="c.label">-->
-<!--            </el-option>-->
-<!--          </el-select>-->
-<!--        </el-form-item>-->
         <el-form-item label="实验室" label-width="120px">
           <el-input v-model="updateLabData.workshopName" autocomplete="off"></el-input>
         </el-form-item>
@@ -307,9 +277,9 @@
           <el-select v-model="newLabData.factory" placeholder="选择实验楼">
             <el-option
               v-for="c in buildingList"
-              :key="c.value"
-              :label="c.label"
-              :value="c.label">
+              :key="c.id"
+              :label="c.factoryName"
+              :value="c.factoryName">
             </el-option>
           </el-select>
         </el-form-item>
@@ -336,13 +306,29 @@
 
 <script>
   import {
-    getCityOptions, getCity,
-    getFactoryOptions, getFactory,
-    getWorkshopOptions, getWorkshop,
+    getCityOptions,
+    getCity,
+    getFactoryOptions,
+    getFactory,
+    getWorkshopOptions,
+    getWorkshop,
     //无：
-    updateCityApi, deleteCity, addCity, searchCityApi,
-    updateBuildingApi, deleteFactory, addFactory, searchBuildingApi,
-    updateLabApi, deleteWorkshop, addWorkshop, searchLabApi,
+    updateCityApi,
+    deleteCity,
+    addCity,
+    searchCityApi,
+    updateBuildingApi,
+    deleteFactory,
+    addFactory,
+    searchBuildingApi,
+    updateLabApi,
+    deleteWorkshop,
+    addWorkshop,
+    searchLabApi,
+    updateFactory,
+    updateWorkshop,
+    getCityByCityName,
+    getFactoryByFactoryName, getWorkshopByWorkshopName,
   } from '../../api/api';
 
 
@@ -401,21 +387,17 @@
               factory: '',
               remark:'',
             },
-
-
-
           }
       },
       methods: {
         async searchByCity(){
           if(this.searchCity !== "") {
-            this.cityData = (await searchCityApi(this.searchCity)).data.d;
+            this.cityData = (await getCityByCityName(this.searchCity)).data.d;
           } else {
             this.cityData = (await getCity()).data.d;
           }
         },
         async openCityUpdateForm(row){  //打开更新表单
-            console.log('test', row);
             this.updateCityData = JSON.parse(JSON.stringify(row));
             this.updateCityFormVisible = true;
         },
@@ -441,7 +423,8 @@
         },
         async updateCity(){
           try {
-            const data = await updateCityApi(this.updateCityData);
+            console.log(this.updateCityData);
+            const data = await updateCityApi(this.updateCityData.id, this.updateCityData);
             this.updateCityFormVisible = false;
             if (data.data.c === 200) {
               this.$message({
@@ -475,7 +458,7 @@
         },
         async searchByBuilding(){
           if(this.searchBuilding !== "") {
-            this.buildingData = (await searchBuildingApi(this.searchBuilding)).data.d;
+            this.buildingData = (await getFactoryByFactoryName(this.searchBuilding)).data.d;
           } else {
             this.buildingData = (await getFactory()).data.d;
           }
@@ -491,7 +474,7 @@
         },
         async updateBuilding(){
           try {
-            const data = await updateBuildingApi(this.updateBuildingData);
+            const data = await updateFactory(this.updateBuildingData.id, this.updateBuildingData);
             this.updateBuildingFormVisible = false;
             if (data.data.c === 200) {
               this.$message({
@@ -508,7 +491,6 @@
 
         },
         async openBuildingUpdateForm(row){//打开更新表单
-          console.log('test', row);
           this.updateBuildingData = JSON.parse(JSON.stringify(row));
           this.updateBuildingFormVisible = true;
         },
@@ -552,10 +534,11 @@
         },
 
         async searchByLab(){
+          console.log(this.searchLab);
           if(this.searchLab !== "") {
-            this.LabData = (await searchLabApi(this.searchLab)).data.d;
+            this.labData = (await getWorkshopByWorkshopName(this.searchLab)).data.d;
           } else {
-            this.LabData = (await getWorkshop()).data.d;
+            this.labData = (await getWorkshop()).data.d;
           }
         },
         async getUpdateLabList(city){
@@ -569,7 +552,7 @@
         },
         async updateLab(){
           try {
-            const data = await updateLabApi(this.updateLabData);
+            const data = await updateWorkshop(this.updateLabData.id, this.updateLabData);
             this.updateLabFormVisible = false;
             if (data.data.c === 200) {
               this.$message({
@@ -586,7 +569,6 @@
 
         },
         async openLabUpdateForm(row){//打开更新表单
-          console.log('test', row);
           this.updateLabData = JSON.parse(JSON.stringify(row));
           this.updateLabFormVisible = true;
         },
@@ -600,7 +582,7 @@
                 type: 'success'
               });
               //再获取一次所有实验室信息
-              this.LabData = (await getWorkshop()).data.d;
+              this.labData = (await getWorkshop()).data.d;
             }
           } catch (e) {
             this.newLabFormVisible = false;
@@ -619,7 +601,7 @@
                     type: 'success'
                   });
                   //再获取一次所有实验室信息
-                  this.LabData = (await getWorkshop()).data.d;
+                  this.labData = (await getWorkshop()).data.d;
                 }
               })
               .catch(_ => {
@@ -636,7 +618,7 @@
         this.buildingData = (await getFactory()).data.d;
         this.labData = (await getWorkshop()).data.d;
         this.cityList = (await getCityOptions()).data.d;
-        this.buildingList = (await getFactoryOptions('all')).data.d;
+        this.buildingList = (await getFactory()).data.d;
       }
     }
 </script>

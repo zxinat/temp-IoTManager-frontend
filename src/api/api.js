@@ -554,8 +554,8 @@ export function getCityDataApi() {
   return axios.get('/api/city')
 }
 
-export function updateCityApi(id) {
-  return axios.post(`/api/city/${id}`)
+export function updateCityApi(id, data) {
+  return axios.put(`/api/city/${id}`, {...data});
 }
 
 export function deleteCityApi(id) {
@@ -572,4 +572,36 @@ export function searchCityApi(city) {
 
 export function getBuildingDataApi() {
   return axios.get('/api/')
+}
+
+export function deleteCity(id) {
+  return axios.delete(`/api/city/${id}`);
+}
+
+export function deleteFactory(id) {
+  return axios.delete(`/api/factory/${id}`);
+}
+
+export function updateFactory(id, data) {
+  return axios.put(`/api/factory/${id}`, {...data});
+}
+
+export function deleteWorkshop(id) {
+  return axios.delete(`/api/workshop/${id}`);
+}
+
+export function updateWorkshop(id, data) {
+  return axios.put(`/api/workshop/${id}`, {...data});
+}
+
+export function getCityByCityName(cityName) {
+  return axios.get(`/api/city/cityName/${cityName}`);
+}
+
+export function getFactoryByFactoryName(factoryName) {
+  return axios.get(`/api/factory/factoryName/${factoryName}`);
+}
+
+export function getWorkshopByWorkshopName(workshopName) {
+  return axios.get(`/api/workshop/workshopName/${workshopName}`);
 }
