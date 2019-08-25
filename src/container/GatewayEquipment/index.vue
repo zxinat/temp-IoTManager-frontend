@@ -13,19 +13,19 @@
         <el-form-item>
           <el-button type="primary" @click="exportExcel">导出Excel</el-button>
         </el-form-item>
-        <!--<el-form-item>-->
-        <!--<el-upload-->
-        <!--ref="upload"-->
-        <!--action="https://jsonplaceholder.typicode.com/posts/"-->
-        <!--:show-file-list="false"-->
-        <!--:on-success="readExcel"-->
-        <!--:on-error="uploadFailed"-->
-        <!--:file-list="fileList">-->
-        <!--<el-button slot="trigger"-->
-        <!--type="primary">导入excel-->
-        <!--</el-button>-->
-        <!--</el-upload>-->
-        <!--</el-form-item>-->
+        <el-form-item>
+        <el-upload
+        ref="upload"
+        action="https://jsonplaceholder.typicode.com/posts/"
+        :show-file-list="false"
+        :on-success="readExcel"
+        :on-error="uploadFailed"
+        :file-list="fileList">
+        <el-button slot="trigger"
+        type="primary">导入excel
+        </el-button>
+        </el-upload>
+        </el-form-item>
       </el-form>
     </div>
     <div class="addbutton-container">
@@ -544,8 +544,7 @@
       uploadFailed() {
         this.$message.error('导入失败');
       },
-      readExcel(res, file) {
-        console.log('testss', file);
+      async readExcel(res, file) {
         let vm = this;
         const fileReader = new FileReader();
         fileReader.onload = (ev) => {
@@ -563,8 +562,8 @@
               "网关名称": "gatewayName",
               "更新时间": "gatewayType",
               "城市": "city",
-              "工厂": "factory",
-              "车间": "workshop",
+              "实验楼": "factory",
+              "实验室": "workshop",
               "网关状态": "gatewayState",
               "上次连接时间": "lastConnectionTime",
               "网关图像链接": "imageUrl",
@@ -580,8 +579,13 @@
               }
               return obj;
             });
+            const t = newData.forEach(async ob => {
+              const data = (await addGatewayApi(ob)).data.d;
+              if(data === 'success') {
+                this.getGateways();
+              }
+            });
             // 导入接口，将数据导入后端
-            vm.tableData.push(...newData);
             this.$message({
               message: '导入成功',
               type: 'success'

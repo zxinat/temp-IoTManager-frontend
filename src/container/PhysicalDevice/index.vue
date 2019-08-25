@@ -13,18 +13,18 @@
         <el-form-item>
           <el-button type="primary" @click="exportExcel">导出Excel</el-button>
         </el-form-item>
-        <!--<el-form-item>-->
-        <!--<el-upload-->
-        <!--ref="upload"-->
-        <!--action="/sss"-->
-        <!--:show-file-list="false"-->
-        <!--:on-success="readExcel"-->
-        <!--:on-error="uploadFailed">-->
-        <!--<el-button slot="trigger"-->
-        <!--type="primary">导入excel-->
-        <!--</el-button>-->
-        <!--</el-upload>-->
-        <!--</el-form-item>-->
+        <el-form-item>
+        <el-upload
+        ref="upload"
+        action="https://jsonplaceholder.typicode.com/posts/"
+        :show-file-list="false"
+        :on-success="readExcel"
+        :on-error="uploadFailed">
+        <el-button slot="trigger"
+        type="primary">导入excel
+        </el-button>
+        </el-upload>
+        </el-form-item>
       </el-form>
     </div>
     <div class="addbutton-container">
@@ -605,10 +605,10 @@
               "设备名称": "deviceName",
               "设备类型": "deviceType",
               "城市": "city",
-              "工厂": "factory",
-              "车间": "workshop",
+              "实验楼": "factory",
+              "实验室": "workshop",
               "设备图像链接": "imageUrl",
-              "所属网关ID": "gatewayID",
+              "所属网关": "gatewayId",
               "Mac地址": "mac",
               "设备状态": "deviceState",
               "上次连接时间": "lastConnectionTime",
@@ -625,7 +625,14 @@
               return obj;
             });
             // 导入接口，将数据导入后端
-            vm.tableData.push(...newData);
+            console.log(newData);
+            const t = newData.forEach(async ob => {
+              console.log(ob);
+              const data = (await addDeviceApi(ob)).data.d;
+              if (data === 'success') {
+                this.getDevices();
+              }
+            });
             this.$message({
               message: '导入成功',
               type: 'success'

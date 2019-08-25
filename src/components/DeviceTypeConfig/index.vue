@@ -1,7 +1,7 @@
 <template>
   <div>
   <div class="search-container">
-    <el-form :inline="true" :model="searchDeviceType" class="header">
+    <el-form :inline="true" class="header">
       <el-form-item>
         <h2>设备类型</h2>
       </el-form-item>
