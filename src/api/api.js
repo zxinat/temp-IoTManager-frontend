@@ -27,12 +27,16 @@ export function signOut(sessionID) {
 
 //折线图
 export function getDeviceProperty(id) {
-  return axios.get(`api/deviceProperty/${id}`);
+  // return axios.get(`api/deviceProperty/${id}`);
 
 }
 
 export function getDevicePropertyData(deviceid, propertyid) {
   return axios.get(`/api/deviceData/${deviceid}/${propertyid}`);
+}
+
+export function getDeviceMultiPropertyData(deviceId, properties) {
+  return axios.post(`/api/deviceData/multipleLineChart/${deviceId}`, {...properties});
 }
 
 //网关管理

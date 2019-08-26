@@ -2,7 +2,7 @@
   <div class="dashboard-line-chart">
     <div class="selector-container">
       设备
-      <el-select v-model="tmpDeviceSelectorValue" placeholder="请选择设备" @change="deviceChange">
+      <el-select v-model="tmpDeviceSelectorValue" filterable placeholder="请选择设备" @change="deviceChange">
         <el-option
           v-for="item in deviceSelectorOptions"
           :key="item.value"
@@ -11,7 +11,7 @@
         </el-option>
       </el-select>
       属性
-      <el-select v-model="tmpPropertySelectorValue" placeholder="请选择属性">
+      <el-select v-model="tmpPropertySelectorValue" multiple placeholder="请选择属性">
         <el-option
           v-for="item in propertySelectorOptions"
           :key="item.fieldId"
@@ -29,7 +29,14 @@
 <script>
   import echarts from 'echarts';
   import io from 'socket.io-client';
-  import {getDevicesApi, getDeviceProperty, getDevicePropertyData, getFields, getAffiliateFields} from '../../api/api';
+  import {
+    getDevicesApi,
+    getDeviceProperty,
+    getDevicePropertyData,
+    getFields,
+    getAffiliateFields,
+    getDeviceMultiPropertyData
+  } from '../../api/api';
   // const socket = io('ws://localhost:3000')
   export default {
     name: "DashboardLineChart",
@@ -42,7 +49,7 @@
         tmpDeviceSelectorValue: '',
         propertySelectorOptions: [],
         propertySelectorValue: '',
-        tmpPropertySelectorValue: '',
+        tmpPropertySelectorValue: [],
         chart: null,
         option: {
           title: {
@@ -108,22 +115,22 @@
           label: el.deviceName
         }
       });
-      if (this.deviceSelectorOptions[0] != null) {
-        this.tmpDeviceSelectorValue = this.deviceSelectorOptions[0].value;
-        this.propertySelectorOptions = (await getAffiliateFields(this.tmpDeviceSelectorValue)).data.d;
-        if (this.propertySelectorOptions[0] != null) {
-          console.log(this.propertySelectorOptions);
-          this.tmpPropertySelectorValue = this.propertySelectorOptions[0].fieldId;
-        }
-      }
-
-      if (this.deviceSelectorOptions[0] != null && this.propertySelectorOptions[0] != null) {
-        this.tmpDeviceSelectorValue = this.deviceSelectorOptions[0].value;
-        this.propertySelectorOptions = (await getAffiliateFields(this.deviceSelectorOptions[0].label)).data.d;
-        this.tmpPropertySelectorValue = this.propertySelectorOptions[0].fieldId;
-        this.searchLineChartData();
-
-      }
+      // if (this.deviceSelectorOptions[0] != null) {
+      //   this.tmpDeviceSelectorValue = this.deviceSelectorOptions[0].value;
+      //   this.propertySelectorOptions = (await getAffiliateFields(this.tmpDeviceSelectorValue)).data.d;
+      //   if (this.propertySelectorOptions[0] != null) {
+      //     console.log(this.propertySelectorOptions);
+      //     // this.tmpPropertySelectorValue = this.propertySelectorOptions[0].fieldId;
+      //   }
+      // }
+      //
+      // if (this.deviceSelectorOptions[0] != null && this.propertySelectorOptions[0] != null) {
+      //   this.tmpDeviceSelectorValue = this.deviceSelectorOptions[0].value;
+      //   this.propertySelectorOptions = (await getAffiliateFields(this.deviceSelectorOptions[0].label)).data.d;
+      //   // this.tmpPropertySelectorValue = this.propertySelectorOptions[0].fieldId;
+      //   // this.searchLineChartData();
+      //
+      // }
 
     },
     watch: {
@@ -149,22 +156,28 @@
           this.deviceSelectorValue = this.tmpDeviceSelectorValue;
           this.propertySelectorValue = this.tmpPropertySelectorValue;
           setTimeout(async () => {
-            let result = (await getDevicePropertyData(this.deviceSelectorValue, this.propertySelectorValue)).data.d;
-            this.chart.setOption({xAxis: [{data: result.xAxis}], series: [{data: result.series}]});
+            let result = (await getDeviceMultiPropertyData(this.deviceSelectorValue, {str: this.propertySelectorValue})).data.d;
+            this.setChart(result);
+            // this.chart.setOption({xAxis: [{data: result.xAxis}], series: [{data: result.series}]});
           }, 200);
           setInterval(async () => {
-            let result = (await getDevicePropertyData(this.deviceSelectorValue, this.propertySelectorValue)).data.d;
-            this.chart.setOption({xAxis: [{data: result.xAxis}], series: [{data: result.series}]});
+            let result = (await getDeviceMultiPropertyData(this.deviceSelectorValue, {str: this.propertySelectorValue})).data.d;
+            this.setChart(result);
+            // this.chart.setOption({xAxis: [{data: result.xAxis}], series: [{data: result.series}]});
           }, 10000);
-          this.initChart();
+          // this.initChart();
         }
-
-        // this.initChart();
-
+      },
+      setChart(opt) {
+        let s = [];
+        opt.forEach(e => {
+          s.push({type: 'line', data: e['series'], name: e['indexId'], label: {show: true}});
+        });
+        this.chart.setOption({xAxis:[{data: opt[0].xAxis}], series: s, legend: {data: this.propertySelectorValue}});
       },
       async deviceChange() {
         this.propertySelectorOptions = (await getAffiliateFields(this.tmpDeviceSelectorValue)).data.d;
-        this.tmpPropertySelectorValue = '';
+        this.tmpPropertySelectorValue = [];
       }
     },
     beforeDestroy() {
