@@ -424,6 +424,7 @@
   import UploadImg from "../../components/UploadImg/index";
   import FileSaver from 'file-saver'
   import XLSX from 'xlsx'
+  import {checkAuth} from "../../common/util";
 
   export default {
     name: "GatewayEquipment",
@@ -541,6 +542,9 @@
     },
 
     methods: {
+      checkGatewayAuth(auth) {
+        return checkAuth(auth);
+      },
       uploadFailed() {
         this.$message.error('导入失败');
       },

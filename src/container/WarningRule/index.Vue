@@ -3,7 +3,7 @@
     <div class="search-container">
       <el-form :inline="true" :model="searchData" class="demo-form-inline">
         <el-form-item label="选择设备">
-          <el-select v-model="curSearchDevice" placeholder="请选择" @change="getRules">
+          <el-select v-model="curSearchDevice" filterable placeholder="请选择" @change="getRules">
             <el-option value="全部" label="全部"></el-option>
             <el-option
               v-for="c in dropdownDevices"

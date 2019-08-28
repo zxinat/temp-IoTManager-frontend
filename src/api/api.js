@@ -609,3 +609,7 @@ export function getFactoryByFactoryName(factoryName) {
 export function getWorkshopByWorkshopName(workshopName) {
   return axios.get(`/api/workshop/workshopName/${workshopName}`);
 }
+
+export function getAuthByUid(uid) {
+  return axios.get(`/api/user/getAuth/${uid}`);
+}

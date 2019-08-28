@@ -3,7 +3,7 @@
     <div class="search-container">
       <el-form :inline="true" :model="searchDevice" class="header">
         <el-form-item>
-          <el-select v-model="curSearchDevice" @change="getDeviceData" placeholder="请选择设备">
+          <el-select v-model="curSearchDevice" filterable @change="getDeviceData" placeholder="请选择设备">
             <el-option value="全部" label="全部"></el-option>
             <el-option
               v-for="d in deviceOptions"
@@ -27,6 +27,7 @@
                      @current-change="pageChange()">
       </el-pagination>
       <el-table
+        v-if="checkPageAuth(['testAuth'])"
         :data="tableData"
         border
         style="width: 100%"
@@ -129,6 +130,7 @@
   } from '../../api/api';
   import FileSaver from 'file-saver'
   import XLSX from 'xlsx'
+  import {checkAuth} from "../../common/util";
 
   export default {
     name: "EquipmentData",
@@ -191,6 +193,9 @@
     },
 
     methods: {
+      checkPageAuth(auth) {
+        return checkAuth(auth);
+      },
       uploadFailed(){
         this.$message.error('导入失败');
       },
