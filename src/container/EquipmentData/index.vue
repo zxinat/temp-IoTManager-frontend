@@ -2,7 +2,7 @@
   <div>
     <div class="search-container">
       <el-form :inline="true" :model="searchDevice" class="header">
-        <el-form-item>
+        <el-form-item v-if="checkDeviceDataAuth(['DEVICEDATA_RETRIEVE'])">
           <el-select v-model="curSearchDevice" filterable @change="getDeviceData" placeholder="请选择设备">
             <el-option value="全部" label="全部"></el-option>
             <el-option
@@ -14,12 +14,12 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item>
+        <el-form-item v-if="checkDeviceDataAuth(['DEVICEDATA_EXPORT_EXCEL'])">
           <el-button type="primary" @click="exportExcel">导出Excel</el-button>
         </el-form-item>
       </el-form>
     </div>
-    <div class="table-container">
+    <div class="table-container" v-if="checkDeviceDataAuth(['DEVICEDATA_RETRIEVE'])">
       <el-pagination background layout="prev, pager, next"
                      :total="totalPage"
                      :current-page.sync="curPage"
@@ -27,7 +27,6 @@
                      @current-change="pageChange()">
       </el-pagination>
       <el-table
-        v-if="checkPageAuth(['testAuth'])"
         :data="tableData"
         border
         style="width: 100%"
@@ -36,7 +35,7 @@
         id="equipment-data-out-table">
         <el-table-column
           type="selection"
-          width="55">
+          width="55" v-if="checkDeviceDataAuth(['DEVICEDATA_DELETE'])">
         </el-table-column>
         <el-table-column
           prop="id"
@@ -78,16 +77,16 @@
         <el-table-column
           fixed="right"
           label="操作"
-          width="100">
+          width="100" v-if="checkDeviceDataAuth(['DEVICEDATA_DELETE', 'DEVICEDATA_UPDATE'])">
           <template slot-scope="scope">
-            <el-button @click="openUpdateForm(scope.row)" type="text" size="small">修改</el-button>
-            <el-button @click="deleteDevice(scope.row)" type="text" size="small">删除</el-button>
+            <el-button @click="openUpdateForm(scope.row)" type="text" size="small" v-if="checkDeviceDataAuth(['DEVICEDATA_UPDATE'])">修改</el-button>
+            <el-button @click="deleteDevice(scope.row)" type="text" size="small" v-if="checkDeviceDataAuth(['DEVICEDATA_DELETE'])">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
     <div class="addbutton-container">
-      <el-button type="primary" @click="multipleDelete">批量删除</el-button>
+      <el-button type="primary" @click="multipleDelete" v-if="checkDeviceDataAuth(['DEVICEDATA_DELETE'])">批量删除</el-button>
     </div>
     <el-dialog title="修改数据" :visible.sync="updateFormVisible">
       <el-form :model="updateData">
@@ -193,7 +192,7 @@
     },
 
     methods: {
-      checkPageAuth(auth) {
+      checkDeviceDataAuth(auth) {
         return checkAuth(auth);
       },
       uploadFailed(){

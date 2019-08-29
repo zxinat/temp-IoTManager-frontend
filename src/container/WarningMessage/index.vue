@@ -2,7 +2,7 @@
   <div>
     <div class="search-container">
       <el-form :inline="true" :model="searchData" class="demo-form-inline">
-        <el-form-item label="选择设备">
+        <el-form-item label="选择设备" v-if="checkInfoAuth(['ALARMINFO_RETRIEVE'])">
           <el-select v-model="curSearchDevice" filterable @change="getAlarmInformation" placeholder="请选择">
             <el-option value="全部" label="全部"></el-option>
             <el-option
@@ -19,7 +19,7 @@
     <!--<div class="addbutton-container">-->
       <!--<el-button type="primary" @click="newFormVisible = true">快速处理</el-button>-->
     <!--</div>-->
-    <div class="table-container">
+    <div class="table-container" v-if="checkInfoAuth(['ALARMINFO_RETRIEVE'])">
       <el-pagination background layout="prev, pager, next"
                      :total="totalPage"
                      :current-page.sync="curPage"
@@ -72,10 +72,10 @@
         <!--</el-table-column>-->
         <el-table-column
           fixed="right"
-          label="操作">
+          label="操作" v-if="checkInfoAuth(['ALARMINFO_UPDATE', 'ALARMINFO_DELETE'])">
           <template slot-scope="scope">
-            <el-button @click="openUpdateForm(scope.row)" type="text" size="small">处理</el-button>
-            <el-button @click="deleteDevice(scope.row)" type="text" size="small">删除</el-button>
+            <el-button @click="openUpdateForm(scope.row)" type="text" size="small" v-if="checkInfoAuth(['ALARMINFO_UPDATE'])">处理</el-button>
+            <el-button @click="deleteDevice(scope.row)" type="text" size="small" v-if="checkInfoAuth(['ALARMINFO_DELETE'])">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -131,6 +131,7 @@
     searchAlarmInformationApi, updateAlarmInfoProcessed,
     updateAlarmInformationApi
   } from '../../api/api';
+  import {checkAuth} from "../../common/util";
 
   export default {
         name: "WarningMessage",
@@ -187,6 +188,9 @@
       },
 
       methods: {
+        checkInfoAuth(auth) {
+          return checkAuth(auth);
+        },
         async searchDeviceByName() {
           const data = await searchAlarmInformationApi(this.searchData);
           this.tableData = data.data.d;

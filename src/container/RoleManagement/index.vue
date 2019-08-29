@@ -2,9 +2,9 @@
   <div class="role-management-container">
     <div class="top-header">
       <span style="font-size: 25px">{{$t('message.roleManagement')}}</span>
-      <el-button type="primary" class="float-right" @click="createNewDialogFormVisible=true">创建新用户</el-button>
+      <el-button type="primary" class="float-right" @click="createNewDialogFormVisible=true" v-if="checkUserAuth(['USER_CREATE'])">创建新用户</el-button>
     </div>
-    <div class="search">
+    <div class="search" v-if="checkUserAuth(['USER_RETRIEVE'])">
       <el-row>
         <el-col :span="20">
           <div class="grid-content bg-purple-dark">
@@ -31,7 +31,7 @@
       </el-row>
     </div>
     <!--<hr>-->
-    <div class="table">
+    <div class="table"v-if="checkUserAuth(['USER_RETRIEVE'])">
       <el-table
         :data="tableData"
         border
@@ -62,11 +62,11 @@
         <!--</el-table-column>-->
         <!--TODO:权限  -->
         <el-table-column
-          label="操作">
+          label="操作"v-if="checkUserAuth(['USER_DELETE', 'USER_UPDATE'])">
           <template slot-scope="scope">
-            <el-button @click="editAuthority(scope.row)" type="primary" size="small">修改</el-button>
+            <el-button @click="editAuthority(scope.row)" type="primary" size="small" v-if="checkUserAuth(['USER_UPDATE'])">修改</el-button>
             <!--<el-button @click="resetPassword(scope.row)" type="warning" size="small">重置随机密码</el-button>-->
-            <el-button @click="deleteUser(scope.row)" type="danger" size="small">删除</el-button>
+            <el-button @click="deleteUser(scope.row)" type="danger" size="small" v-if="checkUserAuth(['USER_DELETE'])">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -196,6 +196,7 @@
     searchUsers
   } from '../../api/api';
   import {isvalidPhone} from '../../common/validate';
+  import {checkAuth} from "../../common/util";
 
   var validPhone = (rule, value, callback) => {
     if (!value) {
@@ -276,6 +277,9 @@
       }
     },
     methods: {
+      checkUserAuth(auth) {
+        return checkAuth(auth);
+      },
       async searchDeviceByName() {
         let result = (await getUserTable(this.username, this.department));
         if (result.data.c === 200) {

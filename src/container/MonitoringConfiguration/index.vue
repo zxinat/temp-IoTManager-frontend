@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-form :inline="true" :model="form" class="header">
-      <el-form-item :label="GLOBAL.firstLevel">
+      <el-form-item :label="GLOBAL.firstLevel" v-if="checkMonitorAuth(['MONITOR_RETRIEVE'])">
         <el-select v-model="form.city" @change="getFactoryList(form.city)" placeholder="请选择城市">
           <el-option
             v-for="item in cityOptions"
@@ -11,7 +11,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item :label="GLOBAL.secondLevel">
+      <el-form-item :label="GLOBAL.secondLevel" v-if="checkMonitorAuth(['MONITOR_RETRIEVE'])">
         <el-select v-model="form.factory" placeholder="请选择工厂">
           <el-option
             v-for="item in factoryOptions"
@@ -21,13 +21,13 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item>
+      <el-form-item v-if="checkMonitorAuth(['MONITOR_RETRIEVE'])">
         <el-button type="primary" @click="filter"><img src="../../assets/img/find.svg">筛选</el-button>
       </el-form-item>
-      <el-form-item style="float: right">
+      <el-form-item style="float: right" v-if="checkMonitorAuth(['MONITOR_EXPORT_DEVICEDATA'])">
         <el-button type="primary" @click="showExportDeviceData = true">导出设备数据</el-button>
       </el-form-item>
-      <el-form-item style="float: right">
+      <el-form-item style="float: right" v-if="checkMonitorAuth(['MONITOR_DEFINE_THRESHOLD'])">
         <el-button type="primary" @click="showAlarmRules=true">定义报警规则</el-button>
       </el-form-item>
     </el-form>
@@ -127,7 +127,7 @@
         <el-button type="primary" @click="submitAlarmRules">确 定</el-button>
       </div>
     </el-dialog>
-    <el-row>
+    <el-row v-if="checkMonitorAuth(['MONITOR_RETRIEVE'])">
       <el-col :span="3">
         <!--<MonitoringTree></MonitoringTree>-->
         <div class="monitoring-tree-container">
@@ -173,6 +173,7 @@
     getFactoryOptions,
     getFields, getSeverity
   } from "../../api/api";
+  import {checkAuth} from "../../common/util";
 
   export default {
     name: "MonitoringConfiguration",
@@ -229,6 +230,9 @@
       }
     },
     methods: {
+      checkMonitorAuth(auth) {
+        return checkAuth(auth);
+      },
       async getAffiliateField(deviceId) {
         this.fieldOptions = (await getAffiliateFields(deviceId)).data.d;
       },

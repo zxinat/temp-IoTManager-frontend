@@ -2,7 +2,7 @@
   <div>
     <div class="search-container">
       <el-form :inline="true" :model="searchGateway" class="header">
-        <el-form-item>
+        <el-form-item v-if="checkGatewayAuth(['GATEWAY_RETRIEVE'])">
           <el-cascader
             v-model="cascaderValue"
             :placeholder="'选择' + GLOBAL.firstLevel + '/' + GLOBAL.secondLevel + '/' + GLOBAL.thirdLevel "
@@ -10,10 +10,10 @@
             @change="searchCascader">
           </el-cascader>
         </el-form-item>
-        <el-form-item>
+        <el-form-item v-if="checkGatewayAuth(['GATEWAY_EXPORT_EXCEL'])">
           <el-button type="primary" @click="exportExcel">导出Excel</el-button>
         </el-form-item>
-        <el-form-item>
+        <el-form-item v-if="checkGatewayAuth(['GATEWAY_IMPORT_EXCEL'])">
         <el-upload
         ref="upload"
         action="https://jsonplaceholder.typicode.com/posts/"
@@ -28,10 +28,10 @@
         </el-form-item>
       </el-form>
     </div>
-    <div class="addbutton-container">
+    <div class="addbutton-container" v-if="checkGatewayAuth(['GATEWAY_CREATE'])">
       <el-button type="primary" @click="newFormVisible = true">新增网关</el-button>
     </div>
-    <div class="table-container">
+    <div class="table-container" v-if="checkGatewayAuth(['GATEWAY_RETRIEVE'])">
       <el-pagination background layout="prev, pager, next"
                      :total="totalPage"
                      :current-page.sync="curPage"
@@ -46,7 +46,7 @@
         @sort-change="sortChange"
         id="gateway-equipment-out-table">
         <el-table-column
-          type="selection">
+          type="selection" v-if="checkGatewayAuth(['GATEWAY_DELETE'])">
         </el-table-column>
         <el-table-column
           prop="hardwareGatewayID"
@@ -106,16 +106,16 @@
         </el-table-column>-->
         <el-table-column
           fixed="right"
-          label="操作">
+          label="操作" v-if="checkGatewayAuth(['GATEWAY_UPDATE', 'GATEWAY_DELETE'])">
           <template slot-scope="scope">
-            <el-button @click="openUpdateForm(scope.row)" type="text" size="small">修改</el-button>
-            <el-button @click="deleteGateway(scope.row)" type="text" size="small">删除</el-button>
+            <el-button @click="openUpdateForm(scope.row)" type="text" size="small" v-if="checkGatewayAuth(['GATEWAY_UPDATE'])">修改</el-button>
+            <el-button @click="deleteGateway(scope.row)" type="text" size="small" v-if="checkGatewayAuth(['GATEWAY_DELETE'])">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
     <div class="addbutton-container">
-      <el-button type="primary" @click="multipleDelete">批量删除</el-button>
+      <el-button type="primary" @click="multipleDelete" v-if="checkGatewayAuth(['GATEWAY_DELETE'])">批量删除</el-button>
     </div>
     <el-dialog title="修改网关" :visible.sync="updateFormVisible">
       <el-form :model="updateData">

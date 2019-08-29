@@ -5,26 +5,23 @@
       <el-form-item>
         <h2>设备类型</h2>
       </el-form-item>
-      <el-form-item>
+      <el-form-item v-if="checkTypeAuth(['CONFIGURE_SYSTEM_RETRIEVE'])">
         <el-input v-model="searchDeviceType" placeholder="请输入设备类型"></el-input>
       </el-form-item>
-      <el-form-item>
+      <el-form-item v-if="checkTypeAuth(['CONFIGURE_SYSTEM_RETRIEVE'])">
         <el-button type="primary" @click="searchByDeviceType">搜索</el-button>
       </el-form-item>
-      <el-form-item>
+      <el-form-item v-if="checkTypeAuth(['CONFIGURE_SYSTEM_CREATE'])">
         <el-button type="primary" @click="newFormVisible = true">添加</el-button>
       </el-form-item>
     </el-form>
   </div>
-  <div class="table-container">
+  <div class="table-container" v-if="checkTypeAuth(['CONFIGURE_SYSTEM_RETRIEVE'])">
     <el-table
       :data="tableData"
       border
       style="width: 60%"
       @selection-change="handleSelectionChange">
-      <el-table-column
-        type="selection">
-      </el-table-column>
       <el-table-column
         prop="deviceType"
         label="设备类型">
@@ -35,17 +32,14 @@
       </el-table-column>
       <el-table-column
         fixed="right"
-        label="操作">
+        label="操作" v-if="checkTypeAuth(['CONFIGURE_SYSTEM_DELETE', 'CONFIGURE_SYSTEM_UPDATE'])">
         <template slot-scope="scope">
-          <el-button @click="openUpdateForm(scope.row)" type="text" size="small">修改</el-button>
-          <el-button @click="deleteDeviceType(scope.row)" type="text" size="small">删除</el-button>
+          <el-button @click="openUpdateForm(scope.row)" type="text" size="small" v-if="checkTypeAuth(['CONFIGURE_SYSTEM_UPDATE'])">修改</el-button>
+          <el-button @click="deleteDeviceType(scope.row)" type="text" size="small" v-if="checkTypeAuth(['CONFIGURE_SYSTEM_DELETE'])">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
   </div>
-    <div class="deleteButton-container">
-      <el-button type="primary" @click="multipleDelete">批量删除</el-button>
-    </div>
 
     <el-dialog title="修改设备类型" :visible.sync="updateFormVisible">
       <el-form :model="updateData">
@@ -92,6 +86,7 @@
       getDeviceTypeApi, searchDeviceTypeApi, deleteDeviceTypeApi, updateDeviceTypeApi,
       getDeviceType, addDeviceTypeApi, deleteMultipleDeviceTypeApi
     } from '../../api/api'
+    import {checkAuth} from "../../common/util";
     export default {
       name: "DeviceTypeConfig",
       data() {
@@ -120,6 +115,9 @@
       },
 
       methods: {
+        checkTypeAuth(auth) {
+          checkAuth(auth);
+        },
         handleSelectionChange(val) {
           console.log('change', this.multipleSelection);
           this.multipleSelection = val;

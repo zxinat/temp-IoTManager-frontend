@@ -2,7 +2,7 @@
   <div>
     <div class="search-container">
       <el-form :inline="true" :model="searchData" class="demo-form-inline">
-        <el-form-item label="选择设备">
+        <el-form-item label="选择设备" v-if="checkRuleAuth(['ALARMRULE_RETRIEVE'])">
           <el-select v-model="curSearchDevice" filterable placeholder="请选择" @change="getRules">
             <el-option value="全部" label="全部"></el-option>
             <el-option
@@ -16,7 +16,7 @@
       </el-form>
     </div>
     <h2 style="margin-left: 10px">告警规则</h2>
-    <div class="table-container">
+    <div class="table-container" v-if="checkRuleAuth(['ALARMRULE_RETRIEVE'])">
       <el-pagination background layout="prev, pager, next"
                      :total="totalPage"
                      :current-page.sync="curPage"
@@ -30,7 +30,7 @@
         border>
         <el-table-column
           type="selection"
-          width="55"/>
+          width="55" v-if="checkRuleAuth(['ALARMRULE_DELETE'])"/>
         <el-table-column
           prop="name"
           label="规则名称" sortable="custom">
@@ -54,16 +54,16 @@
         <el-table-column
         fixed="right"
         label="操作"
-        width="100">
+        width="100" v-if="checkRuleAuth(['ALARMRULE_UPDATE', 'ALARMRULE_DELETE'])">
         <template slot-scope="scope">
-        <el-button @click="openUpdateForm(scope.row)" type="text" size="small">修改</el-button>
-        <el-button @click="deleteRule(scope.row)" type="text" size="small">删除</el-button>
+        <el-button @click="openUpdateForm(scope.row)" type="text" size="small" v-if="checkRuleAuth(['ALARMRULE_UPDATE'])">修改</el-button>
+        <el-button @click="deleteRule(scope.row)" type="text" size="small" v-if="checkRuleAuth(['ALARMRULE_DELETE'])">删除</el-button>
         </template>
         </el-table-column>
       </el-table>
     </div>
     <div class="addbutton-container">
-      <el-button type="primary" @click="multipleDelete">批量删除</el-button>
+      <el-button type="primary" @click="multipleDelete" v-if="checkRuleAuth(['ALARMRULE_DELETE'])">批量删除</el-button>
     </div>
 
       <el-dialog title="修改规则" :visible.sync="updateFormVisible">
@@ -134,6 +134,7 @@
     updateAlarmInformationApi, updateThreshold,
     //deleteMultipleWarningRuleApi
   } from '../../api/api';
+  import {checkAuth} from "../../common/util";
 
   export default {
     name: "WarningRule",
@@ -174,6 +175,9 @@
     },
 
     methods: {
+      checkRuleAuth(auth) {
+        return checkAuth(auth);
+      },
       async searchDeviceByName() {
         const data = await searchAlarmInformationApi(this.searchData);
         this.tableData = data.data.d;

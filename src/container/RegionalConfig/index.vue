@@ -5,18 +5,18 @@
         <el-form-item>
           <h2>城市管理</h2>
         </el-form-item>
-        <el-form-item>
+        <el-form-item v-if="checkRegionAuth(['CONFIGURE_REGION_RETRIEVE'])">
           <el-input v-model="searchCity" placeholder="请输入城市名"></el-input>
         </el-form-item>
-        <el-form-item>
+        <el-form-item v-if="checkRegionAuth(['CONFIGURE_REGION_RETRIEVE'])">
           <el-button type="primary" @click="searchByCity">搜索</el-button>
         </el-form-item>
-        <el-form-item>
+        <el-form-item v-if="checkRegionAuth(['CONFIGURE_REGION_CREATE'])">
           <el-button type="primary" @click="newCityFormVisible = true">添加城市</el-button>
         </el-form-item>
       </el-form>
     </div>
-    <div class="table-container">
+    <div class="table-container" v-if="checkRegionAuth(['CONFIGURE_REGION_RETRIEVE'])">
       <el-table
         :data="cityData"
         border
@@ -31,10 +31,10 @@
         </el-table-column>
         <el-table-column
           fixed="right"
-          label="操作">
+          label="操作" v-if="checkRegionAuth(['CONFIGURE_REGION_DELETE', 'CONFIGURE_REGION_UPDATE'])">
           <template slot-scope="scope">
-            <el-button @click="openCityUpdateForm(scope.row)" type="text" size="small">修改</el-button>
-            <el-button @click="deleteCity(scope.row)" type="text" size="small">删除</el-button>
+            <el-button @click="openCityUpdateForm(scope.row)" type="text" size="small" v-if="checkRegionAuth(['CONFIGURE_REGION_UPDATE'])">修改</el-button>
+            <el-button @click="deleteCity(scope.row)" type="text" size="small" v-if="checkRegionAuth(['CONFIGURE_REGION_DELETE'])">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -77,18 +77,18 @@
         <el-form-item>
           <h2>实验楼</h2>
         </el-form-item>
-        <el-form-item>
+        <el-form-item v-if="checkRegionAuth(['CONFIGURE_REGION_RETRIEVE'])">
           <el-input v-model="searchBuilding" placeholder="请输入实验楼名"></el-input>
         </el-form-item>
-        <el-form-item>
+        <el-form-item v-if="checkRegionAuth(['CONFIGURE_REGION_RETRIEVE'])">
           <el-button type="primary" @click="searchByBuilding">搜索</el-button>
         </el-form-item>
-        <el-form-item>
+        <el-form-item v-if="checkRegionAuth(['CONFIGURE_REGION_CREATE'])">
           <el-button type="primary" @click="newBuildingFormVisible = true">添加实验楼</el-button>
         </el-form-item>
       </el-form>
     </div>
-    <div class="table-container">
+    <div class="table-container" v-if="checkRegionAuth(['CONFIGURE_REGION_RETRIEVE'])">
       <el-table
         :data="buildingData"
         border
@@ -115,10 +115,10 @@
         </el-table-column>
         <el-table-column
           fixed="right"
-          label="操作">
+          label="操作" v-if="checkRegionAuth(['CONFIGURE_REGION_DELETE', 'CONFIGURE_REGION_UPDATE'])">
           <template slot-scope="scope">
-            <el-button @click="openBuildingUpdateForm(scope.row)" type="text" size="small">修改</el-button>
-            <el-button @click="deleteBuilding(scope.row)" type="text" size="small">删除</el-button>
+            <el-button @click="openBuildingUpdateForm(scope.row)" type="text" size="small" v-if="checkRegionAuth(['CONFIGURE_REGION_UPDATE'])">修改</el-button>
+            <el-button @click="deleteBuilding(scope.row)" type="text" size="small" v-if="checkRegionAuth(['CONFIGURE_REGION_DELETE'])">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -193,18 +193,18 @@
         <el-form-item>
           <h2>实验室</h2>
         </el-form-item>
-        <el-form-item>
+        <el-form-item v-if="checkRegionAuth(['CONFIGURE_REGION_RETRIEVE'])">
           <el-input  v-model="searchLab" placeholder="请输入实验室名"></el-input>
         </el-form-item>
-        <el-form-item>
+        <el-form-item v-if="checkRegionAuth(['CONFIGURE_REGION_RETRIEVE'])">
           <el-button type="primary" @click="searchByLab">搜索</el-button>
         </el-form-item>
-        <el-form-item>
+        <el-form-item v-if="checkRegionAuth(['CONFIGURE_REGION_CREATE'])">
           <el-button type="primary" @click="newLabFormVisible = true">添加实验室</el-button>
         </el-form-item>
       </el-form>
     </div>
-    <div class="table-container">
+    <div class="table-container" v-if="checkRegionAuth(['CONFIGURE_REGION_RETRIEVE'])">
       <el-table
         :data="labData"
         border
@@ -230,10 +230,10 @@
         </el-table-column>
         <el-table-column
           fixed="right"
-          label="操作">
+          label="操作" v-if="checkRegionAuth(['CONFIGURE_REGION_DELETE', 'CONFIGURE_REGION_UPDATE'])">
           <template slot-scope="scope">
-            <el-button @click="openLabUpdateForm(scope.row)" type="text" size="small">修改</el-button>
-            <el-button @click="deleteLab(scope.row)" type="text" size="small">删除</el-button>
+            <el-button @click="openLabUpdateForm(scope.row)" type="text" size="small" v-if="checkRegionAuth(['CONFIGURE_REGION_UPDATE'])">修改</el-button>
+            <el-button @click="deleteLab(scope.row)" type="text" size="small" v-if="checkRegionAuth(['CONFIGURE_REGION_DELETE'])">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -326,6 +326,7 @@
     getCityByCityName,
     getFactoryByFactoryName, getWorkshopByWorkshopName,
   } from '../../api/api';
+  import {checkAuth} from "../../common/util";
 
 
     export default {
@@ -386,6 +387,9 @@
           }
       },
       methods: {
+        checkRegionAuth(auth) {
+          return checkAuth(auth);
+        },
         async searchByCity(){
           if(this.searchCity !== "") {
             this.cityData = (await getCityByCityName(this.searchCity)).data.d;

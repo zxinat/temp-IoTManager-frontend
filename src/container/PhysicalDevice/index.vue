@@ -2,7 +2,7 @@
   <div>
     <div class="search-container">
       <el-form :inline="true" :model="searchDevice" class="header">
-        <el-form-item>
+        <el-form-item v-if="checkDeviceAuth(['DEVICE_RETRIEVE'])">
           <el-cascader
             v-model="cascaderValue"
             :placeholder="'选择' + GLOBAL.firstLevel + '/' + GLOBAL.secondLevel + '/' + GLOBAL.thirdLevel "
@@ -10,10 +10,10 @@
             @change="searchCascader">
           </el-cascader>
         </el-form-item>
-        <el-form-item>
+        <el-form-item v-if="checkDeviceAuth(['DEVICE_EXPORT_EXCEL'])">
           <el-button type="primary" @click="exportExcel">导出Excel</el-button>
         </el-form-item>
-        <el-form-item>
+        <el-form-item v-if="checkDeviceAuth(['DEVICE_IMPORT_EXCEL'])">
         <el-upload
         ref="upload"
         action="https://jsonplaceholder.typicode.com/posts/"
@@ -27,10 +27,10 @@
         </el-form-item>
       </el-form>
     </div>
-    <div class="addbutton-container">
+    <div class="addbutton-container" v-if="checkDeviceAuth(['DEVICE_CREATE'])">
       <el-button type="primary" @click="newFormVisible = true">新增设备</el-button>
     </div>
-    <div class="table-container">
+    <div class="table-container" v-if="checkDeviceAuth(['DEVICE_RETRIEVE'])">
       <el-pagination background layout="prev, pager, next"
                      :total="totalPage"
                      :current-page.sync="curPage"
@@ -45,7 +45,7 @@
         @sort-change="sortChange"
         id="physical-device-out-table">
         <el-table-column
-          type="selection">
+          type="selection" v-if="checkDeviceAuth(['DEVICE_DELETE'])">
         </el-table-column>
         <el-table-column
           prop="hardwareDeviceID"
@@ -116,16 +116,16 @@
         </el-table-column>
         <el-table-column
           fixed="right"
-          label="操作">
+          label="操作" v-if="checkDeviceAuth(['DEVICE_UPDATE', 'DEVICE_DELETE'])">
           <template slot-scope="scope">
-            <el-button @click="openUpdateForm(scope.row)" type="text" size="small">修改</el-button>
-            <el-button @click="deleteDevice(scope.row)" type="text" size="small">删除</el-button>
+            <el-button @click="openUpdateForm(scope.row)" type="text" size="small" v-if="checkDeviceAuth(['DEVICE_UPDATE'])">修改</el-button>
+            <el-button @click="deleteDevice(scope.row)" type="text" size="small" v-if="checkDeviceAuth(['DEVICE_DELETE'])">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
     <div class="addbutton-container">
-      <el-button type="primary" @click="multipleDelete">批量删除</el-button>
+      <el-button type="primary" @click="multipleDelete" v-if="checkDeviceAuth(['DEVICE_DELETE'])">批量删除</el-button>
     </div>
     <el-dialog title="修改设备" :visible.sync="updateFormVisible">
       <el-form :model="updateData">
@@ -462,6 +462,7 @@
   import UploadImg from "../../components/UploadImg/index";
   import FileSaver from 'file-saver'
   import XLSX from 'xlsx'
+  import {checkAuth} from "../../common/util";
 
   export default {
     name: "PhysicalDevice",
@@ -584,6 +585,9 @@
     },
 
     methods: {
+      checkDeviceAuth(auth) {
+        return checkAuth(auth);
+      },
       uploadFailed() {
         this.$message.error('导入失败');
       },

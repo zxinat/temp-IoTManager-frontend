@@ -58,6 +58,7 @@
           // signOut(sessionID);
           delCookie('userSessionID');
           localStorage.removeItem('userInfo');
+          localStorage.removeItem('auth');
           this.$router.push('/login');
         },
         changeColor(color){
