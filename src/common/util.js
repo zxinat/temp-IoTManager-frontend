@@ -6,6 +6,5 @@ export function checkAuth(auth) {
       flag = true;
     }
   });
-  console.log(flag);
   return flag;
 }

@@ -4,7 +4,7 @@
       设备
       <el-select v-model="tmpDeviceSelectorValue" filterable placeholder="请选择设备" @change="deviceChange">
         <el-option
-          v-for="item in deviceSelectorOptions"
+          v-for="item in computedDeviceOption"
           :key="item.value"
           :label="item.label"
           :value="item.value">
@@ -73,7 +73,7 @@
               textStyle: {
                 margin: 15,
               },
-              interval: 0
+              interval: 0,
             },
             axisTick: {
               show: false,
@@ -144,6 +144,18 @@
         });
       }
     },
+    computed: {
+      computedDeviceOption: {
+        get: function() {
+          return this.$store.state.device.dashboardDeviceOption.map(el => {
+            return {
+              value: el.hardwareDeviceID,
+              label: el.deviceName
+            }
+          });
+        }
+      }
+    },
     methods: {
       initChart() {
         this.chart = echarts.init(document.getElementsByClassName('dashboard-line-chart-container')[0]);
@@ -171,7 +183,7 @@
       setChart(opt) {
         let s = [];
         opt.forEach(e => {
-          s.push({type: 'line', data: e['series'], name: e['indexId'], label: {show: true}});
+          s.push({type: 'bar', data: e['series'], name: e['indexId'], label: {show: true}});
         });
         this.chart.setOption({xAxis:[{data: opt[0].xAxis}], series: s, legend: {data: this.propertySelectorValue}});
       },

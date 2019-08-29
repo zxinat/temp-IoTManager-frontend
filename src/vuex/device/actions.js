@@ -8,7 +8,10 @@ const actions = {
   },
   async setCurrentDeviceData({commit,dispatch,state},data){
     commit(Type.SET_CURRENT_DEVICE_DATA,data);
-  }
+  },
+  async setDashboardDeviceOption({commit, dispatch, state}, data){
+    commit(Type.SET_DASHBOARD_DEVICE_OPTION, data);
+  },
 };
 
 export default actions;

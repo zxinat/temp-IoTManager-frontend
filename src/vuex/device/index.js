@@ -31,7 +31,8 @@ const state = {
     "humidity":"80%",
     "faultTolerantNumber": '2',
     "saveInterval": '3s'
-  }
+  },
+  dashboardDeviceOption: []
 };
 
 export default {

@@ -505,6 +505,10 @@ export function getMapInfo() {
   return axios.get('/api/city/mapInfo');
 }
 
+export function getOneMapInfo(cityName) {
+  return axios.get(`/api/city/oneMapInfo?cityName=${cityName}`);
+}
+
 export function getAffiliateFields(deviceName) {
   return axios.get(`/api/field/affiliate/${deviceName}`);
 }
@@ -612,4 +616,8 @@ export function getWorkshopByWorkshopName(workshopName) {
 
 export function getAuthByUid(uid) {
   return axios.get(`/api/user/getAuth/${uid}`);
+}
+
+export function getDeviceByCity(cityName) {
+  return axios.get(`/api/device/getByCity?cityName=${cityName}`);
 }

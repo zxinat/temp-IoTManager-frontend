@@ -67,6 +67,7 @@
             <el-button @click="editAuthority(scope.row)" type="primary" size="small" v-if="checkUserAuth(['USER_UPDATE'])">修改</el-button>
             <!--<el-button @click="resetPassword(scope.row)" type="warning" size="small">重置随机密码</el-button>-->
             <el-button @click="deleteUser(scope.row)" type="danger" size="small" v-if="checkUserAuth(['USER_DELETE'])">删除</el-button>
+            <el-button type="success" size="small">权限</el-button>
           </template>
         </el-table-column>
       </el-table>

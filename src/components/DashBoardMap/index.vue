@@ -4,7 +4,7 @@
       <span class="demonstration">地域筛选</span>
       <el-cascader
         :options="selectorOptions"
-        v-model="selectedArea"
+        v-model="searchCity"
         @change="areaFilter">
       </el-cascader>
       <div class="dashboard-map-container">
@@ -25,8 +25,16 @@
   // 一定要引入才能正常显示
   import 'echarts/map/js/world';
   import {
-    getDeviceAmount, getCityOptions, getGatewayByWorkshop,
-    getFactoryOptions, getWorkshopOptions, getMapInfo, getCityCascaderOptions,
+    getDeviceAmount,
+    getCityOptions,
+    getGatewayByWorkshop,
+    getFactoryOptions,
+    getWorkshopOptions,
+    getMapInfo,
+    getCityCascaderOptions,
+    getOneMapInfo,
+    getDeviceByCity,
+    getDevicesApi,
   } from "../../api/api";
 
   export default {
@@ -34,6 +42,7 @@
     data() {
       return {
         chart: null,
+        searchCity: ['全部'],
         option: {
           backgroundColor: '#404a59',  		// 图表背景色
           tooltip: {
@@ -83,13 +92,17 @@
         let myChart = echarts.init(document.getElementsByClassName('dashboard-map-container')[0]); //这里是为了获得容器所在位置
         window.onresize = myChart.resize;
         myChart.setOption(this.option);
-        console.log(this.option);
       },
-      areaFilter(value) {
-        console.log(value);
+      async areaFilter() {
+        this.setMapInfo();
       },
       async setMapInfo() {
-        const amount = (await getMapInfo()).data.d;
+        let amount = [];
+        if (this.searchCity[0] === '全部') {
+          amount = (await getMapInfo()).data.d;
+        } else {
+          amount = (await getOneMapInfo(this.searchCity[0])).data.d;
+        }
         this.option.series = [
           {
             name: '设备分布', // series名称
@@ -99,6 +112,15 @@
           }
         ];
         this.chinaConfigure();
+
+        let data = [];
+        if (this.searchCity[0] === '全部') {
+          data = (await getDevicesApi('all')).data.d;
+        } else {
+          data = (await getDeviceByCity(this.searchCity[0])).data.d;
+        }
+        console.log('dispatch', data);
+        this.$store.dispatch('device/setDashboardDeviceOption', data);
       },
       async getDeviceOptions() {
         this.selectorOptions = (await getCityCascaderOptions()).data.d;
