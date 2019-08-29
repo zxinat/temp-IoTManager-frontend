@@ -183,7 +183,7 @@
       setChart(opt) {
         let s = [];
         opt.forEach(e => {
-          s.push({type: 'bar', data: e['series'], name: e['indexId'], label: {show: true}});
+          s.push({type: 'bar', barGap: '0', data: e['series'], name: e['indexId'], label: {show: true}});
         });
         this.chart.setOption({xAxis:[{data: opt[0].xAxis}], series: s, legend: {data: this.propertySelectorValue}});
       },
