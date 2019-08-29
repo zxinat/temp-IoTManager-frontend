@@ -1,6 +1,5 @@
 <template>
   <div class="data-statistic-container">
-    <h3>功能完善中，敬请期待</h3>
     <el-date-picker
       v-model="timeDuration"
       type="daterange"
@@ -15,10 +14,10 @@
         <el-button type="primary" @click="setTimeDuration">最近100个数据</el-button>
       </el-col>
       <el-col :span="6">
-        <el-button type="primary" @click="setTimeDuration('day')">日数据</el-button>
+        <el-button type="primary" @click="setTimeDuration('hour')">时数据</el-button>
       </el-col>
       <el-col :span="6">
-        <el-button type="primary" @click="setTimeDuration('week')">周数据</el-button>
+        <el-button type="primary" @click="setTimeDuration('day')">日数据</el-button>
       </el-col>
       <el-col :span="6">
         <el-button type="primary" @click="setTimeDuration('month')">月数据</el-button>
@@ -164,13 +163,13 @@
       },
       setTimeDuration(value) {
         switch (value) {
-          case 'day':
+          case 'hour':
             this.timeDuration=[new Date() - 86400000, new Date()];
             this.stopPolling();
             // 数据修改操作接口，传入快捷时间方式，返回min数组、max数组、ave数组、x轴数组
             this.chart.setOption(this.chartOption,true);
             break;
-          case 'week':
+          case 'day':
             this.stopPolling();
             this.timeDuration=[new Date() - 86400000 * 7, new Date()];
             // 数据修改操作接口，传入快捷时间方式，返回min数组、max数组、ave数组、x轴数组
