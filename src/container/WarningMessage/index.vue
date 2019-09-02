@@ -318,7 +318,7 @@
             this.$confirm('确认删除？')
               .then(async _ => {
                 this.deleteData.number = this.multipleSelection.map(el => el.id);
-                const data = await batchDeleteThresholds(this.deleteData);
+                const data = {};
                 if (data.data.c === 200) {
                   this.$message({
                     message: '删除成功',
@@ -337,7 +337,7 @@
       },
       async mounted() {
         //获取所有设备信息
-        this.getTotalPage('all');
+        this.getTotalPage('search');
         this.getAlarmInformation();
         this.rulesData = (await getAllRules()).data.d;
         this.dropdownDevices = (await getDevicesApi()).data.d;

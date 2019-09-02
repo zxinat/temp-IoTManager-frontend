@@ -422,7 +422,7 @@
       }
     },
     async mounted() {
-      this.getTotalPage('all');
+      this.getTotalPage('search');
       this.getDeviceOptions();
       this.getCityList();
       //获取所有设备信息
