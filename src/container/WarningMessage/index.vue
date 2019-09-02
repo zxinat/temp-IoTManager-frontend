@@ -33,6 +33,11 @@
         @selection-change="handleSelectionChange"
         @sort-change="sortChange">
         <el-table-column
+          type="selection"
+          width="55" v-if="checkInfoAuth(['ALARMINFO_DELETE'])">
+        >
+        </el-table-column>
+        <el-table-column
           fixed
           prop="deviceId"
           label="设备ID"
@@ -80,6 +85,10 @@
         </el-table-column>
       </el-table>
     </div>
+    <div class="deleteButton-container">
+      <el-button type="primary" @click="multipleDelete" v-if="checkInfoAuth(['ALARMINFO_DELETE'])">批量删除</el-button>
+    </div>
+
     <el-dialog title="告警处理" :visible.sync="updateFormVisible">
       <el-form :model="updateData">
         <el-form-item label="处理方式" label-width="120px">
@@ -124,6 +133,7 @@
 
 <script>
   import {
+    batchDeleteThresholds,
     deleteAlarmInfo,
     getAlarmInfoByDeviceid, getAlarmInfoNumber,
     getAlarmInformationApi, getAllRules, getDevicesApi,
@@ -183,6 +193,9 @@
           searchData: {
             deviceID: '',
             deviceName: ''
+          },
+          deleteData: {
+            number: []
           }
         }
       },
@@ -299,7 +312,28 @@
             const d = deviceId === '全部' ? 'all' : deviceId;
             this.totalPage = (await getAlarmInfoNumber('search', d)).data.d;
           }
-        }
+        },
+        async multipleDelete() {
+          try {
+            this.$confirm('确认删除？')
+              .then(async _ => {
+                this.deleteData.number = this.multipleSelection.map(el => el.id);
+                const data = await batchDeleteThresholds(this.deleteData);
+                if (data.data.c === 200) {
+                  this.$message({
+                    message: '删除成功',
+                    type: 'success'
+                  });
+                  //再获取一次所有网关信息
+                  this.getAlarmInformation();
+                }
+              })
+              .catch(_ => {
+              });
+          } catch (e) {
+            console.log(e)
+          }
+        },
       },
       async mounted() {
         //获取所有设备信息
@@ -314,7 +348,7 @@
 </script>
 
 <style scoped>
-  .search-container, .addbutton-container ,.table-container{
+  .search-container, .deleteButton-container ,.table-container{
     margin:1% 1%;
     text-align: left;
   }
