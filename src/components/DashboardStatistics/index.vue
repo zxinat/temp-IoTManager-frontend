@@ -19,7 +19,7 @@
     getNoticeAlarmInfoAmount,
     getDeviceDataAmount,
     getSeriousAlarmInfoAmount,
-    getVerySeriousAlarmInfoAmount
+    getVerySeriousAlarmInfoAmount, getDashboardDeviceStatus
   } from "../../api/api";
     export default {
         name: "DashboardStatistics",
@@ -124,7 +124,7 @@
       },
       async mounted() {
         await this.initAlarmChart();
-        this.initStatusChart();
+        await this.initStatusChart();
 
       },
       methods: {
@@ -168,11 +168,42 @@
           ];
           this.chart.setOption(this.alarmOption)
         },
-        initStatusChart(){
+        async initStatusChart(){
           this.chart = echarts.init(document.getElementsByClassName('status-container')[0]);
           // 把配置和数据放这里
-          console.log(this.statusOption);
-          this.chart.setOption(this.statusOption)
+          const statusData = (await getDashboardDeviceStatus()).data.d;
+          this.statusOption.series = [
+            {
+              name:'设备状态',
+              type:'pie',
+              radius: ['50%', '70%'],
+              avoidLabelOverlap: false,
+              label: {
+                normal: {
+                  show: false,
+                  position: 'center'
+                },
+                emphasis: {
+                  show: true,
+                  textStyle: {
+                    fontSize: '30',
+                    fontWeight: 'bold'
+                  }
+                }
+              },
+              labelLine: {
+                normal: {
+                  show: false
+                }
+              },
+              data:[
+                {value: statusData['info'], name:'Info'},
+                {value: statusData['warning'], name:'Warning'},
+                {value: statusData['critical'], name:'Critical'},
+              ]
+            }
+          ]
+          this.chart.setOption(this.statusOption);
         }
       }
     }

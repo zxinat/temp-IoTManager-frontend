@@ -623,5 +623,9 @@ export function getDeviceByCity(cityName) {
 }
 
 export function getRegionLevelMenu() {
-  return axios.get(`/api/city/threeLevelMenu`)
+  return axios.get(`/api/city/threeLevelMenu`);
+}
+
+export function getDashboardDeviceStatus() {
+  return axios.get('/api/device/dashboardStatus');
 }
