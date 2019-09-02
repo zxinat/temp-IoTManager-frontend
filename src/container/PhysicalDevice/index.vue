@@ -445,16 +445,29 @@
 <script>
   import {
     addCity,
-    addDeviceApi, addFactory, addWorkshop, createDeviceType,
+    addDeviceApi,
+    addFactory,
+    addWorkshop,
+    createDeviceType,
     deleteDeviceApi,
     deleteMultipleDeviceApi,
     getAllDepartments,
-    getCity, getCityCascaderOptions, getCityOptions, getDeviceByWorkshop, getDeviceNumber,
+    getCity,
+    getCityCascaderOptions,
+    getCityOptions,
+    getDeviceAffiliateAlarmInfo,
+    getDeviceAffiliateData, getDeviceAffiliateThreshold,
+    getDeviceByWorkshop,
+    getDeviceNumber,
     getDevicesApi,
     getDeviceState,
     getDeviceType,
-    getFactory, getFactoryOptions, getGatewaysApi, getLocation,
-    getWorkshop, getWorkshopOptions,
+    getFactory,
+    getFactoryOptions,
+    getGatewaysApi,
+    getLocation,
+    getWorkshop,
+    getWorkshopOptions,
     searchDevicesByDeviceIdApi,
     searchDevicesByDeviceNameApi,
     updateDeviceApi
@@ -836,25 +849,32 @@
         this.updateFormVisible = true
       },
       async deleteDevice(row) {
-        try {
-          this.$confirm('确认删除？')
-            .then(async _ => {
-              console.log(row);
-              console.log(row.id);
-              const data = await deleteDeviceApi(row.id);
-              if (data.data.c === 200) {
-                this.$message({
-                  message: '删除成功',
-                  type: 'success'
-                });
-                //再获取一次所有网关信息
-                this.getDevices();
-              }
-            })
-            .catch(_ => {
-            });
-        } catch (e) {
-          console.log(e)
+        const affiliateData = (await getDeviceAffiliateData(row.hardwareDeviceID)).data.d;
+        const affiliateAlarmInfo = (await getDeviceAffiliateAlarmInfo(row.hardwareDeviceID)).data.d;
+        const affiliateThreshold = (await getDeviceAffiliateThreshold(row.hardwareDeviceID)).data.d;
+        if (affiliateData === 0 && affiliateAlarmInfo === 0 && affiliateThreshold === 0) {
+          try {
+            this.$confirm('确认删除？')
+              .then(async _ => {
+                console.log(row);
+                console.log(row.id);
+                const data = await deleteDeviceApi(row.id);
+                if (data.data.c === 200) {
+                  this.$message({
+                    message: '删除成功',
+                    type: 'success'
+                  });
+                  //再获取一次所有网关信息
+                  this.getDevices();
+                }
+              })
+              .catch(_ => {
+              });
+          } catch (e) {
+            console.log(e)
+          }
+        } else {
+          this.$msgbox('该设备有' + affiliateData + '条数据, ' + affiliateAlarmInfo + '条告警记录, ' + affiliateThreshold + '个相关规则, 无法被删除')
         }
       },
       async getDevices() {

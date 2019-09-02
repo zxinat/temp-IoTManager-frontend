@@ -633,3 +633,15 @@ export function getDashboardDeviceStatus() {
 export function getAffiliateDeviceNumber(id) {
   return axios.get(`/api/gateway/affiliateDevice/${id}`);
 }
+
+export function getDeviceAffiliateData(deviceId) {
+  return axios.get(`/api/device/affiliateData/${deviceId}`);
+}
+
+export function getDeviceAffiliateAlarmInfo(deviceId) {
+  return axios.get(`/api/device/affiliateAlarmInfo/${deviceId}`);
+}
+
+export function getDeviceAffiliateThreshold(deviceId) {
+  return axios.get(`/api/device/affiliateThreshold/${deviceId}`);
+}
