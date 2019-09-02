@@ -32,7 +32,7 @@
 </template>
 
 <script>
-  import {getAuthByUid, loginApi} from '../../api/api';
+  import {getAuthByUid, getRegionLevelMenu, loginApi} from '../../api/api';
   import {setCookie} from '../../../utils/package-cookies';
   import {setItemToLocalstorage} from '../../../utils/package-localstorage';
 
@@ -67,6 +67,10 @@
               setCookie('userSessionID',res.data.d.sessionId,20);//存储sessionID
               setItemToLocalstorage('userInfo',res.data.d.user);//存储用户信息
               setItemToLocalstorage('auth', auth);
+              // const region = (await getRegionLevelMenu()).data.d;
+              // firstLevel = region['first'];
+              // secondLevel = region['second'];
+              // thirdLevel = region['third'];
               await this.$store.dispatch('userInfo/setUserInfo',this.form);
               this.$router.push('/dashboard');
             } else {

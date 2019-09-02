@@ -621,3 +621,7 @@ export function getAuthByUid(uid) {
 export function getDeviceByCity(cityName) {
   return axios.get(`/api/device/getByCity?cityName=${cityName}`);
 }
+
+export function getRegionLevelMenu() {
+  return axios.get(`/api/city/threeLevelMenu`)
+}

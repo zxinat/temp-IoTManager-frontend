@@ -1,6 +1,6 @@
-const firstLevel='城市';
-const secondLevel='实验楼';
-const thirdLevel='实验室';
+let firstLevel='城市';
+let secondLevel='实验楼';
+let thirdLevel='实验室';
 export default
 {
   firstLevel,//第一级
