@@ -629,3 +629,7 @@ export function getRegionLevelMenu() {
 export function getDashboardDeviceStatus() {
   return axios.get('/api/device/dashboardStatus');
 }
+
+export function getAffiliateDeviceNumber(id) {
+  return axios.get(`/api/gateway/affiliateDevice/${id}`);
+}

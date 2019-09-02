@@ -410,7 +410,7 @@
     addCity, addFactory,
     addGatewayApi, addWorkshop, createGatewayType,
     deleteGatewayApi,
-    deleteMultipleGatewayApi,
+    deleteMultipleGatewayApi, getAffiliateDeviceNumber,
     getAllDepartments,
     getCity, getCityCascaderOptions, getCityOptions,
     getFactory, getFactoryOptions, getGatewayByWorkshop, getGatewayNumber,
@@ -781,23 +781,28 @@
         this.updateFormVisible = true
       },
       async deleteGateway(row) {
-        try {
-          this.$confirm('确认删除？')
-            .then(async _ => {
-              const data = await deleteGatewayApi(row.id);
-              if (data.data.c === 200) {
-                this.$message({
-                  message: '删除成功',
-                  type: 'success'
-                });
-                //再获取一次所有网关信息
-                this.getGateways();
-              }
-            })
-            .catch(_ => {
-            });
-        } catch (e) {
-          console.log(e)
+        const affiliateDeviceNumber = (await getAffiliateDeviceNumber(row.id)).data.d;
+        if (affiliateDeviceNumber === 0) {
+          try {
+            this.$confirm('确认删除？')
+              .then(async _ => {
+                const data = await deleteGatewayApi(row.id);
+                if (data.data.c === 200) {
+                  this.$message({
+                    message: '删除成功',
+                    type: 'success'
+                  });
+                  //再获取一次所有网关信息
+                  this.getGateways();
+                }
+              })
+              .catch(_ => {
+              });
+          } catch (e) {
+            console.log(e)
+          }
+        } else {
+          this.$msgbox('该网关有' + affiliateDeviceNumber + '个关联设备，无法被删除');
         }
       },
       async getGateways() {
