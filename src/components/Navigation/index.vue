@@ -15,6 +15,7 @@
           <el-dropdown-menu slot="dropdown">
             <!--<router-link to="/personalInformation" style="text-decoration: none"><el-dropdown-item>用户信息</el-dropdown-item></router-link>-->
             <!--<el-dropdown-item>设置</el-dropdown-item>-->
+            <el-dropdown-item @click.native="changeColor('black')">黑色</el-dropdown-item>
             <el-dropdown-item @click.native="changeColor('blue')">蓝色</el-dropdown-item>
             <el-dropdown-item @click.native="changeColor('orange')">橙色</el-dropdown-item>
             <el-dropdown-item @click.native="changeColor('red')">红色</el-dropdown-item>
@@ -63,6 +64,10 @@
         },
         changeColor(color){
           switch (color) {
+            case 'black':
+              changeMainColor("#303133");
+              window.location.reload();
+              break;
             case 'blue':
               changeMainColor("#409EFF");
               window.location.reload();
