@@ -67,7 +67,7 @@
             <el-button @click="editAuthority(scope.row)" type="primary" size="small" v-if="checkUserAuth(['USER_UPDATE'])">修改</el-button>
             <!--<el-button @click="resetPassword(scope.row)" type="warning" size="small">重置随机密码</el-button>-->
             <el-button @click="deleteUser(scope.row)" type="danger" size="small" v-if="checkUserAuth(['USER_DELETE'])">删除</el-button>
-            <el-button type="success" size="small">权限</el-button>
+            <el-button v-if="scope.row.role !== 2" @click="openAuthChangeForm(scope.row)" type="success" size="small">权限</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -122,6 +122,142 @@
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="confirmEdit(currentID)">确 定</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog title="变更权限" :visible.sync="authChangeVisible">
+      <table border="1" cellspacing="0">
+        <thead>
+          <tr>
+            <td>页面</td>
+            <td>子页面</td>
+            <td>权限</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>仪表板</td>
+            <td>无</td>
+            <td>
+              <el-checkbox v-model="authList.DASHBOARD_RETRIEVE" label="查看"></el-checkbox>
+            </td>
+          </tr>
+          <tr>
+            <td rowspan="3">设备管理</td>
+            <td>网关设备</td>
+            <td>
+              <el-checkbox v-model="authList.GATEWAY_RETRIEVE" label="查看"></el-checkbox>
+              <el-checkbox v-model="authList.GATEWAY_EXPORT_EXCEL" label="导出Excel"></el-checkbox>
+              <el-checkbox v-model="authList.GATEWAY_IMPORT_EXCEL" label="导入Excel"></el-checkbox>
+              <el-checkbox v-model="authList.GATEWAY_CREATE" label="新增"></el-checkbox>
+              <el-checkbox v-model="authList.GATEWAY_DELETE" label="删除、批量删除"></el-checkbox>
+              <el-checkbox v-model="authList.GATEWAY_UPDATE" label="修改"></el-checkbox>
+            </td>
+          </tr>
+          <tr>
+            <td>物理设备</td>
+            <td>
+              <el-checkbox v-model="authList.DEVICE_RETRIEVE" label="查看"></el-checkbox>
+              <el-checkbox v-model="authList.DEVICE_EXPORT_EXCEL" label="导出Excel"></el-checkbox>
+              <el-checkbox v-model="authList.DEVICE_IMPORT_EXCEL" label="导入Excel"></el-checkbox>
+              <el-checkbox v-model="authList.DEVICE_CREATE" label="新增"></el-checkbox>
+              <el-checkbox v-model="authList.DEVICE_DELETE" label="删除、批量删除"></el-checkbox>
+              <el-checkbox v-model="authList.DEVICE_UPDATE" label="修改"></el-checkbox>
+            </td>
+          </tr>
+          <tr>
+            <td>设备数据</td>
+            <td>
+              <el-checkbox v-model="authList.DEVICEDATA_RETRIEVE" label="查看"></el-checkbox>
+              <el-checkbox v-model="authList.DEVICEDATA_EXPORT_EXCEL" label="导出Excel"></el-checkbox>
+              <el-checkbox v-model="authList.DEVICEDATA_DELETE" label="删除、批量删除"></el-checkbox>
+              <el-checkbox v-model="authList.DEVICEDATA_UPDATE" label="修改"></el-checkbox>
+            </td>
+          </tr>
+          <tr>
+            <td rowspan="3">监控告警</td>
+            <td>监控配置</td>
+            <td>
+              <el-checkbox v-model="authList.MONITOR_RETRIEVE" label="查看"></el-checkbox>
+              <el-checkbox v-model="authList.MONITOR_DEFINE_THRESHOLD" label="定义报警规则"></el-checkbox>
+              <el-checkbox v-model="authList.MONITOR_EXPORT_DEVICEDATA" label="导出设备数据"></el-checkbox>
+            </td>
+          </tr>
+          <tr>
+            <td>告警规则</td>
+            <td>
+              <el-checkbox v-model="authList.ALARMRULE_RETRIEVE" label="查看"></el-checkbox>
+              <el-checkbox v-model="authList.ALARMRULE_DELETE" label="删除、批量删除"></el-checkbox>
+              <el-checkbox v-model="authList.ALARMRULE_UPDATE" label="修改"></el-checkbox>
+            </td>
+          </tr>
+          <tr>
+            <td>告警信息</td>
+            <td>
+              <el-checkbox v-model="authList.ALARMINFO_RETRIEVE" label="查看"></el-checkbox>
+              <el-checkbox v-model="authList.ALARMINFO_DELETE" label="删除、批量删除"></el-checkbox>
+              <el-checkbox v-model="authList.ALARMINFO_UPDATE" label="修改"></el-checkbox>
+            </td>
+          </tr>
+          <tr>
+            <td rowspan="4">报表中心</td>
+            <td>时间维度</td>
+            <td>
+              <el-checkbox v-model="authList.REPORT_TIME_RETRIEVE" label="查看"></el-checkbox>
+            </td>
+          </tr>
+          <tr>
+            <td>地域维度</td>
+            <td>
+              <el-checkbox v-model="authList.REPORT_REGION_RETRIEVE" label="查看"></el-checkbox>
+            </td>
+          </tr>
+          <tr>
+            <td>设备类型</td>
+            <td>
+              <el-checkbox v-model="authList.REPORT_DEVICETYPE_RETRIEVE" label="查看"></el-checkbox>
+            </td>
+          </tr>
+          <tr>
+            <td>标签维度</td>
+            <td>
+              <el-checkbox v-model="authList.REPORT_TAG_RETRIEVE" label="查看"></el-checkbox>
+            </td>
+          </tr>
+          <tr>
+            <td>用户管理</td>
+            <td>无</td>
+            <td>
+              <el-checkbox v-model="authList.USER_RETRIEVE" label="查看"></el-checkbox>
+              <el-checkbox v-model="authList.USER_CREATE" label="新增"></el-checkbox>
+              <el-checkbox v-model="authList.USER_DELETE" label="删除、批量删除"></el-checkbox>
+              <el-checkbox v-model="authList.USER_UPDATE" label="修改"></el-checkbox>
+              <el-checkbox v-model="authList.USER_AUTH" label="权限"></el-checkbox>
+            </td>
+          </tr>
+          <tr>
+            <td rowspan="2">配置管理</td>
+            <td>地域配置</td>
+            <td>
+              <el-checkbox v-model="authList.CONFIGURE_REGION_RETRIEVE" label="查看"></el-checkbox>
+              <el-checkbox v-model="authList.CONFIGURE_REGION_CREATE" label="新增"></el-checkbox>
+              <el-checkbox v-model="authList.CONFIGURE_REGION_DELETE" label="删除、批量删除"></el-checkbox>
+              <el-checkbox v-model="authList.CONFIGURE_REGION_UPDATE" label="修改"></el-checkbox>
+            </td>
+          </tr>
+          <tr>
+            <td>系统配置</td>
+            <td>
+              <el-checkbox v-model="authList.CONFIGURE_SYSTEM_RETRIEVE" label="查看"></el-checkbox>
+              <el-checkbox v-model="authList.CONFIGURE_SYSTEM_CREATE" label="新增"></el-checkbox>
+              <el-checkbox v-model="authList.CONFIGURE_SYSTEM_DELETE" label="删除、批量删除"></el-checkbox>
+              <el-checkbox v-model="authList.CONFIGURE_SYSTEM_UPDATE" label="修改"></el-checkbox>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="authChangeVisible = false">取 消</el-button>
+        <el-button @click="updateAuth" type="primary">确 定</el-button>
       </div>
     </el-dialog>
     <el-dialog title="添加用户" :visible.sync="createNewDialogFormVisible">
@@ -191,10 +327,10 @@
     createNewUser,
     deleteUser,
     editUser,
-    getAllAuthorities,
+    getAllAuthorities, getAuthByUid,
     getUserById,
     getUserTable,
-    searchUsers
+    searchUsers, updateUserAuth
   } from '../../api/api';
   import {isvalidPhone} from '../../common/validate';
   import {checkAuth} from "../../common/util";
@@ -251,6 +387,63 @@
         department: '',
         tableData: [],
         currentID: '',
+        updateAuthUserId: 0,
+        authList: {
+          DASHBOARD_RETRIEVE: false,
+
+          GATEWAY_RETRIEVE: false,
+          GATEWAY_EXPORT_EXCEL: false,
+          GATEWAY_IMPORT_EXCEL: false,
+          GATEWAY_CREATE: false,
+          GATEWAY_DELETE: false,
+          GATEWAY_UPDATE: false,
+
+          DEVICE_RETRIEVE: false,
+          DEVICE_EXPORT_EXCEL: false,
+          DEVICE_IMPORT_EXCEL: false,
+          DEVICE_CREATE: false,
+          DEVICE_DELETE: false,
+          DEVICE_UPDATE: false,
+
+          DEVICEDATA_RETRIEVE: false,
+          DEVICEDATA_EXPORT_EXCEL: false,
+          DEVICEDATA_DELETE: false,
+          DEVICEDATA_UPDATE: false,
+
+          REPORT_TIME_RETRIEVE: false,
+          REPORT_REGION_RETRIEVE: false,
+          REPORT_DEVICETYPE_RETRIEVE: false,
+          REPORT_TAG_RETRIEVE: false,
+
+          MONITOR_RETRIEVE: false,
+          MONITOR_DEFINE_THRESHOLD: false,
+          MONITOR_EXPORT_DEVICEDATA: false,
+
+          ALARMRULE_RETRIEVE: false,
+          ALARMRULE_DELETE: false,
+          ALARMRULE_UPDATE: false,
+
+          ALARMINFO_RETRIEVE: false,
+          ALARMINFO_UPDATE: false,
+          ALARMINFO_DELETE: false,
+
+          USER_RETRIEVE: false,
+          USER_CREATE: false,
+          USER_DELETE: false,
+          USER_UPDATE: false,
+          USER_AUTH: false,
+
+          CONFIGURE_REGION_RETRIEVE: false,
+          CONFIGURE_REGION_CREATE: false,
+          CONFIGURE_REGION_DELETE: false,
+          CONFIGURE_REGION_UPDATE: false,
+
+          CONFIGURE_SYSTEM_RETRIEVE: false,
+          CONFIGURE_SYSTEM_CREATE: false,
+          CONFIGURE_SYSTEM_DELETE: false,
+          CONFIGURE_SYSTEM_UPDATE: false,
+        },
+        authChangeVisible: false,
         dialogFormVisible: false,
         createNewDialogFormVisible: false,
         dynamicTags: [],
@@ -379,6 +572,38 @@
           this.tableData = (await searchUsers(this.username)).data.d;
         } else {
           this.tableData = (await getUserTable()).data.d;
+        }
+      },
+      async openAuthChangeForm(row) {
+        this.updateAuthUserId = row.id;
+        Object.keys(this.authList).forEach(e => {
+          this.authList[e] = false;
+        });
+        const userAuth = (await getAuthByUid(row.id)).data.d;
+        userAuth.forEach(e => {
+          this.authList[e] = true;
+        });
+        this.authChangeVisible = true;
+      },
+      async updateAuth() {
+        try {
+          let auths = [];
+          Object.keys(this.authList).forEach(e => {
+            if (this.authList[e] === true) {
+              auths.push(e);
+            }
+          });
+          const data = (await updateUserAuth(this.updateAuthUserId, {str: auths}));
+          this.authChangeVisible = false;
+          if (data.data.c === 200) {
+            this.$message({
+              message: '更新权限成功, 请通知相关用户重新登录',
+              type: 'success'
+            });
+          }
+        } catch (e) {
+          this.authChangeVisible = false;
+          this.$message.error('更新权限未成功');
         }
       }
     },

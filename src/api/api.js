@@ -677,3 +677,11 @@ export function getWorkshopAffiliateDevice(id) {
 export function getWorkshopAffiliateGateway(id) {
   return axios.get(`/api/workshop/affiliateGateway/${id}`);
 }
+
+export function getAllAuth() {
+  return axios.get('/api/user/getAllAuth');
+}
+
+export function updateUserAuth(id, auth) {
+  return axios.post(`/api/user/updateUserAuth/${id}`, auth);
+}
