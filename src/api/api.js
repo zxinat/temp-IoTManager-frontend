@@ -669,3 +669,11 @@ export function getFactoryAffiliateDevice(id) {
 export function getFactoryAffiliateGateway(id) {
   return axios.get(`/api/factory/affiliateGateway/${id}`);
 }
+
+export function getWorkshopAffiliateDevice(id) {
+  return axios.get(`/api/workshop/affiliateDevice/${id}`);
+}
+
+export function getWorkshopAffiliateGateway(id) {
+  return axios.get(`/api/workshop/affiliateGateway/${id}`);
+}

@@ -328,7 +328,11 @@
     getWorkshopByWorkshopName,
     getCityAffiliateFactory,
     getCityAffiliateDevice,
-    getCityAffiliateGateway, getFactoryAffiliateWorkshop, getFactoryAffiliateDevice, getFactoryAffiliateGateway,
+    getCityAffiliateGateway,
+    getFactoryAffiliateWorkshop,
+    getFactoryAffiliateDevice,
+    getFactoryAffiliateGateway,
+    getWorkshopAffiliateGateway, getWorkshopAffiliateDevice,
   } from '../../api/api';
   import {checkAuth} from "../../common/util";
 
@@ -612,23 +616,29 @@
 
         },
         async deleteLab(row){
-          try {
-            this.$confirm('确认删除？')
-              .then(async _ => {
-                const data = await deleteWorkshop(row.id);
-                if (data.data.c === 200) {
-                  this.$message({
-                    message: '删除成功',
-                    type: 'success'
-                  });
-                  //再获取一次所有实验室信息
-                  this.labData = (await getWorkshop()).data.d;
-                }
-              })
-              .catch(_ => {
-              });
-          } catch (e) {
-            console.log(e)
+          const affiliateDevice = (await getWorkshopAffiliateDevice(row.id)).data.d;
+          const affiliateGateway = (await getWorkshopAffiliateGateway(row.id)).data.d;
+          if (affiliateDevice === 0 && affiliateGateway === 0) {
+            try {
+              this.$confirm('确认删除？')
+                .then(async _ => {
+                  const data = await deleteWorkshop(row.id);
+                  if (data.data.c === 200) {
+                    this.$message({
+                      message: '删除成功',
+                      type: 'success'
+                    });
+                    //再获取一次所有实验室信息
+                    this.labData = (await getWorkshop()).data.d;
+                  }
+                })
+                .catch(_ => {
+                });
+            } catch (e) {
+              console.log(e)
+            }
+          } else {
+            this.$msgbox('该实验室有' + affiliateDevice + '个下属设备, ' + affiliateGateway + '个下属网关, 无法被删除');
           }
         },
 
