@@ -645,3 +645,27 @@ export function getDeviceAffiliateAlarmInfo(deviceId) {
 export function getDeviceAffiliateThreshold(deviceId) {
   return axios.get(`/api/device/affiliateThreshold/${deviceId}`);
 }
+
+export function getCityAffiliateFactory(id) {
+  return axios.get(`/api/city/affiliateFactory/${id}`);
+}
+
+export function getCityAffiliateDevice(id) {
+  return axios.get(`/api/city/affiliateDevice/${id}`);
+}
+
+export function getCityAffiliateGateway(id) {
+  return axios.get(`/api/city/affiliateGateway/${id}`);
+}
+
+export function getFactoryAffiliateWorkshop(id) {
+  return axios.get(`/api/factory/affiliateWorkshop/${id}`);
+}
+
+export function getFactoryAffiliateDevice(id) {
+  return axios.get(`/api/factory/affiliateDevice/${id}`);
+}
+
+export function getFactoryAffiliateGateway(id) {
+  return axios.get(`/api/factory/affiliateGateway/${id}`);
+}

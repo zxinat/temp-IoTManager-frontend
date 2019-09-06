@@ -324,7 +324,11 @@
     updateFactory,
     updateWorkshop,
     getCityByCityName,
-    getFactoryByFactoryName, getWorkshopByWorkshopName,
+    getFactoryByFactoryName,
+    getWorkshopByWorkshopName,
+    getCityAffiliateFactory,
+    getCityAffiliateDevice,
+    getCityAffiliateGateway, getFactoryAffiliateWorkshop, getFactoryAffiliateDevice, getFactoryAffiliateGateway,
   } from '../../api/api';
   import {checkAuth} from "../../common/util";
 
@@ -402,23 +406,32 @@
             this.updateCityFormVisible = true;
         },
         async deleteCity(row) {
-          try {
-            this.$confirm('确认删除？')
-              .then(async _ => {
-                const data = await deleteCity(row.id);
-                if (data.data.c === 200) {
-                  this.$message({
-                    message: '删除成功',
-                    type: 'success'
-                  });
-                  //再获取一次所有城市信息
-                  this.cityData = (await getCity()).data.d;
-                }
-              })
-              .catch(_ => {
-              });
-          } catch (e) {
-            console.log(e)
+          const affiliateFactory = (await getCityAffiliateFactory(row.id)).data.d;
+          const affiliateDevice = (await getCityAffiliateDevice(row.id)).data.d;
+          const affiliateGateway = (await getCityAffiliateGateway(row.id)).data.d;
+          if (affiliateFactory === 0 && affiliateDevice === 0 && affiliateGateway === 0) {
+            try {
+              this.$confirm('确认删除？')
+                .then(async _ => {
+                  const data = await deleteCity(row.id);
+                  if (data.data.c === 200) {
+                    this.$message({
+                      message: '删除成功',
+                      type: 'success'
+                    });
+                    //再获取一次所有城市信息
+                    this.cityData = (await getCity()).data.d;
+                  }
+                })
+                .catch(_ => {
+                });
+            } catch (e) {
+              console.log(e);
+            }
+          } else {
+            this.$msgbox('该城市有' + affiliateFactory +
+              '个下属实验楼, ' + affiliateDevice +
+              '个下属设备, ' + affiliateGateway + '个下属网关，无法被删除');
           }
         },
         async updateCity(){
@@ -513,23 +526,31 @@
 
         },
         async deleteBuilding(row){
-          try {
-            this.$confirm('确认删除？')
-              .then(async _ => {
-                const data = await deleteFactory(row.id);
-                if (data.data.c === 200) {
-                  this.$message({
-                    message: '删除成功',
-                    type: 'success'
-                  });
-                  //再获取一次所有实验楼信息
-                  this.buildingData = (await getFactory()).data.d;
-                }
-              })
-              .catch(_ => {
-              });
-          } catch (e) {
-            console.log(e)
+          const affiliateWorkshop = (await getFactoryAffiliateWorkshop(row.id)).data.d;
+          const affiliateDevice = (await getFactoryAffiliateDevice(row.id)).data.d;
+          const affiliateGateway = (await getFactoryAffiliateGateway(row.id)).data.d;
+          if (affiliateWorkshop === 0 && affiliateDevice === 0 && affiliateGateway === 0) {
+            try {
+              this.$confirm('确认删除？')
+                .then(async _ => {
+                  const data = await deleteFactory(row.id);
+                  if (data.data.c === 200) {
+                    this.$message({
+                      message: '删除成功',
+                      type: 'success'
+                    });
+                    //再获取一次所有实验楼信息
+                    this.buildingData = (await getFactory()).data.d;
+                  }
+                })
+                .catch(_ => {
+                });
+            } catch (e) {
+              console.log(e)
+            }
+          } else {
+            this.$msgbox('该实验楼有' + affiliateWorkshop + '下属实验室, ' +
+              affiliateDevice + '个下属设备， ' + affiliateGateway + '个下属网关, 无法被删除');
           }
         },
 
