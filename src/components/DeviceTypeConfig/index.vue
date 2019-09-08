@@ -83,8 +83,8 @@
 
 <script>
     import {
-      getDeviceTypeApi, searchDeviceTypeApi, deleteDeviceTypeApi, updateDeviceTypeApi,
-      getDeviceType, addDeviceTypeApi, deleteMultipleDeviceTypeApi
+      /**getDeviceTypeApi, searchDeviceTypeApi, deleteDeviceTypeApi, updateDeviceTypeApi,**/
+      getDeviceType, /**addDeviceTypeApi, deleteMultipleDeviceTypeApi**/
     } from '../../api/api'
     import {checkAuth} from "../../common/util";
     export default {
