@@ -12,6 +12,9 @@ const actions = {
   async setDashboardDeviceOption({commit, dispatch, state}, data){
     commit(Type.SET_DASHBOARD_DEVICE_OPTION, data);
   },
+  async setMonitorDate({commit, dispatch, state}, data){
+    commit(Type.SET_MONITOR_DATE, data);
+  }
 };
 
 export default actions;

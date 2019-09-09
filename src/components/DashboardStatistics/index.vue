@@ -197,9 +197,9 @@
                 }
               },
               data:[
-                {value: statusData['info'], name:'Info'},
-                {value: statusData['warning'], name:'Warning'},
                 {value: statusData['critical'], name:'Critical'},
+                {value: statusData['warning'], name:'Warning'},
+                {value: statusData['info'], name:'Info'}
               ]
             }
           ]

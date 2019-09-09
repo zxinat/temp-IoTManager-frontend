@@ -453,8 +453,8 @@ export function getVerySeriousAlarmInfoAmount() {
   return axios.get(`/api/alarmInfo/verySeriousAmount`);
 }
 
-export function getDeviceStatus(id) {
-  return axios.get(`/api/deviceData/status/${id}`);
+export function getDeviceStatus(id, t) {
+  return axios.post(`/api/deviceData/status/${id}`, t);
 }
 
 export function getSeverity() {
@@ -684,4 +684,12 @@ export function getAllAuth() {
 
 export function updateUserAuth(id, auth) {
   return axios.post(`/api/user/updateUserAuth/${id}`, auth);
+}
+
+export function getDataStatistic(deviceId, t) {
+  return axios.post(`/api/deviceData/statistic/${deviceId}`, t)
+}
+
+export function getDayAggregateData(deviceId, indexId, t) {
+  return axios.post(`/api/deviceData/aggregate/day/${deviceId}?indexId=${indexId}`, t);
 }

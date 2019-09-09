@@ -286,10 +286,20 @@
         }
       },
       async handleNodeClick(data) {
-        console.log(data);
         if (data.id) {
-          const result = (await getDeviceStatus(data.id)).data.d;
-          this.$store.dispatch('device/setCurrentDeviceData', result);
+          if (this.statTimeDuration.length > 0) {
+            const result = (await getDeviceStatus(data.id, {
+              startTime: this.statTimeDuration[0],
+              endTime: this.statTimeDuration[1]
+            })).data.d;
+            this.$store.dispatch('device/setCurrentDeviceData', result);
+          } else {
+            const result = (await getDeviceStatus(data.id, {
+              startTime: new Date,
+              endTime: new Date
+            })).data.d;
+            this.$store.dispatch('device/setCurrentDeviceData', result);
+          }
         }
       },
       exportDeviceData() {
@@ -388,6 +398,13 @@
       await this.getDevices();
       this.severityOptions = (await getSeverity()).data.d;
       this.treeData = (await getDeviceTreeApi(this.form.city, this.form.factory)).data.d;
+    },
+    computed: {
+      statTimeDuration: {
+        get: function() {
+          return this.$store.state.device.monitorDate;
+        }
+      }
     },
     components: {MonitoringConfig, MonitoringTree},
   }

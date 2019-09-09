@@ -32,7 +32,8 @@ const state = {
     "faultTolerantNumber": '2',
     "saveInterval": '3s'
   },
-  dashboardDeviceOption: []
+  dashboardDeviceOption: [],
+  monitorDate: [],
 };
 
 export default {
