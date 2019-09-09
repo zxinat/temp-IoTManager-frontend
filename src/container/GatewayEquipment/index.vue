@@ -39,6 +39,7 @@
                      @current-change="pageChange()">
       </el-pagination>
       <el-table
+        v-loading="loading"
         :data="tableData"
         border
         style="width: 100%"
@@ -431,6 +432,7 @@
     components: {UploadImg},
     data() {
       return {
+        loading: false,
         totalPage: 0,
         curPage: 1,
         curSortColumn: '',
@@ -806,6 +808,7 @@
         }
       },
       async getGateways() {
+        this.loading = true;
         const orderMap = {ascending: 'asc', descending: 'desc'};
         const searchColumn = this.curSortColumn === '' ? "id" : this.curSortColumn;
         const searchOrder = this.curOrder === '' ? "asc" : orderMap[this.curOrder];
@@ -815,6 +818,7 @@
         const data = await getGatewaysApi('search', this.curPage, searchColumn, searchOrder, searchCity, searchFactory, searchWorkshop);
         this.tableData = data.data.d;
         this.getTotalPage('search', searchCity, searchFactory, searchWorkshop);
+        this.loading = false;
       },
       handleSelectionChange(val) {
         console.log('change', this.multipleSelection);

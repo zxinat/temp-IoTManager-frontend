@@ -27,6 +27,7 @@
                      @current-change="pageChange()">
       </el-pagination>
       <el-table
+        v-loading="loading"
         :data="tableData"
         border
         style="width: 100%"
@@ -135,6 +136,7 @@
     name: "EquipmentData",
     data() {
       return {
+        loading: false,
         totalPage: 0,
         curPage: 1,
         curSortColumn: '',
@@ -392,6 +394,7 @@
         // 调获取车间接口，searchGatewayData.city，searchGatewayData.factory参数
       },
       async getDeviceData() {
+        this.loading = true;
         const orderMap = {ascending: 'asc', descending: 'desc'};
         const columnMap = {id: 'Id', deviceId: 'DeviceId', indexName: 'IndexName', indexId: 'IndexId', timestamp: 'Timestamp'};
         const searchColumn = this.curSortColumn === '' ? "Id" : columnMap[this.curSortColumn];
@@ -400,6 +403,7 @@
         const data = await getDevicesDataApi('search', this.curPage, searchColumn, searchOrder, searchDeviceId);
         this.tableData = data.data.d;
         this.getTotalPage('search', searchDeviceId);
+        this.loading = false;
       },
       async pageChange() {
         this.getDeviceData();
