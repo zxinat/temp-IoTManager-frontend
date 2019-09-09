@@ -11,7 +11,7 @@
       end-placeholder="结束日期">
     </el-date-picker>
     <el-button type="primary" @click="getData">确定</el-button>
-    <div class="data-statistic-line-chart"></div>
+    <div v-loading="loading" class="data-statistic-line-chart"></div>
     <el-row style="margin-left: 10px">
       <!--<el-col :span="6">-->
         <!--<el-button type="primary" @click="setTimeDuration">最近100个数据</el-button>-->
@@ -42,6 +42,7 @@
         // 折线图数据
         chart: {},
         tableData: [],
+        loading: false,
         // dynamicChartOption: {
         //   title: {
         //     text: '数据统计',
@@ -142,6 +143,7 @@
         }
       },
       async getData() {  // 替换为查询数据接口,参数为value(时间值)
+        this.loading = true;
         this.$store.dispatch('device/setMonitorDate', this.timeDuration);
         let s = {};
         if (this.timeDuration.length > 0) {
@@ -160,8 +162,10 @@
         this.$store.dispatch('device/setCurrentDeviceData', s);
         this.setChartOption(this.curScale);
         this.chart.setOption(this.chartOption, true);
+        this.loading = false;
       },
       setChartOption(scale) {
+        this.loading = true;
         const scaleMap = {day: 'aggregateDayResult', hour: 'aggregateHourResult', month: 'aggregateMonthResult'};
         const titleMap = {day: '日统计', hour: '时统计', month: '月统计'};
         if (this.$store.state.device.currentDeviceData[scaleMap[scale]] !== undefined
@@ -192,11 +196,14 @@
           this.chartOption.series = value;
           console.log(this.chartOption);
           this.chartOption.legend.data = l;
+          this.chart.setOption(this.chartOption, true);
         } else {
           console.log('empty');
           this.chartOption.series = [];
           this.chartOption.xAxis.data = [];
+          this.chart.setOption(this.chartOption, true);
         }
+        this.loading = false;
       }
     },
     mounted() {
@@ -206,13 +213,20 @@
       deviceData: {
         // getter
         get: function () {
-          this.setChartOption(this.curScale);
+          // this.setChartOption(this.curScale);
           return this.$store.state.device.currentDeviceData;
         },
         // setter
         set: function (newValue) {
           console.log('newvalue', newValue)
         }
+      }
+    },
+    watch:{
+      deviceData(val, oldVal) {
+        this.loading = true;
+        this.setChartOption(this.curScale);
+        this.loading = false;
       }
     }
   }
