@@ -25,7 +25,8 @@
       <el-menu-item index="3" style="float: right">
         <el-dropdown trigger="click">
         <span class="el-dropdown-link" style="color: white">
-          <img src="../../assets/img/yonghu.svg"> 下拉菜单<i class="el-icon-arrow-down el-icon--right"></i>
+<!--          <img src="../../assets/img/yonghu.svg"> -->
+          下拉菜单<i class="el-icon-arrow-down el-icon--right"></i>
         </span>
           <el-dropdown-menu slot="dropdown">
             <router-link to="/personalInformation" style="text-decoration: none"><el-dropdown-item>用户信息</el-dropdown-item></router-link>

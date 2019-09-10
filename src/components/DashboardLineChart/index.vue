@@ -11,7 +11,7 @@
         </el-option>
       </el-select>
       属性
-      <el-select v-model="tmpPropertySelectorValue" multiple placeholder="请选择属性">
+      <el-select v-model="tmpPropertySelectorValue" multiple placeholder="请选择属性" @change="searchLineChartData">
         <el-option
           v-for="item in propertySelectorOptions"
           :key="item.fieldId"
@@ -19,7 +19,7 @@
           :value="item.fieldId">
         </el-option>
       </el-select>
-      <el-button type="primary" plain @click="searchLineChartData">确认</el-button>
+<!--      <el-button type="primary" plain @click="searchLineChartData">确认</el-button>-->
     </div>
     <div class="dashboard-line-chart-container">
     </div>
@@ -62,6 +62,12 @@
               // 'temperature', 'humidity'
             ],
           },
+          toolbox: {
+            show: true,
+            feature: {
+              magicType: {type: ['line', 'bar']},
+            }
+          },
           xAxis: [{
             type: 'category',
             boundaryGap: true,
@@ -84,7 +90,7 @@
           series: [
             {
               type: 'line',
-              name: 'Value',
+              name: '',
               label: {
                 show: true,
                 // position: 'top'
@@ -164,6 +170,8 @@
         // this.chart.setOption({series:[{data: this.data}]});
       },
       async searchLineChartData() {
+        this.chart.clear();
+        this.initChart();
         if (this.tmpDeviceSelectorValue && this.tmpPropertySelectorValue) {
           this.deviceSelectorValue = this.tmpDeviceSelectorValue;
           this.propertySelectorValue = this.tmpPropertySelectorValue;
@@ -182,9 +190,9 @@
       },
       setChart(opt) {
         let s = [];
-        opt.forEach(e => {
-          s.push({type: 'bar', barGap: '0', data: e['series'], name: e['indexId'], label: {show: true}});
-        });
+          opt.forEach(e => {
+            s.push({type: 'bar', barGap: '0', data: e['series'], name: e['indexId'], label: {show: true}});
+          });
         this.chart.setOption({xAxis:[{data: opt[0].xAxis}], series: s, legend: {data: this.propertySelectorValue}});
       },
       async deviceChange() {
