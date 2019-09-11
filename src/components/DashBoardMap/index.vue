@@ -64,16 +64,16 @@
               emphasis: {					// 高亮状态下的样式
                 areaColor: '#483636'
               }
-            }
+            },
+            center: [],
+            zoom: 1
           },
           series: [
             {
               name: '设备分布', // series名称
               type: 'scatter', // series图表类型
               coordinateSystem: 'geo', // series坐标系类型
-              data: [
-                {name: '上海', value: []}
-              ],
+              data: [],
             }
           ]
         },
@@ -98,10 +98,15 @@
       },
       async setMapInfo() {
         let amount = [];
+        let centerPos = [];
         if (this.searchCity[0] === '全部') {
           amount = (await getMapInfo()).data.d;
         } else {
           amount = (await getOneMapInfo(this.searchCity[0])).data.d;
+          centerPos.push(amount[0]['value'][0]);
+          centerPos.push(amount[0]['value'][1]);
+          this.option.geo.center = centerPos;
+          this.option.geo.zoom = 8;
         }
         this.option.series = [
           {
@@ -119,7 +124,6 @@
         } else {
           data = (await getDeviceByCity(this.searchCity[0])).data.d;
         }
-        console.log('dispatch', data);
         this.$store.dispatch('device/setDashboardDeviceOption', data);
       },
       async getDeviceOptions() {
