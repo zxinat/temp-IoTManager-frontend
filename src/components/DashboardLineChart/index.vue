@@ -130,17 +130,6 @@
       // }
 
     },
-    // watch: {
-    //   async 'deviceSelectorValue'(newVal, oldVal) {
-    //     // console.log('manmantest',newVal);
-    //     this.propertySelectorOptions = ((await getDeviceProperty(newVal)).data.d).map(el => {
-    //       return {
-    //         value: el.devicePropertyId,
-    //         label: el.propertyName
-    //       }
-    //     });
-    //   }
-    // },
     computed: {
       computedDeviceOption: {
         get: function () {
@@ -183,13 +172,6 @@
           opt.forEach(e => {
             s.push({type: 'bar', barGap: '0', data: e['series'], name: e['indexId'], label: {show: true}});
           });
-          // const newOption = {
-          //   xAxis:[{data: opt[0].xAxis}],
-          //   series: s,
-          //   legend: {
-          //     data: this.propertySelectorValue
-          //   }
-          // };
           this.option.xAxis[0].data = opt[0].xAxis;
           this.option.series = s;
           this.option.legend = {

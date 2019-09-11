@@ -1,18 +1,18 @@
 <template>
   <div>
     <el-row>
-      <el-col :span="12">
+      <el-col :span="8">
         <DashBoardMap></DashBoardMap>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="16">
         <DashboardLineChart></DashboardLineChart>
       </el-col>
     </el-row>
     <el-row>
-      <el-col :span="12">
+      <el-col :span="8">
         <dashboard-alarm-history></dashboard-alarm-history>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="16">
         <dashboard-statistics></dashboard-statistics>
       </el-col>
     </el-row>
