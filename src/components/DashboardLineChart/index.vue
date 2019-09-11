@@ -175,7 +175,9 @@
         if (this.tmpDeviceSelectorValue && this.tmpPropertySelectorValue) {
           this.deviceSelectorValue = this.tmpDeviceSelectorValue;
           this.propertySelectorValue = this.tmpPropertySelectorValue;
-          setTimeout(async () => {
+          let result = (await getDeviceMultiPropertyData(this.deviceSelectorValue, {str: this.propertySelectorValue})).data.d;
+          this.setChart(result);
+          /**setTimeout(async () => {
             let result = (await getDeviceMultiPropertyData(this.deviceSelectorValue, {str: this.propertySelectorValue})).data.d;
             this.setChart(result);
             // this.chart.setOption({xAxis: [{data: result.xAxis}], series: [{data: result.series}]});
@@ -184,7 +186,7 @@
             let result = (await getDeviceMultiPropertyData(this.deviceSelectorValue, {str: this.propertySelectorValue})).data.d;
             this.setChart(result);
             // this.chart.setOption({xAxis: [{data: result.xAxis}], series: [{data: result.series}]});
-          }, 10000);
+          }, 10000);**/
           // this.initChart();
         }
       },
