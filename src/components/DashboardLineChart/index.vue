@@ -11,7 +11,7 @@
         </el-option>
       </el-select>
       属性
-      <el-select v-model="tmpPropertySelectorValue" multiple placeholder="请选择属性" @change="searchLineChartData">
+      <el-select v-model="tmpPropertySelectorValue" multiple collapse-tags placeholder="请选择属性" @change="searchLineChartData">
         <el-option
           v-for="item in propertySelectorOptions"
           :key="item.fieldId"
@@ -19,9 +19,11 @@
           :value="item.fieldId">
         </el-option>
       </el-select>
+      <el-button type="primary" v-if="lineChecked" @click="switchToBar">切换为柱状图</el-button>
+      <el-button type="success" v-if="!lineChecked" @click="switchToLine">切换为折线图</el-button>
       <!--      <el-button type="primary" plain @click="searchLineChartData">确认</el-button>-->
     </div>
-    <div class="dashboard-line-chart-container">
+    <div v-loading="chartLoading" class="dashboard-line-chart-container">
     </div>
   </div>
 </template>
@@ -42,6 +44,9 @@
     name: "DashboardLineChart",
     data() {
       return {
+        chartLoading: false,
+        lineChecked: false,
+        chartType: 'bar',
         data: [98, 97, 96, 99, 101, 106, 100],
         xAxisData: ['14:43:00', '14:43:01', '14:43:02', '14:43:03', '14:43:04', '14:43:05', '14:43:06'],
         deviceSelectorOptions: [],
@@ -150,6 +155,7 @@
         // this.chart.setOption({series:[{data: this.data}]});
       },
       async searchLineChartData() {
+        this.chartLoading = true;
         if (this.tmpDeviceSelectorValue && this.tmpPropertySelectorValue) {
           this.deviceSelectorValue = this.tmpDeviceSelectorValue;
           this.propertySelectorValue = this.tmpPropertySelectorValue;
@@ -165,12 +171,13 @@
           }, 10000);
           // this.initChart();
         }
+        this.chartLoading = false;
       },
       setChart(opt) {
         if (opt.length > 0) {
           let s = [];
           opt.forEach(e => {
-            s.push({type: 'bar', barGap: '0', data: e['series'], name: e['indexId'], label: {show: true}});
+            s.push({type: this.chartType, barGap: '0', data: e['series'], name: e['indexId'], label: {show: true}});
           });
           this.option.xAxis[0].data = opt[0].xAxis;
           this.option.series = s;
@@ -190,6 +197,16 @@
       async deviceChange() {
         this.propertySelectorOptions = (await getAffiliateFields(this.tmpDeviceSelectorValue)).data.d;
         this.tmpPropertySelectorValue = [];
+      },
+      switchToLine() {
+        this.chartType = 'line';
+        this.searchLineChartData();
+        this.lineChecked = true;
+      },
+      switchToBar() {
+        this.chartType = 'bar';
+        this.searchLineChartData();
+        this.lineChecked = false;
       }
     },
     beforeDestroy() {
