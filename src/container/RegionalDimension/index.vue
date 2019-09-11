@@ -2,29 +2,23 @@
   <div class="regional-dimension-container">
     <el-row>
       <el-col :span="3">
-        <el-tree :data="treeData" :props="defaultProps" @node-click=""></el-tree>
+        <el-tree v-loading="treeLoading" :data="treeData" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
       </el-col>
       <el-col :span="21">
         <div class="head-container">
-          <!--选择车间-->
-          <!--<el-cascader-->
-          <!--:options="nameOptions"-->
-          <!--v-model="selectedOptions"-->
-          <!--@change="handleChange">-->
-          <!--</el-cascader>-->
-          <span class="demonstration">选择时间</span>
-          <el-date-picker
-            v-model="selectedDate"
-            type="daterange"
-            range-separator="至"
-            start-placeholder="开始月份"
-            end-placeholder="结束月份"
-            :default-time="['00:00:00', '23:59:59']">
-          </el-date-picker>
+        <span class="demonstration">选择时间</span>
+        <el-date-picker
+        v-model="selectedDate"
+        type="daterange"
+        range-separator="至"
+        start-placeholder="开始月份"
+        end-placeholder="结束月份"
+        @change="handleTimeChange">
+        </el-date-picker>
         </div>
         <el-row>
           <el-col :span="23">
-            <div class="report-statistic-daily-histogram">
+            <div v-loading="chartLoading" class="report-statistic-daily-histogram">
             </div>
           </el-col>
         </el-row>
@@ -42,149 +36,29 @@
   import echarts from 'echarts';
   import FileSaver from 'file-saver'
   import XLSX from 'xlsx'
+  import {getCityFactoryTree, getReportByRegion} from "../../api/api";
 
   export default {
     name: "RegionalDimension",
     data() {
       return {
-        nameOptions: [{
-          value: 'shanghai',
-          label: '上海',
-          children: [{
-            value: '111',
-            label: '工厂1',
-            children: [{
-              value: '',
-              label: '车间1'
-            }, {
-              value: 'fankui',
-              label: '车间2'
-            }, {
-              value: 'xiaolv',
-              label: '车间3'
-            }, {
-              value: 'kekong',
-              label: '车间4'
-            }]
-          }, {
-            value: 'daohang',
-            label: '工厂2',
-            children: [{
-              value: 'cexiangdaohang',
-              label: '车间1'
-            }, {
-              value: 'dingbudaohang',
-              label: '车间2'
-            }]
-          }]
-        }, {
-          value: 'zujian',
-          label: '长沙',
-          children: [{
-            value: 'basic',
-            label: '工厂1',
-            children: [{
-              value: 'layout',
-              label: '车间1'
-            }, {
-              value: 'color',
-              label: '车间2'
-            }, {
-              value: 'typography',
-              label: '车间3'
-            }, {
-              value: 'icon',
-              label: '车间4'
-            }, {
-              value: 'button',
-              label: '车间5'
-            }]
-          }, {
-            value: 'form',
-            label: '工厂2',
-            children: [{
-              value: 'radio',
-              label: '车间1'
-            }, {
-              value: 'checkbox',
-              label: '车间2'
-            }, {
-              value: 'input',
-              label: '车间3'
-            }, {
-              value: 'input-number',
-              label: '车间4'
-            }, {
-              value: 'select',
-              label: '车间5'
-            }]
-          }, {
-            value: 'data',
-            label: '工厂3',
-            children: [{
-              value: 'table',
-              label: '车间1'
-            }, {
-              value: 'tag',
-              label: '车间2'
-            }, {
-              value: 'progress',
-              label: '车间3'
-            }, {
-              value: 'tree',
-              label: '车间4'
-            }, {
-              value: 'pagination',
-              label: '车间5'
-            }, {
-              value: 'badge',
-              label: '车间6'
-            }]
-          }, {
-            value: 'notice',
-            label: '工厂4',
-            children: [{
-              value: 'alert',
-              label: '车间1'
-            }, {
-              value: 'loading',
-              label: '车间2'
-            }, {
-              value: 'message',
-              label: '车间3'
-            }, {
-              value: 'message-box',
-              label: '车间4'
-            }]
-          }]
-        }, {
-          value: 'ziyuan',
-          label: '武汉',
-          children: [{
-            value: 'notice',
-            label: '工厂4',
-            children: [{
-              value: 'alert',
-              label: '车间1'
-            }, {
-              value: 'loading',
-              label: '车间2'
-            }, {
-              value: 'message',
-              label: '车间3'
-            }, {
-              value: 'message-box',
-              label: '车间4'
-            }]
-          }]
-        }],
+        treeLoading: false,
+        chartLoading: false,
+        curFactory: '',
+        nameOptions: [],
         selectedType: '',
         // 时间戳数组
-        selectedDate: '',
+        selectedDate: [],
         histogramOption: {
           xAxis: {
             type: 'category',
-            data: ['车间1', '车间2', '车间3', '车间4', '车间5', '车间6', '车间7']
+            data: []
+          },
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+              type: 'shadow'
+            }
           },
           legend: {
             show: true,
@@ -193,22 +67,7 @@
           yAxis: {
             type: 'value'
           },
-          series: [{
-            name: '平均在线时间',
-            data: [43.3, 83.1, 86.4, 72.4, 72.40, 110, 130],
-            type: 'bar',
-            barWidth: 20
-          }, {
-            name: '告警次数',
-            data: [85.8, 73.4, 65.2, 53.9, 70, 11, 130],
-            type: 'bar',
-            barWidth: 20
-          }, {
-            name: '设备数量',
-            data: [93.7, 55.1, 82.5, 39.1, 70, 120, 10],
-            type: 'bar',
-            barWidth: 20
-          }],
+          series: [],
           toolbox: {
             show: true,
             feature: {
@@ -260,66 +119,12 @@
                   return table;
                 }
               },
-              saveAsImage : {show: true}
+              saveAsImage: {show: true}
             }
           },
         },
         // 左边栏数据
-        treeData: [{
-          "label": "上海",
-          "children": [{
-            "label": "工厂1",
-            "children": [{
-              "label": "车间1",
-            }]
-          }, {
-            "label": "工厂2",
-            "children": [{
-              "label": "车间2",
-            }]
-          }, {
-            "label": "工厂3",
-            "children": [{
-              "label": "车间3",
-            }]
-          }]
-        }, {
-          "label": "长沙",
-          "children": [{
-            "label": "工厂1",
-            "children": [{
-              "label": "车间1",
-            }]
-          }, {
-            "label": "工厂2",
-            "children": [{
-              "label": "车间2",
-            }]
-          }, {
-            "label": "工厂3",
-            "children": [{
-              "label": "车间3",
-            }]
-          }]
-        }, {
-          "label": "武汉",
-          "children": [{
-            "label": "工厂1",
-            "children": [{
-              "label": "车间1",
-            }]
-          }, {
-            "label": "工厂2",
-            "children": [{
-              "label": "车间2",
-            }]
-          }, {
-            "label": "工厂3",
-            "children": [{
-              "label": "车间3"
-            }]
-          }]
-        }],
+        treeData: [],
         defaultProps: {
           children: 'children',
           label: 'label'
@@ -327,25 +132,53 @@
       }
     },
     async mounted() {
-      // 默认获取统计表
-      // let histogramData = await getRegionalDimensionHistogram(this.selectedType, this.selectedSource, this.time);
-      // this.histogramOption.dataset.source = histogramData.data.d;
-      // let pieChartData = await getReportStaticDaithlyPieChart(this.selectedType, this.selectedSource, this.time);
-      // this.pieChartOption.series[0].data = pieChartData.data.d;
       this.initTypeChart();
-      // this.initSubClassChart();
+      this.treeLoading = true;
+      this.treeData = (await getCityFactoryTree()).data.d;
+      this.treeLoading = false;
     },
     methods: {
       initTypeChart() {
         this.chart = echarts.init(document.getElementsByClassName('report-statistic-daily-histogram')[0]);
-        // 把配置和数据放这里
         this.chart.setOption(this.histogramOption)
       },
-      // initSubClassChart() {
-      //   this.chart = echarts.init(document.getElementsByClassName('report-statistic-daily-piechart')[0]);
-      //   // 把配置和数据放这里
-      //   this.chart.setOption(this.pieChartOption)
-      // },
+      async handleNodeClick(data) {
+        this.chartLoading = true;
+        if (data.factoryName) {
+          this.curFactory = data.factoryName;
+          if (this.selectedDate.length > 0) {
+            const result = (await getReportByRegion(data.factoryName, {
+              startTime: this.selectedDate[0],
+              endTime: this.selectedDate[1]
+            })).data.d;
+            this.histogramOption.xAxis.data = result['xAxis'];
+            this.histogramOption.series = result['series'];
+            this.chart.setOption(this.histogramOption, true);
+          } else {
+            const result = (await getReportByRegion(data.factoryName, {
+              startTime: new Date(),
+              endTime: new Date()
+            })).data.d;
+            this.histogramOption.xAxis.data = result['xAxis'];
+            this.histogramOption.series = result['series'];
+            this.chart.setOption(this.histogramOption, true);
+          }
+        }
+        this.chartLoading = false;
+      },
+      async handleTimeChange() {
+        if (this.curFactory !== '') {
+          this.chartLoading = true;
+          const result = (await getReportByRegion(this.curFactory, {
+            startTime: this.selectedDate[0],
+            endTime: this.selectedDate[1]
+          })).data.d;
+          this.histogramOption.xAxis.data = result['xAxis'];
+          this.histogramOption.series = result['series'];
+          this.chart.setOption(this.histogramOption, true);
+          this.chartLoading = false;
+        }
+      }
     },
   }
 </script>
