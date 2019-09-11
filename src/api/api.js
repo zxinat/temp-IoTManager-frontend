@@ -693,3 +693,15 @@ export function getDataStatistic(deviceId, t) {
 export function getDayAggregateData(deviceId, indexId, t) {
   return axios.post(`/api/deviceData/aggregate/day/${deviceId}?indexId=${indexId}`, t);
 }
+
+export function getCityFactoryTree() {
+  return axios.get(`/api/city/cityFactoryTree`);
+}
+
+export function getReportByRegion(factoryName, t) {
+  return axios.post(`/api/report/byRegion?factoryName=${factoryName}`, t);
+}
+
+export function getReportByTime(t) {
+  return axios.post(`/api/report/byTime`, t);
+}

@@ -131,7 +131,7 @@
       <el-col :span="3">
         <!--<MonitoringTree></MonitoringTree>-->
         <div class="monitoring-tree-container">
-          <el-tree :data="treeData" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+          <el-tree v-loading="treeLoading" :data="treeData" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
         </div>
       </el-col>
       <el-col :span="21">
@@ -179,6 +179,7 @@
     name: "MonitoringConfiguration",
     data() {
       return {
+        treeLoading : false,
         cityOptions: [],
         factoryOptions: [],
         fieldOptions: [],
@@ -237,6 +238,7 @@
         this.fieldOptions = (await getAffiliateFields(deviceId)).data.d;
       },
       async filter() {
+        this.treeLoading = true;
         if (this.form.city !== "" && this.form.factory !== "") {
           this.treeData = (await getDeviceTreeApi(this.form.city, this.form.factory)).data.d;
           if (this.treeData.length === 0) {
@@ -245,6 +247,7 @@
         } else {
           this.treeData = [];
         }
+        this.treeLoading = false;
         //调接口，传form参数
       },
       async getCityList() {
