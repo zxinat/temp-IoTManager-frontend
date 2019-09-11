@@ -19,7 +19,7 @@
           :value="item.fieldId">
         </el-option>
       </el-select>
-<!--      <el-button type="primary" plain @click="searchLineChartData">确认</el-button>-->
+      <!--      <el-button type="primary" plain @click="searchLineChartData">确认</el-button>-->
     </div>
     <div class="dashboard-line-chart-container">
     </div>
@@ -100,15 +100,6 @@
               },
               data: this.data
             }
-            // ,
-            //   {
-            //   type: 'line',
-            //   name: 'humidity',
-            //   label: {
-            //     show:true
-            //   },
-            //   data: [200.500, 382, 102, 267, 186, 315, 316]
-            // }
           ]
         },
       }
@@ -139,20 +130,20 @@
       // }
 
     },
-    watch: {
-      async 'deviceSelectorValue'(newVal, oldVal) {
-        // console.log('manmantest',newVal);
-        this.propertySelectorOptions = ((await getDeviceProperty(newVal)).data.d).map(el => {
-          return {
-            value: el.devicePropertyId,
-            label: el.propertyName
-          }
-        });
-      }
-    },
+    // watch: {
+    //   async 'deviceSelectorValue'(newVal, oldVal) {
+    //     // console.log('manmantest',newVal);
+    //     this.propertySelectorOptions = ((await getDeviceProperty(newVal)).data.d).map(el => {
+    //       return {
+    //         value: el.devicePropertyId,
+    //         label: el.propertyName
+    //       }
+    //     });
+    //   }
+    // },
     computed: {
       computedDeviceOption: {
-        get: function() {
+        get: function () {
           return this.$store.state.device.dashboardDeviceOption.map(el => {
             return {
               value: el.hardwareDeviceID,
@@ -170,14 +161,10 @@
         // this.chart.setOption({series:[{data: this.data}]});
       },
       async searchLineChartData() {
-        this.chart.clear();
-        this.initChart();
         if (this.tmpDeviceSelectorValue && this.tmpPropertySelectorValue) {
           this.deviceSelectorValue = this.tmpDeviceSelectorValue;
           this.propertySelectorValue = this.tmpPropertySelectorValue;
-          let result = (await getDeviceMultiPropertyData(this.deviceSelectorValue, {str: this.propertySelectorValue})).data.d;
-          this.setChart(result);
-          /**setTimeout(async () => {
+          setTimeout(async () => {
             let result = (await getDeviceMultiPropertyData(this.deviceSelectorValue, {str: this.propertySelectorValue})).data.d;
             this.setChart(result);
             // this.chart.setOption({xAxis: [{data: result.xAxis}], series: [{data: result.series}]});
@@ -186,16 +173,37 @@
             let result = (await getDeviceMultiPropertyData(this.deviceSelectorValue, {str: this.propertySelectorValue})).data.d;
             this.setChart(result);
             // this.chart.setOption({xAxis: [{data: result.xAxis}], series: [{data: result.series}]});
-          }, 10000);**/
+          }, 10000);
           // this.initChart();
         }
       },
       setChart(opt) {
-        let s = [];
+        if (opt.length > 0) {
+          let s = [];
           opt.forEach(e => {
             s.push({type: 'bar', barGap: '0', data: e['series'], name: e['indexId'], label: {show: true}});
           });
-        this.chart.setOption({xAxis:[{data: opt[0].xAxis}], series: s, legend: {data: this.propertySelectorValue}});
+          // const newOption = {
+          //   xAxis:[{data: opt[0].xAxis}],
+          //   series: s,
+          //   legend: {
+          //     data: this.propertySelectorValue
+          //   }
+          // };
+          this.option.xAxis[0].data = opt[0].xAxis;
+          this.option.series = s;
+          this.option.legend = {
+            data: this.propertySelectorValue
+          };
+          this.chart.setOption(this.option, true);
+        } else {
+          this.option.xAxis[0].data = [];
+          this.option.series = [];
+          this.option.legend = {
+            data: []
+          };
+          this.chart.setOption(this.option, true);
+        }
       },
       async deviceChange() {
         this.propertySelectorOptions = (await getAffiliateFields(this.tmpDeviceSelectorValue)).data.d;
