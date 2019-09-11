@@ -132,15 +132,27 @@
         this.chart.setOption(this.histogramOption);
       },
       async handleDateChange() {
-        this.chartLoading = true;
-        const result = (await getReportByTime({
-          startTime: this.selectedDate[0],
-          endTime: this.selectedDate[1]
-        })).data.d;
-        this.histogramOption.xAxis.data = result['xAxis'];
-        this.histogramOption.series = result['series'];
-        this.chart.setOption(this.histogramOption);
-        this.chartLoading = false;
+        if (this.selectedDate.length > 1) {
+          this.chartLoading = true;
+          const result = (await getReportByTime({
+            startTime: this.selectedDate[0],
+            endTime: this.selectedDate[1]
+          })).data.d;
+          this.histogramOption.xAxis.data = result['xAxis'];
+          this.histogramOption.series = result['series'];
+          this.chart.setOption(this.histogramOption);
+          this.chartLoading = false;
+        } else {
+          this.chartLoading = true;
+          const result = (await getReportByTime({
+            startTime: new Date(),
+            endTime: new Date()
+          })).data.d;
+          this.histogramOption.xAxis.data = result['xAxis'];
+          this.histogramOption.series = result['series'];
+          this.chart.setOption(this.histogramOption);
+          this.chartLoading = false;
+        }
       }
     },
   }

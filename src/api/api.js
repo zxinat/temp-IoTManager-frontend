@@ -705,3 +705,7 @@ export function getReportByRegion(factoryName, t) {
 export function getReportByTime(t) {
   return axios.post(`/api/report/byTime`, t);
 }
+
+export function getReportByTag(t) {
+  return axios.post(`/api/report/byTag`, t);
+}

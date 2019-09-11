@@ -146,7 +146,7 @@
         this.chartLoading = true;
         if (data.factoryName) {
           this.curFactory = data.factoryName;
-          if (this.selectedDate.length > 0) {
+          if (this.selectedDate.length > 1) {
             const result = (await getReportByRegion(data.factoryName, {
               startTime: this.selectedDate[0],
               endTime: this.selectedDate[1]
