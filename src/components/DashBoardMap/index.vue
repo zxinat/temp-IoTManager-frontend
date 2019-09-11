@@ -101,6 +101,8 @@
         let centerPos = [];
         if (this.searchCity[0] === '全部') {
           amount = (await getMapInfo()).data.d;
+          this.option.geo.center = [];
+          this.option.geo.zoom = 1;
         } else {
           amount = (await getOneMapInfo(this.searchCity[0])).data.d;
           centerPos.push(amount[0]['value'][0]);
