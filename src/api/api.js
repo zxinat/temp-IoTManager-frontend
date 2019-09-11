@@ -709,3 +709,7 @@ export function getReportByTime(t) {
 export function getReportByTag(t) {
   return axios.post(`/api/report/byTag`, t);
 }
+
+export function getReportByType(t) {
+  return axios.post(`/api/report/byType`, t);
+}

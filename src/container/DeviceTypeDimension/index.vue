@@ -1,24 +1,17 @@
 <template>
   <div class="device-type-dimension-container">
     <div class="head-container">
-      <!--选择车间-->
-      <!--<el-cascader-->
-      <!--:options="nameOptions"-->
-      <!--v-model="selectedOptions"-->
-      <!--@change="handleChange">-->
-      <!--</el-cascader>-->
       <span class="demonstration">选择时间</span>
       <el-date-picker
         v-model="selectedDate"
         type="daterange"
         range-separator="至"
         start-placeholder="开始月份"
-        end-placeholder="结束月份"
-        :default-time="['00:00:00', '23:59:59']">
+        end-placeholder="结束月份" @change="handleDateChange">
       </el-date-picker>
     </div>
     <el-row>
-      <div class="report-statistic-daily-histogram">
+      <div v-loading="chartLoading" class="report-statistic-daily-histogram">
       </div>
     </el-row>
     <!--<el-steps style="margin: 20px 0" simple>-->
@@ -26,11 +19,11 @@
     <!--</el-steps>-->
     <el-row>
       <el-col :span="12">
-        <div class="report-statistic-daily-piechart1">
+        <div v-loading="chartLoading" class="report-statistic-daily-piechart1">
         </div>
       </el-col>
       <el-col :span="12">
-        <div class="report-statistic-daily-piechart2">
+        <div v-loading="chartLoading" class="report-statistic-daily-piechart2">
         </div>
       </el-col>
     </el-row>
@@ -39,149 +32,26 @@
 
 <script>
   import echarts from 'echarts';
+  import {getReportByType} from "../../api/api";
 
   export default {
     name: "DeviceTypeDimension",
     data() {
       return {
-        nameOptions: [{
-          value: 'shanghai',
-          label: '上海',
-          children: [{
-            value: '111',
-            label: '工厂1',
-            children: [{
-              value: '',
-              label: '车间1'
-            }, {
-              value: 'fankui',
-              label: '车间2'
-            }, {
-              value: 'xiaolv',
-              label: '车间3'
-            }, {
-              value: 'kekong',
-              label: '车间4'
-            }]
-          }, {
-            value: 'daohang',
-            label: '工厂2',
-            children: [{
-              value: 'cexiangdaohang',
-              label: '车间1'
-            }, {
-              value: 'dingbudaohang',
-              label: '车间2'
-            }]
-          }]
-        }, {
-          value: 'zujian',
-          label: '长沙',
-          children: [{
-            value: 'basic',
-            label: '工厂1',
-            children: [{
-              value: 'layout',
-              label: '车间1'
-            }, {
-              value: 'color',
-              label: '车间2'
-            }, {
-              value: 'typography',
-              label: '车间3'
-            }, {
-              value: 'icon',
-              label: '车间4'
-            }, {
-              value: 'button',
-              label: '车间5'
-            }]
-          }, {
-            value: 'form',
-            label: '工厂2',
-            children: [{
-              value: 'radio',
-              label: '车间1'
-            }, {
-              value: 'checkbox',
-              label: '车间2'
-            }, {
-              value: 'input',
-              label: '车间3'
-            }, {
-              value: 'input-number',
-              label: '车间4'
-            }, {
-              value: 'select',
-              label: '车间5'
-            }]
-          }, {
-            value: 'data',
-            label: '工厂3',
-            children: [{
-              value: 'table',
-              label: '车间1'
-            }, {
-              value: 'tag',
-              label: '车间2'
-            }, {
-              value: 'progress',
-              label: '车间3'
-            }, {
-              value: 'tree',
-              label: '车间4'
-            }, {
-              value: 'pagination',
-              label: '车间5'
-            }, {
-              value: 'badge',
-              label: '车间6'
-            }]
-          }, {
-            value: 'notice',
-            label: '工厂4',
-            children: [{
-              value: 'alert',
-              label: '车间1'
-            }, {
-              value: 'loading',
-              label: '车间2'
-            }, {
-              value: 'message',
-              label: '车间3'
-            }, {
-              value: 'message-box',
-              label: '车间4'
-            }]
-          }]
-        }, {
-          value: 'ziyuan',
-          label: '武汉',
-          children: [{
-            value: 'notice',
-            label: '工厂4',
-            children: [{
-              value: 'alert',
-              label: '车间1'
-            }, {
-              value: 'loading',
-              label: '车间2'
-            }, {
-              value: 'message',
-              label: '车间3'
-            }, {
-              value: 'message-box',
-              label: '车间4'
-            }]
-          }]
-        }],
+        chartLoading: false,
         selectedType: '',
         // 时间戳数组
         selectedDate: '',
         histogramOption: {
           xAxis: {
             type: 'category',
-            data: ['传感器1', '传感器2', '传感器3', '传感器4', '传感器5', '传感器6','传感器7', '传感器8', '传感器9', '传感器10', '传感器12']
+            data: []
+          },
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+              type: 'shadow'
+            }
           },
           legend: {
             show: true,
@@ -192,7 +62,7 @@
           },
           series: [{
             name: '平均在线时间',
-            data: [43.3, 83.1, 86.4, 72.4, 72.40, 110,43.3, 83.1, 86.4, 72.4, 72.40],
+            data: [],
             type: 'bar',
             barWidth: 20
           }],
@@ -284,20 +154,7 @@
                   }
                 }
               },
-              data: [
-                {value: 200, name: '传感器1'},
-                {value: 20, name: '传感器2'},
-                {value: 790, name: '传感器3'},
-                {value: 780, name: '传感器4'},
-                {value: 550, name: '传感器5'},
-                {value: 70, name: '传感器6'},
-                {value: 80, name: '传感器7'},
-                {value: 78, name: '传感器8'},
-                {value: 7, name: '传感器9'},
-                {value: 78, name: '传感器10'},
-                {value: 780, name: '传感器11'},
-                // {value: 780, name: '传感器12'},
-              ]
+              data: []
             }
           ]
         },
@@ -334,31 +191,13 @@
                   }
                 }
               },
-              data: [
-                {value: 200, name: '传感器1'},
-                {value: 20, name: '传感器2'},
-                {value: 780, name: '传感器3'},
-                {value: 780, name: '传感器4'},
-                {value: 780, name: '传感器5'},
-                {value: 780, name: '传感器6'},
-                {value: 780, name: '传感器7'},
-                {value: 780, name: '传感器8'},
-                {value: 780, name: '传感器9'},
-                {value: 780, name: '传感器10'},
-                {value: 780, name: '传感器11'},
-                // {value: 780, name: '传感器12'},
-              ]
+              data: []
             }
           ]
         }
       }
     },
     async mounted() {
-      // 默认获取统计表
-      // let histogramData = await getRegionalDimensionHistogram(this.selectedType, this.selectedSource, this.time);
-      // this.histogramOption.dataset.source = histogramData.data.d;
-      // let pieChartData = await getReportStaticDaithlyPieChart(this.selectedType, this.selectedSource, this.time);
-      // this.pieChartOption.series[0].data = pieChartData.data.d;
       this.initTypeChart();
       this.initSubClassChartOne();
       this.initSubClassChartTwo();
@@ -370,15 +209,51 @@
         this.chart.setOption(this.histogramOption);
       },
       initSubClassChartOne() {
-        this.chart = echarts.init(document.getElementsByClassName('report-statistic-daily-piechart1')[0]);
+        this.pieChart1 = echarts.init(document.getElementsByClassName('report-statistic-daily-piechart1')[0]);
         // 把配置和数据放这里
-        this.chart.setOption(this.pieChartOption)
+        this.pieChart1.setOption(this.pieChartOption)
       },
       initSubClassChartTwo() {
-        this.chart = echarts.init(document.getElementsByClassName('report-statistic-daily-piechart2')[0]);
+        this.pieChart2 = echarts.init(document.getElementsByClassName('report-statistic-daily-piechart2')[0]);
         // 把配置和数据放这里
-        this.chart.setOption(this.pieChartOption2)
+        this.pieChart2.setOption(this.pieChartOption2)
       },
+      async handleDateChange() {
+        this.chartLoading = true;
+        if (this.selectedDate.length > 1) {
+          const result = (await getReportByType({
+            startTime: this.selectedDate[0],
+            endTime: this.selectedDate[1]
+          })).data.d;
+
+          this.histogramOption.xAxis.data = result['xAxis'];
+          this.histogramOption.series = result['lineChartSeries'];
+          this.chart.setOption(this.histogramOption);
+
+          this.pieChartOption.series[0].data = result['pieChart1Series'];
+          this.pieChart1.setOption(this.pieChartOption);
+          console.log(result);
+
+          this.pieChartOption2.series[0].data = result['pieChart2Series'];
+          this.pieChart2.setOption(this.pieChartOption2);
+        } else {
+          const result = (await getReportByType({
+            startTime: new Date(),
+            endTime: new Date
+          })).data.d;
+
+          this.histogramOption.xAxis.data = result['xAxis'];
+          this.histogramOption.series = result['lineChartSeries'];
+          this.chart.setOption(this.histogramOption);
+
+          this.pieChartOption.series[0].data = result['pieChart1Series'];
+          this.pieChart1.setOption(this.pieChartOption);
+
+          this.pieChartOption2.series[0].data = result['pieChart2Series'];
+          this.pieChart2.setOption(this.pieChartOption2);
+        }
+        this.chartLoading = false;
+      }
     },
   }
 </script>
