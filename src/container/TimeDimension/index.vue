@@ -124,6 +124,7 @@
     },
     async mounted() {
       this.initTypeChart();
+      this.handleDateChange();
     },
     methods: {
       initTypeChart() {
@@ -145,8 +146,8 @@
         } else {
           this.chartLoading = true;
           const result = (await getReportByTime({
-            startTime: new Date(),
-            endTime: new Date()
+            startTime: new Date('1980/1/1'),
+            endTime: new Date('2030/12/31')
           })).data.d;
           this.histogramOption.xAxis.data = result['xAxis'];
           this.histogramOption.series = result['series'];
