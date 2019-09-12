@@ -143,6 +143,7 @@
   }
 
   .dashboard-map-container {
+    margin-top: 7px;
     height: $dashboard-block-height;
   }
 

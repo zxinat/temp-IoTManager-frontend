@@ -70,9 +70,9 @@
           },
           toolbox: {
             show: true,
-            feature: {
-              magicType: {type: ['line', 'bar']},
-            }
+            // feature: {
+            //   magicType: {type: ['line', 'bar']},
+            // }
           },
           xAxis: [{
             type: 'category',
@@ -226,7 +226,7 @@
   @import "../../assets/scss/variaties";
 
   .selector-container {
-    margin: 10px 0 10px 10px
+    margin: 10px 0 10px 15px
   }
 
   .dashboard-line-chart-container {

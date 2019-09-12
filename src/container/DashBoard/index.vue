@@ -1,10 +1,10 @@
 <template>
   <div>
     <el-row>
-      <el-col :span="9">
+      <el-col :span="10">
         <DashBoardMap></DashBoardMap>
       </el-col>
-      <el-col :span="15">
+      <el-col :span="14">
         <DashboardLineChart></DashboardLineChart>
       </el-col>
     </el-row>
