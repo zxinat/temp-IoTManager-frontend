@@ -725,3 +725,7 @@ export function uploadPicture(body) {
 export function getPicture(deviceId) {
   return axios.get(`/api/device/getPicture/${deviceId}`);
 }
+
+export function getOneCityByName(cityName) {
+  return axios.get(`/api/city/oneCityByName/${cityName}`);
+}
