@@ -12,7 +12,7 @@
         </el-select>
       </el-form-item>
       <el-form-item :label="GLOBAL.secondLevel" v-if="checkMonitorAuth(['MONITOR_RETRIEVE'])">
-        <el-select v-model="form.factory" placeholder="请选择工厂">
+        <el-select v-model="form.factory" placeholder="请选择工厂" @change="filter">
           <el-option
             v-for="item in factoryOptions"
             :key="item.value"
@@ -21,9 +21,9 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item v-if="checkMonitorAuth(['MONITOR_RETRIEVE'])">
-        <el-button type="primary" @click="filter"><img src="../../assets/img/find.svg">筛选</el-button>
-      </el-form-item>
+      <!--<el-form-item v-if="checkMonitorAuth(['MONITOR_RETRIEVE'])">-->
+        <!--<el-button type="primary" @click="filter"><img src="../../assets/img/find.svg">筛选</el-button>-->
+      <!--</el-form-item>-->
       <el-form-item style="float: right" v-if="checkMonitorAuth(['MONITOR_EXPORT_DEVICEDATA'])">
         <el-button type="primary" @click="showExportDeviceData = true">导出设备数据</el-button>
       </el-form-item>
@@ -134,7 +134,7 @@
           <el-tree v-loading="treeLoading" :data="treeData" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
         </div>
       </el-col>
-      <el-col :span="21">
+      <el-col v-loading="pageLoading" :span="21">
         <monitoring-config></monitoring-config>
       </el-col>
     </el-row>
@@ -179,6 +179,7 @@
     name: "MonitoringConfiguration",
     data() {
       return {
+        pageLoading: false,
         treeLoading : false,
         cityOptions: [],
         factoryOptions: [],
@@ -243,6 +244,10 @@
           this.treeData = (await getDeviceTreeApi(this.form.city, this.form.factory)).data.d;
           if (this.treeData.length === 0) {
             alert("无设备");
+          } else {
+            if (this.treeData[0]['children'].length > 0) {
+              this.handleNodeClick(this.treeData[0]['children'][0]);
+            }
           }
         } else {
           this.treeData = [];
@@ -253,8 +258,8 @@
       async getCityList() {
         this.cityOptions = (await getCityOptions()).data.d;
         if (this.cityOptions[0] != null) {
-          this.form.city = this.cityOptions[0].value;
-          this.getFactoryList(this.cityOptions[0].value);
+          this.form.city = this.cityOptions[0].valueTuple;
+          this.getFactoryList(this.cityOptions[0].valueTuple);
         } else {
           this.form.city = "";
           this.form.factory = "";
@@ -271,6 +276,7 @@
           this.form.factory = "";
         }
         // 调获取工厂接口，传form.city参数
+        this.filter();
       },
       async addField() {
         try {
@@ -289,6 +295,7 @@
         }
       },
       async handleNodeClick(data) {
+        this.pageLoading = true;
         if (data.id) {
           if (this.statTimeDuration.length > 0) {
             const result = (await getDeviceStatus(data.id, {
@@ -304,6 +311,7 @@
             this.$store.dispatch('device/setCurrentDeviceData', result);
           }
         }
+        this.pageLoading = false;
       },
       exportDeviceData() {
         //导出设备数据接口，传入exportDeviceTime参数，返回内容格式如jsondata
@@ -400,7 +408,7 @@
       await this.getCityList();
       await this.getDevices();
       this.severityOptions = (await getSeverity()).data.d;
-      this.treeData = (await getDeviceTreeApi(this.form.city, this.form.factory)).data.d;
+      // this.treeData = (await getDeviceTreeApi(this.form.city, this.form.factory)).data.d;
     },
     computed: {
       statTimeDuration: {

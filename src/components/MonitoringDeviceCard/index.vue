@@ -59,8 +59,7 @@
           <img src="../../assets/img/chilunzu.svg">
           <span>设备快照</span>
         </div>
-        <div>
-          <!--<img v-if="!deviceData.imageUrl" src="../../assets/img/equipment.png" class="image">-->
+        <div v-loading="uploadLoading">
           <img :src="deviceData['base64Image']" class="image">
         </div>
         </el-card>
@@ -74,6 +73,7 @@
           :limit="1"
           :on-exceed="handleExceed"
           :on-success="handleUpload"
+          :file-list="fileList"
           :show-file-list="false">
           <el-button size="small" type="primary" class="upLoadButton">点击上传</el-button>
         </el-upload>
@@ -96,9 +96,11 @@
     components: {MonitoringMap, UploadImg},
     data(){
       return {
+        uploadLoading: false,
         imgData: '',
         deviceId: '',
         pic:'',
+        fileList: [],
       }
     },
     computed:{
@@ -129,6 +131,8 @@
         return this.$confirm(`确定移除 ${ file.name }？`);
       },
       async handleUpload(response, file) {
+        this.uploadLoading = true;
+        this.fileList = [];
         let reader = new FileReader();
         let base64 = '';
         reader.readAsDataURL(file.raw);
@@ -136,9 +140,11 @@
           base64 = reader.result;
           const result = (await uploadPicture({deviceId: this.deviceData.hardwareDeviceID, picture: base64})).data.c;
           if (result === 200) {
+            this.deviceData['base64Image'] = base64;
             this.$message.success('上传成功');
           }
         };
+        this.uploadLoading = false;
       }
     },
     async mounted(){
