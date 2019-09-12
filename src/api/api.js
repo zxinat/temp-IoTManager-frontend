@@ -717,3 +717,11 @@ export function getReportByType(t) {
 export function getDetailedDeviceType() {
   return axios.get(`/api/detailedDeviceType`);
 }
+
+export function uploadPicture(body) {
+  return axios.post(`/api/device/uploadPicture`, body);
+}
+
+export function getPicture(deviceId) {
+  return axios.get(`/api/device/getPicture/${deviceId}`);
+}
