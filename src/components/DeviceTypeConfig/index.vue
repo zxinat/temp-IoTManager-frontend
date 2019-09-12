@@ -23,11 +23,11 @@
       style="width: 60%"
       @selection-change="handleSelectionChange">
       <el-table-column
-        prop="deviceType"
+        prop="deviceTypeName"
         label="设备类型">
       </el-table-column>
       <el-table-column
-        prop="warningTime"
+        prop="offlineTime"
         label="超时告警时间">
       </el-table-column>
       <el-table-column
@@ -82,10 +82,11 @@
 </template>
 
 <script>
-    import {
-      /**getDeviceTypeApi, searchDeviceTypeApi, deleteDeviceTypeApi, updateDeviceTypeApi,**/
+  import {
+    getDetailedDeviceType,
+    /**getDeviceTypeApi, searchDeviceTypeApi, deleteDeviceTypeApi, updateDeviceTypeApi,**/
       getDeviceType, /**addDeviceTypeApi, deleteMultipleDeviceTypeApi**/
-    } from '../../api/api'
+  } from '../../api/api'
     import {checkAuth} from "../../common/util";
     export default {
       name: "DeviceTypeConfig",
@@ -116,7 +117,7 @@
 
       methods: {
         checkTypeAuth(auth) {
-          checkAuth(auth);
+          return checkAuth(auth);
         },
         handleSelectionChange(val) {
           console.log('change', this.multipleSelection);
@@ -133,7 +134,7 @@
                     type: 'success'
                   });
                   //再获取一次所有信息
-                  this.tableData = (await getDeviceTypeApi()).data.d;
+                  this.tableData = (await getDetailedDeviceType()).data.d;
                 }
               })
               .catch(_ => {
@@ -149,9 +150,9 @@
         },
         async searchByDeviceType(){
           if(this.searchDeviceType !== "") {
-            this.tableData = (await searchDeviceTypeApi(this.searchDeviceType)).data.d;
+            this.tableData = (await getDetailedDeviceType()).data.d;
           } else {
-            this.tableData = (await getDeviceTypeApi()).data.d;
+            this.tableData = (await getDetailedDeviceType()).data.d;
           }
         },
         async multipleDelete(){
@@ -166,7 +167,7 @@
                     type: 'success'
                   });
                   //再获取一次所有信息
-                  this.tableData = (await getDeviceTypeApi()).data.d;
+                  this.tableData = (await getDetailedDeviceType()).data.d;
                 }
               })
               .catch(_ => {
@@ -185,7 +186,7 @@
                 type: 'success'
               });
               //再获取一次所有信息
-              this.tableData = (await getDeviceTypeApi()).data.d;
+              this.tableData = (await getDetailedDeviceType()).data.d;
             }
           } catch (e) {
             this.newFormVisible = false;
@@ -202,7 +203,7 @@
                 type: 'success'
               });
               //再获取一次所有信息
-              this.tableData = (await getDeviceTypeApi()).data.d;
+              this.tableData = (await getDetailedDeviceType()).data.d;
             }
           } catch (e) {
             this.updateFormVisible = false;
@@ -212,7 +213,7 @@
       },
       async mounted() {
         this.deviceType = (await getDeviceType()).data.d;
-        this.tableData = (await getDeviceTypeApi()).data.d;
+        this.tableData = (await getDetailedDeviceType()).data.d;
       },
     }
 </script>

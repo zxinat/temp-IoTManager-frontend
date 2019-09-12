@@ -56,6 +56,7 @@
         propertySelectorValue: '',
         tmpPropertySelectorValue: [],
         chart: null,
+        pollInterval: {},
         option: {
           title: {
             text: 'Telemetry History'
@@ -164,7 +165,7 @@
             this.setChart(result);
             // this.chart.setOption({xAxis: [{data: result.xAxis}], series: [{data: result.series}]});
           }, 200);
-          setInterval(async () => {
+          this.pollInterval = setInterval(async () => {
             let result = (await getDeviceMultiPropertyData(this.deviceSelectorValue, {str: this.propertySelectorValue})).data.d;
             this.setChart(result);
             // this.chart.setOption({xAxis: [{data: result.xAxis}], series: [{data: result.series}]});
@@ -197,6 +198,8 @@
       async deviceChange() {
         this.propertySelectorOptions = (await getAffiliateFields(this.tmpDeviceSelectorValue)).data.d;
         this.tmpPropertySelectorValue = [];
+
+        this.searchLineChartData();
       },
       switchToLine() {
         this.chartType = 'line';

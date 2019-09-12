@@ -713,3 +713,7 @@ export function getReportByTag(t) {
 export function getReportByType(t) {
   return axios.post(`/api/report/byType`, t);
 }
+
+export function getDetailedDeviceType() {
+  return axios.get(`/api/detailedDeviceType`);
+}
