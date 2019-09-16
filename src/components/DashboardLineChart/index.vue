@@ -86,6 +86,7 @@
                 margin: 15,
               },
               interval: 0,
+              rotate: 30
             },
             axisTick: {
               show: false,
