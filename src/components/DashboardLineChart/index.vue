@@ -119,6 +119,14 @@
           label: el.deviceName
         }
       });
+      if (this.deviceSelectorOptions[0] != null) {
+        this.tmpDeviceSelectorValue = this.deviceSelectorOptions[0].value;
+        this.propertySelectorOptions = (await getAffiliateFields(this.tmpDeviceSelectorValue)).data.d;
+        if  (this.propertySelectorOptions[0] != null) {
+          this.tmpPropertySelectorValue.push(this.propertySelectorOptions[0].fieldId);
+          this.searchLineChartData();
+        }
+      }
       // if (this.deviceSelectorOptions[0] != null) {
       //   this.tmpDeviceSelectorValue = this.deviceSelectorOptions[0].value;
       //   this.propertySelectorOptions = (await getAffiliateFields(this.tmpDeviceSelectorValue)).data.d;

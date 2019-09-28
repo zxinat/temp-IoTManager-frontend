@@ -36,6 +36,14 @@
       :visible.sync="showExportDeviceData"
       width="30%"
       center>
+      <el-select v-model="exportIndex" placeholder="请选择属性">
+        <el-option
+          v-for="item in deviceData.affiliateFields"
+          :key="item.id"
+          :label="item.fieldName"
+          :value="item.fieldId">
+        </el-option>
+      </el-select>
       <el-date-picker
         v-model="exportDeviceTime"
         type="daterange"
@@ -166,7 +174,7 @@
   import MonitoringConfig from "../../components/MonitoringConfig/index";
   import {
     addRule, createNewField, getAffiliateFields,
-    getCityOptions,
+    getCityOptions, getDayAggregateData,
     getDeviceApi,
     getDevicesApi, getDeviceStatus,
     getDeviceTreeApi,
@@ -179,6 +187,8 @@
     name: "MonitoringConfiguration",
     data() {
       return {
+        deviceData: {},
+        exportIndex: '',
         pageLoading: false,
         treeLoading : false,
         cityOptions: [],
@@ -302,45 +312,28 @@
               startTime: this.statTimeDuration[0],
               endTime: this.statTimeDuration[1]
             })).data.d;
+            this.deviceData = result;
             this.$store.dispatch('device/setCurrentDeviceData', result);
           } else {
             const result = (await getDeviceStatus(data.id, {
               startTime: new Date,
               endTime: new Date
             })).data.d;
+            this.deviceData = result;
             this.$store.dispatch('device/setCurrentDeviceData', result);
           }
         }
         this.pageLoading = false;
       },
-      exportDeviceData() {
+      async exportDeviceData() {
         //导出设备数据接口，传入exportDeviceTime参数，返回内容格式如jsondata
-        const jsonData = [
-          {
-            time: '2018-08-09',
-            max: 80,
-            min: 10,
-            average: 30
-          },
-          {
-            time: '2018-08-10',
-            max: 80,
-            min: 10,
-            average: 30
-          },
-          {
-            time: '2018-08-11',
-            max: 80,
-            min: 10,
-            average: 30
-          },
-          {
-            time: '2018-08-12',
-            max: 80,
-            min: 10,
-            average: 30
-          },
-        ]
+        let result = (await getDayAggregateData(this.deviceData.hardwareDeviceID, this.exportIndex, {
+          startTime: this.exportDeviceTime[0],
+          endTime: this.exportDeviceTime[1]
+        })).data.d;
+        console.log(result);
+
+        let jsonData = result;
         //列标题，逗号隔开，每一个逗号就是隔开一个单元格
         let str = `日期,最大值,最小值,平均值\n`;
         //增加\t为了不让表格显示科学计数法或者其他格式
