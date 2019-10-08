@@ -120,9 +120,22 @@
       initChart() {
         this.chart = echarts.init(document.getElementsByClassName('data-statistic-line-chart')[0]);
         console.log(this.deviceData['hundredData']);
+        this.chartOption.series = [];
+        this.chartOption.legend.data = [];
         this.chartOption.title.text = '最近100个数据';
-        this.chartOption.xAxis.data = this.deviceData['hundredData'].map(e => {return e['timestamp']});
-        this.chartOption.series = {type: 'line', data: this.deviceData['hundredData'].map(e => {return e['indexValue']})};
+        let flag = false;
+        Object.keys(this.deviceData['hundredData']).forEach(v => {
+          if (flag === false) {
+            this.chartOption.xAxis.data = this.deviceData['hundredData'][v].map(e => {
+              return e['timestamp']
+            });
+          }
+          this.chartOption.series.push(
+            {type: 'line', name: v, data: this.deviceData['hundredData'][v].map(e => {return e['indexValue']})}
+          );
+          this.chartOption.legend.data.push(v);
+        });
+        // this.chartOption.series = {type: 'line', data: this.deviceData['hundredData'].map(e => {return e['indexValue']})};
         // this.chartOption.xAxis.data = ['sa'];
         // this.chartOption.series = [1];
         this.chart.setOption(this.chartOption);
@@ -146,6 +159,7 @@
             break;
           case '100':
             this.curScale = '100';
+            this.initChart();
             break;
           default:
             this.initChart();
