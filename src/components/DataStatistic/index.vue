@@ -4,25 +4,26 @@
       {{deviceData.deviceName}}
     </div>
     <el-date-picker
+      v-if="curScale != '100'"
       v-model="timeDuration"
       type="daterange"
       range-separator="至"
       start-placeholder="开始日期"
       end-placeholder="结束日期">
     </el-date-picker>
-    <el-button type="primary" @click="getData">确定</el-button>
+    <el-button v-if="curScale != '100'" type="primary" @click="getData">确定</el-button>
     <div v-loading="loading" class="data-statistic-line-chart"></div>
     <el-row style="margin-left: 10px">
-      <!--<el-col :span="6">-->
-        <!--<el-button type="primary" @click="setTimeDuration">最近100个数据</el-button>-->
-      <!--</el-col>-->
-      <el-col :span="8">
+      <el-col :span="6">
+        <el-button type="primary" @click="setTimeDuration('100')">最近100个数据</el-button>
+      </el-col>
+      <el-col :span="6">
         <el-button type="primary" @click="setTimeDuration('hour')">时数据</el-button>
       </el-col>
-      <el-col :span="8">
+      <el-col :span="6">
         <el-button type="primary" @click="setTimeDuration('day')">日数据</el-button>
       </el-col>
-      <el-col :span="8">
+      <el-col :span="6">
         <el-button type="primary" @click="setTimeDuration('month')">月数据</el-button>
       </el-col>
     </el-row>
@@ -37,7 +38,7 @@
     name: "DataStatistic",
     data() {
       return {
-        curScale: 'hour',
+        curScale: '100',
         timeDuration: [],
         // 折线图数据
         chart: {},
@@ -118,7 +119,13 @@
     methods: {
       initChart() {
         this.chart = echarts.init(document.getElementsByClassName('data-statistic-line-chart')[0]);
-        // this.chart.setOption(this.ChartOption);
+        console.log(this.deviceData['hundredData']);
+        this.chartOption.title.text = '最近100个数据';
+        this.chartOption.xAxis.data = this.deviceData['hundredData'].map(e => {return e['timestamp']});
+        this.chartOption.series = {type: 'line', data: this.deviceData['hundredData'].map(e => {return e['indexValue']})};
+        // this.chartOption.xAxis.data = ['sa'];
+        // this.chartOption.series = [1];
+        this.chart.setOption(this.chartOption);
       },
       setTimeDuration(value) {
         switch (value) {
@@ -136,6 +143,9 @@
             this.curScale = 'month';
             this.getData();
             // this.chart.setOption(this.chartOption,true);
+            break;
+          case '100':
+            this.curScale = '100';
             break;
           default:
             this.initChart();
