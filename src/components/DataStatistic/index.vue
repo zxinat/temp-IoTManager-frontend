@@ -183,6 +183,7 @@
           })).data.d;
           s = result;
         }
+        console.log(s);
         this.$store.dispatch('device/setCurrentDeviceData', s);
         this.setChartOption(this.curScale);
         this.chart.setOption(this.chartOption, true);

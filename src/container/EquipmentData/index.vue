@@ -159,6 +159,7 @@
           "indexUnit": "",
           "timestamp": ""
         }],
+        allTableData: [],
         multipleSelection: [],
         updateData: {
           deviceId: '',
@@ -248,19 +249,23 @@
       exportExcel() {
         var fix = document.querySelector('.el-table__fixed-right');
         var wb;
+        var wb2;
         if (fix) {
           wb = XLSX.utils.table_to_book(document.querySelector('#equipment-data-out-table').removeChild(fix));
+          wb2 = XLSX.utils.json_to_sheet(this.allTableData);
           console.log("test");
           document.querySelector('#equipment-data-out-table').appendChild(fix);
         } else {
           wb = XLSX.utils.table_to_book(document.querySelector('#equipment-data-out-table'));
         }
         /* get binary string as output */
-        var wbout = XLSX.write(wb, {
+        XLSX.utils.sheet_to
+        var wbout = XLSX.write(wb2, {
           bookType: 'xlsx',
           bookSST: true,
           type: 'array'
         });
+        console.log(wbout);
         try {
           FileSaver.saveAs(
             new Blob([wbout], {
@@ -431,6 +436,8 @@
       this.getCityList();
       //获取所有设备信息
       this.getDeviceData();
+      this.allTableData = (await getDevicesDataApi('all')).data.d;
+      console.log(this.allTableData);
     }
   }
 </script>

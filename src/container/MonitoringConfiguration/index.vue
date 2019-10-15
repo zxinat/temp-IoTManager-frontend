@@ -51,6 +51,9 @@
         start-placeholder="开始日期"
         end-placeholder="结束日期">
       </el-date-picker>
+      <el-radio v-model="exportScale" label="hour">时数据</el-radio>
+      <el-radio v-model="exportScale" label="day">日数据</el-radio>
+      <el-radio v-model="exportScale" label="month">月数据</el-radio>
       <span slot="footer" class="dialog-footer">
     <el-button @click="showExportDeviceData = false">取 消</el-button>
     <el-button type="primary" @click="exportDeviceData()">确 定</el-button>
@@ -187,6 +190,7 @@
     name: "MonitoringConfiguration",
     data() {
       return {
+        exportScale: '',
         deviceData: {},
         exportIndex: '',
         pageLoading: false,
@@ -330,8 +334,9 @@
         let result = (await getDayAggregateData(this.deviceData.hardwareDeviceID, this.exportIndex, {
           startTime: this.exportDeviceTime[0],
           endTime: this.exportDeviceTime[1]
-        })).data.d;
-        console.log(result);
+        }, this.exportScale)).data.d;
+        console.log('export', result);
+        console.log(this.deviceData);
 
         let jsonData = result;
         //列标题，逗号隔开，每一个逗号就是隔开一个单元格

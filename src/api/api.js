@@ -690,8 +690,8 @@ export function getDataStatistic(deviceId, t) {
   return axios.post(`/api/deviceData/statistic/${deviceId}`, t)
 }
 
-export function getDayAggregateData(deviceId, indexId, t) {
-  return axios.post(`/api/deviceData/aggregate/day/${deviceId}?indexId=${indexId}`, t);
+export function getDayAggregateData(deviceId, indexId, t, scale) {
+  return axios.post(`/api/deviceData/aggregate/day/${deviceId}?indexId=${indexId}&scale=${scale}`, t);
 }
 
 export function getCityFactoryTree() {
