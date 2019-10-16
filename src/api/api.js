@@ -729,3 +729,15 @@ export function getPicture(deviceId) {
 export function getOneCityByName(cityName) {
   return axios.get(`/api/city/oneCityByName/${cityName}`);
 }
+
+export function getDeviceTag(id) {
+  return axios.get(`/api/device/deviceTag/${id}`);
+}
+
+export function getAllTags() {
+  return axios.get(`/api/device/getalltag`);
+}
+
+export function setDeviceTags(id, tags) {
+  return axios.post(`/api/device/deviceTag/${id}`, {str: tags});
+}

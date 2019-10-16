@@ -14,16 +14,16 @@
           <el-button type="primary" @click="exportExcel">导出Excel</el-button>
         </el-form-item>
         <el-form-item v-if="checkDeviceAuth(['DEVICE_IMPORT_EXCEL'])">
-        <el-upload
-        ref="upload"
-        action="https://jsonplaceholder.typicode.com/posts/"
-        :show-file-list="false"
-        :on-success="readExcel"
-        :on-error="uploadFailed">
-        <el-button slot="trigger"
-        type="primary">导入excel
-        </el-button>
-        </el-upload>
+          <el-upload
+            ref="upload"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            :show-file-list="false"
+            :on-success="readExcel"
+            :on-error="uploadFailed">
+            <el-button slot="trigger"
+                       type="primary">导入excel
+            </el-button>
+          </el-upload>
         </el-form-item>
       </el-form>
     </div>
@@ -112,15 +112,26 @@
           width="120">
         </el-table-column>-->
         <el-table-column
-          prop="imageUrl"
-          label="设备图像链接">
+          label="标签">
+          <template slot-scope="scope">
+            <div slot="reference" class="name-wrapper">
+              <el-tag v-for="t in scope.row.tags" v-bind:key="t">
+                {{ t }}
+              </el-tag>
+            </div>
+          </template>
         </el-table-column>
         <el-table-column
           fixed="right"
           label="操作" v-if="checkDeviceAuth(['DEVICE_UPDATE', 'DEVICE_DELETE'])">
           <template slot-scope="scope">
-            <el-button @click="openUpdateForm(scope.row)" type="text" size="small" v-if="checkDeviceAuth(['DEVICE_UPDATE'])">修改</el-button>
-            <el-button @click="deleteDevice(scope.row)" type="text" size="small" v-if="checkDeviceAuth(['DEVICE_DELETE'])">删除</el-button>
+            <el-button @click="openUpdateForm(scope.row)" type="text" size="small"
+                       v-if="checkDeviceAuth(['DEVICE_UPDATE'])">修改
+            </el-button>
+            <el-button @click="deleteDevice(scope.row)" type="text" size="small"
+                       v-if="checkDeviceAuth(['DEVICE_DELETE'])">删除
+            </el-button>
+            <el-button @click="editTag(scope.row)" type="text" size="small">标签编辑</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -355,6 +366,29 @@
         <el-button type="primary" @click="add">确 定</el-button>
       </div>
     </el-dialog>
+    <el-dialog title="标签编辑" :visible.sync="tagEditVisible">
+      <div>
+        <p>当前标签</p>
+        <el-tag v-for="t in curTag" v-bind:key="t">{{t}}</el-tag>
+      </div>
+      <el-divider></el-divider>
+      <div>
+        <p>请选择标签</p>
+        <el-select v-model="curTag" multiple placeholder="请选择标签">
+          <el-option
+            v-for="t in allTags"
+            :key="t"
+            :label="t"
+            :value="t">
+          </el-option>
+        </el-select>
+      </div>
+      <el-divider></el-divider>
+      <div>
+        <el-button @click="tagEditVisible = false">取消</el-button>
+        <el-button type="primary" @click="setDeviceTags">确认修改</el-button>
+      </div>
+    </el-dialog>
     <el-dialog title="新增设备类型" :visible.sync="typeAddVisible">
       <el-form :model="typeTable">
         <el-form-item label="设备类型名" label-width="120px">
@@ -452,7 +486,7 @@
     createDeviceType,
     deleteDeviceApi,
     deleteMultipleDeviceApi,
-    getAllDepartments,
+    getAllDepartments, getAllTags,
     getCity,
     getCityCascaderOptions,
     getCityOptions,
@@ -461,7 +495,7 @@
     getDeviceByWorkshop,
     getDeviceNumber,
     getDevicesApi,
-    getDeviceState,
+    getDeviceState, getDeviceTag,
     getDeviceType,
     getFactory,
     getFactoryOptions,
@@ -470,7 +504,7 @@
     getWorkshop,
     getWorkshopOptions,
     searchDevicesByDeviceIdApi,
-    searchDevicesByDeviceNameApi,
+    searchDevicesByDeviceNameApi, setDeviceTags,
     updateDeviceApi
   } from '../../api/api';
   import UploadImg from "../../components/UploadImg/index";
@@ -487,6 +521,7 @@
         totalPage: 0,
         curSortColumn: '',
         curOrder: '',
+        curTagEdit: 0,
         cascaderValue: [],
         cascaderOptions: [],
         typeAddVisible: false,
@@ -495,6 +530,9 @@
         workshopAddVisible: false,
         updateFormVisible: false,
         newFormVisible: false,
+        tagEditVisible: false,
+        allTags: [],
+        curTag: [],
         deviceState: [],
         newCityList: [],
         newFactoryList: [],
@@ -844,11 +882,32 @@
           this.$message.error('更新设备未成功');
         }
       },
+      async setDeviceTags() {
+        try {
+          const data = await setDeviceTags(this.curTagEdit, this.curTag);
+          this.tagEditVisible = false;
+          if (data.data.c === 200) {
+            this.$message({
+              message: '更新成功',
+              type: 'success'
+            });
+            this.getDevices();
+          }
+        } catch(e) {
+          this.tagEditVisible = false;
+          this.$message.error('标签更新未成功');
+        }
+      },
+      async editTag(row) {
+        this.curTag = (await getDeviceTag(row.id)).data.d;
+        this.curTagEdit = row.id;
+        this.tagEditVisible = true;
+      },
       async openUpdateForm(row) {//打开更新表单
         this.updateData = row;
         this.updateFactory = (await getFactoryOptions(row.city)).data.d;
         this.updateWorkshop = (await getWorkshopOptions(row.factory)).data.d;
-        this.updateFormVisible = true
+        this.updateFormVisible = true;
       },
       async deleteDevice(row) {
         const affiliateData = (await getDeviceAffiliateData(row.hardwareDeviceID)).data.d;
@@ -995,10 +1054,10 @@
       async getDeviceOptions() {
         this.cascaderOptions = (await getCityCascaderOptions()).data.d;
       },
-      async getTotalPage(searchType, city='all', factory='all', workshop='all') {
-        if(searchType === 'all') {
+      async getTotalPage(searchType, city = 'all', factory = 'all', workshop = 'all') {
+        if (searchType === 'all') {
           this.totalPage = (await getDeviceNumber('all')).data.d;
-        } else if(searchType === 'search') {
+        } else if (searchType === 'search') {
           const c = city === '全部' ? 'all' : city;
           const f = factory === '全部' ? 'all' : factory;
           const w = workshop === '全部' ? 'all' : workshop;
@@ -1022,6 +1081,7 @@
       this.deviceState = (await getDeviceState()).data.d;
       this.deviceType = (await getDeviceType()).data.d;
       this.department = (await getAllDepartments()).data.d;
+      this.allTags = (await getAllTags()).data.d;
     }
   }
 </script>
