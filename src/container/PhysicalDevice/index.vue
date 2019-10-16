@@ -382,11 +382,23 @@
             :value="t">
           </el-option>
         </el-select>
+        <el-button type="primary" @click="newTagVisible = true">+</el-button>
       </div>
       <el-divider></el-divider>
       <div>
         <el-button @click="tagEditVisible = false">取消</el-button>
         <el-button type="primary" @click="setDeviceTags">确认修改</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog title="新增标签" :visible.sync="newTagVisible">
+      <div>
+        <p>新标签名</p>
+        <el-input v-model="newTagName" placeholder="请输入新标签名"></el-input>
+      </div>
+      <el-divider></el-divider>
+      <div>
+        <el-button @click="newTagVisible = false">取消</el-button>
+        <el-button type="primary" @click="addTag">确定</el-button>
       </div>
     </el-dialog>
     <el-dialog title="新增设备类型" :visible.sync="typeAddVisible">
@@ -481,7 +493,7 @@
   import {
     addCity,
     addDeviceApi,
-    addFactory,
+    addFactory, addTag,
     addWorkshop,
     createDeviceType,
     deleteDeviceApi,
@@ -522,6 +534,7 @@
         curSortColumn: '',
         curOrder: '',
         curTagEdit: 0,
+        newTagName: '',
         cascaderValue: [],
         cascaderOptions: [],
         typeAddVisible: false,
@@ -531,6 +544,7 @@
         updateFormVisible: false,
         newFormVisible: false,
         tagEditVisible: false,
+        newTagVisible: false,
         allTags: [],
         curTag: [],
         deviceState: [],
@@ -893,9 +907,33 @@
             });
             this.getDevices();
           }
-        } catch(e) {
+        } catch (e) {
           this.tagEditVisible = false;
           this.$message.error('标签更新未成功');
+        }
+      },
+      async addTag() {
+        if (this.allTags.indexOf(this.newTagName) === -1) {
+          try {
+            const data = await addTag(this.newTagName);
+            this.newTagVisible = false;
+            if (data.data.c === 200) {
+              this.$message({
+                message: '更新成功',
+                type: 'success'
+              });
+              this.newTagName = '';
+              this.allTags = (await getAllTags()).data.d;
+            }
+          } catch (e) {
+            this.newTagVisible = false;
+            this.newTagName = '';
+            this.$message.error('添加标签失败');
+          }
+        } else {
+          this.newTagVisible = false;
+          this.newTagName = '';
+          this.$message.error('标签名重复');
         }
       },
       async editTag(row) {

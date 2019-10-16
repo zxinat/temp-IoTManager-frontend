@@ -741,3 +741,7 @@ export function getAllTags() {
 export function setDeviceTags(id, tags) {
   return axios.post(`/api/device/deviceTag/${id}`, {str: tags});
 }
+
+export function addTag(tagName) {
+  return axios.post(`/api/device/tag?tagName=${tagName}`);
+}
