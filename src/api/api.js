@@ -746,6 +746,10 @@ export function addTag(tagName) {
   return axios.post(`/api/device/tag?tagName=${tagName}`);
 }
 
+export function deleteTag(tagName) {
+  return axios.delete(`/api/device/tag?tagName=${tagName}`);
+}
+
 export function addDeviceType(deviceType) {
   return axios.post(`/api/deviceType`, {...deviceType});
 }

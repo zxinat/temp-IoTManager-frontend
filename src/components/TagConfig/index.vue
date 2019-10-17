@@ -8,7 +8,8 @@
         class="tag-container"
         v-for="tag in tags"
         :key="tag"
-        closable>
+        closable
+        @close="closeTag(tag)">
         {{tag}}
       </el-tag>
       <el-input
@@ -26,7 +27,7 @@
 </template>
 
 <script>
-  import {getAllTags} from "../../api/api";
+  import {addTag, deleteTag, getAllTags} from "../../api/api";
 
   export default {
     name: "TagConfig",
@@ -42,8 +43,45 @@
         this.tags = (await getAllTags()).data.d;
       },
       async addTag() {
-        this.inputVisible = false;
-        this.inputValue = '';
+        if (this.tags.indexOf(this.inputValue) === -1) {
+          try {
+            const data = await addTag(this.inputValue);
+            this.inputVisible = false;
+            if (data.data.c === 200) {
+              this.$message({
+                message: '更新成功',
+                type: 'success'
+              });
+              this.inputValue = '';
+              this.tags = (await getAllTags()).data.d;
+            }
+          } catch (e) {
+            this.inputVisible = false;
+            this.inputValue = '';
+            this.$message.error('添加标签失败');
+          }
+        } else {
+          this.inputVisible = false;
+          this.inputValue = '';
+          this.$message.error('标签名重复');
+        }
+      },
+      async closeTag(tag) {
+        try {
+          this.$confirm('确认删除？')
+            .then(async _ => {
+              const data = await deleteTag(tag);
+              if (data.data.c === 200) {
+                this.$message({
+                  message: '删除成功',
+                  type: 'success'
+                });
+                this.tags = (await getAllTags()).data.d;
+              }
+            });
+        } catch (e) {
+          console.log(e);
+        }
       },
       showInput() {
         this.inputVisible = true;
