@@ -84,7 +84,7 @@
     deleteDeviceType,
     getDetailedDeviceType,
     /**getDeviceTypeApi, searchDeviceTypeApi, deleteDeviceTypeApi, updateDeviceTypeApi,**/
-      getDeviceType, updateDeviceType, /**addDeviceTypeApi, deleteMultipleDeviceTypeApi**/
+      getDeviceType, getDeviceTypeAffiliateDevice, updateDeviceType, /**addDeviceTypeApi, deleteMultipleDeviceTypeApi**/
   } from '../../api/api'
   import {checkAuth} from "../../common/util";
 
@@ -126,23 +126,28 @@
         this.multipleSelection = val;
       },
       async deleteDeviceType(row) {
-        try {
-          this.$confirm('确认删除？')
-            .then(async _ => {
-              const data = await deleteDeviceType(row.id);
-              if (data.data.c === 200) {
-                this.$message({
-                  message: '删除成功',
-                  type: 'success'
-                });
-                //再获取一次所有信息
-                this.tableData = (await getDetailedDeviceType()).data.d;
-              }
-            })
-            .catch(_ => {
-            });
-        } catch (e) {
-          console.log(e)
+        const affiliateDevice = (await getDeviceTypeAffiliateDevice(row.id)).data.d;c
+        if (affiliateDevice === 0) {
+          try {
+            this.$confirm('确认删除？')
+              .then(async _ => {
+                const data = await deleteDeviceType(row.id);
+                if (data.data.c === 200) {
+                  this.$message({
+                    message: '删除成功',
+                    type: 'success'
+                  });
+                  //再获取一次所有信息
+                  this.tableData = (await getDetailedDeviceType()).data.d;
+                }
+              })
+              .catch(_ => {
+              });
+          } catch (e) {
+            console.log(e)
+          }
+        } else {
+          this.$msgbox('该类型有' + affiliateDevice + '个相关设备， 无法被删除');
         }
       },
       async openUpdateForm(row) {//打开更新表单

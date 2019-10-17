@@ -777,3 +777,7 @@ export function findTagAffiliation(tagName) {
 export function getFieldAffiliateData(fieldId) {
   return axios.get(`/api/field/affiliateData/${fieldId}`);
 }
+
+export function getDeviceTypeAffiliateDevice(id) {
+  return axios.get(`api/deviceType/affiliate/${id}`);
+}
