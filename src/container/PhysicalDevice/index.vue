@@ -517,7 +517,7 @@
     getCityOptions,
     getDeviceAffiliateAlarmInfo,
     getDeviceAffiliateData, getDeviceAffiliateThreshold,
-    getDeviceByWorkshop,
+    getDeviceByWorkshop, getDeviceIdExist,
     getDeviceNumber,
     getDevicesApi,
     getDeviceState, getDeviceTag,
@@ -772,19 +772,25 @@
       async add(formName) {
         this.$refs[formName].validate( async (valid) => {
           if (valid) {
-            try {
-              const data = await addDeviceApi(this.newDeviceData);
-              this.newFormVisible = false;
-              if (data.data.c === 200) {
-                this.$message({
-                  message: '添加成功',
-                  type: 'success'
-                });
-                this.getDevices();
+            const deviceIdExist = (await getDeviceIdExist(this.newDeviceData.hardwareDeviceID)).data.d;
+            if (deviceIdExist === 0) {
+              try {
+                const data = await addDeviceApi(this.newDeviceData);
+                this.newFormVisible = false;
+                if (data.data.c === 200) {
+                  this.$message({
+                    message: '添加成功',
+                    type: 'success'
+                  });
+                  this.getDevices();
+                }
+              } catch (e) {
+                this.newFormVisible = false;
+                this.$message.error('添加设备未成功');
               }
-            } catch (e) {
+            } else {
               this.newFormVisible = false;
-              this.$message.error('添加设备未成功');
+              this.$message.error('设备ID重复');
             }
           }
         });
