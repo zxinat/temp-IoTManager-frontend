@@ -27,7 +27,7 @@
 </template>
 
 <script>
-  import {addTag, deleteTag, getAllTags} from "../../api/api";
+  import {addTag, deleteTag, findTagAffiliation, getAllTags} from "../../api/api";
 
   export default {
     name: "TagConfig",
@@ -67,20 +67,25 @@
         }
       },
       async closeTag(tag) {
-        try {
-          this.$confirm('确认删除？')
-            .then(async _ => {
-              const data = await deleteTag(tag);
-              if (data.data.c === 200) {
-                this.$message({
-                  message: '删除成功',
-                  type: 'success'
-                });
-                this.tags = (await getAllTags()).data.d;
-              }
-            });
-        } catch (e) {
-          console.log(e);
+        const affiliation = (await findTagAffiliation(tag)).data.d;
+        if (affiliation === 0) {
+          try {
+            this.$confirm('确认删除？')
+              .then(async _ => {
+                const data = await deleteTag(tag);
+                if (data.data.c === 200) {
+                  this.$message({
+                    message: '删除成功',
+                    type: 'success'
+                  });
+                  this.tags = (await getAllTags()).data.d;
+                }
+              });
+          } catch (e) {
+            console.log(e);
+          }
+        } else {
+          this.$msgbox('该标签有' + affiliation + '个下属设备，无法被删除');
         }
       },
       showInput() {

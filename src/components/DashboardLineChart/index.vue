@@ -59,7 +59,7 @@
         pollInterval: {},
         option: {
           title: {
-            text: 'Telemetry History'
+            text: ''
           },
           tooltip: {},
           legend: {

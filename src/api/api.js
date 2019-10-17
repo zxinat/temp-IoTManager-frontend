@@ -769,3 +769,7 @@ export function updateField(id, property) {
 export function deleteField(id) {
   return axios.delete(`/api/field/${id}`);
 }
+
+export function findTagAffiliation(tagName) {
+  return axios.get(`/api/device/tag/affiliation?tagName=${tagName}`);
+}
