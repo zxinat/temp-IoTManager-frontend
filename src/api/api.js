@@ -757,3 +757,11 @@ export function updateDeviceType(id, deviceType) {
 export function deleteDeviceType(id) {
   return axios.delete(`/api/deviceType/${id}`);
 }
+
+export function updateField(id, property) {
+  return axios.put(`/api/field/${id}`, {...property});
+}
+
+export function deleteField(id) {
+  return axios.delete(`/api/field/${id}`);
+}
