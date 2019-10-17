@@ -779,9 +779,13 @@ export function getFieldAffiliateData(fieldId) {
 }
 
 export function getDeviceTypeAffiliateDevice(id) {
-  return axios.get(`api/deviceType/affiliate/${id}`);
+  return axios.get(`/api/deviceType/affiliate/${id}`);
 }
 
 export function getDeviceIdExist(deviceId) {
-  return axios.get(`api/device/exist/${deviceId}`);
+  return axios.get(`/api/device/exist/${deviceId}`);
+}
+
+export function getGatewayIdExist(gatewayId) {
+  return axios.get(`/api/gateway/exist/${gatewayId}`);
 }

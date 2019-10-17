@@ -425,7 +425,7 @@
     deleteMultipleGatewayApi, getAffiliateDeviceNumber,
     getAllDepartments,
     getCity, getCityCascaderOptions, getCityOptions,
-    getFactory, getFactoryOptions, getGatewayByWorkshop, getGatewayNumber,
+    getFactory, getFactoryOptions, getGatewayByWorkshop, getGatewayIdExist, getGatewayNumber,
     getGatewaysApi,
     getGatewayState,
     getGatewayType,
@@ -650,20 +650,26 @@
       add(formName) {
         this.$refs[formName].validate( async (valid) => {
           if (valid) {
-            try {
-              console.log(this.gatewayState);
-              const data = await addGatewayApi(this.newGatewayData);
-              this.newFormVisible = false;
-              if (data.data.c === 200) {
-                this.$message({
-                  message: '添加成功',
-                  type: 'success'
-                });
-                this.getGateways();
+            const gatewayIdExist = (await getGatewayIdExist(this.newGatewayData.hardwareGatewayID)).data.d;
+            if (gatewayIdExist === 0) {
+              try {
+                console.log(this.gatewayState);
+                const data = await addGatewayApi(this.newGatewayData);
+                this.newFormVisible = false;
+                if (data.data.c === 200) {
+                  this.$message({
+                    message: '添加成功',
+                    type: 'success'
+                  });
+                  this.getGateways();
+                }
+              } catch (e) {
+                this.newFormVisible = false;
+                this.$message.error('添加网关未成功');
               }
-            } catch (e) {
+            } else {
               this.newFormVisible = false;
-              this.$message.error('添加网关未成功');
+              this.$message.error('网关ID重复');
             }
           } else {
             console.log('error submit');
