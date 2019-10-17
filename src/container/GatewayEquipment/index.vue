@@ -119,14 +119,16 @@
       <el-button type="primary" @click="multipleDelete" v-if="checkGatewayAuth(['GATEWAY_DELETE'])">批量删除</el-button>
     </div>
     <el-dialog title="修改网关" :visible.sync="updateFormVisible">
-      <el-form :model="updateData">
+      <el-form :model="updateData" ref="updateData">
         <el-form-item label="网关编号" label-width="120px">
-          <el-input v-model="updateData.hardwareGatewayID" autocomplete="off"></el-input>
+          <el-input v-model="updateData.hardwareGatewayID" autocomplete="off" disabled=""></el-input>
         </el-form-item>
-        <el-form-item label="网关名称" label-width="120px">
+        <el-form-item label="网关名称" prop="gatewayName" label-width="120px"
+                      :rules="[{required: true, message: '网关名称不能为空'}]">
           <el-input v-model="updateData.gatewayName" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="网关类型" label-width="120px">
+        <el-form-item label="网关类型" prop="gatewayType" label-width="120px"
+                      :rules="[{required: true, message: '网关类型不能为空'}]">
           <el-select v-model="updateData.gatewayType" placeholder="选择网关类型">
             <el-option
               v-for="gt in gatewayType"
@@ -137,7 +139,8 @@
           </el-select>
           <el-button type="primary" @click="typeAddVisible = true">+</el-button>
         </el-form-item>
-        <el-form-item :label="GLOBAL.firstLevel" label-width="120px">
+        <el-form-item :label="GLOBAL.firstLevel" prop="city" label-width="120px"
+                      :rules="[{required: true, message: GLOBAL.firstLevel+'不能为空'}]">
           <el-select v-model="updateData.city" @change="getUpdateFactory(updateData.city)" placeholder="选择城市">
             <el-option
               v-for="c in updateCity"
@@ -148,7 +151,8 @@
           </el-select>
           <el-button type="primary" @click="cityAddVisible = true">+</el-button>
         </el-form-item>
-        <el-form-item :label="GLOBAL.secondLevel+'名称'" label-width="120px">
+        <el-form-item :label="GLOBAL.secondLevel+'名称'" prop="factory" label-width="120px"
+                      :rules="[{required: true, message: GLOBAL.secondLevel+'不能为空'}]">
           <el-select v-model="updateData.factory" @change="getUpdateWorkshop(updateData.factory)" placeholder="选择工厂">
             <el-option
               v-for="f in updateFactory"
@@ -159,7 +163,8 @@
           </el-select>
           <el-button type="primary" @click="factoryAddVisible = true">+</el-button>
         </el-form-item>
-        <el-form-item :label="GLOBAL.thirdLevel" label-width="120px">
+        <el-form-item :label="GLOBAL.thirdLevel" prop="workshop" label-width="120px"
+                      :rules="[{required: true, message: GLOBAL.thirdLevel+'不能为空'}]">
           <el-select v-model="updateData.workshop" placeholder="选择车间">
             <el-option
               v-for="w in updateWorkshop"
@@ -202,18 +207,21 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="updateFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="update">确 定</el-button>
+        <el-button type="primary" @click="update('updateData')">确 定</el-button>
       </div>
     </el-dialog>
     <el-dialog title="新增网关" :visible.sync="newFormVisible">
-      <el-form :model="newGatewayData">
-        <el-form-item label="网关编号" label-width="120px">
+      <el-form :model="newGatewayData" ref="newGatewayData">
+        <el-form-item label="网关编号" prop="hardwareGatewayID" label-width="120px"
+                      :rules="[{required: true, message: '网关编号不能为空'}]">
           <el-input v-model="newGatewayData.hardwareGatewayID" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="网关名称" label-width="120px">
+        <el-form-item label="网关名称" prop="gatewayName" label-width="120px"
+                      :rules="[{required: true, message: '网关名称不能为空'}]">
           <el-input v-model="newGatewayData.gatewayName" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="网关类型" label-width="120px">
+        <el-form-item label="网关类型" prop="gatewayType" label-width="120px"
+                      :rules="[{required: true, message: '网关类型不能为空'}]">
           <el-select v-model="newGatewayData.gatewayType" placeholder="选择网关类型">
             <el-option
               v-for="gt in gatewayType"
@@ -224,7 +232,8 @@
           </el-select>
           <el-button type="primary" @click="typeAddVisible = true">+</el-button>
         </el-form-item>
-        <el-form-item :label="GLOBAL.firstLevel" label-width="120px">
+        <el-form-item :label="GLOBAL.firstLevel" prop="city" label-width="120px"
+                      :rules="[{required: true, message: GLOBAL.firstLevel+'不能为空'}]">
           <el-select v-model="newGatewayData.city" @change="getNewFactory(newGatewayData.city)" placeholder="请选择">
             <el-option
               v-for="c in city"
@@ -235,7 +244,8 @@
           </el-select>
           <el-button type="primary" @click="cityAddVisible = true">+</el-button>
         </el-form-item>
-        <el-form-item :label="GLOBAL.secondLevel+'名称'" label-width="120px">
+        <el-form-item :label="GLOBAL.secondLevel" prop="factory" label-width="120px"
+                      :rules="[{required: true, message: GLOBAL.secondLevel+'不能为空'}]">
           <el-select v-model="newGatewayData.factory" @change="getNewWorkshop(newGatewayData.factory)"
                      placeholder="请选择">
             <el-option
@@ -247,7 +257,8 @@
           </el-select>
           <el-button type="primary" @click="factoryAddVisible = true">+</el-button>
         </el-form-item>
-        <el-form-item :label="GLOBAL.thirdLevel" label-width="120px">
+        <el-form-item :label="GLOBAL.thirdLevel" prop="workshop" label-width="120px"
+                      :rules="[{required: true, message: GLOBAL.thirdLevel+'不能为空'}]">
           <el-select v-model="newGatewayData.workshop" placeholder="请选择">
             <el-option
               v-for="w in workshop"
@@ -315,7 +326,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="newFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="add">确 定</el-button>
+        <el-button type="primary" @click="add('newGatewayData')">确 定</el-button>
       </div>
     </el-dialog>
     <el-dialog title="新增网关类型" :visible.sync="typeAddVisible">
@@ -636,22 +647,30 @@
         const data = await searchGatewaysApi(this.searchData);
         this.tableData = data.data.d;
       },
-      async add() {
-        try {
-          console.log(this.gatewayState);
-          const data = await addGatewayApi(this.newGatewayData);
-          this.newFormVisible = false;
-          if (data.data.c === 200) {
-            this.$message({
-              message: '添加成功',
-              type: 'success'
-            });
-            this.getGateways();
+      add(formName) {
+        this.$refs[formName].validate( async (valid) => {
+          if (valid) {
+            try {
+              console.log(this.gatewayState);
+              const data = await addGatewayApi(this.newGatewayData);
+              this.newFormVisible = false;
+              if (data.data.c === 200) {
+                this.$message({
+                  message: '添加成功',
+                  type: 'success'
+                });
+                this.getGateways();
+              }
+            } catch (e) {
+              this.newFormVisible = false;
+              this.$message.error('添加网关未成功');
+            }
+          } else {
+            console.log('error submit');
+            return false;
           }
-        } catch (e) {
-          this.newFormVisible = false;
-          this.$message.error('添加网关未成功');
-        }
+        });
+
       },
       async addType() {
         try {
@@ -761,21 +780,28 @@
           this.newGatewayData.workshop = "";
         }
       },
-      async update() {
-        try {
-          const data = await updateGatewayApi(this.updateData);
-          this.updateFormVisible = false;
-          if (data.data.c === 200) {
-            this.$message({
-              message: '更新成功',
-              type: 'success'
-            });
-            this.getGateways();
+      async update(formName) {
+        this.$refs[formName].validate( async (valid) => {
+          if (valid) {
+            try {
+              const data = await updateGatewayApi(this.updateData);
+              this.updateFormVisible = false;
+              if (data.data.c === 200) {
+                this.$message({
+                  message: '更新成功',
+                  type: 'success'
+                });
+                this.getGateways();
+              }
+            } catch (e) {
+              this.updateFormVisible = false;
+              this.$message.error('更新网关未成功');
+            }
+          } else {
+            console.log('error input');
+            return false;
           }
-        } catch (e) {
-          this.updateFormVisible = false;
-          this.$message.error('更新网关未成功');
-        }
+        });
       },
       async openUpdateForm(row) {//打开更新表单
         console.log('test', row);
