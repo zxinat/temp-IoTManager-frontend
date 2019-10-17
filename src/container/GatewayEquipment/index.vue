@@ -121,7 +121,7 @@
     <el-dialog title="修改网关" :visible.sync="updateFormVisible">
       <el-form :model="updateData" ref="updateData">
         <el-form-item label="网关编号" label-width="120px">
-          <el-input v-model="updateData.hardwareGatewayID" autocomplete="off" disabled=""></el-input>
+          <el-input v-model="updateData.hardwareGatewayID" autocomplete="off" disabled></el-input>
         </el-form-item>
         <el-form-item label="网关名称" prop="gatewayName" label-width="120px"
                       :rules="[{required: true, message: '网关名称不能为空'}]">

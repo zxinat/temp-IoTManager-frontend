@@ -140,14 +140,28 @@
       <el-button type="primary" @click="multipleDelete" v-if="checkDeviceAuth(['DEVICE_DELETE'])">批量删除</el-button>
     </div>
     <el-dialog title="修改设备" :visible.sync="updateFormVisible">
-      <el-form :model="updateData">
+      <el-form :model="updateData" ref="updateData">
         <el-form-item label="设备编号" label-width="120px">
-          <el-input v-model="updateData.hardwareDeviceID" autocomplete="off"></el-input>
+          <el-input v-model="updateData.hardwareDeviceID" autocomplete="off" disabled></el-input>
         </el-form-item>
-        <el-form-item label="设备名称" label-width="120px">
+        <el-form-item label="设备名称" prop="deviceName" label-width="120px"
+                      :rules="[{required: true, message: '设备名称不能为空'}]">
           <el-input v-model="updateData.deviceName" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item :label="GLOBAL.firstLevel" label-width="120px">
+        <el-form-item label="设备类型" prop="deviceType" label-width="120px"
+                      :rules="[{required: true, message: '设备类型不能为空'}]">
+          <el-select v-model="updateData.deviceType" placeholder="选择设备类型">
+            <el-option
+              v-for="dt in deviceType"
+              :key="dt.id"
+              :label="dt.deviceTypeName"
+              :value="dt.deviceTypeName">
+            </el-option>
+          </el-select>
+          <el-button type="primary" @click="typeAddVisible = true">+</el-button>
+        </el-form-item>
+        <el-form-item :label="GLOBAL.firstLevel" prop="city" label-width="120px"
+                      :rules="[{required: true, message: GLOBAL.firstLevel+'不能为空'}]">
           <el-select v-model="updateData.city" @change="getUpdateFactory(updateData.city)" placeholder="请选择">
             <el-option
               v-for="c in updateCity"
@@ -158,7 +172,8 @@
           </el-select>
           <el-button type="primary" @click="cityAddVisible = true">+</el-button>
         </el-form-item>
-        <el-form-item :label="GLOBAL.secondLevel" label-width="120px">
+        <el-form-item :label="GLOBAL.secondLevel" prop="factory" label-width="120px"
+                      :rules="[{required: true, message: GLOBAL.secondLevel+'不能为空'}]">
           <el-select v-model="updateData.factory" @change="getUpdateWorkshop(updateData.factory)" placeholder="请选择">
             <el-option
               v-for="f in updateFactory"
@@ -169,7 +184,8 @@
           </el-select>
           <el-button type="primary" @click="factoryAddVisible = true">+</el-button>
         </el-form-item>
-        <el-form-item :label="GLOBAL.thirdLevel" label-width="120px">
+        <el-form-item :label="GLOBAL.thirdLevel" prop="workshop" label-width="120px"
+                      :rules="[{required: true, message: GLOBAL.thirdLevel+'不能为空'}]">
           <el-select v-model="updateData.workshop" placeholder="请选择">
             <el-option
               v-for="w in updateWorkshop"
@@ -179,17 +195,6 @@
             </el-option>
           </el-select>
           <el-button type="primary" @click="workshopAddVisible = true">+</el-button>
-        </el-form-item>
-        <el-form-item label="设备类型" label-width="120px">
-          <el-select v-model="updateData.deviceType" placeholder="选择设备类型">
-            <el-option
-              v-for="dt in deviceType"
-              :key="dt.id"
-              :label="dt.deviceTypeName"
-              :value="dt.deviceTypeName">
-            </el-option>
-          </el-select>
-          <el-button type="primary" @click="typeAddVisible = true">+</el-button>
         </el-form-item>
         <!--<el-form-item label="设备状态" label-width="120px">-->
         <!--<el-select v-model="updateData.deviceState" placeholder="选择设备状态">-->
@@ -201,14 +206,15 @@
         <!--</el-option>-->
         <!--</el-select>-->
         <!--</el-form-item>-->
-        <el-form-item label="设备图像链接" label-width="120px">
-          <el-input v-model="updateData.imageUrl" autocomplete="off"></el-input>
-        </el-form-item>
+        <!--<el-form-item label="设备图像链接" label-width="120px">-->
+          <!--<el-input v-model="updateData.imageUrl" autocomplete="off"></el-input>-->
+        <!--</el-form-item>-->
         <!--<el-form-item label="所属网关编号" label-width="120px">-->
         <!--<el-input v-model="updateData.gatewayID" autocomplete="off"></el-input>-->
         <!--</el-form-item>-->
-        <el-form-item label="所属网关" label-width="120px">
-          <el-select v-model="updateData.gatewayId" placeholder="选择设备类型">
+        <el-form-item label="所属网关" prop="gatewayId" label-width="120px"
+                      :rules="[{required: true, message: '所属网关不能为空'}]">
+          <el-select v-model="updateData.gatewayId" placeholder="选择所属网关">
             <el-option
               v-for="dt in affiliateGateways"
               :key="dt.id"
@@ -239,18 +245,33 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="updateFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="update">确 定</el-button>
+        <el-button type="primary" @click="update('updateData')">确 定</el-button>
       </div>
     </el-dialog>
     <el-dialog title="新增设备" :visible.sync="newFormVisible">
-      <el-form :model="newDeviceData">
-        <el-form-item label="设备编号" label-width="120px">
+      <el-form :model="newDeviceData" ref="newDeviceData">
+        <el-form-item label="设备编号" prop="hardwareDeviceID" label-width="120px"
+                      :rules="[{required: true, message: '设备编号不能为空'}]">
           <el-input v-model="newDeviceData.hardwareDeviceID" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="设备名称" label-width="120px">
+        <el-form-item label="设备名称" prop="deviceName" label-width="120px"
+                      :rules="[{required: true, message: '设备名称不能为空'}]">
           <el-input v-model="newDeviceData.deviceName" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item :label="GLOBAL.firstLevel" label-width="120px">
+        <el-form-item label="设备类型" prop="deviceType" label-width="120px"
+                      :rules="[{required: true, message: '设备类型不能为空'}]">
+          <el-select v-model="newDeviceData.deviceType" placeholder="选择设备类型">
+            <el-option
+              v-for="dt in deviceType"
+              :key="dt.id"
+              :label="dt.deviceTypeName"
+              :value="dt.deviceTypeName">
+            </el-option>
+          </el-select>
+          <el-button type="primary" @click="typeAddVisible = true">+</el-button>
+        </el-form-item>
+        <el-form-item :label="GLOBAL.firstLevel" prop="city" label-width="120px"
+                      :rules="[{required: true, message: GLOBAL.firstLevel+'不能为空'}]">
           <el-select v-model="newDeviceData.city" @change="getNewFactory(newDeviceData.city)" placeholder="请选择">
             <el-option
               v-for="c in city"
@@ -261,7 +282,8 @@
           </el-select>
           <el-button type="primary" @click="cityAddVisible = true">+</el-button>
         </el-form-item>
-        <el-form-item :label="GLOBAL.secondLevel" label-width="120px">
+        <el-form-item :label="GLOBAL.secondLevel" prop="factory" label-width="120px"
+                      :rules="[{required: true, message: GLOBAL.secondLevel+'不能为空'}]">
           <el-select v-model="newDeviceData.factory" @change="getNewWorkshop(newDeviceData.factory)" placeholder="请选择">
             <el-option
               v-for="f in factory"
@@ -272,7 +294,8 @@
           </el-select>
           <el-button type="primary" @click="factoryAddVisible = true">+</el-button>
         </el-form-item>
-        <el-form-item :label="GLOBAL.thirdLevel" label-width="120px">
+        <el-form-item :label="GLOBAL.thirdLevel" prop="workshop" label-width="120px"
+                      :rules="[{required: true, message: GLOBAL.thirdLevel+'不能为空'}]">
           <el-select v-model="newDeviceData.workshop" placeholder="请选择">
             <el-option
               v-for="w in workshop"
@@ -282,17 +305,6 @@
             </el-option>
           </el-select>
           <el-button type="primary" @click="workshopAddVisible = true">+</el-button>
-        </el-form-item>
-        <el-form-item label="设备类型" label-width="120px">
-          <el-select v-model="newDeviceData.deviceType" placeholder="选择设备类型">
-            <el-option
-              v-for="dt in deviceType"
-              :key="dt.id"
-              :label="dt.deviceTypeName"
-              :value="dt.deviceTypeName">
-            </el-option>
-          </el-select>
-          <el-button type="primary" @click="typeAddVisible = true">+</el-button>
         </el-form-item>
         <!--<el-form-item label="设备状态" label-width="120px">-->
         <!--<el-select v-model="newDeviceData.deviceState" placeholder="选择设备状态">-->
@@ -304,14 +316,15 @@
         <!--</el-option>-->
         <!--</el-select>-->
         <!--</el-form-item>-->
-        <el-form-item label="设备图像链接" label-width="120px">
-          <el-input v-model="newDeviceData.imageUrl" autocomplete="off"></el-input>
-        </el-form-item>
+        <!--<el-form-item label="设备图像链接" label-width="120px">-->
+          <!--<el-input v-model="newDeviceData.imageUrl" autocomplete="off"></el-input>-->
+        <!--</el-form-item>-->
         <!--<el-form-item label="所属网关编号" label-width="120px">-->
         <!--<el-input v-model="newDeviceData.gatewayId" autocomplete="off"></el-input>-->
         <!--</el-form-item>-->
-        <el-form-item label="所属网关" label-width="120px">
-          <el-select v-model="newDeviceData.gatewayId" placeholder="选择设备类型">
+        <el-form-item label="所属网关" prop="gatewayId" label-width="120px"
+                      :rules="[{required: true, message: '所属网关不能为空'}]">
+          <el-select v-model="newDeviceData.gatewayId" placeholder="选择所属网关">
             <el-option
               v-for="dt in affiliateGateways"
               :key="dt.id"
@@ -363,7 +376,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="newFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="add">确 定</el-button>
+        <el-button type="primary" @click="add('newDeviceData')">确 定</el-button>
       </div>
     </el-dialog>
     <el-dialog title="标签编辑" :visible.sync="tagEditVisible">
@@ -756,21 +769,25 @@
         const data = await searchDevicesByDeviceIdApi(this.searchDeviceId.deviceId);
         this.tableData = data.data.d;
       },
-      async add() {
-        try {
-          const data = await addDeviceApi(this.newDeviceData);
-          this.newFormVisible = false;
-          if (data.data.c === 200) {
-            this.$message({
-              message: '添加成功',
-              type: 'success'
-            });
-            this.getDevices();
+      async add(formName) {
+        this.$refs[formName].validate( async (valid) => {
+          if (valid) {
+            try {
+              const data = await addDeviceApi(this.newDeviceData);
+              this.newFormVisible = false;
+              if (data.data.c === 200) {
+                this.$message({
+                  message: '添加成功',
+                  type: 'success'
+                });
+                this.getDevices();
+              }
+            } catch (e) {
+              this.newFormVisible = false;
+              this.$message.error('添加设备未成功');
+            }
           }
-        } catch (e) {
-          this.newFormVisible = false;
-          this.$message.error('添加设备未成功');
-        }
+        });
       },
       async addType() {
         try {
@@ -880,21 +897,25 @@
           this.newDeviceData.workshop = "";
         }
       },
-      async update() {
-        try {
-          const data = await updateDeviceApi(this.updateData);
-          this.updateFormVisible = false;
-          if (data.data.c === 200) {
-            this.$message({
-              message: '更新成功',
-              type: 'success'
-            });
-            this.getDevices();
+      async update(formName) {
+        this.$refs[formName].validate( async (valid) => {
+          if (valid) {
+            try {
+              const data = await updateDeviceApi(this.updateData);
+              this.updateFormVisible = false;
+              if (data.data.c === 200) {
+                this.$message({
+                  message: '更新成功',
+                  type: 'success'
+                });
+                this.getDevices();
+              }
+            } catch (e) {
+              this.updateFormVisible = false;
+              this.$message.error('更新设备未成功');
+            }
           }
-        } catch (e) {
-          this.updateFormVisible = false;
-          this.$message.error('更新设备未成功');
-        }
+        });
       },
       async setDeviceTags() {
         try {
