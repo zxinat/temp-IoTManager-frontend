@@ -1,22 +1,27 @@
 <template>
   <div>
-    <el-tag
-      class="tag-container"
-      v-for="tag in tags"
-      :key="tag"
-      closable>
-      {{tag}}
-    </el-tag>
-    <el-input
-      class="input-new-tag"
-      v-if="inputVisible"
-      v-model="inputValue"
-      ref="saveTagInput"
-      size="small"
-      @keyup.enter.native="addTag"
-      @blur="addTag">
-    </el-input>
-    <el-button v-else class="button-new-tag" size="small" @click="showInput">+新标签</el-button>
+    <div>
+      <h2>设备标签</h2>
+    </div>
+    <div>
+      <el-tag
+        class="tag-container"
+        v-for="tag in tags"
+        :key="tag"
+        closable>
+        {{tag}}
+      </el-tag>
+      <el-input
+        class="input-new-tag"
+        v-if="inputVisible"
+        v-model="inputValue"
+        ref="saveTagInput"
+        size="small"
+        @keyup.enter.native="addTag"
+        @blur="addTag">
+      </el-input>
+      <el-button v-else class="button-new-tag" size="small" @click="showInput">+新标签</el-button>
+    </div>
   </div>
 </template>
 
