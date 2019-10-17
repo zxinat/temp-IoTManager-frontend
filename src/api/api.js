@@ -773,3 +773,7 @@ export function deleteField(id) {
 export function findTagAffiliation(tagName) {
   return axios.get(`/api/device/tag/affiliation?tagName=${tagName}`);
 }
+
+export function getFieldAffiliateData(fieldId) {
+  return axios.get(`/api/field/affiliateData/${fieldId}`);
+}

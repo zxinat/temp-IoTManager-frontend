@@ -97,7 +97,14 @@
 </template>
 
 <script>
-  import {createNewField, deleteField, getDevicesApi, getFields, updateField} from "../../api/api";
+  import {
+    createNewField,
+    deleteField,
+    getDevicesApi,
+    getFieldAffiliateData,
+    getFields,
+    updateField
+  } from "../../api/api";
 
   export default {
     name: "PropertyConfig",
@@ -168,20 +175,25 @@
         }
       },
       async deleteField(row) {
-        try {
-          this.$confirm('确认删除?')
-            .then(async _ => {
-              const data = await deleteField(row.id);
-              if (data.data.c === 200) {
-                this.$message({
-                  message: '删除成功',
-                  type: 'success'
-                });
-                this.properties = (await getFields()).data.d;
-              }
-            });
-        } catch (e) {
-          console.log(e);
+        const affiliateData = (await getFieldAffiliateData(row.fieldId)).data.d;
+        if (affiliateData === 0) {
+          try {
+            this.$confirm('确认删除?')
+              .then(async _ => {
+                const data = await deleteField(row.id);
+                if (data.data.c === 200) {
+                  this.$message({
+                    message: '删除成功',
+                    type: 'success'
+                  });
+                  this.properties = (await getFields()).data.d;
+                }
+              });
+          } catch (e) {
+            console.log(e);
+          }
+        } else {
+          this.$msgbox('该属性有' + affiliateData + '条数据，无法被删除');
         }
       }
     },
