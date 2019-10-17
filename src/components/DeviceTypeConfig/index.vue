@@ -43,18 +43,11 @@
 
     <el-dialog title="修改设备类型" :visible.sync="updateFormVisible">
       <el-form :model="updateData">
-        <el-form-item label="设备类型" label-width="120px">
-          <el-select v-model="updateData.deviceType" placeholder="选择城市">
-            <el-option
-              v-for="dt in deviceType"
-              :key="dt.id"
-              :label="dt.deviceTypeName"
-              :value="dt.deviceTypeName">
-            </el-option>
-          </el-select>
+        <el-form-item label="设备类型名称" label-width="120px">
+          <el-input v-model="updateData.deviceTypeName"></el-input>
         </el-form-item>
         <el-form-item label="超时告警时间" label-width="120px">
-          <el-input v-model="updateData.warningTime" autocomplete="off"></el-input>
+          <el-input v-model="updateData.offlineTime" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -65,11 +58,11 @@
 
     <el-dialog title="添加设备类型" :visible.sync="newFormVisible">
       <el-form :model="newData">
-        <el-form-item label="设备类型" label-width="120px">
-          <el-input v-model="newData.deviceType" autocomplete="off"></el-input>
+        <el-form-item label="设备类型名称" label-width="120px">
+          <el-input v-model="newData.deviceTypeName" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="超时告警时间" label-width="120px">
-          <el-input v-model="newData.warningTime" autocomplete="off"></el-input>
+          <el-input v-model="newData.offlineTime" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -83,9 +76,11 @@
 
 <script>
   import {
+    addDeviceType,
+    deleteDeviceType,
     getDetailedDeviceType,
     /**getDeviceTypeApi, searchDeviceTypeApi, deleteDeviceTypeApi, updateDeviceTypeApi,**/
-      getDeviceType, /**addDeviceTypeApi, deleteMultipleDeviceTypeApi**/
+      getDeviceType, updateDeviceType, /**addDeviceTypeApi, deleteMultipleDeviceTypeApi**/
   } from '../../api/api'
     import {checkAuth} from "../../common/util";
     export default {
@@ -102,12 +97,14 @@
           searchDeviceType: '',
           multipleSelection: [],
           updateData: {
-            deviceType: '',
-            warningTime: '',
+            id: 0,
+            deviceTypeName: '',
+            offlineTime: '',
           },
           newData: {
-            deviceType: '',
-            warningTime: '',
+            id: 0,
+            deviceTypeName: '',
+            offlineTime: '',
           },
           deleteData: {
             number: []
@@ -127,7 +124,7 @@
           try {
             this.$confirm('确认删除？')
               .then(async _ => {
-                const data = await deleteDeviceTypeApi(row.id);
+                const data = await deleteDeviceType(row.id);
                 if (data.data.c === 200) {
                   this.$message({
                     message: '删除成功',
@@ -144,7 +141,6 @@
           }
         },
         async openUpdateForm(row){//打开更新表单
-          console.log('test', row);
           this.updateData = JSON.parse(JSON.stringify(row));
           this.updateFormVisible = true;
         },
@@ -178,7 +174,7 @@
         },
         async add(){
           try {
-            const data = await addDeviceTypeApi(this.newData);
+            const data = await addDeviceType(this.newData);
             this.newFormVisible = false;
             if (data.data.c === 200) {
               this.$message({
@@ -195,7 +191,7 @@
         },
         async update(){
           try {
-            const data = await updateDeviceTypeApi(this.updateData);
+            const data = await updateDeviceType(this.updateData.id, this.updateData);
             this.updateFormVisible = false;
             if (data.data.c === 200) {
               this.$message({
@@ -214,6 +210,7 @@
       async mounted() {
         this.deviceType = (await getDeviceType()).data.d;
         this.tableData = (await getDetailedDeviceType()).data.d;
+        console.log(this.tableData);
       },
     }
 </script>
