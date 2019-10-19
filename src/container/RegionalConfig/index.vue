@@ -27,7 +27,7 @@
         v-loading="loading"
         :data="cityData"
         border
-        style="width: 60%"
+        style="width: 100%"
         @sort-change="citySortChange">
         <el-table-column
           prop="cityName"
@@ -451,11 +451,11 @@
               city: '',
               remark: '',
             },
-            searchLab: '',
             workshopTotalPage: 0,
             workshopCurPage: 1,
             workshopCurSortColumn: '',
             workshopCurOrder: '',
+            searchLab: '',
             labData: [],
             labList: [],
             updateLabFormVisible: false,
@@ -701,7 +701,7 @@
           if(this.searchLab !== "") {
             this.labData = (await getWorkshopByWorkshopName(this.searchLab)).data.d;
           } else {
-            this.getWorkshop();
+            this.labData = (await getWorkshop()).data.d;
           }
         },
         async getUpdateLabList(city){
@@ -713,17 +713,17 @@
             this.labList = [];
           }
         },
+
         async getWorkshop() {
           this.loading = true;
           const orderMap = {ascending: 'asc', descending: 'desc'};
           const columnMap = {id: 'id', updateTime: 'updateTime', createTime: 'createTime'};
           const searchColumn = this.workshopCurSortColumn === '' ? "id" : columnMap[this.workshopCurSortColumn];
           const searchOrder = this.workshopCurOrder === '' ? "asc" : orderMap[this.workshopCurOrder];
-          const searchWorkshopName = this.searchLab === '全部' ? "all" : this.searchLab ;
+          const searchWorkshopName = this.searchLab === '全部' ? "all" : this.searchLab;
           const data = await getWorkshop('search', this.workshopCurPage, searchColumn, searchOrder, searchWorkshopName);
           this.labData = data.data.d;
           this.getWorkshopTotalPage('search', searchWorkshopName);
-          // console.log("Total Workshop Page:" + this.workshopTotalPage);
           this.loading = false;
         },
         async workshopPageChange() {
@@ -742,6 +742,7 @@
           this.workshopCurOrder = ob.order;
           this.getWorkshop();
         },
+
         async updateLab(){
           try {
             const data = await updateWorkshop(this.updateLabData.id, this.updateLabData);

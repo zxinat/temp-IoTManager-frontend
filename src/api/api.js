@@ -567,7 +567,7 @@ export function getFactoryNumber(searchType, factoryName = 'all') {
 }
 
 export function getWorkshopNumber(searchType, workshopName = 'all') {
-  return axios.get(`/api/factory/number?searchType=${searchType}&workshopName=${workshopName}`);
+  return axios.get(`/api/workshop/number?searchType=${searchType}&workshopName=${workshopName}`);
 }
 
 export function updateCityApi(id, data) {
