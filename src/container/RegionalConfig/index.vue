@@ -17,13 +17,41 @@
       </el-form>
     </div>
     <div class="table-container" v-if="checkRegionAuth(['CONFIGURE_REGION_RETRIEVE'])">
+      <el-pagination background layout="prev, pager, next"
+                     :total="cityTotalPage"
+                     :current-page.sync="cityCurPage"
+                     :page-size="12"
+                     @current-change="cityPageChange()">
+      </el-pagination>
       <el-table
+        v-loading="loading"
         :data="cityData"
         border
-        style="width: 60%">
+        style="width: 60%"
+        @sort-change="citySortChange">
         <el-table-column
           prop="cityName"
           label="城市">
+        </el-table-column>
+        <el-table-column
+          prop="createTime"
+          label="创建时间"
+          sortable="custom">
+        </el-table-column>
+        <el-table-column
+          prop="updateTime"
+          label="更新时间"
+          sortable="custom">
+        </el-table-column>
+        <el-table-column
+          prop="longitude"
+          label="经度"
+          sortable="custom">
+        </el-table-column>
+        <el-table-column
+          prop="latitude"
+          label="纬度"
+          sortable="custom">
         </el-table-column>
         <el-table-column
           prop="remark"
@@ -89,10 +117,18 @@
       </el-form>
     </div>
     <div class="table-container" v-if="checkRegionAuth(['CONFIGURE_REGION_RETRIEVE'])">
+      <el-pagination background layout="prev, pager, next"
+                     :total="factoryTotalPage"
+                     :current-page.sync="factoryCurPage"
+                     :page-size="12"
+                     @current-change="factoryPageChange()">
+      </el-pagination>
       <el-table
+        v-loading="loading"
         :data="buildingData"
         border
-        style="width: 100%">
+        style="width: 100%"
+        @sort-change="factorySortChange">
         <el-table-column
           prop="factoryName"
           label="实验楼">
@@ -108,6 +144,16 @@
         <el-table-column
           prop="city"
           label="所属城市">
+        </el-table-column>
+        <el-table-column
+          prop="createTime"
+          label="创建时间"
+          sortable="custom">
+        </el-table-column>
+        <el-table-column
+          prop="updateTime"
+          label="更新时间"
+          sortable="custom">
         </el-table-column>
         <el-table-column
           prop="remark"
@@ -205,10 +251,18 @@
       </el-form>
     </div>
     <div class="table-container" v-if="checkRegionAuth(['CONFIGURE_REGION_RETRIEVE'])">
+      <el-pagination background layout="prev, pager, next"
+                     :total="workshopTotalPage"
+                     :current-page.sync="workshopCurPage"
+                     :page-size="12"
+                     @current-change="workshopPageChange()">
+      </el-pagination>
       <el-table
+        v-loading="loading"
         :data="labData"
         border
-        style="width: 100%">
+        style="width: 100%"
+        @sort-change="workshopSortChange">
         <el-table-column
           prop="workshopName"
           label="实验室">
@@ -223,6 +277,16 @@
         <el-table-column
           prop="factory"
           label="所属实验楼">
+        </el-table-column>
+        <el-table-column
+          prop="createTime"
+          label="创建时间"
+          sortable="custom">
+        </el-table-column>
+        <el-table-column
+          prop="updateTime"
+          label="更新时间"
+          sortable="custom">
         </el-table-column>
         <el-table-column
           prop="remark"
@@ -308,19 +372,20 @@
   import {
     getCityOptions,
     getCity,
+    getCityNumber,
     getFactoryOptions,
     getFactory,
+    getFactoryNumber,
     getWorkshopOptions,
     getWorkshop,
+    getWorkshopNumber,
     updateCityApi,
     deleteCity,
     addCity,
     deleteFactory,
     addFactory,
-    searchBuildingApi,
     deleteWorkshop,
     addWorkshop,
-    searchLabApi,
     updateFactory,
     updateWorkshop,
     getCityByCityName,
@@ -341,7 +406,12 @@
       name: "RegionalConfig",
       data() {
           return{
-            searchCity: "",
+            loading: false,
+            cityTotalPage: 0,
+            cityCurPage: 1,
+            cityCurSortColumn: '',
+            cityCurOrder: '',
+            searchCity: '',
             cityData: [],
             cityList: [],
             updateCityFormVisible: false,
@@ -349,12 +419,20 @@
             updateCityData: {
               cityName: '',
               remark: '',
+              createTime: '',
+              updateTime: '',
+              longitude: '',
+              latitude: '',
             },
             newCityData: {
               cityName: '',
               remark: '',
             },
-            searchBuilding: "",
+            factoryTotalPage: 0,
+            factoryCurPage: 1,
+            factoryCurSortColumn: '',
+            factoryCurOrder: '',
+            searchBuilding: '',
             buildingData: [],
             buildingList: [],
             updateBuildingFormVisible: false,
@@ -373,7 +451,11 @@
               city: '',
               remark: '',
             },
-            searchLab: "",
+            searchLab: '',
+            workshopTotalPage: 0,
+            workshopCurPage: 1,
+            workshopCurSortColumn: '',
+            workshopCurOrder: '',
             labData: [],
             labList: [],
             updateLabFormVisible: false,
@@ -409,6 +491,34 @@
             this.updateCityData = JSON.parse(JSON.stringify(row));
             this.updateCityFormVisible = true;
         },
+        async getCity() {
+          this.loading = true;
+          const orderMap = {ascending: 'asc', descending: 'desc'};
+          const columnMap = {id: 'id', longitude: 'longitude', latitude: 'latitude', updateTime: 'updateTime', createTime: 'createTime'};
+          const searchColumn = this.cityCurSortColumn === '' ? "id" : columnMap[this.cityCurSortColumn];
+          const searchOrder = this.cityCurOrder === '' ? "asc" : orderMap[this.cityCurOrder];
+          const searchCityName = this.searchCity === '全部' ? "all" : this.searchCity;
+          const data = await getCity('search', this.cityCurPage, searchColumn, searchOrder, searchCityName);
+          this.cityData = data.data.d;
+          this.getCityTotalPage('search', searchCityName);
+          this.loading = false;
+        },
+        async cityPageChange() {
+          this.getCity();
+        },
+        async getCityTotalPage(searchType, city='all') {
+          if(searchType === 'all') {
+            this.cityTotalPage = (await getCityNumber('all')).data.d;
+          } else if(searchType === 'search') {
+            const c = city === '全部' ? 'all' : city;
+            this.cityTotalPage = (await getCityNumber('search', c)).data.d;
+          }
+        },
+        async citySortChange(ob) {
+          this.cityCurSortColumn = ob.prop;
+          this.cityCurOrder = ob.order;
+          this.getCity();
+        },
         async deleteCity(row) {
           const affiliateFactory = (await getCityAffiliateFactory(row.id)).data.d;
           const affiliateDevice = (await getCityAffiliateDevice(row.id)).data.d;
@@ -424,7 +534,7 @@
                       type: 'success'
                     });
                     //再获取一次所有城市信息
-                    this.cityData = (await getCity()).data.d;
+                    this.getCity();
                   }
                 })
                 .catch(_ => {
@@ -449,7 +559,7 @@
                 type: 'success'
               });
               //再获取一次所有城市信息
-              this.cityData = (await getCity()).data.d;
+              this.getCity();
             }
           } catch (e) {
             this.updateCityFormVisible = false;
@@ -466,7 +576,7 @@
                 type: 'success'
               });
               //再获取一次所有城市信息
-              this.cityData = (await getCity()).data.d;
+              this.getCity();
             }
           } catch (e) {
             this.newCityFormVisible = false;
@@ -489,6 +599,34 @@
             this.buildingList = [];
           }
         },
+        async getFactory() {
+          this.loading = true;
+          const orderMap = {ascending: 'asc', descending: 'desc'};
+          const columnMap = {id: 'id', updateTime: 'updateTime', createTime: 'createTime'};
+          const searchColumn = this.factoryCurSortColumn === '' ? "id" : columnMap[this.factoryCurSortColumn];
+          const searchOrder = this.factoryCurOrder === '' ? "asc" : orderMap[this.factoryCurOrder];
+          const searchFactoryName = this.searchBuilding === '全部' ? "all" : this.searchBuilding ;
+          const data = await getFactory('search', this.factoryCurPage, searchColumn, searchOrder, searchFactoryName);
+          this.buildingData = data.data.d;
+          this.getFactoryTotalPage('search', searchFactoryName);
+          this.loading = false;
+        },
+        async factoryPageChange() {
+          this.getFactory();
+        },
+        async getFactoryTotalPage(searchType, factory='all') {
+          if(searchType === 'all') {
+            this.factoryTotalPage = (await getFactoryNumber('all')).data.d;
+          } else if(searchType === 'search') {
+            const f = factory === '全部' ? 'all' : factory;
+            this.factoryTotalPage = (await getFactoryNumber('search', f)).data.d;
+          }
+        },
+        async factorySortChange(ob) {
+          this.factoryCurSortColumn = ob.prop;
+          this.factoryCurOrder = ob.order;
+          this.getFactory();
+        },
         async updateBuilding(){
           try {
             const data = await updateFactory(this.updateBuildingData.id, this.updateBuildingData);
@@ -499,7 +637,7 @@
                 type: 'success'
               });
               //再获取一次所有实验楼信息
-              this.buildingData = (await getFactory()).data.d;
+              this.getFactory();
             }
           } catch (e) {
             this.updateBuildingFormVisible = false;
@@ -521,7 +659,7 @@
                 type: 'success'
               });
               //再获取一次所有实验楼信息
-              this.buildingData = (await getFactory()).data.d;
+              this.getFactory();
             }
           } catch (e) {
             this.newBuildingFormVisible = false;
@@ -544,7 +682,7 @@
                       type: 'success'
                     });
                     //再获取一次所有实验楼信息
-                    this.buildingData = (await getFactory()).data.d;
+                    this.getFactory();
                   }
                 })
                 .catch(_ => {
@@ -563,7 +701,7 @@
           if(this.searchLab !== "") {
             this.labData = (await getWorkshopByWorkshopName(this.searchLab)).data.d;
           } else {
-            this.labData = (await getWorkshop()).data.d;
+            this.getWorkshop();
           }
         },
         async getUpdateLabList(city){
@@ -575,6 +713,35 @@
             this.labList = [];
           }
         },
+        async getWorkshop() {
+          this.loading = true;
+          const orderMap = {ascending: 'asc', descending: 'desc'};
+          const columnMap = {id: 'id', updateTime: 'updateTime', createTime: 'createTime'};
+          const searchColumn = this.workshopCurSortColumn === '' ? "id" : columnMap[this.workshopCurSortColumn];
+          const searchOrder = this.workshopCurOrder === '' ? "asc" : orderMap[this.workshopCurOrder];
+          const searchWorkshopName = this.searchLab === '全部' ? "all" : this.searchLab ;
+          const data = await getWorkshop('search', this.workshopCurPage, searchColumn, searchOrder, searchWorkshopName);
+          this.labData = data.data.d;
+          this.getWorkshopTotalPage('search', searchWorkshopName);
+          // console.log("Total Workshop Page:" + this.workshopTotalPage);
+          this.loading = false;
+        },
+        async workshopPageChange() {
+          this.getWorkshop();
+        },
+        async getWorkshopTotalPage(searchType, workshop='all') {
+          if(searchType === 'all') {
+            this.workshopTotalPage = (await getWorkshopNumber('all')).data.d;
+          } else if(searchType === 'search') {
+            const w = workshop === '全部' ? 'all' : workshop;
+            this.workshopTotalPage = (await getWorkshopNumber('search', w)).data.d;
+          }
+        },
+        async workshopSortChange(ob) {
+          this.workshopCurSortColumn = ob.prop;
+          this.workshopCurOrder = ob.order;
+          this.getWorkshop();
+        },
         async updateLab(){
           try {
             const data = await updateWorkshop(this.updateLabData.id, this.updateLabData);
@@ -585,7 +752,7 @@
                 type: 'success'
               });
               //再获取一次所有实验室信息
-              this.labData = (await getWorkshop()).data.d;
+              this.getWorkshop();
             }
           } catch (e) {
             this.updateLabFormVisible = false;
@@ -607,7 +774,7 @@
                 type: 'success'
               });
               //再获取一次所有实验室信息
-              this.labData = (await getWorkshop()).data.d;
+              this.getWorkshop();
             }
           } catch (e) {
             this.newLabFormVisible = false;
@@ -629,7 +796,7 @@
                       type: 'success'
                     });
                     //再获取一次所有实验室信息
-                    this.labData = (await getWorkshop()).data.d;
+                    this.getWorkshop();
                   }
                 })
                 .catch(_ => {
@@ -645,9 +812,12 @@
       },
 
       async mounted() {
-        this.cityData = (await getCity()).data.d; //得到“城市管理”的表单数据
-        this.buildingData = (await getFactory()).data.d;
-        this.labData = (await getWorkshop()).data.d;
+        this.getCityTotalPage('all');
+        this.getCity(); //得到“城市管理”的表单数据
+        this.getFactoryTotalPage('all');
+        this.getFactory();
+        this.getWorkshopTotalPage('all');
+        this.getWorkshop();
         this.cityList = (await getCityOptions()).data.d;
         this.buildingList = (await getFactory()).data.d;
       }

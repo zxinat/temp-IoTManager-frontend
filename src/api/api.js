@@ -101,16 +101,16 @@ export function deleteMultipleDeviceApi(id) {
   return axios.post(`/api/device/batch/devices`, {...id});
 }
 
-export function getCity() {
-  return axios.get('/api/city');
+export function getCity(searchType='all', page=1, column='id', order='asc', city) {
+  return axios.get(`/api/city?searchType=${searchType}&page=${page}&sortColumn=${column}&order=${order}&city=${city}`);
 }
 
-export function getFactory() {
-  return axios.get('/api/factory');
+export function getFactory(searchType='all', page=1, column='id', order='asc', factory) {
+  return axios.get(`/api/factory?searchType=${searchType}&page=${page}&sortColumn=${column}&order=${order}&factory=${factory}`);
 }
 
-export function getWorkshop() {
-  return axios.get('/api/workshop');
+export function getWorkshop(searchType='all', page=1, column='id', order='asc', workshop) {
+  return axios.get(`/api/workshop?searchType=${searchType}&page=${page}&sortColumn=${column}&order=${order}&workshop=${workshop}`);
 }
 
 export function getDeviceState() {
@@ -558,28 +558,20 @@ export function updateAlarmInfoProcessed(id) {
 }
 
 //配置管理-地域配置
-export function getCityDataApi() {
-  return axios.get('/api/city')
+export function getCityNumber(searchType, cityName = 'all') {
+  return axios.get(`/api/city/number?searchType=${searchType}&cityName=${cityName}`);
+}
+
+export function getFactoryNumber(searchType, factoryName = 'all') {
+  return axios.get(`/api/factory/number?searchType=${searchType}&factoryName=${factoryName}`);
+}
+
+export function getWorkshopNumber(searchType, workshopName = 'all') {
+  return axios.get(`/api/factory/number?searchType=${searchType}&workshopName=${workshopName}`);
 }
 
 export function updateCityApi(id, data) {
   return axios.put(`/api/city/${id}`, {...data});
-}
-
-export function deleteCityApi(id) {
-  return axios.delete(`/api/city/${id}`)
-}
-
-export function addCityApi(city) {
-  return axios.post(`/api/city`,{...city})
-}
-
-export function searchCityApi(city) {
-  return axios.post(`/api/${city}`)
-}
-
-export function getBuildingDataApi() {
-  return axios.get('/api/')
 }
 
 export function deleteCity(id) {
