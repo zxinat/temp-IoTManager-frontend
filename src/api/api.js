@@ -706,8 +706,12 @@ export function getReportByType(t) {
   return axios.post(`/api/report/byType`, t);
 }
 
-export function getDetailedDeviceType() {
-  return axios.get(`/api/detailedDeviceType`);
+export function getDetailedDeviceType(searchType='all', page=1, column='id', order='asc', device) {
+  return axios.get(`/api/detailedDeviceType?searchType=${searchType}&page=${page}&sortColumn=${column}&order=${order}&device=${device}`);
+}
+
+export function getDevicePageNumber(searchType, device) {
+  return axios.get(`/api/detailedDeviceType/number?searchType=${searchType}&device=${device}`);
 }
 
 export function uploadPicture(body) {

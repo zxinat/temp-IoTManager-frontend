@@ -17,18 +17,26 @@
       </el-form>
     </div>
     <div class="table-container" v-if="checkTypeAuth(['CONFIGURE_SYSTEM_RETRIEVE'])">
+      <el-pagination background layout="prev, pager, next"
+                     :total="totalPage"
+                     :current-page.sync="curPage"
+                     :page-size="12"
+                     @current-change="pageChange()">
+      </el-pagination>
       <el-table
         :data="tableData"
         border
         style="width: 60%"
-        @selection-change="handleSelectionChange">
+        @selection-change="handleSelectionChange"
+        @sort-change="sortChange">
         <el-table-column
           prop="deviceTypeName"
           label="设备类型">
         </el-table-column>
         <el-table-column
           prop="offlineTime"
-          label="超时告警时间">
+          label="超时告警时间"
+          sortable="custom">
         </el-table-column>
         <el-table-column
           fixed="right"
@@ -80,11 +88,11 @@
 
 <script>
   import {
+    getDevicePageNumber,
     addDeviceType,
     deleteDeviceType,
     getDetailedDeviceType,
-    /**getDeviceTypeApi, searchDeviceTypeApi, deleteDeviceTypeApi, updateDeviceTypeApi,**/
-      getDeviceType, getDeviceTypeAffiliateDevice, updateDeviceType, /**addDeviceTypeApi, deleteMultipleDeviceTypeApi**/
+    getDeviceType, getDeviceTypeAffiliateDevice, updateDeviceType,
   } from '../../api/api'
   import {checkAuth} from "../../common/util";
 
@@ -92,6 +100,10 @@
     name: "DeviceTypeConfig",
     data() {
       return {
+        totalPage: 0,
+        curPage: 1,
+        curSortColumn: '',
+        curOrder: '',
         deviceType: [],
         tableData: [{
           "deviceType": "测试1",
@@ -125,6 +137,34 @@
         console.log('change', this.multipleSelection);
         this.multipleSelection = val;
       },
+
+      async getTableData() {
+        const orderMap = {ascending: 'asc', descending: 'desc'};
+        const columnMap = {id: 'id', offlineTime: 'offlineTime'};
+        const searchColumn = this.curSortColumn === '' ? "id" : columnMap[this.curSortColumn];
+        const searchOrder = this.curOrder === '' ? "asc" : orderMap[this.curOrder];
+        const deviceTypeName = this.searchDeviceType === '全部' ? "all" : this.searchDeviceType;
+        const data = await getDetailedDeviceType('search', this.curPage, searchColumn, searchOrder, deviceTypeName);
+        this.tableData = data.data.d;
+        this.getCityTotalPage('search', deviceTypeName);
+      },
+      async pageChange() {
+        this.getTableData();
+      },
+      async getTotalPage(searchType, device='all') {
+        if(searchType === 'all') {
+          this.totalPage = (await getDevicePageNumber('all')).data.d;
+        } else if(searchType === 'search') {
+          const d = device === '全部' ? 'all' : device;
+          this.totalPage = (await getDevicePageNumber('search', d)).data.d;
+        }
+      },
+      async sortChange(ob) {
+        this.curSortColumn = ob.prop;
+        this.curOrder = ob.order;
+        this.getTableData();
+      },
+
       async deleteDeviceType(row) {
         const affiliateDevice = (await getDeviceTypeAffiliateDevice(row.id)).data.d;c
         if (affiliateDevice === 0) {
@@ -138,7 +178,7 @@
                     type: 'success'
                   });
                   //再获取一次所有信息
-                  this.tableData = (await getDetailedDeviceType()).data.d;
+                  this.getTableData();
                 }
               })
               .catch(_ => {
@@ -173,7 +213,7 @@
                   type: 'success'
                 });
                 //再获取一次所有信息
-                this.tableData = (await getDetailedDeviceType()).data.d;
+                this.getTableData();
               }
             })
             .catch(_ => {
@@ -192,7 +232,7 @@
               type: 'success'
             });
             //再获取一次所有信息
-            this.tableData = (await getDetailedDeviceType()).data.d;
+            this.getTableData();
           }
         } catch (e) {
           this.newFormVisible = false;
@@ -209,7 +249,7 @@
               type: 'success'
             });
             //再获取一次所有信息
-            this.tableData = (await getDetailedDeviceType()).data.d;
+            this.getTableData();
           }
         } catch (e) {
           this.updateFormVisible = false;
@@ -218,8 +258,9 @@
       },
     },
     async mounted() {
+      this.getTableData();
+      this.getTotalPage('all');
       this.deviceType = (await getDeviceType()).data.d;
-      this.tableData = (await getDetailedDeviceType()).data.d;
       console.log(this.tableData);
     },
   }
