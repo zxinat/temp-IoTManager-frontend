@@ -17,10 +17,17 @@
       </el-form>
     </div>
     <div class="table-container">
+      <el-pagination background layout="prev, pager, next"
+                     :total="totalPage"
+                     :current-page.sync="curPage"
+                     :page-size="12"
+                     @current-change="pageChange()">
+      </el-pagination>
       <el-table
         :data="properties"
         border
-        style="width: 60%;">
+        style="width: 60%;"
+        @sort-change="sortChange">
         <el-table-column
           prop="fieldId"
           label="属性ID">
@@ -32,6 +39,16 @@
         <el-table-column
           prop="device"
           label="所属设备">
+        </el-table-column>
+        <el-table-column
+          prop="createTime"
+          label="创建时间"
+          sortable="custom">
+        </el-table-column>
+        <el-table-column
+          prop="updateTime"
+          label="更新时间"
+          sortable="custom">
         </el-table-column>
         <el-table-column
           fixed="right"
@@ -103,13 +120,18 @@
     getDevicesApi,
     getFieldAffiliateData,
     getFields,
-    updateField
+    updateField,
+    getFieldPageNumber,
   } from "../../api/api";
 
   export default {
     name: "PropertyConfig",
     data() {
       return {
+        totalPage: 0,
+        curPage: 1,
+        curSortColumn: '',
+        curOrder: '',
         updateFormVisible: false,
         newFormVisible: false,
         properties: [],
@@ -131,9 +153,32 @@
     },
     methods: {
       async getAllProperties() {
-        this.properties = (await getFields()).data.d;
-        console.log(this.properties);
+        const orderMap = {ascending: 'asc', descending: 'desc'};
+        const columnMap = {id: 'id', updateTime: 'updateTime', createTime: 'createTime'};
+        const searchColumn = this.curSortColumn === '' ? "id" : columnMap[this.curSortColumn];
+        const searchOrder = this.curOrder === '' ? "asc" : orderMap[this.curOrder];
+        const property = this.searchProperty === '全部' ? "all" : this.searchProperty;
+        const data = await getFields('search', this.curPage, searchColumn, searchOrder, property);
+        this.properties = data.data.d;
+        this.getTotalPage('search', property);
       },
+      async pageChange() {
+        this.getAllProperties();
+      },
+      async getTotalPage(searchType, property='all') {
+        if(searchType === 'all') {
+          this.totalPage = (await getFieldPageNumber('all')).data.d;
+        } else if(searchType === 'search') {
+          const p = property === '全部' ? 'all' : property;
+          this.totalPage = (await getFieldPageNumber('search', p)).data.d;
+        }
+      },
+      async sortChange(ob) {
+        this.curSortColumn = ob.prop;
+        this.curOrder = ob.order;
+        this.getAllProperties();
+      },
+
       async getDevices() {
         this.devices = (await getDevicesApi('all')).data.d;
       },
@@ -151,7 +196,7 @@
               message: '更新成功',
               type: 'success'
             });
-            this.properties = (await getFields()).data.d;
+            this.getAllProperties();
           }
         } catch (e) {
           this.newFormVisible = false;
@@ -167,7 +212,7 @@
               message: '更新成功',
               type: 'success'
             });
-            this.properties = (await getFields()).data.d;
+            this.getAllProperties();
           }
         } catch (e) {
           this.updateFormVisible = false;
@@ -186,7 +231,7 @@
                     message: '删除成功',
                     type: 'success'
                   });
-                  this.properties = (await getFields()).data.d;
+                  this.getAllProperties();
                 }
               });
           } catch (e) {

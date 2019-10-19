@@ -392,8 +392,12 @@ export function getAuthorities(userID) {
   return axios.get(`/api/getAuthorities/${userID}`)
 }
 
-export function getFields() {
-  return axios.get(`/api/field`);
+export function getFields(searchType='all', page=1, column='id', order='asc', property) {
+  return axios.get(`/api/field?searchType=${searchType}&page=${page}&sortColumn=${column}&order=${order}&property=${property}`);
+}
+
+export function getFieldPageNumber(searchType, property) {
+  return axios.get(`/api/field/number?searchType=${searchType}&property=${property}`);
 }
 
 export function addRule(rule) {
