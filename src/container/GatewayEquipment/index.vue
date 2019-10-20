@@ -812,6 +812,8 @@
       async openUpdateForm(row) {//打开更新表单
         console.log('test', row);
         this.updateData = JSON.parse(JSON.stringify(row));
+        this.updateFactory = (await getFactoryOptions(row.city)).data.d;
+        this.updateWorkshop = (await getWorkshopOptions(row.factory)).data.d;
         this.updateFormVisible = true
       },
       async deleteGateway(row) {
