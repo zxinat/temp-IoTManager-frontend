@@ -789,3 +789,7 @@ export function getDeviceIdExist(deviceId) {
 export function getGatewayIdExist(gatewayId) {
   return axios.get(`/api/gateway/exist/${gatewayId}`);
 }
+
+export function batchDeleteAlarmInfo(str) {
+  return axios.post(`/api/alarmInfo/batchDelete`, {...str});
+}

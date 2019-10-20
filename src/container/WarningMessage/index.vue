@@ -133,6 +133,7 @@
 
 <script>
   import {
+    batchDeleteAlarmInfo,
     batchDeleteThresholds,
     deleteAlarmInfo,
     getAlarmInfoByDeviceid, getAlarmInfoNumber,
@@ -318,7 +319,7 @@
             this.$confirm('确认删除？')
               .then(async _ => {
                 this.deleteData.number = this.multipleSelection.map(el => el.id);
-                const data = {};
+                const data = await batchDeleteAlarmInfo({str: this.deleteData.number});
                 if (data.data.c === 200) {
                   this.$message({
                     message: '删除成功',
