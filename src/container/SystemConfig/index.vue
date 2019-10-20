@@ -2,12 +2,12 @@
   <div class="system-config-container">
     <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
       <el-menu-item index="1">设备类型配置</el-menu-item>
-      <el-menu-item index="2">数据库配置</el-menu-item>
+      <!--<el-menu-item index="2">数据库配置</el-menu-item>-->
       <el-menu-item index="3">属性配置</el-menu-item>
       <el-menu-item index="4">标签配置</el-menu-item>
     </el-menu>
     <div v-if="currentPage==='1'"><device-type-config></device-type-config></div>
-    <div v-if="currentPage==='2'"><database-config></database-config></div>
+    <!--<div v-if="currentPage==='2'"><database-config></database-config></div>-->
     <div v-if="currentPage==='3'"><property-config></property-config></div>
     <div v-if="currentPage==='4'"><tag-config></tag-config></div>
   </div>
