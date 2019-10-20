@@ -3,7 +3,7 @@
     <div class="search-container">
       <el-form :inline="true" class="header">
         <el-form-item>
-          <h2>城市管理</h2>
+          <h2>城市</h2>
         </el-form-item>
         <el-form-item v-if="checkRegionAuth(['CONFIGURE_REGION_RETRIEVE'])">
           <el-input v-model="searchCity" placeholder="请输入城市名"></el-input>
@@ -70,8 +70,9 @@
     <br />
 
     <el-dialog title="修改城市" :visible.sync="updateCityFormVisible">
-      <el-form :model="updateCityData">
-        <el-form-item label="城市" label-width="120px">
+      <el-form :model="updateCityData" ref="updateCityData">
+        <el-form-item label="城市" prop="cityName" label-width="120px"
+                      :rules="[{required: true, message: '城市名不能为空'}]">
           <el-input v-model="updateCityData.cityName" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="备注" label-width="120px">
@@ -80,13 +81,14 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="updateCityFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="updateCity">确 定</el-button>
+        <el-button type="primary" @click="updateCity('updateCityData')">确 定</el-button>
       </div>
     </el-dialog>
 
     <el-dialog title="添加城市" :visible.sync="newCityFormVisible">
-      <el-form :model="newCityData">
-        <el-form-item label="城市" label-width="120px">
+      <el-form :model="newCityData" ref="newCityData">
+        <el-form-item label="城市" prop="cityName" label-width="120px"
+                      :rules="[{required: true, message: '城市名不能为空'}]">
           <el-input v-model="newCityData.cityName" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="备注" label-width="120px">
@@ -95,7 +97,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="newCityFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addCity">确 定</el-button>
+        <el-button type="primary" @click="addCity('newCityData')">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -172,8 +174,9 @@
     <br />
 
     <el-dialog title="修改实验楼" :visible.sync="updateBuildingFormVisible">
-      <el-form :model="updateBuildingData">
-        <el-form-item label="所属城市" label-width="120px">
+      <el-form :model="updateBuildingData" ref="updateBuildingData">
+        <el-form-item label="所属城市" prop="city" label-width="120px"
+                      :rules="[{required: true, message: '城市不能为空'}]">
           <el-select v-model="updateBuildingData.city" placeholder="选择城市">
             <el-option
               v-for="c in cityList"
@@ -183,7 +186,8 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="实验楼" label-width="120px">
+        <el-form-item label="实验楼" prop="factoryName" label-width="120px"
+                      :rules="[{required: true, message: '实验楼名不能为空'}]">
           <el-input v-model="updateBuildingData.factoryName" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="电话" label-width="120px">
@@ -198,13 +202,14 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="updateBuildingFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="updateBuilding">确 定</el-button>
+        <el-button type="primary" @click="updateBuilding('updateBuildingData')">确 定</el-button>
       </div>
     </el-dialog>
 
     <el-dialog title="添加实验楼" :visible.sync="newBuildingFormVisible">
-      <el-form :model="newBuildingData">
-        <el-form-item label="所属城市" label-width="120px">
+      <el-form :model="newBuildingData" ref="newBuildingData">
+        <el-form-item label="所属城市" prop="city" label-width="120px"
+                      :rules="[{required: true, message: '城市不能为空'}]">
           <el-select v-model="newBuildingData.city" placeholder="选择城市">
             <el-option
               v-for="c in cityList"
@@ -214,7 +219,8 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="实验楼" label-width="120px">
+        <el-form-item label="实验楼" prop="factoryName" label-width="120px"
+                      :rules="[{required: true, message: '实验楼名不能为空'}]">
           <el-input v-model="newBuildingData.factoryName" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="电话" label-width="120px">
@@ -229,7 +235,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="newBuildingFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addBuilding">确 定</el-button>
+        <el-button type="primary" @click="addBuilding('newBuildingData')">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -305,8 +311,9 @@
     <br />
 
     <el-dialog title="修改实验室" :visible.sync="updateLabFormVisible">
-      <el-form :model="updateLabData">
-        <el-form-item label="所属实验楼" label-width="120px">
+      <el-form :model="updateLabData" ref="updateLabData">
+        <el-form-item label="所属实验楼" prop="factory" label-width="120px"
+                      :rules="[{required: true, message: '实验楼不能为空'}]">
           <el-select v-model="updateLabData.factory" placeholder="选择实验楼">
             <el-option
               v-for="c in buildingList"
@@ -316,7 +323,8 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="实验室" label-width="120px">
+        <el-form-item label="实验室" prop="workshopName" label-width="120px"
+                      :rules="[{required: true, message: '实验室名不能为空'}]">
           <el-input v-model="updateLabData.workshopName" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="电话" label-width="120px">
@@ -331,13 +339,14 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="updateLabFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="updateLab">确 定</el-button>
+        <el-button type="primary" @click="updateLab('updateLabData')">确 定</el-button>
       </div>
     </el-dialog>
 
     <el-dialog title="添加实验室" :visible.sync="newLabFormVisible">
-      <el-form :model="newLabData">
-        <el-form-item label="所属实验楼" label-width="120px">
+      <el-form :model="newLabData" ref="newLabData">
+        <el-form-item label="所属实验楼" prop="factory" label-width="120px"
+                      :rules="[{required: true, message: '实验楼不能为空'}]">
           <el-select v-model="newLabData.factory" placeholder="选择实验楼">
             <el-option
               v-for="c in buildingList"
@@ -347,7 +356,8 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="实验室" label-width="120px">
+        <el-form-item label="实验室" prop="workshopName" label-width="120px"
+                      :rules="[{required: true, message: '实验室名不能为空'}]">
           <el-input v-model="newLabData.workshopName" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="电话" label-width="120px">
@@ -362,7 +372,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="newLabFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addLab">确 定</el-button>
+        <el-button type="primary" @click="addLab('newLabData')">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -548,40 +558,48 @@
               '个下属设备, ' + affiliateGateway + '个下属网关，无法被删除');
           }
         },
-        async updateCity(){
-          try {
-            console.log(this.updateCityData);
-            const data = await updateCityApi(this.updateCityData.id, this.updateCityData);
-            this.updateCityFormVisible = false;
-            if (data.data.c === 200) {
-              this.$message({
-                message: '更新成功',
-                type: 'success'
-              });
-              //再获取一次所有城市信息
-              this.getCity();
+        async updateCity(formName){
+          this.$refs[formName].validate(async (valid) => {
+            if (valid) {
+              try {
+                console.log(this.updateCityData);
+                const data = await updateCityApi(this.updateCityData.id, this.updateCityData);
+                this.updateCityFormVisible = false;
+                if (data.data.c === 200) {
+                  this.$message({
+                    message: '更新成功',
+                    type: 'success'
+                  });
+                  //再获取一次所有城市信息
+                  this.getCity();
+                }
+              } catch (e) {
+                this.updateCityFormVisible = false;
+                this.$message.error('更新城市未成功');
+              }
             }
-          } catch (e) {
-            this.updateCityFormVisible = false;
-            this.$message.error('更新城市未成功');
-          }
+          });
         },
-        async addCity() {
-          try {
-            const data = await addCity(this.newCityData);
-            this.newCityFormVisible = false;
-            if (data.data.c === 200) {
-              this.$message({
-                message: '添加成功',
-                type: 'success'
-              });
-              //再获取一次所有城市信息
-              this.getCity();
+        async addCity(formName) {
+          this.$refs[formName].validate(async (valid) => {
+            if (valid) {
+              try {
+                const data = await addCity(this.newCityData);
+                this.newCityFormVisible = false;
+                if (data.data.c === 200) {
+                  this.$message({
+                    message: '添加成功',
+                    type: 'success'
+                  });
+                  //再获取一次所有城市信息
+                  this.getCity();
+                }
+              } catch (e) {
+                this.newCityFormVisible = false;
+                this.$message.error('添加城市未成功');
+              }
             }
-          } catch (e) {
-            this.newCityFormVisible = false;
-            this.$message.error('添加城市未成功');
-          }
+          });
         },
         async searchByBuilding(){
           if(this.searchBuilding !== "") {
@@ -627,45 +645,51 @@
           this.factoryCurOrder = ob.order;
           this.getFactory();
         },
-        async updateBuilding(){
-          try {
-            const data = await updateFactory(this.updateBuildingData.id, this.updateBuildingData);
-            this.updateBuildingFormVisible = false;
-            if (data.data.c === 200) {
-              this.$message({
-                message: '更新成功',
-                type: 'success'
-              });
-              //再获取一次所有实验楼信息
-              this.getFactory();
+        async updateBuilding(formName){
+          this.$refs[formName].validate(async (valid) => {
+            if (valid) {
+              try {
+                const data = await updateFactory(this.updateBuildingData.id, this.updateBuildingData);
+                this.updateBuildingFormVisible = false;
+                if (data.data.c === 200) {
+                  this.$message({
+                    message: '更新成功',
+                    type: 'success'
+                  });
+                  //再获取一次所有实验楼信息
+                  this.getFactory();
+                }
+              } catch (e) {
+                this.updateBuildingFormVisible = false;
+                this.$message.error('更新实验楼未成功');
+              }
             }
-          } catch (e) {
-            this.updateBuildingFormVisible = false;
-            this.$message.error('更新实验楼未成功');
-          }
-
+          });
         },
         async openBuildingUpdateForm(row){//打开更新表单
           this.updateBuildingData = JSON.parse(JSON.stringify(row));
           this.updateBuildingFormVisible = true;
         },
-        async addBuilding(){
-          try {
-            const data = await addFactory(this.newBuildingData);
-            this.newBuildingFormVisible = false;
-            if (data.data.c === 200) {
-              this.$message({
-                message: '添加成功',
-                type: 'success'
-              });
-              //再获取一次所有实验楼信息
-              this.getFactory();
+        async addBuilding(formName){
+          this.$refs[formName].validate(async (valid) => {
+            if (valid) {
+              try {
+                const data = await addFactory(this.newBuildingData);
+                this.newBuildingFormVisible = false;
+                if (data.data.c === 200) {
+                  this.$message({
+                    message: '添加成功',
+                    type: 'success'
+                  });
+                  //再获取一次所有实验楼信息
+                  this.getFactory();
+                }
+              } catch (e) {
+                this.newBuildingFormVisible = false;
+                this.$message.error('添加实验楼未成功');
+              }
             }
-          } catch (e) {
-            this.newBuildingFormVisible = false;
-            this.$message.error('添加实验楼未成功');
-          }
-
+          });
         },
         async deleteBuilding(row){
           const affiliateWorkshop = (await getFactoryAffiliateWorkshop(row.id)).data.d;
@@ -743,45 +767,51 @@
           this.getWorkshop();
         },
 
-        async updateLab(){
-          try {
-            const data = await updateWorkshop(this.updateLabData.id, this.updateLabData);
-            this.updateLabFormVisible = false;
-            if (data.data.c === 200) {
-              this.$message({
-                message: '更新成功',
-                type: 'success'
-              });
-              //再获取一次所有实验室信息
-              this.getWorkshop();
+        async updateLab(formName){
+          this.$refs[formName].validate(async (valid) => {
+            if (valid) {
+              try {
+                const data = await updateWorkshop(this.updateLabData.id, this.updateLabData);
+                this.updateLabFormVisible = false;
+                if (data.data.c === 200) {
+                  this.$message({
+                    message: '更新成功',
+                    type: 'success'
+                  });
+                  //再获取一次所有实验室信息
+                  this.getWorkshop();
+                }
+              } catch (e) {
+                this.updateLabFormVisible = false;
+                this.$message.error('更新实验室未成功');
+              }
             }
-          } catch (e) {
-            this.updateLabFormVisible = false;
-            this.$message.error('更新实验室未成功');
-          }
-
+          });
         },
         async openLabUpdateForm(row){//打开更新表单
           this.updateLabData = JSON.parse(JSON.stringify(row));
           this.updateLabFormVisible = true;
         },
-        async addLab(){
-          try {
-            const data = await addWorkshop(this.newLabData);
-            this.newLabFormVisible = false;
-            if (data.data.c === 200) {
-              this.$message({
-                message: '添加成功',
-                type: 'success'
-              });
-              //再获取一次所有实验室信息
-              this.getWorkshop();
+        async addLab(formName){
+          this.$refs[formName].validate(async (valid) => {
+            if (valid) {
+              try {
+                const data = await addWorkshop(this.newLabData);
+                this.newLabFormVisible = false;
+                if (data.data.c === 200) {
+                  this.$message({
+                    message: '添加成功',
+                    type: 'success'
+                  });
+                  //再获取一次所有实验室信息
+                  this.getWorkshop();
+                }
+              } catch (e) {
+                this.newLabFormVisible = false;
+                this.$message.error('添加实验室未成功');
+              }
             }
-          } catch (e) {
-            this.newLabFormVisible = false;
-            this.$message.error('添加实验室未成功');
-          }
-
+          });
         },
         async deleteLab(row){
           const affiliateDevice = (await getWorkshopAffiliateDevice(row.id)).data.d;
