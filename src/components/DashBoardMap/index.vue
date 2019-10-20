@@ -2,11 +2,21 @@
   <div>
     <div class="block">
       <span class="demonstration">地域筛选</span>
-      <el-cascader
-        :options="selectorOptions"
-        v-model="searchCity"
-        @change="areaFilter">
-      </el-cascader>
+      <!--<el-cascader-->
+        <!--:options="selectorOptions"-->
+        <!--v-model="searchCity"-->
+        <!--@change="areaFilter">-->
+      <!--</el-cascader>-->
+      <el-select v-model="searchCity" placeholder="请选择城市" @change="areaFilter">
+        <el-option key="all" label="全部" value="全部"></el-option>
+        <el-option
+          v-for="item in selectorOptions"
+          :key="item.id"
+          :label="item.cityName"
+          :value="item.cityName"
+          >
+        </el-option>
+      </el-select>
       <div class="dashboard-map-container">
         <!--<h2>-->
         <!--中国地图-->
@@ -34,7 +44,7 @@
     getCityCascaderOptions,
     getOneMapInfo,
     getDeviceByCity,
-    getDevicesApi,
+    getDevicesApi, getCity,
   } from "../../api/api";
 
   export default {
@@ -42,7 +52,7 @@
     data() {
       return {
         chart: null,
-        searchCity: ['全部'],
+        searchCity: '全部',
         option: {
           backgroundColor: '#404a59',  		// 图表背景色
           tooltip: {
@@ -99,12 +109,13 @@
       async setMapInfo() {
         let amount = [];
         let centerPos = [];
-        if (this.searchCity[0] === '全部') {
+        console.log(this.searchCity);
+        if (this.searchCity === '全部') {
           amount = (await getMapInfo()).data.d;
           this.option.geo.center = [];
           this.option.geo.zoom = 1;
         } else {
-          amount = (await getOneMapInfo(this.searchCity[0])).data.d;
+          amount = (await getOneMapInfo(this.searchCity)).data.d;
           centerPos.push(amount[0]['value'][0]);
           centerPos.push(amount[0]['value'][1]);
           this.option.geo.center = centerPos;
@@ -121,15 +132,15 @@
         this.chinaConfigure();
 
         let data = [];
-        if (this.searchCity[0] === '全部') {
+        if (this.searchCity === '全部') {
           data = (await getDevicesApi('all')).data.d;
         } else {
-          data = (await getDeviceByCity(this.searchCity[0])).data.d;
+          data = (await getDeviceByCity(this.searchCity)).data.d;
         }
         this.$store.dispatch('device/setDashboardDeviceOption', data);
       },
       async getDeviceOptions() {
-        this.selectorOptions = (await getCityCascaderOptions()).data.d;
+        this.selectorOptions = (await getCity('all')).data.d;
       }
     }
   }

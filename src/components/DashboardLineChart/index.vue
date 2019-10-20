@@ -109,18 +109,71 @@
             }
           ]
         },
+        nullOption: {
+          title: {
+            text: ''
+          },
+          tooltip: {},
+          legend: {
+            itemGap: 25,
+            data: [
+              // 'temperature', 'humidity'
+            ],
+          },
+          toolbox: {
+            show: true,
+            // feature: {
+            //   magicType: {type: ['line', 'bar']},
+            // }
+          },
+          xAxis: [{
+            type: 'category',
+            boundaryGap: true,
+            axisLine: { //坐标轴轴线相关设置。数学上的x轴
+              show: true,
+              lineStyle: {},
+            },
+            axisLabel: { //坐标轴刻度标签的相关设置
+              textStyle: {
+                margin: 15,
+              },
+              interval: 0,
+              rotate: 30
+            },
+            axisTick: {
+              show: false,
+            },
+            data: this.xAxisData
+          }],
+          yAxis: {},
+          series: [
+            {
+              type: 'line',
+              name: '',
+              label: {
+                show: true,
+                // position: 'top'
+              },
+              itemStyle: {
+                normal: {}
+              },
+              data: this.data
+            }
+          ]
+        },
       }
     },
     async mounted() {
       this.initChart();
-      this.deviceSelectorOptions = ((await getDevicesApi()).data.d).map(el => {
-        return {
-          value: el.hardwareDeviceID,
-          label: el.deviceName
-        }
-      });
-      if (this.deviceSelectorOptions[0] != null) {
-        this.tmpDeviceSelectorValue = this.deviceSelectorOptions[0].value;
+      // this.deviceSelectorOptions = ((await getDevicesApi()).data.d).map(el => {
+      //   return {
+      //     value: el.hardwareDeviceID,
+      //     label: el.deviceName
+      //   }
+      // });
+      console.log(this.computedDeviceOption);
+      if (this.computedDeviceOption[0] != null) {
+        this.tmpDeviceSelectorValue = this.computedDeviceOption[0].value;
         this.propertySelectorOptions = (await getAffiliateFields(this.tmpDeviceSelectorValue)).data.d;
         if  (this.propertySelectorOptions[0] != null) {
           this.tmpPropertySelectorValue.push(this.propertySelectorOptions[0].fieldId);
@@ -154,6 +207,24 @@
               label: el.deviceName
             }
           });
+        }
+      }
+    },
+    watch: {
+      async computedDeviceOption(val, oldVal) {
+        console.log(val);
+        if (this.computedDeviceOption.length > 0) {
+          this.tmpDeviceSelectorValue = this.computedDeviceOption[0].value;
+          this.propertySelectorOptions = (await getAffiliateFields(this.tmpDeviceSelectorValue)).data.d;
+          if  (this.propertySelectorOptions[0] != null) {
+            this.tmpPropertySelectorValue.push(this.propertySelectorOptions[0].fieldId);
+            this.searchLineChartData();
+          }
+        } else {
+          this.tmpDeviceSelectorValue = '';
+          this.tmpPropertySelectorValue = [];
+          clearInterval(this.pollInterval);
+          this.chart.setOption(this.nullOption);
         }
       }
     },
