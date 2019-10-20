@@ -415,19 +415,21 @@
       </div>
     </el-dialog>
     <el-dialog title="新增设备类型" :visible.sync="typeAddVisible">
-      <el-form :model="typeTable">
-        <el-form-item label="设备类型名" label-width="120px">
+      <el-form :model="typeTable" ref="typeTable">
+        <el-form-item label="设备类型名" prop="type" label-width="120px"
+                      :rules="[{required: true, message: '设备类型不能为空'}]">
           <el-input v-model="typeTable.type" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="typeAddVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addType">确 定</el-button>
+        <el-button type="primary" @click="addType('typeTable')">确 定</el-button>
       </div>
     </el-dialog>
     <el-dialog title="新增城市" :visible.sync="cityAddVisible">
-      <el-form :model="cityTable">
-        <el-form-item label="城市名" label-width="120px">
+      <el-form :model="cityTable" ref="cityTable">
+        <el-form-item label="城市名" prop="cityName" label-width="120px"
+                      :rules="[{required: true, message: '城市名不能为空'}]">
           <el-input v-model="cityTable.cityName" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="备注" label-width="120px">
@@ -436,12 +438,13 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="cityAddVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addCity">确 定</el-button>
+        <el-button type="primary" @click="addCity('cityTable')">确 定</el-button>
       </div>
     </el-dialog>
     <el-dialog :title="'新增'+GLOBAL.secondLevel" :visible.sync="factoryAddVisible">
-      <el-form :model="factoryTable">
-        <el-form-item :label="GLOBAL.secondLevel+'名'" label-width="120px">
+      <el-form :model="factoryTable" ref="factoryTable">
+        <el-form-item :label="GLOBAL.secondLevel+'名'" prop="factoryName" label-width="120px"
+                      :rules="[{required: true, message: GLOBAL.secondLevel+'不能为空'}]">
           <el-input v-model="factoryTable.factoryName" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item :label="GLOBAL.secondLevel+'电话'" label-width="120px">
@@ -450,7 +453,8 @@
         <el-form-item :label="GLOBAL.secondLevel+'地址'" label-width="120px">
           <el-input v-model="factoryTable.factoryAddress" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="所属城市名" label-width="120px">
+        <el-form-item label="所属城市名" prop="city" label-width="120px"
+                      :rules="[{required: true, message: '所属城市名不能为空'}]">
           <el-select v-model="factoryTable.city" placeholder="请选择">
             <el-option
               v-for="c in newCityList"
@@ -466,12 +470,13 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="factoryAddVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addFactory">确 定</el-button>
+        <el-button type="primary" @click="addFactory('factoryTable')">确 定</el-button>
       </div>
     </el-dialog>
     <el-dialog :title="'新增'+GLOBAL.thirdLevel" :visible.sync="workshopAddVisible">
-      <el-form :model="workshopTable">
-        <el-form-item :label="GLOBAL.thirdLevel+'名'" label-width="120px">
+      <el-form :model="workshopTable" ref="workshopTable">
+        <el-form-item :label="GLOBAL.thirdLevel+'名'" prop="workshopName" label-width="120px"
+                      :rules="[{required: true, message: GLOBAL.thirdLevel+'名不能为空'}]">
           <el-input v-model="workshopTable.workshopName" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item :label="GLOBAL.thirdLevel+'电话'" label-width="120px">
@@ -480,7 +485,8 @@
         <el-form-item :label="GLOBAL.thirdLevel+'地址'" label-width="120px">
           <el-input v-model="workshopTable.workshopAddress" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item :label="'所属'+GLOBAL.secondLevel+'名'" label-width="120px">
+        <el-form-item :label="'所属'+GLOBAL.secondLevel+'名'" prop="factory" label-width="120px"
+                      :rules="[{required: true, message: '所属'+GLOBAL.secondLevel+'名不能为空'}]">
           <el-select v-model="workshopTable.factory" placeholder="请选择">
             <el-option
               v-for="f in newFactoryList"
@@ -496,7 +502,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="workshopAddVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addWorkshop">确 定</el-button>
+        <el-button type="primary" @click="addWorkshop('workshopTable')">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -795,75 +801,91 @@
           }
         });
       },
-      async addType() {
-        try {
-          const data = await createDeviceType(this.typeTable.type);
-          this.typeAddVisible = false;
-          if (data.data.d === "success") {
-            this.$message({
-              message: '添加成功',
-              type: 'success'
-            });
-            this.deviceType = (await getDeviceType()).data.d;
+      async addType(formName) {
+        this.$refs[formName].validate(async (valid) => {
+          if (valid) {
+            try {
+              const data = await createDeviceType(this.typeTable.type);
+              this.typeAddVisible = false;
+              if (data.data.d === "success") {
+                this.$message({
+                  message: '添加成功',
+                  type: 'success'
+                });
+                this.deviceType = (await getDeviceType()).data.d;
+              }
+            } catch (e) {
+              this.typeAddVisible = false;
+              this.$message.error('设备类型添加失败');
+            }
           }
-        } catch (e) {
-          this.typeAddVisible = false;
-          this.$message.error('设备类型添加失败');
-        }
+        });
       },
-      async addCity() {
-        try {
-          const data = await addCity(this.cityTable);
-          this.cityAddVisible = false;
-          if (data.data.d === "success") {
-            this.$message({
-              message: '添加成功',
-              type: 'success'
-            });
-            this.city = (await getCityOptions()).data.d;
-            this.newCityList = (await getCity()).data.d;
-            this.cityOptions = (await getCityOptions()).data.d;
-            this.getDeviceOptions();
+      async addCity(formName) {
+        this.$refs[formName].validate(async (valid) => {
+          if (valid) {
+            try {
+              const data = await addCity(this.cityTable);
+              this.cityAddVisible = false;
+              if (data.data.d === "success") {
+                this.$message({
+                  message: '添加成功',
+                  type: 'success'
+                });
+                this.city = (await getCityOptions()).data.d;
+                this.newCityList = (await getCity()).data.d;
+                this.cityOptions = (await getCityOptions()).data.d;
+                this.getDeviceOptions();
+              }
+            } catch (e) {
+              this.cityAddVisible = false;
+              this.$message.error('城市添加失败');
+            }
           }
-        } catch (e) {
-          this.cityAddVisible = false;
-          this.$message.error('城市添加失败');
-        }
+        });
       },
-      async addFactory() {
-        try {
-          const data = await addFactory(this.factoryTable);
-          this.factoryAddVisible = false;
-          if (data.data.d === "success") {
-            this.$message({
-              message: '添加成功',
-              type: 'success'
-            });
-            this.factory = (await getFactoryOptions(this.factoryTable.city)).data.d;
-            this.newFactoryList = (await getFactory()).data.d;
-            this.getDeviceOptions();
+      async addFactory(formName) {
+        this.$refs[formName].validate(async (valid) => {
+          if (valid) {
+            try {
+              const data = await addFactory(this.factoryTable);
+              this.factoryAddVisible = false;
+              if (data.data.d === "success") {
+                this.$message({
+                  message: '添加成功',
+                  type: 'success'
+                });
+                this.factory = (await getFactoryOptions(this.factoryTable.city)).data.d;
+                this.newFactoryList = (await getFactory()).data.d;
+                this.getDeviceOptions();
+              }
+            } catch (e) {
+              this.factoryAddVisible = false;
+              this.$message.error('添加失败');
+            }
           }
-        } catch (e) {
-          this.factoryAddVisible = false;
-          this.$message.error('添加失败');
-        }
+        });
       },
-      async addWorkshop() {
-        try {
-          const data = await addWorkshop(this.workshopTable);
-          this.workshopAddVisible = false;
-          if (data.data.d === "success") {
-            this.$message({
-              message: '添加成功',
-              type: 'success'
-            });
-            this.workshop = (await getWorkshopOptions(this.workshopTable.factory)).data.d;
-            this.getDeviceOptions();
+      async addWorkshop(formName) {
+        this.$refs[formName].validate(async (valid) => {
+          if (valid) {
+            try {
+              const data = await addWorkshop(this.workshopTable);
+              this.workshopAddVisible = false;
+              if (data.data.d === "success") {
+                this.$message({
+                  message: '添加成功',
+                  type: 'success'
+                });
+                this.workshop = (await getWorkshopOptions(this.workshopTable.factory)).data.d;
+                this.getDeviceOptions();
+              }
+            } catch (e) {
+              this.workshopAddVisible = false;
+              this.$message.error('添加失败');
+            }
           }
-        } catch (e) {
-          this.workshopAddVisible = false;
-          this.$message.error('添加失败');
-        }
+        });
       },
       async getUpdateFactory(city) {
         this.updateFactory = (await getFactoryOptions(city)).data.d;
