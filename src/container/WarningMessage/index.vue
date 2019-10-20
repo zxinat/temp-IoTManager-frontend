@@ -253,7 +253,7 @@
           const orderMap = {ascending: 'asc', descending: 'desc'};
           const columnMap = {deviceId: 'DeviceId', indexId: 'IndexId', alarmInfo: 'AlarmInfo', severity: 'Severity', timestamp: 'Timestamp'};
           const searchColumn = this.curSortColumn === '' ? "Id" : columnMap[this.curSortColumn];
-          const searchOrder = this.curOrder === '' ? "asc" : orderMap[this.curOrder];
+          const searchOrder = this.curOrder === '' ? "desc" : orderMap[this.curOrder];
           const searchDeviceId = this.curSearchDevice === '全部' ? "all" : this.curSearchDevice;
           const data = await getAlarmInformationApi('search', searchDeviceId, this.curPage, searchColumn, searchOrder);
           this.tableData = data.data.d;

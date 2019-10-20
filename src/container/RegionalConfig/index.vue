@@ -20,7 +20,7 @@
       <el-pagination background layout="prev, pager, next"
                      :total="cityTotalPage"
                      :current-page.sync="cityCurPage"
-                     :page-size="12"
+                     :page-size="6"
                      @current-change="cityPageChange()">
       </el-pagination>
       <el-table
@@ -122,7 +122,7 @@
       <el-pagination background layout="prev, pager, next"
                      :total="factoryTotalPage"
                      :current-page.sync="factoryCurPage"
-                     :page-size="12"
+                     :page-size="6"
                      @current-change="factoryPageChange()">
       </el-pagination>
       <el-table
@@ -260,7 +260,7 @@
       <el-pagination background layout="prev, pager, next"
                      :total="workshopTotalPage"
                      :current-page.sync="workshopCurPage"
-                     :page-size="12"
+                     :page-size="6"
                      @current-change="workshopPageChange()">
       </el-pagination>
       <el-table
