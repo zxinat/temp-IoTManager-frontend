@@ -168,7 +168,7 @@
       },
 
       async deleteDeviceType(row) {
-        const affiliateDevice = (await getDeviceTypeAffiliateDevice(row.id)).data.d;c
+        const affiliateDevice = (await getDeviceTypeAffiliateDevice(row.id)).data.d;
         if (affiliateDevice === 0) {
           try {
             this.$confirm('确认删除？')
