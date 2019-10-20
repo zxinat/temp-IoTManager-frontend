@@ -74,7 +74,8 @@
               await this.$store.dispatch('userInfo/setUserInfo',this.form);
               this.$router.push('/dashboard');
             } else {
-              this.$message.error('Wrong Username Or Password');
+              console.log(res.data.d);
+              this.$message.error('用户名或密码错误');
             }
             return true;
           } else {
