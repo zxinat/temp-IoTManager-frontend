@@ -151,14 +151,17 @@
       </el-col>
     </el-row>
     <el-dialog title="新增设备属性" :visible.sync="addFieldVisible">
-      <el-form :model="fieldTable">
-        <el-form-item label="属性名" label-width="120px">
+      <el-form :model="fieldTable" ref="fieldTable">
+        <el-form-item label="属性名" prop="fieldName" label-width="120px"
+                      :rules="[{required: true, message: '属性名不能为空'}]">
           <el-input v-model="fieldTable.fieldName" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="属性ID" label-width="120px">
+        <el-form-item label="属性ID" prop="fieldId" label-width="120px"
+                      :rules="[{required: true, message: '属性ID不能为空'}]">
           <el-input v-model="fieldTable.fieldId" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="所属设备" label-width="120px">
+        <el-form-item label="所属设备" prop="device" label-width="120px"
+                      :rules="[{required: true, message: '所属设备不能为空'}]">
           <el-select v-model="fieldTable.device" placeholder="请选择">
             <el-option v-for="d in devices" :key="d.id" :label="d.deviceName" :value="d.deviceName">
             </el-option>
@@ -167,7 +170,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="addFieldVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addField">确 定</el-button>
+        <el-button type="primary" @click="addField('fieldTable')">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -299,21 +302,25 @@
         // 调获取工厂接口，传form.city参数
         this.filter();
       },
-      async addField() {
-        try {
-          const data = await createNewField(this.fieldTable);
-          this.addFieldVisible = false;
-          if (data.data.d === 'success') {
-            this.$message({
-              message: '添加成功',
-              type: 'success'
-            });
-            this.getAffiliateField(this.alarmRules.deviceGroup);
+      async addField(formName) {
+        this.$refs[formName].validate(async (valid) => {
+          if (valid) {
+            try {
+              const data = await createNewField(this.fieldTable);
+              this.addFieldVisible = false;
+              if (data.data.d === 'success') {
+                this.$message({
+                  message: '添加成功',
+                  type: 'success'
+                });
+                this.getAffiliateField(this.alarmRules.deviceGroup);
+              }
+            } catch (e) {
+              this.addFieldVisible = false;
+              this.$message.error('设备属性添加失败');
+            }
           }
-        } catch (e) {
-          this.addFieldVisible = false;
-          this.$message.error('设备属性添加失败');
-        }
+        });
       },
       async handleNodeClick(data) {
         this.pageLoading = true;
