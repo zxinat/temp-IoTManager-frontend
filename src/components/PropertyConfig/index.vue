@@ -29,16 +29,16 @@
         style="width: 60%;"
         @sort-change="sortChange">
         <el-table-column
+          prop="device"
+          label="所属设备">
+        </el-table-column>
+        <el-table-column
           prop="fieldId"
           label="属性ID">
         </el-table-column>
         <el-table-column
           prop="fieldName"
           label="属性名称">
-        </el-table-column>
-        <el-table-column
-          prop="device"
-          label="所属设备">
         </el-table-column>
         <el-table-column
           prop="createTime"
@@ -161,8 +161,8 @@
     methods: {
       async getAllProperties() {
         const orderMap = {ascending: 'asc', descending: 'desc'};
-        const columnMap = {id: 'id', updateTime: 'updateTime', createTime: 'createTime'};
-        const searchColumn = this.curSortColumn === '' ? "id" : columnMap[this.curSortColumn];
+        const columnMap = {device: 'device', updateTime: 'updateTime', createTime: 'createTime'};
+        const searchColumn = this.curSortColumn === '' ? "device" : columnMap[this.curSortColumn];
         const searchOrder = this.curOrder === '' ? "asc" : orderMap[this.curOrder];
         const property = this.searchProperty === '全部' ? "all" : this.searchProperty;
         const data = await getFields('search', this.curPage, searchColumn, searchOrder, property, this.pageMode);
