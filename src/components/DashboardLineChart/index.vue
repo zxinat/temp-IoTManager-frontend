@@ -244,13 +244,13 @@
             let result = (await getDeviceMultiPropertyData(this.deviceSelectorValue, {str: this.propertySelectorValue})).data.d;
             this.setChart(result);
             // this.chart.setOption({xAxis: [{data: result.xAxis}], series: [{data: result.series}]});
-          }, 200);
-          this.pollInterval = setInterval(async () => {
-            let result = (await getDeviceMultiPropertyData(this.deviceSelectorValue, {str: this.propertySelectorValue})).data.d;
-            this.setChart(result);
-            // this.chart.setOption({xAxis: [{data: result.xAxis}], series: [{data: result.series}]});
-          }, 10000);
-          // this.initChart();
+          }, 100);
+          // this.pollInterval = setInterval(async () => {
+          //   let result = (await getDeviceMultiPropertyData(this.deviceSelectorValue, {str: this.propertySelectorValue})).data.d;
+          //   this.setChart(result);
+          //   // this.chart.setOption({xAxis: [{data: result.xAxis}], series: [{data: result.series}]});
+          // }, 10000);
+          this.initChart();
         }
         this.chartLoading = false;
       },
