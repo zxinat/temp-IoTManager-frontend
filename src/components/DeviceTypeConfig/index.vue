@@ -24,6 +24,7 @@
                      @current-change="pageChange()">
       </el-pagination>
       <el-table
+        v-loading="loading"
         :data="tableData"
         border
         style="width: 60%"
@@ -102,6 +103,7 @@
     name: "DeviceTypeConfig",
     data() {
       return {
+        loading: false,
         totalPage: 0,
         curPage: 1,
         curSortColumn: '',
@@ -141,6 +143,7 @@
       },
 
       async getTableData() {
+        this.loading = true;
         const orderMap = {ascending: 'asc', descending: 'desc'};
         const columnMap = {id: 'id', offlineTime: 'offlineTime'};
         const searchColumn = this.curSortColumn === '' ? "id" : columnMap[this.curSortColumn];
@@ -148,7 +151,8 @@
         const deviceTypeName = this.searchDeviceType === '全部' ? "all" : this.searchDeviceType;
         const data = await getDetailedDeviceType('search', this.curPage, searchColumn, searchOrder, deviceTypeName);
         this.tableData = data.data.d;
-        this.getCityTotalPage('search', deviceTypeName);
+        this.getTotalPage('search', deviceTypeName);
+        this.loading = false;
       },
       async pageChange() {
         this.getTableData();
