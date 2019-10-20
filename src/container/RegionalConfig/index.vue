@@ -416,6 +416,7 @@
       name: "RegionalConfig",
       data() {
           return{
+            pageMode: 1,
             loading: false,
             cityTotalPage: 0,
             cityCurPage: 1,
@@ -508,7 +509,7 @@
           const searchColumn = this.cityCurSortColumn === '' ? "id" : columnMap[this.cityCurSortColumn];
           const searchOrder = this.cityCurOrder === '' ? "asc" : orderMap[this.cityCurOrder];
           const searchCityName = this.searchCity === '全部' ? "all" : this.searchCity;
-          const data = await getCity('search', this.cityCurPage, searchColumn, searchOrder, searchCityName);
+          const data = await getCity('search', this.cityCurPage, searchColumn, searchOrder, searchCityName, this.pageMode);
           this.cityData = data.data.d;
           this.getCityTotalPage('search', searchCityName);
           this.loading = false;
@@ -624,7 +625,7 @@
           const searchColumn = this.factoryCurSortColumn === '' ? "id" : columnMap[this.factoryCurSortColumn];
           const searchOrder = this.factoryCurOrder === '' ? "asc" : orderMap[this.factoryCurOrder];
           const searchFactoryName = this.searchBuilding === '全部' ? "all" : this.searchBuilding ;
-          const data = await getFactory('search', this.factoryCurPage, searchColumn, searchOrder, searchFactoryName);
+          const data = await getFactory('search', this.factoryCurPage, searchColumn, searchOrder, searchFactoryName, this.pageMode);
           this.buildingData = data.data.d;
           this.getFactoryTotalPage('search', searchFactoryName);
           this.loading = false;
@@ -745,7 +746,7 @@
           const searchColumn = this.workshopCurSortColumn === '' ? "id" : columnMap[this.workshopCurSortColumn];
           const searchOrder = this.workshopCurOrder === '' ? "asc" : orderMap[this.workshopCurOrder];
           const searchWorkshopName = this.searchLab === '全部' ? "all" : this.searchLab;
-          const data = await getWorkshop('search', this.workshopCurPage, searchColumn, searchOrder, searchWorkshopName);
+          const data = await getWorkshop('search', this.workshopCurPage, searchColumn, searchOrder, searchWorkshopName, this.pageMode);
           this.labData = data.data.d;
           this.getWorkshopTotalPage('search', searchWorkshopName);
           this.loading = false;

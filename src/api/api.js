@@ -101,16 +101,16 @@ export function deleteMultipleDeviceApi(id) {
   return axios.post(`/api/device/batch/devices`, {...id});
 }
 
-export function getCity(searchType='all', page=1, column='id', order='asc', city) {
-  return axios.get(`/api/city?searchType=${searchType}&page=${page}&sortColumn=${column}&order=${order}&city=${city}`);
+export function getCity(searchType='all', page=1, column='id', order='asc', city, pageMode) {
+  return axios.get(`/api/city?searchType=${searchType}&page=${page}&sortColumn=${column}&order=${order}&city=${city}&pageMode=${pageMode}`);
 }
 
-export function getFactory(searchType='all', page=1, column='id', order='asc', factory) {
-  return axios.get(`/api/factory?searchType=${searchType}&page=${page}&sortColumn=${column}&order=${order}&factory=${factory}`);
+export function getFactory(searchType='all', page=1, column='id', order='asc', factory, pageMode) {
+  return axios.get(`/api/factory?searchType=${searchType}&page=${page}&sortColumn=${column}&order=${order}&factory=${factory}&pageMode=${pageMode}`);
 }
 
-export function getWorkshop(searchType='all', page=1, column='id', order='asc', workshop) {
-  return axios.get(`/api/workshop?searchType=${searchType}&page=${page}&sortColumn=${column}&order=${order}&workshop=${workshop}`);
+export function getWorkshop(searchType='all', page=1, column='id', order='asc', workshop, pageMode) {
+  return axios.get(`/api/workshop?searchType=${searchType}&page=${page}&sortColumn=${column}&order=${order}&workshop=${workshop}&pageMode=${pageMode}`);
 }
 
 export function getDeviceState() {
@@ -392,8 +392,8 @@ export function getAuthorities(userID) {
   return axios.get(`/api/getAuthorities/${userID}`)
 }
 
-export function getFields(searchType='all', page=1, column='id', order='asc', property) {
-  return axios.get(`/api/field?searchType=${searchType}&page=${page}&sortColumn=${column}&order=${order}&property=${property}`);
+export function getFields(searchType='all', page=1, column='id', order='asc', property, pageMode) {
+  return axios.get(`/api/field?searchType=${searchType}&page=${page}&sortColumn=${column}&order=${order}&property=${property}&pageMode=${pageMode}`);
 }
 
 export function getFieldPageNumber(searchType, property) {
@@ -710,8 +710,8 @@ export function getReportByType(t) {
   return axios.post(`/api/report/byType`, t);
 }
 
-export function getDetailedDeviceType(searchType='all', page=1, column='id', order='asc', device) {
-  return axios.get(`/api/detailedDeviceType?searchType=${searchType}&page=${page}&sortColumn=${column}&order=${order}&device=${device}`);
+export function getDetailedDeviceType(searchType='all', page=1, column='id', order='asc', device, pageMode) {
+  return axios.get(`/api/detailedDeviceType?searchType=${searchType}&page=${page}&sortColumn=${column}&order=${order}&device=${device}&pageMode=${pageMode}`);
 }
 
 export function getDevicePageNumber(searchType, device) {

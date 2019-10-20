@@ -134,6 +134,7 @@
     name: "PropertyConfig",
     data() {
       return {
+        pageMode: 1,
         totalPage: 0,
         curPage: 1,
         curSortColumn: '',
@@ -164,7 +165,7 @@
         const searchColumn = this.curSortColumn === '' ? "id" : columnMap[this.curSortColumn];
         const searchOrder = this.curOrder === '' ? "asc" : orderMap[this.curOrder];
         const property = this.searchProperty === '全部' ? "all" : this.searchProperty;
-        const data = await getFields('search', this.curPage, searchColumn, searchOrder, property);
+        const data = await getFields('search', this.curPage, searchColumn, searchOrder, property, this.pageMode);
         this.properties = data.data.d;
         this.getTotalPage('search', property);
       },

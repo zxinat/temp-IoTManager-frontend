@@ -103,6 +103,7 @@
     name: "DeviceTypeConfig",
     data() {
       return {
+        pageMode: 1,
         loading: false,
         totalPage: 0,
         curPage: 1,
@@ -149,7 +150,7 @@
         const searchColumn = this.curSortColumn === '' ? "id" : columnMap[this.curSortColumn];
         const searchOrder = this.curOrder === '' ? "asc" : orderMap[this.curOrder];
         const deviceTypeName = this.searchDeviceType === '全部' ? "all" : this.searchDeviceType;
-        const data = await getDetailedDeviceType('search', this.curPage, searchColumn, searchOrder, deviceTypeName);
+        const data = await getDetailedDeviceType('search', this.curPage, searchColumn, searchOrder, deviceTypeName, this.pageMode);
         this.tableData = data.data.d;
         this.getTotalPage('search', deviceTypeName);
         this.loading = false;
