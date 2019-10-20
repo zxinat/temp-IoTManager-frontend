@@ -54,8 +54,9 @@
     </div>
 
     <el-dialog title="修改设备类型" :visible.sync="updateFormVisible">
-      <el-form :model="updateData">
-        <el-form-item label="设备类型名称" label-width="120px">
+      <el-form :model="updateData" ref="updateData">
+        <el-form-item label="设备类型名称" prop="deviceTypeName" label-width="120px"
+                      :rules="[{required: true, message: '设备类型不能为空'}]">
           <el-input v-model="updateData.deviceTypeName"></el-input>
         </el-form-item>
         <el-form-item label="超时告警时间" label-width="120px">
@@ -64,13 +65,14 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="updateFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="update">确 定</el-button>
+        <el-button type="primary" @click="update('updateData')">确 定</el-button>
       </div>
     </el-dialog>
 
     <el-dialog title="添加设备类型" :visible.sync="newFormVisible">
-      <el-form :model="newData">
-        <el-form-item label="设备类型名称" label-width="120px">
+      <el-form :model="newData" ref="newData">
+        <el-form-item label="设备类型名称" prop="deviceTypeName" label-width="120px"
+                      :rules="[{required: true, message: '设备类型不能为空'}]">
           <el-input v-model="newData.deviceTypeName" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="超时告警时间" label-width="120px">
@@ -79,7 +81,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="newFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="add">确 定</el-button>
+        <el-button type="primary" @click="add('newData')">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -222,39 +224,47 @@
           console.log(e)
         }
       },
-      async add() {
-        try {
-          const data = await addDeviceType(this.newData);
-          this.newFormVisible = false;
-          if (data.data.c === 200) {
-            this.$message({
-              message: '添加成功',
-              type: 'success'
-            });
-            //再获取一次所有信息
-            this.getTableData();
+      async add(formName) {
+        this.$refs[formName].validate(async (valid) => {
+          if (valid) {
+            try {
+              const data = await addDeviceType(this.newData);
+              this.newFormVisible = false;
+              if (data.data.c === 200) {
+                this.$message({
+                  message: '添加成功',
+                  type: 'success'
+                });
+                //再获取一次所有信息
+                this.getTableData();
+              }
+            } catch (e) {
+              this.newFormVisible = false;
+              this.$message.error('添加设备类型未成功');
+            }
           }
-        } catch (e) {
-          this.newFormVisible = false;
-          this.$message.error('添加设备类型未成功');
-        }
+        });
       },
-      async update() {
-        try {
-          const data = await updateDeviceType(this.updateData.id, this.updateData);
-          this.updateFormVisible = false;
-          if (data.data.c === 200) {
-            this.$message({
-              message: '更新成功',
-              type: 'success'
-            });
-            //再获取一次所有信息
-            this.getTableData();
+      async update(formName) {
+        this.$refs[formName].validate(async (valid) => {
+          if (valid) {
+            try {
+              const data = await updateDeviceType(this.updateData.id, this.updateData);
+              this.updateFormVisible = false;
+              if (data.data.c === 200) {
+                this.$message({
+                  message: '更新成功',
+                  type: 'success'
+                });
+                //再获取一次所有信息
+                this.getTableData();
+              }
+            } catch (e) {
+              this.updateFormVisible = false;
+              this.$message.error('更新设备类型未成功');
+            }
           }
-        } catch (e) {
-          this.updateFormVisible = false;
-          this.$message.error('更新设备类型未成功');
-        }
+        });
       },
     },
     async mounted() {
