@@ -101,7 +101,7 @@
         <el-menu-item index="8-1">地域配置</el-menu-item>
       </router-link>
       <router-link to="/systemConfig" class="hide-underline" v-if="checkSidebarAuth('config_sys')">
-        <el-menu-item index="4-2">系统配置</el-menu-item>
+        <el-menu-item index="8-2">系统配置</el-menu-item>
       </router-link>
     </el-submenu>
 <!--    <router-link to="/districtManagement" class="hide-underline">-->
