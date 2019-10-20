@@ -146,7 +146,8 @@
         </div>
       </el-col>
       <el-col v-loading="pageLoading" :span="21">
-        <monitoring-config></monitoring-config>
+        <monitoring-config v-if="hasData"></monitoring-config>
+        <h2 v-else>无数据</h2>
       </el-col>
     </el-row>
     <el-dialog title="新增设备属性" :visible.sync="addFieldVisible">
@@ -190,6 +191,7 @@
     name: "MonitoringConfiguration",
     data() {
       return {
+        hasData: true,
         exportScale: '',
         deviceData: {},
         exportIndex: '',
@@ -257,9 +259,12 @@
         if (this.form.city !== "" && this.form.factory !== "") {
           this.treeData = (await getDeviceTreeApi(this.form.city, this.form.factory)).data.d;
           if (this.treeData.length === 0) {
+            this.hasData = false;
             alert("无设备");
           } else {
+            this.hasData = false;
             if (this.treeData[0]['children'].length > 0) {
+              this.hasData = true;
               this.handleNodeClick(this.treeData[0]['children'][0]);
             }
           }
@@ -285,8 +290,10 @@
       async getFactoryList(city) {
         this.factoryOptions = (await getFactoryOptions(city)).data.d;
         if (this.factoryOptions[0] != null) {
+          this.hasData = true;
           this.form.factory = this.factoryOptions[0].value;
         } else {
+          this.hasData = false;
           this.form.factory = "";
         }
         // 调获取工厂接口，传form.city参数
