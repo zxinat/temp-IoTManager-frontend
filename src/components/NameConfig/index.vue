@@ -151,9 +151,9 @@
     },
     methods: {
       handleSelectionChange(val) {
-        console.log('select: '+ this.selection.id);
         this.selection = val;
-        console.log(global.firstLevel);
+        console.log('select: '+ this.selection.id);
+        // console.log(global.firstLevel);
       },
       async getTableData() {
         this.tableData = (await getAllName()).data.d
@@ -163,9 +163,13 @@
           this.$confirm('确认修改？')
             .then(async _ => {
               const data = await changeGlobalName(this.selection.id, this.selection);
-              const newName = await getNewName();
-              global.firstLevel = newName.first;
-
+              const newName = await getNewName(this.selection.id);
+              console.log("??");
+              global.firstLevel = newName.data.d.first;
+              console.log("一级名称："+global.firstLevel);
+              global.secondLevel = newName.data.d.second;
+              console.log("一级名称："+global.secondLevel);
+              global.thirdLevel = newName.data.d.third;
               if (data.data.c === 200) {
                 this.$message({
                   message: '修改成功',

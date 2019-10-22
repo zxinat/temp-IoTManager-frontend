@@ -816,7 +816,6 @@ export function changeGlobalName(id, selection) {
   return axios.put(`/api/theme/allUserTheme/${id}`,{...selection})
 }
 
-export function getNewName() {
-  return axios.get('/api/userId')
-
+export function getNewName(id) {
+  return axios.get(`/api/theme/${id}`)
 }
