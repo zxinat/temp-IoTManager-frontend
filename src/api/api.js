@@ -793,3 +793,30 @@ export function getGatewayIdExist(gatewayId) {
 export function batchDeleteAlarmInfo(str) {
   return axios.post(`/api/alarmInfo/batchDelete`, {...str});
 }
+
+//平台三级名称配置
+export function getAllName() {
+  return axios.get('/api/theme')
+}
+
+export function deleteName(id) {
+  return axios.delete(`/api/theme/${id}`)
+}
+
+export function addName(newName) {
+  return axios.post(`/api/theme`,{...newName})
+
+}
+
+export function updateName(id, updateName) {
+  return axios.put(`/api/theme/${id}`,{...updateName})
+}
+
+export function changeGlobalName(id, selection) {
+  return axios.put(`/api/theme/allUserTheme/${id}`,{...selection})
+}
+
+export function getNewName() {
+  return axios.get('/api/userId')
+
+}

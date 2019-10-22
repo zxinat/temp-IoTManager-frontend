@@ -5,11 +5,13 @@
       <!--<el-menu-item index="2">数据库配置</el-menu-item>-->
       <el-menu-item index="3">属性配置</el-menu-item>
       <el-menu-item index="4">标签配置</el-menu-item>
+      <el-menu-item index="5">名称配置</el-menu-item>
     </el-menu>
     <div v-if="currentPage==='1'"><device-type-config></device-type-config></div>
     <!--<div v-if="currentPage==='2'"><database-config></database-config></div>-->
     <div v-if="currentPage==='3'"><property-config></property-config></div>
     <div v-if="currentPage==='4'"><tag-config></tag-config></div>
+    <div v-if="currentPage==='5'"><name-config></name-config></div>
   </div>
 </template>
 
@@ -18,6 +20,7 @@
     import DeviceTypeConfig from '../../components/DeviceTypeConfig/index';
     import PropertyConfig from '../../components/PropertyConfig/index';
     import TagConfig from '../../components/TagConfig/index';
+    import NameConfig from '../../components/NameConfig/index';
     export default {
       name: "SystemConfig",
       data() {
@@ -48,7 +51,7 @@
           }
         },
         components: {
-        DeviceTypeConfig, DatabaseConfig, PropertyConfig, TagConfig
+        DeviceTypeConfig, DatabaseConfig, PropertyConfig, TagConfig, NameConfig
         }
     }
 </script>
