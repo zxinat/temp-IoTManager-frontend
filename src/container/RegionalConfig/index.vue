@@ -3,16 +3,16 @@
     <div class="search-container">
       <el-form :inline="true" class="header">
         <el-form-item>
-          <h2>城市</h2>
+          <h2 id="first">{{GLOBAL.firstLevel}}</h2>
         </el-form-item>
         <el-form-item v-if="checkRegionAuth(['CONFIGURE_REGION_RETRIEVE'])">
-          <el-input v-model="searchCity" placeholder="请输入城市名"></el-input>
+          <el-input v-model="searchCity" :placeholder=" '请输入' + GLOBAL.firstLevel + '名'"></el-input>
         </el-form-item>
         <el-form-item v-if="checkRegionAuth(['CONFIGURE_REGION_RETRIEVE'])">
           <el-button type="primary" @click="searchByCity">搜索</el-button>
         </el-form-item>
         <el-form-item v-if="checkRegionAuth(['CONFIGURE_REGION_CREATE'])">
-          <el-button type="primary" @click="newCityFormVisible = true">添加城市</el-button>
+          <el-button type="primary" @click="newCityFormVisible = true">添加{{GLOBAL.firstLevel}}</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -31,7 +31,7 @@
         @sort-change="citySortChange">
         <el-table-column
           prop="cityName"
-          label="城市">
+          :label="GLOBAL.firstLevel">
         </el-table-column>
         <el-table-column
           prop="createTime"
@@ -69,10 +69,10 @@
     </div>
     <br />
 
-    <el-dialog title="修改城市" :visible.sync="updateCityFormVisible">
+    <el-dialog :title="'修改'+GLOBAL.firstLevel" :visible.sync="updateCityFormVisible">
       <el-form :model="updateCityData" ref="updateCityData">
-        <el-form-item label="城市" prop="cityName" label-width="120px"
-                      :rules="[{required: true, message: '城市名不能为空'}]">
+        <el-form-item :label="GLOBAL.firstLevel" prop="cityName" label-width="120px"
+                      :rules="[{required: true, message: '不能为空'}]">
           <el-input v-model="updateCityData.cityName" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="备注" label-width="120px">
@@ -85,9 +85,9 @@
       </div>
     </el-dialog>
 
-    <el-dialog title="添加城市" :visible.sync="newCityFormVisible">
+    <el-dialog :title="'添加'+GLOBAL.firstLevel" :visible.sync="newCityFormVisible">
       <el-form :model="newCityData" ref="newCityData">
-        <el-form-item label="城市" prop="cityName" label-width="120px"
+        <el-form-item :label="GLOBAL.firstLevel" prop="cityName" label-width="120px"
                       :rules="[{required: true, message: '城市名不能为空'}]">
           <el-input v-model="newCityData.cityName" autocomplete="off"></el-input>
         </el-form-item>
@@ -105,16 +105,16 @@
     <div class="search-container">
       <el-form :inline="true" class="header">
         <el-form-item>
-          <h2>实验楼</h2>
+          <h2 id="second">{{GLOBAL.secondLevel}}</h2>
         </el-form-item>
         <el-form-item v-if="checkRegionAuth(['CONFIGURE_REGION_RETRIEVE'])">
-          <el-input v-model="searchBuilding" placeholder="请输入实验楼名"></el-input>
+          <el-input v-model="searchBuilding" :placeholder=" '请输入' + GLOBAL.secondLevel + '名'"></el-input>
         </el-form-item>
         <el-form-item v-if="checkRegionAuth(['CONFIGURE_REGION_RETRIEVE'])">
           <el-button type="primary" @click="searchByBuilding">搜索</el-button>
         </el-form-item>
         <el-form-item v-if="checkRegionAuth(['CONFIGURE_REGION_CREATE'])">
-          <el-button type="primary" @click="newBuildingFormVisible = true">添加实验楼</el-button>
+          <el-button type="primary" @click="newBuildingFormVisible = true">添加{{GLOBAL.secondLevel}}</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -133,7 +133,7 @@
         @sort-change="factorySortChange">
         <el-table-column
           prop="factoryName"
-          label="实验楼">
+          :label="GLOBAL.secondLevel">
         </el-table-column>
         <el-table-column
           prop="factoryPhoneNumber"
@@ -145,7 +145,7 @@
         </el-table-column>
         <el-table-column
           prop="city"
-          label="所属城市">
+          :label="'所属'+GLOBAL.firstLevel">
         </el-table-column>
         <el-table-column
           prop="createTime"
@@ -173,11 +173,11 @@
     </div>
     <br />
 
-    <el-dialog title="修改实验楼" :visible.sync="updateBuildingFormVisible">
+    <el-dialog :title="'修改'+GLOBAL.secondLevel" :visible.sync="updateBuildingFormVisible">
       <el-form :model="updateBuildingData" ref="updateBuildingData">
-        <el-form-item label="所属城市" prop="city" label-width="120px"
-                      :rules="[{required: true, message: '城市不能为空'}]">
-          <el-select v-model="updateBuildingData.city" placeholder="选择城市">
+        <el-form-item :label="'所属'+GLOBAL.firstLevel" prop="city" label-width="120px"
+                      :rules="[{required: true, message: '不能为空'}]">
+          <el-select v-model="updateBuildingData.city" :placeholder="'选择'+GLOBAL.firstLevel">
             <el-option
               v-for="c in cityList"
               :key="c.value"
@@ -186,8 +186,8 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="实验楼" prop="factoryName" label-width="120px"
-                      :rules="[{required: true, message: '实验楼名不能为空'}]">
+        <el-form-item :label="GLOBAL.secondLevel" prop="factoryName" label-width="120px"
+                      :rules="[{required: true, message: '不能为空'}]">
           <el-input v-model="updateBuildingData.factoryName" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="电话" label-width="120px">
@@ -206,11 +206,11 @@
       </div>
     </el-dialog>
 
-    <el-dialog title="添加实验楼" :visible.sync="newBuildingFormVisible">
+    <el-dialog :title="'添加'+GLOBAL.secondLevel" :visible.sync="newBuildingFormVisible">
       <el-form :model="newBuildingData" ref="newBuildingData">
-        <el-form-item label="所属城市" prop="city" label-width="120px"
-                      :rules="[{required: true, message: '城市不能为空'}]">
-          <el-select v-model="newBuildingData.city" placeholder="选择城市">
+        <el-form-item :label="'所属'+GLOBAL.firstLevel" prop="city" label-width="120px"
+                      :rules="[{required: true, message: '不能为空'}]">
+          <el-select v-model="newBuildingData.city" :placeholder="'选择'+GLOBAL.firstLevel">
             <el-option
               v-for="c in cityList"
               :key="c.value"
@@ -219,8 +219,8 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="实验楼" prop="factoryName" label-width="120px"
-                      :rules="[{required: true, message: '实验楼名不能为空'}]">
+        <el-form-item :label="GLOBAL.secondLevel" prop="factoryName" label-width="120px"
+                      :rules="[{required: true, message: '不能为空'}]">
           <el-input v-model="newBuildingData.factoryName" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="电话" label-width="120px">
@@ -243,16 +243,16 @@
     <div class="search-container">
       <el-form :inline="true" class="header">
         <el-form-item>
-          <h2>实验室</h2>
+          <h2 id="third">{{GLOBAL.thirdLevel}}</h2>
         </el-form-item>
         <el-form-item v-if="checkRegionAuth(['CONFIGURE_REGION_RETRIEVE'])">
-          <el-input  v-model="searchLab" placeholder="请输入实验室名"></el-input>
+          <el-input  v-model="searchLab" :placeholder=" '请输入' + GLOBAL.thirdLevel + '名'"></el-input>
         </el-form-item>
         <el-form-item v-if="checkRegionAuth(['CONFIGURE_REGION_RETRIEVE'])">
           <el-button type="primary" @click="searchByLab">搜索</el-button>
         </el-form-item>
         <el-form-item v-if="checkRegionAuth(['CONFIGURE_REGION_CREATE'])">
-          <el-button type="primary" @click="newLabFormVisible = true">添加实验室</el-button>
+          <el-button type="primary" @click="newLabFormVisible = true">添加{{GLOBAL.thirdLevel}}</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -271,7 +271,7 @@
         @sort-change="workshopSortChange">
         <el-table-column
           prop="workshopName"
-          label="实验室">
+          :label="GLOBAL.thirdLevel">
         </el-table-column>
         <el-table-column
           prop="workshopPhoneNumber"
@@ -282,7 +282,7 @@
         </el-table-column>
         <el-table-column
           prop="factory"
-          label="所属实验楼">
+          :label="'所属'+GLOBAL.secondLevel">
         </el-table-column>
         <el-table-column
           prop="createTime"
@@ -310,11 +310,11 @@
     </div>
     <br />
 
-    <el-dialog title="修改实验室" :visible.sync="updateLabFormVisible">
+    <el-dialog :title="'修改'+GLOBAL.thirdLevel" :visible.sync="updateLabFormVisible">
       <el-form :model="updateLabData" ref="updateLabData">
-        <el-form-item label="所属实验楼" prop="factory" label-width="120px"
-                      :rules="[{required: true, message: '实验楼不能为空'}]">
-          <el-select v-model="updateLabData.factory" placeholder="选择实验楼">
+        <el-form-item :label="'所属'+GLOBAL.secondLevel" prop="factory" label-width="120px"
+                      :rules="[{required: true, message: '不能为空'}]">
+          <el-select v-model="updateLabData.factory" :placeholder="'选择'+GLOBAL.secondLevel">
             <el-option
               v-for="c in buildingList"
               :key="c.value"
@@ -323,8 +323,8 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="实验室" prop="workshopName" label-width="120px"
-                      :rules="[{required: true, message: '实验室名不能为空'}]">
+        <el-form-item :label="GLOBAL.thirdLevel" prop="workshopName" label-width="120px"
+                      :rules="[{required: true, message: '不能为空'}]">
           <el-input v-model="updateLabData.workshopName" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="电话" label-width="120px">
@@ -343,11 +343,11 @@
       </div>
     </el-dialog>
 
-    <el-dialog title="添加实验室" :visible.sync="newLabFormVisible">
+    <el-dialog :title="'添加'+GLOBAL.thirdLevel" :visible.sync="newLabFormVisible">
       <el-form :model="newLabData" ref="newLabData">
-        <el-form-item label="所属实验楼" prop="factory" label-width="120px"
-                      :rules="[{required: true, message: '实验楼不能为空'}]">
-          <el-select v-model="newLabData.factory" placeholder="选择实验楼">
+        <el-form-item :label="'所属'+GLOBAL.secondLevel" prop="factory" label-width="120px"
+                      :rules="[{required: true, message: '不能为空'}]">
+          <el-select v-model="newLabData.factory" :placeholder="'选择'+GLOBAL.secondLevel">
             <el-option
               v-for="c in buildingList"
               :key="c.id"
@@ -356,8 +356,8 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="实验室" prop="workshopName" label-width="120px"
-                      :rules="[{required: true, message: '实验室名不能为空'}]">
+        <el-form-item :label="GLOBAL.thirdLevel" prop="workshopName" label-width="120px"
+                      :rules="[{required: true, message: '不能为空'}]">
           <el-input v-model="newLabData.workshopName" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="电话" label-width="120px">
@@ -416,6 +416,9 @@
       name: "RegionalConfig",
       data() {
           return{
+            changeCityForm: '',
+            changeFactoryForm: '',
+            changeWorkshopForm: '',
             pageMode: 1,
             loading: false,
             cityTotalPage: 0,

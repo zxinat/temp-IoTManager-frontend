@@ -819,3 +819,7 @@ export function changeGlobalName(id, selection) {
 export function getNewName(id) {
   return axios.get(`/api/theme/${id}`)
 }
+
+export function getUserThreeLevelName(uid) {
+  return axios.get(`/api/user/${uid}`)
+}

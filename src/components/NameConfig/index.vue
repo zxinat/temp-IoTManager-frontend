@@ -74,7 +74,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="newFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="add()">确 定</el-button>
+          <el-button type="primary" @click="add('newData')">确 定</el-button>
         </div>
       </el-dialog>
 
@@ -99,7 +99,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="updateFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="update()">确 定</el-button>
+          <el-button type="primary" @click="update('updateData')">确 定</el-button>
         </div>
       </el-dialog>
 
@@ -109,12 +109,14 @@
 <script>
   import global from '../../common/global';
   import {
+    getUserByName,
     getAllName,
     deleteName,
     addName,
     updateName,
     changeGlobalName,
     getNewName,
+    getUserThreeLevelName,
 
   } from '../../api/api'
   export default {
@@ -147,6 +149,7 @@
         selection: {
 
         },
+        userInfo: '',
       }
     },
     methods: {
@@ -163,8 +166,12 @@
           this.$confirm('确认修改？')
             .then(async _ => {
               const data = await changeGlobalName(this.selection.id, this.selection);
-              const newName = await getNewName(this.selection.id);
-              console.log("??");
+              console.log("uid:"+this.userInfo.id);
+              const x = await getUserThreeLevelName(this.userInfo.id);
+              console.log("uTheme:"+x.data.d.theme);
+              const newName = await getNewName(x.data.d.theme);
+              global.name = newName.data.d.name;
+              console.log("平台名称："+global.name);
               global.firstLevel = newName.data.d.first;
               console.log("一级名称："+global.firstLevel);
               global.secondLevel = newName.data.d.second;
@@ -176,6 +183,7 @@
                   type: 'success'
                 });
               }
+              //location.reload();
             })
         } catch (e) {
           this.$message.error('修改未成功');
@@ -201,48 +209,58 @@
           console.log(e)
         }
       },
-      async add(){
-        try {
-          const data = await addName(this.newData);
-          this.newFormVisible = false;
-          if (data.data.c === 200) {
-            this.$message({
-              message: '添加成功',
-              type: 'success'
-            });
-            //再获取一次所有信息
-            this.getTableData();
+      async add(formData){
+        this.$refs[formData].validate(async (valid) => {
+          if (valid) {
+            try {
+              const data = await addName(this.newData);
+              this.newFormVisible = false;
+              if (data.data.c === 200) {
+                this.$message({
+                  message: '添加成功',
+                  type: 'success'
+                });
+                //再获取一次所有信息
+                this.getTableData();
+              }
+            } catch (e) {
+              this.newFormVisible = false;
+              this.$message.error('添加平台三级名称未成功');
+            }
           }
-        } catch (e) {
-          this.newFormVisible = false;
-          this.$message.error('添加平台三级名称未成功');
-        }
+        });
       },
       async openUpdateForm(row) {//打开更新表单
         this.updateData = JSON.parse(JSON.stringify(row));
         this.updateFormVisible = true;
       },
-      async update() {
-        try {
-          const data = await updateName(this.updateData.id, this.updateData);
-          this.updateFormVisible = false;
-          if (data.data.c === 200) {
-            this.$message({
-              message: '更新成功',
-              type: 'success'
-            });
-            //再获取一次所有信息
-            this.getTableData();
+      async update(formData) {
+        this.$refs[formData].validate(async (valid) => {
+          if (valid) {
+            try {
+              const data = await updateName(this.updateData.id, this.updateData);
+              this.updateFormVisible = false;
+              if (data.data.c === 200) {
+                this.$message({
+                  message: '更新成功',
+                  type: 'success'
+                });
+                //再获取一次所有信息
+                this.getTableData();
+              }
+            } catch (e) {
+              this.newFormVisible = false;
+              this.$message.error('更新平台三级名称未成功');
+            }
           }
-        } catch (e) {
-          this.updateFormVisible = false;
-          this.$message.error('更新平台三级名称未成功');
-        }
-      }
-
+        });
+      },
     },
     async mounted() {
+      console.log("平台名称："+global.name);
       this.getTableData();
+      this.userInfo = (await getUserByName(localStorage.getItem('userInfo').substr(1, localStorage.getItem('userInfo').length-2))).data.d;
+      console.log(this.userInfo);
     }
   }
 </script>

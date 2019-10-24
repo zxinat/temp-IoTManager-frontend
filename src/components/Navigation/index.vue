@@ -6,7 +6,7 @@
       :background-color=mainColor
       text-color="#fff"
       active-text-color="#ffffff">
-      <el-menu-item index="1">南洋IoT管理平台</el-menu-item>
+      <el-menu-item index="1">{{GLOBAL.name}}</el-menu-item>
       <el-menu-item index="2" style="float: right">
         <el-dropdown trigger="click">
         <span class="el-dropdown-link" style="color: white">
@@ -46,9 +46,10 @@
         name: "Navigation",
       data() {
         return {
+          userInfo: [],
           activeIndex: '1',
           activeIndex2: '1',
-          mainColor:mainColor?mainColor:'#409EFF'
+          mainColor:mainColor?mainColor:'#409EFF',
         };
       },
       methods: {
@@ -82,7 +83,7 @@
               window.location.reload();
               break;
           }
-        }
+        },
       },
       mounted(){
           console.log("manman",getCookie("mainColor"));
