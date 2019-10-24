@@ -80,7 +80,7 @@
 
       <el-dialog title="修改平台三级名称" :visible.sync="updateFormVisible">
         <el-form :model="updateData" ref="updateData">
-          <el-form-item label="平台名称" prop="deviceTypeName" label-width="120px"
+          <el-form-item label="平台名称" prop="name" label-width="120px"
                         :rules="[{required: true, message: '平台名称不能为空'}]">
             <el-input v-model="updateData.name"></el-input>
           </el-form-item>
