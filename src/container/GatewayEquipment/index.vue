@@ -341,10 +341,10 @@
         <el-button type="primary" @click="addType('typeTable')">确 定</el-button>
       </div>
     </el-dialog>
-    <el-dialog title="新增城市" :visible.sync="cityAddVisible">
+    <el-dialog :title="'新增'+GLOBAL.firstLevel" :visible.sync="cityAddVisible">
       <el-form :model="cityTable" ref="cityTable">
-        <el-form-item label="城市名" prop="cityName" label-width="120px"
-                      :rules="[{required: true, message: '城市名不能为空'}]">
+        <el-form-item :label="GLOBAL.firstLevel+'名'" prop="cityName" label-width="120px"
+                      :rules="[{required: true, message: GLOBAL.firstLevel+'不能为空'}]">
           <el-input v-model="cityTable.cityName" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="备注" label-width="120px">
@@ -368,8 +368,8 @@
         <el-form-item :label="GLOBAL.secondLevel+'地址'" label-width="120px">
           <el-input v-model="factoryTable.factoryAddress" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="所属城市名" prop="city" label-width="120px"
-                      :rules="[{required: true, message: '所属城市名不能为空'}]">
+        <el-form-item :label="'所属'+GLOBAL.firstLevel" prop="city" label-width="120px"
+                      :rules="[{required: true, message: '所属'+GLOBAL.firstLevel+'不能为空'}]">
           <el-select v-model="factoryTable.city" placeholder="请选择">
             <el-option
               v-for="c in newCityList"
