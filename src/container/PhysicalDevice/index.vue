@@ -453,8 +453,8 @@
         <el-form-item :label="GLOBAL.secondLevel+'地址'" label-width="120px">
           <el-input v-model="factoryTable.factoryAddress" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="所属城市名" prop="city" label-width="120px"
-                      :rules="[{required: true, message: '所属城市名不能为空'}]">
+        <el-form-item :label="'所属'+GLOBAL.firstLevel" prop="city" label-width="120px"
+                      :rules="[{required: true, message: '所属'+GLOBAL.firstLevel+'不能为空'}]">
           <el-select v-model="factoryTable.city" placeholder="请选择">
             <el-option
               v-for="c in newCityList"
