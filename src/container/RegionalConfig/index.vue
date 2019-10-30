@@ -498,7 +498,7 @@
           if(this.searchCity !== "") {
             this.cityData = (await getCityByCityName(this.searchCity)).data.d;
           } else {
-            this.cityData = (await getCity()).data.d;
+            //this.cityData = (await getCity()).data.d;
           }
         },
         async openCityUpdateForm(row){  //打开更新表单
@@ -512,7 +512,7 @@
           const searchColumn = this.cityCurSortColumn === '' ? "id" : columnMap[this.cityCurSortColumn];
           const searchOrder = this.cityCurOrder === '' ? "asc" : orderMap[this.cityCurOrder];
           const searchCityName = this.searchCity === '全部' ? "all" : this.searchCity;
-          const data = await getCity('search', this.cityCurPage, searchColumn, searchOrder, searchCityName, this.pageMode);
+          const data = await getCity(this.cityCurPage, searchColumn, searchOrder, this.pageMode);
           this.cityData = data.data.d;
           this.getCityTotalPage('search', searchCityName);
           this.loading = false;
@@ -609,7 +609,7 @@
           if(this.searchBuilding !== "") {
             this.buildingData = (await getFactoryByFactoryName(this.searchBuilding)).data.d;
           } else {
-            this.buildingData = (await getFactory()).data.d;
+            //this.buildingData = (await getFactory()).data.d;
           }
         },
         async getUpdateBuildingList(city){
@@ -628,7 +628,7 @@
           const searchColumn = this.factoryCurSortColumn === '' ? "id" : columnMap[this.factoryCurSortColumn];
           const searchOrder = this.factoryCurOrder === '' ? "asc" : orderMap[this.factoryCurOrder];
           const searchFactoryName = this.searchBuilding === '全部' ? "all" : this.searchBuilding ;
-          const data = await getFactory('search', this.factoryCurPage, searchColumn, searchOrder, searchFactoryName, this.pageMode);
+          const data = await getFactory(this.factoryCurPage, searchColumn, searchOrder, this.pageMode);
           this.buildingData = data.data.d;
           this.getFactoryTotalPage('search', searchFactoryName);
           this.loading = false;
@@ -749,7 +749,7 @@
           const searchColumn = this.workshopCurSortColumn === '' ? "id" : columnMap[this.workshopCurSortColumn];
           const searchOrder = this.workshopCurOrder === '' ? "asc" : orderMap[this.workshopCurOrder];
           const searchWorkshopName = this.searchLab === '全部' ? "all" : this.searchLab;
-          const data = await getWorkshop('search', this.workshopCurPage, searchColumn, searchOrder, searchWorkshopName, this.pageMode);
+          const data = await getWorkshop(this.workshopCurPage, searchColumn, searchOrder, this.pageMode);
           this.labData = data.data.d;
           this.getWorkshopTotalPage('search', searchWorkshopName);
           this.loading = false;
@@ -854,7 +854,7 @@
         this.getWorkshopTotalPage('all');
         this.getWorkshop();
         this.cityList = (await getCityOptions()).data.d;
-        this.buildingList = (await getFactory()).data.d;
+        this.buildingList = (await getFactory(1, 'id', 'asc', 0)).data.d;
       }
     }
 </script>

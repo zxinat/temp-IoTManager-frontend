@@ -833,7 +833,7 @@
                   type: 'success'
                 });
                 this.city = (await getCityOptions()).data.d;
-                this.newCityList = (await getCity()).data.d;
+                this.newCityList = (await getCity(1, 'id', 'asc', 0)).data.d;
                 this.cityOptions = (await getCityOptions()).data.d;
                 this.getDeviceOptions();
               }
@@ -856,7 +856,7 @@
                   type: 'success'
                 });
                 this.factory = (await getFactoryOptions(this.factoryTable.city)).data.d;
-                this.newFactoryList = (await getFactory()).data.d;
+                this.newFactoryList = (await getFactory(1, 'id', 'asc', 0)).data.d;
                 this.getDeviceOptions();
               }
             } catch (e) {
@@ -1160,8 +1160,8 @@
       this.cityOptions = (await getCityOptions()).data.d;
       this.city = (await getCityOptions()).data.d;
       this.updateCity = (await getCityOptions()).data.d;
-      this.newCityList = (await getCity()).data.d;
-      this.newFactoryList = (await getFactory()).data.d;
+      this.newCityList = (await getCity(1, 'id', 'asc', 0)).data.d;
+      this.newFactoryList = (await getFactory(1, 'id', 'asc', 0)).data.d;
       this.affiliateGateways = (await getGatewaysApi('all')).data.d;
       // this.factory = (await getFactory()).data.d;
       // this.workshop = (await getWorkshop()).data.d;

@@ -140,7 +140,7 @@
         this.$store.dispatch('device/setDashboardDeviceOption', data);
       },
       async getDeviceOptions() {
-        this.selectorOptions = (await getCity('all')).data.d;
+        this.selectorOptions = (await getCity(1, 'id', 'asc', 0)).data.d;
       }
     }
   }

@@ -101,16 +101,16 @@ export function deleteMultipleDeviceApi(id) {
   return axios.post(`/api/device/batch/devices`, {...id});
 }
 
-export function getCity(searchType='all', page=1, column='id', order='asc', city, pageMode) {
-  return axios.get(`/api/city?searchType=${searchType}&page=${page}&sortColumn=${column}&order=${order}&city=${city}&pageMode=${pageMode}`);
+export function getCity(page=1, column='id', order='asc', pageMode) {
+  return axios.get(`/api/city?&page=${page}&sortColumn=${column}&order=${order}&pageMode=${pageMode}`);
 }
 
-export function getFactory(searchType='all', page=1, column='id', order='asc', factory, pageMode) {
-  return axios.get(`/api/factory?searchType=${searchType}&page=${page}&sortColumn=${column}&order=${order}&factory=${factory}&pageMode=${pageMode}`);
+export function getFactory(page=1, column='id', order='asc', pageMode) {
+  return axios.get(`/api/factory?&page=${page}&sortColumn=${column}&order=${order}&pageMode=${pageMode}`);
 }
 
-export function getWorkshop(searchType='all', page=1, column='id', order='asc', workshop, pageMode) {
-  return axios.get(`/api/workshop?searchType=${searchType}&page=${page}&sortColumn=${column}&order=${order}&workshop=${workshop}&pageMode=${pageMode}`);
+export function getWorkshop(page=1, column='id', order='asc', pageMode) {
+  return axios.get(`/api/workshop?&page=${page}&sortColumn=${column}&order=${order}&pageMode=${pageMode}`);
 }
 
 export function getDeviceState() {

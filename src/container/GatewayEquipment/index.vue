@@ -716,7 +716,7 @@
                   type: 'success'
                 });
                 this.city = (await getCityOptions()).data.d;
-                this.newCityList = (await getCity()).data.d;
+                this.newCityList = (await getCity(1, 'id', 'asc', 0)).data.d;
                 this.cityOptions = (await getCityOptions()).data.d;
                 this.getDeviceOptions();
               }
@@ -739,7 +739,7 @@
                   type: 'success'
                 });
                 this.factory = (await getFactoryOptions(this.factoryTable.city)).data.d;
-                this.newFactoryList = (await getFactory()).data.d;
+                this.newFactoryList = (await getFactory(1, 'id', 'asc', 0)).data.d;
                 this.getDeviceOptions();
               }
             } catch (e) {
@@ -995,8 +995,8 @@
       this.cityOptions = (await getCityOptions()).data.d;
       this.city = (await getCityOptions()).data.d;
       this.updateCity = (await getCityOptions()).data.d;
-      this.newCityList = (await getCity()).data.d;
-      this.newFactoryList = (await getFactory()).data.d;
+      this.newCityList = (await getCity(1, 'id', 'asc', 0)).data.d;
+      this.newFactoryList = (await getFactory(1, 'id', 'asc', 0)).data.d;
       this.gatewayState = (await getGatewayState()).data.d;
       this.gatewayType = (await getGatewayType()).data.d;
       this.department = (await getAllDepartments()).data.d;
