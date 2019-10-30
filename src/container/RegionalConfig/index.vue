@@ -498,7 +498,7 @@
           if(this.searchCity !== "") {
             this.cityData = (await getCityByCityName(this.searchCity)).data.d;
           } else {
-            //this.cityData = (await getCity()).data.d;
+            this.cityData = this.getCity();
           }
         },
         async openCityUpdateForm(row){  //打开更新表单
@@ -609,7 +609,7 @@
           if(this.searchBuilding !== "") {
             this.buildingData = (await getFactoryByFactoryName(this.searchBuilding)).data.d;
           } else {
-            //this.buildingData = (await getFactory()).data.d;
+            this.buildingData = this.getFactory();
           }
         },
         async getUpdateBuildingList(city){
@@ -729,7 +729,7 @@
           if(this.searchLab !== "") {
             this.labData = (await getWorkshopByWorkshopName(this.searchLab)).data.d;
           } else {
-            this.labData = (await getWorkshop()).data.d;
+            this.labData = this.getWorkshop();
           }
         },
         async getUpdateLabList(city){
