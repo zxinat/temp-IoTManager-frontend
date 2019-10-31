@@ -614,8 +614,8 @@ export function getAuthByUid(uid) {
   return axios.get(`/api/user/getAuth/${uid}`);
 }
 
-export function getDeviceByCity(cityName) {
-  return axios.get(`/api/device/getByCity?cityName=${cityName}`);
+export function getDeviceByCity(cityName, factoryName = 'all', workshopName = 'all') {
+  return axios.get(`/api/device/getByCity?cityName=${cityName}&factoryName=${factoryName}&workshopName=${workshopName}`);
 }
 
 export function getRegionLevelMenu() {

@@ -217,6 +217,7 @@
           this.tmpDeviceSelectorValue = this.computedDeviceOption[0].value;
           this.propertySelectorOptions = (await getAffiliateFields(this.tmpDeviceSelectorValue)).data.d;
           if  (this.propertySelectorOptions[0] != null) {
+            this.tmpPropertySelectorValue = [];
             this.tmpPropertySelectorValue.push(this.propertySelectorOptions[0].fieldId);
             this.searchLineChartData();
           }
