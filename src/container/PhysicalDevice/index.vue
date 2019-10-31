@@ -788,6 +788,25 @@
                     message: '添加成功',
                     type: 'success'
                   });
+                  this.newDeviceData = {
+                    // 标签
+                    hardwareDeviceID: '',
+                    deviceName: '',
+                    city: '',
+                    factory: '',
+                    workshop: '',
+                    deviceState: '',
+                    imageUrl: '',
+                    gatewayId: '',
+                    mac: '',
+                    deviceType: '',
+                    remark: '',
+                    // department: '',
+
+                    inputVisible: false,
+                    inputValue: '',
+                    dynamicTags: ['标签一', '标签二', '标签三'],
+                  };
                   this.getDevices();
                 }
               } catch (e) {

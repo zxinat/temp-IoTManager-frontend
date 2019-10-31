@@ -667,6 +667,24 @@
                     message: '添加成功',
                     type: 'success'
                   });
+                  this.newGatewayData = {
+                    hardwareGatewayID: '',
+                    gatewayName: '',
+                    gatewayType: '',
+                    city: '',
+                    factory: '',
+                    workshop: '',
+                    gatewayState: '',
+                    imageUrl: '',
+                    remark: '',
+                    department: '',
+
+
+                    // 标签
+                    inputVisible: false,
+                    inputValue: '',
+                    dynamicTags: ['标签一', '标签二', '标签三'],
+                  };
                   this.getGateways();
                 }
               } catch (e) {
