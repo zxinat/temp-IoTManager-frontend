@@ -220,6 +220,10 @@
             this.tmpPropertySelectorValue = [];
             this.tmpPropertySelectorValue.push(this.propertySelectorOptions[0].fieldId);
             this.searchLineChartData();
+          } else {
+            this.tmpPropertySelectorValue = [];
+            clearInterval(this.pollInterval);
+            this.chart.setOption(this.nullOption);
           }
         } else {
           this.tmpDeviceSelectorValue = '';
