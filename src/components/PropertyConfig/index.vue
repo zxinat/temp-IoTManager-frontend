@@ -5,18 +5,18 @@
         <el-form-item>
           <h2>设备属性</h2>
         </el-form-item>
-        <el-form-item>
+        <el-form-item v-if="checkPropertyAuth(['CONFIGURE_SYSTEM_RETRIEVE'])">
           <el-input v-model="searchProperty" placeholder="请输入设备属性"></el-input>
         </el-form-item>
-        <el-form-item>
+        <el-form-item v-if="checkPropertyAuth(['CONFIGURE_SYSTEM_RETRIEVE'])">
           <el-button type="primary">搜索</el-button>
         </el-form-item>
-        <el-form-item>
+        <el-form-item v-if="checkPropertyAuth(['CONFIGURE_SYSTEM_CREATE'])">
           <el-button type="primary" @click="newFormVisible = true">添加</el-button>
         </el-form-item>
       </el-form>
     </div>
-    <div class="table-container">
+    <div class="table-container" v-if="checkPropertyAuth(['CONFIGURE_SYSTEM_RETRIEVE'])">
       <el-pagination background layout="prev, pager, next"
                      :total="totalPage"
                      :current-page.sync="curPage"
@@ -53,9 +53,11 @@
         <el-table-column
           fixed="right"
           label="操作">
-          <template slot-scope="scope">
-            <el-button @click="openUpdateForm(scope.row)" type="text" size="small">修改</el-button>
-            <el-button @click="deleteField(scope.row)" type="text" size="small">删除</el-button>
+          <template slot-scope="scope" v-if="checkPropertyAuth(['CONFIGURE_SYSTEM_DELETE', 'CONFIGURE_SYSTEM_UPDATE'])">
+            <el-button @click="openUpdateForm(scope.row)" type="text" size="small"
+                       v-if="checkPropertyAuth(['CONFIGURE_SYSTEM_UPDATE'])">修改</el-button>
+            <el-button @click="deleteField(scope.row)" type="text" size="small"
+                       v-if="checkPropertyAuth(['CONFIGURE_SYSTEM_DELETE'])">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -129,6 +131,7 @@
     updateField,
     getFieldPageNumber,
   } from "../../api/api";
+  import {checkAuth} from "../../common/util";
 
   export default {
     name: "PropertyConfig",
@@ -159,6 +162,9 @@
       }
     },
     methods: {
+      checkPropertyAuth(auth) {
+        return checkAuth(auth);
+      },
       async getAllProperties() {
         const orderMap = {ascending: 'asc', descending: 'desc'};
         const columnMap = {device: 'device', updateTime: 'updateTime', createTime: 'createTime'};

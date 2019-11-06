@@ -3,8 +3,9 @@
     <div>
       <h2>设备标签</h2>
     </div>
-    <div>
+    <div v-if="checkTagAuth(['CONFIGURE_SYSTEM_RETRIEVE'])">
       <el-tag
+        v-if="checkTagAuth(['CONFIGURE_SYSTEM_RETRIEVE'])"
         class="tag-container"
         v-for="tag in tags"
         :key="tag"
@@ -28,6 +29,7 @@
 
 <script>
   import {addTag, deleteTag, findTagAffiliation, getAllTags} from "../../api/api";
+  import {checkAuth} from "../../common/util";
 
   export default {
     name: "TagConfig",
@@ -39,6 +41,9 @@
       }
     },
     methods: {
+      checkTagAuth(auth) {
+        return checkAuth(auth);
+      },
       async getTags() {
         this.tags = (await getAllTags()).data.d;
       },

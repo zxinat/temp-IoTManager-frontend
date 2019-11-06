@@ -5,13 +5,14 @@
           <el-form-item>
             <h2>平台三级名称配置</h2>
           </el-form-item>
-          <el-form-item>
+          <el-form-item v-if="checkNameAuth(['CONFIGURE_SYSTEM_CREATE'])">
             <el-button type="primary" @click="newFormVisible = true">添加三级名称</el-button>
           </el-form-item>
         </el-form>
       </div>
       <div class="table-container">
         <el-table
+          v-if="checkNameAuth(['CONFIGURE_SYSTEM_RETRIEVE'])"
           v-loading="loading"
           :data="tableData"
           border
@@ -41,15 +42,17 @@
           <el-table-column
             fixed="right"
             label="操作">
-            <template slot-scope="scope">
-              <el-button @click="openUpdateForm(scope.row)" type="text" size="small">修改</el-button>
-              <el-button @click="deleteName(scope.row)" type="text" size="small">删除</el-button>
+            <template slot-scope="scope" v-if="checkNameAuth(['CONFIGURE_SYSTEM_UPDATE', 'CONFIGURE_SYSTEM_DELETE'])">
+              <el-button @click="openUpdateForm(scope.row)" type="text" size="small"
+                         v-if="checkNameAuth(['CONFIGURE_SYSTEM_UPDATE'])">修改</el-button>
+              <el-button @click="deleteName(scope.row)" type="text" size="small"
+                         v-if="checkNameAuth(['CONFIGURE_SYSTEM_DELETE'])">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
       </div>
 
-      <div class="selection-container">
+      <div v-if="checkNameAuth(['CONFIGURE_SYSTEM_UPDATE'])" class="selection-container">
         <el-button type="primary" @click="changeGlobalName()">修改为选中三级名称</el-button>
       </div>
 
@@ -119,6 +122,7 @@
     getUserThreeLevelName,
 
   } from '../../api/api'
+  import {checkAuth} from "../../common/util";
   export default {
     name: "NameConfig",
     data() {
@@ -153,6 +157,9 @@
       }
     },
     methods: {
+      checkNameAuth(auth) {
+        return checkAuth(auth);
+      },
       handleSelectionChange(val) {
         this.selection = val;
         console.log('select: '+ this.selection.id);
