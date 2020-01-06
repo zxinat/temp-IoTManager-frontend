@@ -22,7 +22,7 @@
         </el-select>
       </el-form-item>
       <!--<el-form-item v-if="checkMonitorAuth(['MONITOR_RETRIEVE'])">-->
-        <!--<el-button type="primary" @click="filter"><img src="../../assets/img/find.svg">筛选</el-button>-->
+      <!--<el-button type="primary" @click="filter"><img src="../../assets/img/find.svg">筛选</el-button>-->
       <!--</el-form-item>-->
       <el-form-item style="float: right" v-if="checkMonitorAuth(['MONITOR_EXPORT_DEVICEDATA'])">
         <el-button type="primary" @click="showExportDeviceData = true">导出设备数据</el-button>
@@ -36,7 +36,7 @@
       :visible.sync="showExportDeviceData"
       width="30%"
       center>
-      <el-select v-model="exportIndex" placeholder="请选择属性">
+      <el-select v-model="exportIndex" multiple placeholder="请选择属性">
         <el-option
           v-for="item in deviceData.affiliateFields"
           :key="item.id"
@@ -51,9 +51,12 @@
         start-placeholder="开始日期"
         end-placeholder="结束日期">
       </el-date-picker>
-      <el-radio v-model="exportScale" label="hour">时数据</el-radio>
-      <el-radio v-model="exportScale" label="day">日数据</el-radio>
-      <el-radio v-model="exportScale" label="month">月数据</el-radio>
+      <div>
+        <el-radio v-model="exportScale" label="hour">时数据</el-radio>
+        <el-radio v-model="exportScale" label="day">日数据</el-radio>
+        <el-radio v-model="exportScale" label="month">月数据</el-radio>
+      </div>
+      <el-divider></el-divider>
       <span slot="footer" class="dialog-footer">
     <el-button @click="showExportDeviceData = false">取 消</el-button>
     <el-button type="primary" @click="exportDeviceData()">确 定</el-button>
@@ -68,7 +71,8 @@
           <el-input type="textarea" v-model="alarmRules.description"></el-input>
         </el-form-item>
         <el-form-item prop="deviceGroup" label="设备" :rules="[{ required: true, message: '项目必选'}]">
-          <el-select v-model="alarmRules.deviceGroup" placeholder="请选择设备" @change="getAffiliateField(alarmRules.deviceGroup)">
+          <el-select v-model="alarmRules.deviceGroup" placeholder="请选择设备"
+                     @change="getAffiliateField(alarmRules.deviceGroup)">
             <el-option
               v-for="item in devices"
               :key="item.id"
@@ -142,7 +146,8 @@
       <el-col :span="3">
         <!--<MonitoringTree></MonitoringTree>-->
         <div class="monitoring-tree-container">
-          <el-tree v-loading="treeLoading" :data="treeData" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+          <el-tree v-loading="treeLoading" :data="treeData" :props="defaultProps"
+                   @node-click="handleNodeClick"></el-tree>
         </div>
       </el-col>
       <el-col v-loading="pageLoading" :span="21">
@@ -197,9 +202,9 @@
         hasData: true,
         exportScale: '',
         deviceData: {},
-        exportIndex: '',
+        exportIndex: [],
         pageLoading: false,
-        treeLoading : false,
+        treeLoading: false,
         cityOptions: [],
         factoryOptions: [],
         fieldOptions: [],
@@ -345,16 +350,21 @@
       },
       async exportDeviceData() {
         //导出设备数据接口，传入exportDeviceTime参数，返回内容格式如jsondata
-        let result = (await getDayAggregateData(this.deviceData.hardwareDeviceID, this.exportIndex, {
-          startTime: this.exportDeviceTime[0],
-          endTime: this.exportDeviceTime[1]
-        }, this.exportScale)).data.d;
-        console.log('export', result);
-        console.log(this.deviceData);
+        console.log(this.exportIndex);
+        let total_result = [];
+        for (let i = 0; i < this.exportIndex.length; i++) {
+          let result = (await getDayAggregateData(this.deviceData.hardwareDeviceID, this.exportIndex[i], {
+            startTime: this.exportDeviceTime[0],
+            endTime: this.exportDeviceTime[1]
+          }, this.exportScale)).data.d;
+          total_result = total_result.concat(result);
+        }
 
-        let jsonData = result;
+        console.log(total_result);
+
+        let jsonData = total_result;
         //列标题，逗号隔开，每一个逗号就是隔开一个单元格
-        let str = `日期,最大值,最小值,平均值\n`;
+        let str = `日期,属性ID,最大值,最小值,平均值\n`;
         //增加\t为了不让表格显示科学计数法或者其他格式
         for (let i = 0; i < jsonData.length; i++) {
           for (let item in jsonData[i]) {
@@ -362,7 +372,7 @@
           }
           str += '\n';
         }
-        console.log(str);
+        // console.log(str);
         //encodeURIComponent解决中文乱码
         let uri = 'data:text/csv;charset=utf-8,\ufeff' + encodeURIComponent(str);
         //通过创建a标签实现
@@ -424,7 +434,7 @@
     },
     computed: {
       statTimeDuration: {
-        get: function() {
+        get: function () {
           return this.$store.state.device.monitorDate;
         }
       }

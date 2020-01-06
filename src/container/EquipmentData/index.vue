@@ -159,7 +159,7 @@
           "indexUnit": "",
           "timestamp": ""
         }],
-        allTableData: [],
+        //allTableData: [],
         multipleSelection: [],
         updateData: {
           deviceId: '',
@@ -432,8 +432,8 @@
       this.getCityList();
       //获取所有设备信息
       this.getDeviceData();
-      this.allTableData = (await getDevicesDataApi('all')).data.d;
-      console.log(this.allTableData);
+      // this.allTableData = (await getDevicesDataApi('all')).data.d;
+      // console.log(this.allTableData);
     }
   }
 </script>
