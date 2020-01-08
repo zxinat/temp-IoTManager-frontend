@@ -17,7 +17,7 @@
             </div>
             <img src="./Scripts/images/user.png"/>
             <el-form-item prop="name" :rules="[{ required: true, message: '用户名必填'}]">
-              <input class="form-control" type="text" v-model="form.name" placeholder="请输入用户名">
+              <input class="form-control" type="text" v-model="form.name" placeholder="请输入用户名" @keyup.enter="login">
             </el-form-item>
           </div>
           <div class="nyam_login_box_div">
@@ -26,7 +26,7 @@
             </div>
             <img src="./Scripts/images/padlock.png"/>
             <el-form-item prop="password" :rules="[{ required: true, message: '密码必填'}]">
-              <input class="form-control" type="password" v-model="form.password" autocomplete="off" placeholder="请输入密码">
+              <input class="form-control" type="password" v-model="form.password" autocomplete="off" placeholder="请输入密码" @keyup.enter="login">
             </el-form-item>
           </div>
           <el-button class="btn btn-primary nyam_login_btn pull-left" style="background-color: #45a9ff;" @click="login">登录</el-button>
