@@ -1,30 +1,35 @@
 <template>
-  <div class="login-container">
-    <div class="login-box">
-      <div class="login-form">
-        <h2>登录</h2>
+  <div class="nyam_loginbg">
+    <div class="nyam_login_left"></div>
+    <div class="nyam_login_right">
+      <div class="nyam_login_logo">
+        <img src="./Scripts/images/nylogo_cloud.png" class="nyam_login_logoimg pull-left"/>
+        <div class="nyam_login_logotext pull-left">
+          <span style="font-family: Consolas;">CloudWeaver</span>
+        </div>
+        <div class="clear"></div>
+      </div>
+      <div class="nyam_login_box">
         <el-form ref="form" :model="form" label-width="80px">
-          <el-form-item prop="name" label="用户名" :rules="[{ required: true, message: '用户名必填'}]">
-            <el-input v-model="form.name"></el-input>
-          </el-form-item>
-          <el-form-item prop="password" label="密码" :rules="[{ required: true, message: '密码必填'}]">
-            <el-input type="password" v-model="form.password" autocomplete="off"></el-input>
-          </el-form-item>
-          <!--<el-form-item prop="pwd" label="确认密码" :rules="[{-->
-                                                    <!--required:true,message:'确认密码',trigger:'blur'-->
-                                                    <!--}]">-->
-            <!--<el-input type="password" v-model="form.confirmPwd" autocomplete="off"></el-input>-->
-          <!--</el-form-item>-->
-          <!--<span class="right"><router-link to="/register" class="hide-underline">没有账号?注册一个</router-link></span>-->
+          <div class="nyam_login_box_div">
+            <div style="position: absolute; top: -24px; left: 230px; z-index: 2; color: rgba(255, 255, 255, 0.25); ">
 
-          <!--<el-form-item prop="type"  style="text-align: left" label="用户类别" :rules="[{ required: true, message: '用户类别必填'}]">-->
-            <!--<el-select v-model="form.type" placeholder="请选择用户类别">-->
-              <!--<el-option label="用户" value="normal"></el-option>-->
-              <!--<el-option label="管理" value="management"></el-option>-->
-              <!--<el-option label="超级管理员" value="superManagement"></el-option>-->
-            <!--</el-select>-->
-          <!--</el-form-item>-->
-          <el-button type="primary" @click="login">登录</el-button>
+            </div>
+            <img src="./Scripts/images/user.png"/>
+            <el-form-item prop="name" :rules="[{ required: true, message: '用户名必填'}]">
+              <input class="form-control" type="text" v-model="form.name" placeholder="请输入用户名">
+            </el-form-item>
+          </div>
+          <div class="nyam_login_box_div">
+            <div style="position: absolute; top: -24px; left: 230px; z-index: 2; color: rgba(255, 255, 255, 0.25); ">
+
+            </div>
+            <img src="./Scripts/images/padlock.png"/>
+            <el-form-item prop="password" :rules="[{ required: true, message: '密码必填'}]">
+              <input class="form-control" type="password" v-model="form.password" autocomplete="off" placeholder="请输入密码">
+            </el-form-item>
+          </div>
+          <el-button class="btn btn-primary nyam_login_btn pull-left" style="background-color: #45a9ff;" @click="login">登录</el-button>
         </el-form>
       </div>
     </div>
@@ -35,6 +40,8 @@
   import {getAuthByUid, getRegionLevelMenu, loginApi} from '../../api/api';
   import {setCookie} from '../../../utils/package-cookies';
   import {setItemToLocalstorage} from '../../../utils/package-localstorage';
+  import './Scripts/jquery/jquery-1.11.1.js';
+  import './Scripts/bootstrap/js/bootstrap.min';
 
   export default {
     name: 'Login',
@@ -51,7 +58,7 @@
     computed: {},
     methods: {
       async login() {
-          this.submitForm('form');
+        this.submitForm('form');
         // const res = await loginApi(this.form);
         //setCookie('userSessionID',res.data.d.sessionId,20);
         //setItemToLocalstorage('userInfo',res.data.d.user);
@@ -62,16 +69,16 @@
         this.$refs[formName].validate(async (valid) => {
           if (valid) {
             const res = await loginApi(this.form);
-            if(res.data.d.status === 'success') {
-              const auth =  (await getAuthByUid(res.data.d.uid)).data.d;
-              setCookie('userSessionID',res.data.d.sessionId,20);//存储sessionID
-              setItemToLocalstorage('userInfo',res.data.d.user);//存储用户信息
+            if (res.data.d.status === 'success') {
+              const auth = (await getAuthByUid(res.data.d.uid)).data.d;
+              setCookie('userSessionID', res.data.d.sessionId, 20);//存储sessionID
+              setItemToLocalstorage('userInfo', res.data.d.user);//存储用户信息
               setItemToLocalstorage('auth', auth);
               // const region = (await getRegionLevelMenu()).data.d;
               // firstLevel = region['first'];
               // secondLevel = region['second'];
               // thirdLevel = region['third'];
-              await this.$store.dispatch('userInfo/setUserInfo',this.form);
+              await this.$store.dispatch('userInfo/setUserInfo', this.form);
               this.$router.push('/dashboard');
             } else {
               console.log(res.data.d);
@@ -89,33 +96,12 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  .login-container {
-    text-align: center;
-    width: 100%;
-    height: 100%;
-    margin: 0px auto;
-    display: table;
+  @import "./Scripts/bootstrap/css/bootstrap.min.css";
 
-    .login-box {
-      display: table-cell;
-      vertical-align: middle;
+  @import "./Scripts/css/ny_bootstrap.css";
+  @import "./Scripts/css/nyam_base.css";
+  @import "./Scripts/css/nyam_layouts.css";
 
-      .login-form {
-        width: 25%;
-        margin: auto;
-        padding: 2% 2%;
-        /*border: 1px solid gray;*/
-        border-radius: 5rem;
-        box-shadow: 0px 0px 15px #6c807b;
-
-        .right {
-          font-size: 14px;
-          display: block;
-          text-align: right;
-        }
-      }
-    }
-  }
 
 
 </style>
