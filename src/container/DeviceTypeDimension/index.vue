@@ -10,10 +10,6 @@
         end-placeholder="结束月份" @change="handleDateChange">
       </el-date-picker>
     </div>
-    <el-row>
-      <div v-loading="chartLoading" class="report-statistic-daily-histogram">
-      </div>
-    </el-row>
     <!--<el-steps style="margin: 20px 0" simple>-->
     <!--<el-step title="资源类别统计" icon="el-icon-upload"></el-step>-->
     <!--</el-steps>-->
@@ -26,6 +22,10 @@
         <div v-loading="chartLoading" class="report-statistic-daily-piechart2">
         </div>
       </el-col>
+    </el-row>
+    <el-row>
+      <div v-loading="chartLoading" class="report-statistic-daily-histogram">
+      </div>
     </el-row>
   </div>
 </template>
@@ -140,7 +140,7 @@
           },
           series: [
             {
-              name: '饼图',
+              name: '设备数',
               type: 'pie',
               radius: '50%',
               selectedMode: 'single',
