@@ -2,7 +2,7 @@
   <div class="alarm-record-container">
     <h3>设备告警信息（只显示最新10条）</h3>
     <el-table
-      :data="deviceData.alarmInfo"
+      :data="curDeviceData"
       stripe
       style="width: 80%; margin: 5px">
       <el-table-column
@@ -30,27 +30,13 @@
 </template>
 
 <script>
+  import {getAlarmInfoInAlarmRecord} from "../../api/api";
+
   export default {
     name: "AlarmRecord",
     data() {
       return {
-        tableData: [{
-          date: '2016-05-02 20:40',
-          data: '25',
-          alarm: '0'
-        }, {
-          date: '2016-06-02 20:40',
-          data: '25',
-          alarm: '1'
-        }, {
-          date: '2016-07-02 20:40',
-          data: '25',
-          alarm: '1'
-        }, {
-          date: '2016-08-02 20:40',
-          data: '25',
-          alarm: '0'
-        }]
+        curDeviceData: []
       }
     },
     computed:{
@@ -63,6 +49,18 @@
         set: function (newValue) {
           console.log('newvalue',newValue)
         }
+      }
+    },
+    watch: {
+      async deviceData(val) {
+        if (typeof this.deviceData === 'string') {
+          this.curDeviceData = (await getAlarmInfoInAlarmRecord(val)).data.d;
+        }
+      }
+    },
+    async mounted() {
+      if (typeof this.deviceData === 'string') {
+        this.curDeviceData = (await getAlarmInfoInAlarmRecord(this.deviceData)).data.d;
       }
     }
   }

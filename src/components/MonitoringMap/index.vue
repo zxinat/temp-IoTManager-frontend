@@ -7,7 +7,7 @@
 <script>
   import echarts from 'echarts';
   import  'echarts/extension/bmap/bmap';
-  import {getOneCityByName} from "../../api/api";
+  import {getDeviceLocation, getOneCityByName} from "../../api/api";
   export default {
     name: "MonitoringMap",
     data(){
@@ -60,8 +60,12 @@
         // this.mapOption.series[0].data=[{"name":val.city,"value":val.address}];
         // const city = (await getOneCityByName(val.city)).data.d;
         // console.log('city', val);
-        this.mapOption.bmap.center = [val.longitude, val.latitude];
-        this.mapConfigure();
+        if (typeof this.deviceData === 'string') {
+          let deviceLocation = (await getDeviceLocation(val)).data.d;
+          this.mapOption.bmap.center = [deviceLocation.longitude,
+            deviceLocation.latitude];
+          this.mapConfigure();
+        }
       }
     },
     methods:{
@@ -73,8 +77,12 @@
         bmap.addControl(new BMap.ScaleControl()); // 比例尺
       }
     },
-    mounted(){
-      this.mapConfigure();
+    async mounted(){
+      if (typeof this.deviceData === 'string') {
+        let deviceLocation = (await getDeviceLocation(this.deviceData)).data.d;
+        this.mapOption.bmap.center = [deviceLocation.longitude, deviceLocation.latitude];
+        this.mapConfigure();
+      }
     }
 
   }

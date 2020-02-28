@@ -1,6 +1,6 @@
 <template>
     <div class="monitoring-config-container">
-        <h3>{{deviceData.deviceName}}</h3>
+        <h3>{{deviceData}}</h3>
         <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
           <el-menu-item index="1">设备概况</el-menu-item>
           <!--<el-menu-item index="2">设备状态</el-menu-item>-->
@@ -27,7 +27,7 @@
     import DeviceProperty from '../../components/DeviceProperty/index';
     import DataStatistic from "../DataStatistic/index";
     import AlarmRecord from "../AlarmRecord/index";
-    import DeviceAlarmingRule from "../DeviceAlarmingRule/DeviceAlarmingRule";
+    import DeviceAlarmingRule from "../DeviceAlarmingRule/index";
     export default {
       name: "MonitoringConfig",
       data(){
@@ -52,7 +52,6 @@
       methods:{
         handleSelect(key, keyPath) {
           this.currentPage=key;
-          console.log('currentpage',typeof this.currentPage);
         }
       },
       components: {DeviceAlarmingRule, AlarmRecord, DataStatistic, MonitoringDeviceCard, MonitoringMap,DeviceProperty}

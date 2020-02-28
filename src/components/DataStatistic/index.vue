@@ -4,13 +4,20 @@
       {{deviceData.deviceName}}
     </div>
     <el-date-picker
-      v-if="curScale != '100'"
+      v-if="curScale !== '100'"
       v-model="timeDuration"
       type="daterange"
       range-separator="至"
       start-placeholder="开始日期"
       end-placeholder="结束日期">
     </el-date-picker>
+    <el-select v-if="curScale !== '100'" v-model="selectedField" placeholder="请选择属性">
+      <el-option
+        v-for="field in affiliateFields"
+        :key="field.fieldName"
+        :value="field.fieldId">
+      </el-option>
+    </el-select>
     <el-button v-if="curScale != '100'" type="primary" @click="getData">确定</el-button>
     <div v-loading="loading" class="data-statistic-line-chart"></div>
     <el-row style="margin-left: 10px">
@@ -32,63 +39,27 @@
 
 <script>
   import echarts from 'echarts';
-  import {getDataStatistic, getDayAggregateData, getDeviceStatus} from "../../api/api";
+  import {
+    get100DataInDataStatistic,
+    getDataStatistic,
+    getDayAggregateData, getDayAggregateDataInDataStatistic,
+    getDeviceStatus,
+    getFieldByDeviceName, getHourAggregateData, getMonthAggregateData
+  } from "../../api/api";
 
   export default {
     name: "DataStatistic",
     data() {
       return {
         curScale: '100',
+        affiliateFields: [],
+        selectedField: '',
         timeDuration: [],
         // 折线图数据
         chart: {},
         tableData: [],
         loading: false,
-        // dynamicChartOption: {
-        //   title: {
-        //     text: '数据统计',
-        //     show: false
-        //   },
-        //   tooltip: {
-        //     trigger: 'axis',
-        //     formatter: function (params) {
-        //       params = params[0];
-        //       var date = new Date(params.name);
-        //       return date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + ' : ' + params.value[1];
-        //     },
-        //     axisPointer: {
-        //       animation: false
-        //     }
-        //   },
-        //   toolbox: {
-        //     left: 'left',
-        //     feature: {
-        //       saveAsImage: {}
-        //     }
-        //   },
-        //   xAxis: {
-        //     type: 'time',
-        //     splitLine: {
-        //       show: true
-        //     }
-        //   },
-        //   yAxis: {
-        //     type: 'value',
-        //     boundaryGap: [0, 0],
-        //     splitLine: {
-        //       show: true
-        //     }
-        //   },
-        //   series: [{
-        //     name: '模拟数据',
-        //     type: 'line',
-        //     showSymbol: false,
-        //     hoverAnimation: false,
-        //     data: []
-        //   }]
-        // },
         chartOption: {
-          // color:[ '#d14a61', '#675bba'],
           title: {
             text: ''
           },
@@ -98,6 +69,10 @@
           },
           xAxis: {
             type: 'category',
+            axisLabel: {
+              interval: 0,
+              rotate: 30
+            },
             data: [],
           },
           yAxis: {
@@ -117,45 +92,39 @@
       }
     },
     methods: {
-      initChart() {
-        this.chart = echarts.init(document.getElementsByClassName('data-statistic-line-chart')[0]);
-        console.log(this.deviceData['hundredData']);
+      clearChart() {
+        this.chartOption.xAxis.data = [];
         this.chartOption.series = [];
         this.chartOption.legend.data = [];
+        this.chartOption.title.text = '';
+        this.chart.setOption(this.chartOption, true);
+      },
+      async initChart() {
+        this.chart = echarts.init(document.getElementsByClassName('data-statistic-line-chart')[0]);
+        this.clearChart();
+        let tmpChartOption = {};
+        if (typeof this.deviceData === 'string') {
+          tmpChartOption = (await get100DataInDataStatistic(this.deviceData)).data.d;
+        }
+        this.chartOption.xAxis.data = tmpChartOption.xAxis;
+        this.chartOption.series = tmpChartOption.series;
+        this.chartOption.legend.data = tmpChartOption.legend;
         this.chartOption.title.text = '最近100个数据';
-        let flag = false;
-        Object.keys(this.deviceData['hundredData']).forEach(v => {
-          if (flag === false) {
-            this.chartOption.xAxis.data = this.deviceData['hundredData'][v].map(e => {
-              return e['timestamp']
-            });
-          }
-          this.chartOption.series.push(
-            {type: 'line', name: v, data: this.deviceData['hundredData'][v].map(e => {return e['indexValue']})}
-          );
-          this.chartOption.legend.data.push(v);
-        });
-        // this.chartOption.series = {type: 'line', data: this.deviceData['hundredData'].map(e => {return e['indexValue']})};
-        // this.chartOption.xAxis.data = ['sa'];
-        // this.chartOption.series = [1];
-        this.chart.setOption(this.chartOption);
+        this.chart.setOption(this.chartOption, true);
       },
       setTimeDuration(value) {
         switch (value) {
           case 'hour':
             this.curScale = 'hour';
             this.getData();
-            // this.chart.setOption(this.chartOption,true);
             break;
           case 'day':
             this.curScale = 'day';
             this.getData();
-            // this.chart.setOption(this.chartOption,true);
             break;
           case 'month':
             this.curScale = 'month';
             this.getData();
-            // this.chart.setOption(this.chartOption,true);
             break;
           case '100':
             this.curScale = '100';
@@ -167,71 +136,70 @@
         }
       },
       async getData() {  // 替换为查询数据接口,参数为value(时间值)
-        this.loading = true;
-        this.$store.dispatch('device/setMonitorDate', this.timeDuration);
-        let s = {};
-        if (this.timeDuration.length > 0) {
-          const result = (await getDeviceStatus(this.deviceData.id, {
-            startTime: this.timeDuration[0],
-            endTime: this.timeDuration[1]
-          })).data.d;
-          s = result;
-        } else {
-          const result = (await getDeviceStatus(this.deviceData.id, {
-            startTime: new Date,
-            endTime: new Date
-          })).data.d;
-          s = result;
-        }
-        console.log(s);
-        this.$store.dispatch('device/setCurrentDeviceData', s);
-        this.setChartOption(this.curScale);
-        this.chart.setOption(this.chartOption, true);
-        this.loading = false;
-      },
-      setChartOption(scale) {
-        this.loading = true;
-        const scaleMap = {day: 'aggregateDayResult', hour: 'aggregateHourResult', month: 'aggregateMonthResult'};
         const titleMap = {day: '日统计', hour: '时统计', month: '月统计'};
-        if (this.$store.state.device.currentDeviceData[scaleMap[scale]] !== undefined
-          && this.$store.state.device.currentDeviceData[scaleMap[scale]].length > 0) {
-          this.chartOption.title.text = titleMap[scale];
-          this.chartOption.xAxis.data = this.$store.state.device.currentDeviceData[scaleMap[scale]][0]['avg']
-            .map(e => {
-              if (scale === 'day') {
-                return e['time']['year'] + '-' + e['time']['month'] + '-' + e['time']['day'];
-              } else if (scale === 'hour') {
-                return e['time']['year'] + '-' + e['time']['month'] + '-' + e['time']['day'] + ' ' + e['time']['hour'] + '时';
-              } else if (scale === 'month') {
-                return e['time']['year'] + '-' + e['time']['month'];
-              }
-            });
-          const l = [];
-          const value = this.$store.state.device.currentDeviceData[scaleMap[scale]]
-            .map(e => {
-              let obj = {};
-              obj['name'] = e['index'];
-              l.push(e['index']);
-              obj['type'] = 'line';
-              obj['data'] = e['avg'].map(t => {
-                return t['avg'];
-              });
-              return obj;
-            });
-          this.chartOption.series = value;
-          console.log(this.chartOption);
-          this.chartOption.legend.data = l;
-          this.chart.setOption(this.chartOption, true);
+        if (this.timeDuration.length < 2 || this.selectedField === '') {
+          this.clearChart();
+          this.$alert('请选择日期和属性', '提示');
         } else {
-          console.log('empty');
-          this.chartOption.series = [];
-          this.chartOption.xAxis.data = [];
+          this.clearChart();
+          let tmpChartOption = {};
+          if (typeof this.deviceData === 'string') {
+            let timeObj = {
+              startTime: this.timeDuration[0],
+              endTime: this.timeDuration[1]
+            };
+            if (this.curScale === 'hour') {
+              tmpChartOption = (await getHourAggregateData(this.deviceData, this.selectedField, timeObj)).data.d;
+            } else if (this.curScale === 'day') {
+              tmpChartOption = (await getDayAggregateDataInDataStatistic(this.deviceData, this.selectedField, timeObj)).data.d;
+            } else if (this.curScale === 'month') {
+              tmpChartOption = (await getMonthAggregateData(this.deviceData, this.selectedField, timeObj)).data.d;
+            }
+          }
+          let min = [];
+          let avg = [];
+          let max = [];
+          let x = [];
+          tmpChartOption.min.forEach(e => {
+            min.push(e.min);
+            let t = e.time.year + '-' + e.time.month;
+            if (this.curScale === 'day') {
+              t += '-';
+              t += e.time.day;
+            }
+            if (this.curScale === 'hour') {
+              t += ' ';
+              t += e.time.hour;
+            }
+            x.push(t);
+          });
+          tmpChartOption.avg.forEach(e => {
+            avg.push(e.avg);
+          });
+          tmpChartOption.max.forEach(e => {
+            max.push(e.max);
+          });
+          let series = [];
+          series.push({type: 'line', name: '最大值', data: max, connectNulls: true});
+          series.push({type: 'line', name: '平均值', data: avg, connectNulls: true});
+          series.push({type: 'line', name: '最小值', data: min, connectNulls: true});
+
+          let legend = ['最大值', '平均值', '最小值'];
+
+          this.chartOption.title.text = titleMap[this.curScale];
+          this.chartOption.xAxis.data = x;
+          this.chartOption.series = series;
+          this.chartOption.legend.data = legend;
+
           this.chart.setOption(this.chartOption, true);
         }
-        this.loading = false;
-      }
+      },
     },
-    mounted() {
+    async mounted() {
+      this.curScale = '100';
+      if (typeof this.deviceData === 'string') {
+        this.affiliateFields = (await getFieldByDeviceName(this.deviceData)).data.d;
+      }
       this.initChart();
     },
     computed: {
@@ -248,10 +216,16 @@
       }
     },
     watch:{
-      deviceData(val, oldVal) {
-        this.loading = true;
-        this.setChartOption(this.curScale);
-        this.loading = false;
+      async deviceData(val) {
+        if (typeof this.deviceData === 'string') {
+          this.affiliateFields = (await getFieldByDeviceName(val)).data.d;
+        }
+        console.log(this.affiliateFields);
+        if (this.curScale === '100') {
+          this.initChart();
+        } else {
+          this.getData();
+        }
       }
     }
   }

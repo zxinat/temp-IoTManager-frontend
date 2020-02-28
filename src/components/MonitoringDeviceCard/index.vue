@@ -8,22 +8,16 @@
             <span>属性信息</span>
           </div>
           <div  class="text item">
-            {{'设备名称：'+deviceData.deviceName}}
+            {{'设备名称：'+curDeviceData.deviceName}}
           </div>
           <div  class="text item">
-            {{'设备编号：'+deviceData.hardwareDeviceID}}
+            {{'设备编号：'+curDeviceData.hardwareDeviceID}}
           </div>
           <div  class="text item">
-            {{'设备类型：'+deviceData.deviceType}}
+            {{'设备类型：'+curDeviceData.deviceType}}
           </div>
-          <!--<div  class="text item">-->
-            <!--{{'东经：    '+deviceData.deviceName}}-->
-          <!--</div>-->
-          <!--<div  class="text item">-->
-            <!--{{'北纬：    '+deviceData.deviceName}}-->
-          <!--</div>-->
           <div  class="text item">
-            {{'设备状态：'+deviceData.deviceState}}
+            {{'设备状态：'+curDeviceData.deviceState}}
           </div>
         </el-card>
       </el-col>
@@ -34,23 +28,17 @@
             <span>设备状态</span>
           </div>
           <div  class="text item">
-            {{'启动时间：'+deviceData.startTime}}
+            {{'启动时间：'+curDeviceData.startTime}}
           </div>
           <div  class="text item">
-            {{'运行时长：'+deviceData.runningTime}}
+            {{'运行时长：'+curDeviceData.runningTime}}
           </div>
           <div  class="text item">
-            {{'报警次数：'+deviceData.alarmTimes}}
+            {{'报警次数：'+curDeviceData.alarmTimes}}
           </div>
           <div  class="text item">
-            {{'最近报警时间：'+deviceData.recentAlarmTime}}
+            {{'最近报警时间：'+curDeviceData.recentAlarmTime}}
           </div>
-          <!--<div  class="text item">-->
-            <!--{{'温度：'+deviceData.temperature}}-->
-          <!--</div>-->
-          <!--<div  class="text item">-->
-            <!--{{'湿度：'+deviceData.humidity}}-->
-          <!--</div>-->
         </el-card>
       </el-col>
       <el-col style="margin: 5px; width: 30%; float: left;">
@@ -60,7 +48,7 @@
           <span>设备快照</span>
         </div>
         <div v-loading="uploadLoading">
-          <img :src="deviceData['base64Image']" class="image">
+          <img :src="curDeviceData['base64Image']" class="image">
         </div>
         </el-card>
         <el-upload
@@ -90,12 +78,13 @@
 <script>
   import UploadImg from "../UploadImg/index";
   import MonitoringMap from "../MonitoringMap/index";
-  import {getPicture, uploadPicture} from "../../api/api";
+  import {getDeviceDataInDeviceCard, getPicture, uploadPicture} from "../../api/api";
   export default {
     name: "MonitoringDeviceCard",
     components: {MonitoringMap, UploadImg},
     data(){
       return {
+        curDeviceData: {},
         uploadLoading: false,
         imgData: '',
         deviceId: '',
@@ -116,6 +105,11 @@
       }
     },
     watch:{
+      async deviceData(val) {
+        if (typeof this.deviceData === 'string') {
+          this.curDeviceData = (await getDeviceDataInDeviceCard(val)).data.d;
+        }
+      }
     },
     methods:{
       handleRemove(file, fileList) {
@@ -138,9 +132,9 @@
         reader.readAsDataURL(file.raw);
         reader.onload = async () => {
           base64 = reader.result;
-          const result = (await uploadPicture({deviceId: this.deviceData.hardwareDeviceID, picture: base64})).data.c;
+          const result = (await uploadPicture({deviceId: this.curDeviceData.hardwareDeviceId, picture: base64})).data.c;
           if (result === 200) {
-            this.deviceData['base64Image'] = base64;
+            this.curDeviceData['base64Image'] = base64;
             this.$message.success('上传成功');
           }
         };
@@ -148,6 +142,9 @@
       }
     },
     async mounted(){
+      if (typeof this.deviceData === 'string') {
+        this.curDeviceData = (await getDeviceDataInDeviceCard(this.deviceData)).data.d;
+      }
     }
   }
 </script>

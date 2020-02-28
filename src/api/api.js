@@ -823,3 +823,43 @@ export function getNewName(id) {
 export function getUserThreeLevelName(uid) {
   return axios.get(`/api/user/${uid}`)
 }
+
+export function getDeviceLocation(deviceName) {
+  return axios.get(`/api/device/deviceLocation?deviceName=${deviceName}`);
+}
+
+export function getDeviceDataInDeviceCard(deviceName) {
+  return axios.get(`/api/deviceData/dataInDeviceCard?deviceName=${deviceName}`);
+}
+
+export function getDeviceDataInDeviceProperty(deviceName) {
+  return axios.get(`/api/deviceData/dataInDeviceProperty?deviceName=${deviceName}`);
+}
+
+export function getAlarmInfoInAlarmRecord(deviceName) {
+  return axios.get(`/api/deviceData/dataInAlarmRecord?deviceName=${deviceName}`);
+}
+
+export function getRuleInDeviceAlarmingRule(deviceName) {
+  return axios.get(`/api/deviceData/ruleInDeviceAlarmingRule?deviceName=${deviceName}`);
+}
+
+export function get100DataInDataStatistic(deviceName) {
+  return axios.get(`/api/deviceData/100DataInDataStatistic?deviceName=${deviceName}`);
+}
+
+export function getFieldByDeviceName(deviceName) {
+  return axios.get(`/api/deviceData/affiliateField?deviceName=${deviceName}`);
+}
+
+export function getHourAggregateData(deviceName, fieldId, time) {
+  return axios.post(`/api/deviceData/hourAggregateData?deviceName=${deviceName}&fieldId=${fieldId}`, time);
+}
+
+export function getDayAggregateDataInDataStatistic(deviceName, fieldId, time) {
+  return axios.post(`/api/deviceData/dayAggregateData?deviceName=${deviceName}&fieldId=${fieldId}`, time);
+}
+
+export function getMonthAggregateData(deviceName, fieldId, time) {
+  return axios.post(`/api/deviceData/monthAggregateData?deviceName=${deviceName}&fieldId=${fieldId}`, time);
+}

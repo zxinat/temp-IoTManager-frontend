@@ -330,21 +330,8 @@
       async handleNodeClick(data) {
         this.pageLoading = true;
         if (data.id) {
-          if (this.statTimeDuration.length > 0) {
-            const result = (await getDeviceStatus(data.id, {
-              startTime: this.statTimeDuration[0],
-              endTime: this.statTimeDuration[1]
-            })).data.d;
-            this.deviceData = result;
-            this.$store.dispatch('device/setCurrentDeviceData', result);
-          } else {
-            const result = (await getDeviceStatus(data.id, {
-              startTime: new Date,
-              endTime: new Date
-            })).data.d;
-            this.deviceData = result;
-            this.$store.dispatch('device/setCurrentDeviceData', result);
-          }
+          //data.label是设备名称
+          this.$store.dispatch('device/setCurrentDeviceData', data.label);
         }
         this.pageLoading = false;
       },
@@ -431,13 +418,6 @@
       await this.getDevices();
       this.severityOptions = (await getSeverity()).data.d;
       // this.treeData = (await getDeviceTreeApi(this.form.city, this.form.factory)).data.d;
-    },
-    computed: {
-      statTimeDuration: {
-        get: function () {
-          return this.$store.state.device.monitorDate;
-        }
-      }
     },
     components: {MonitoringConfig, MonitoringTree},
   }
