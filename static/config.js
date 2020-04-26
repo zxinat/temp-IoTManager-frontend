@@ -1,0 +1,1 @@
+const IPCONFIG='http://localhost:5000';

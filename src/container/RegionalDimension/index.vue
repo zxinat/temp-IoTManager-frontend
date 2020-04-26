@@ -44,6 +44,7 @@
       return {
         treeLoading: false,
         chartLoading: false,
+        curCity:'',
         curFactory: '',
         nameOptions: [],
         selectedType: '',
@@ -143,11 +144,15 @@
         this.chart.setOption(this.histogramOption)
       },
       async handleNodeClick(data) {
+        console.log("handleNodeClick");
+        console.log(data);
         this.chartLoading = true;
         if (data.factoryName) {
           this.curFactory = data.factoryName;
+          this.curCity=data.cityName;
+          console.log(data.factoryName);
           if (this.selectedDate.length > 1) {
-            const result = (await getReportByRegion(data.factoryName, {
+            const result = (await getReportByRegion(data.cityName,data.factoryName, {
               startTime: this.selectedDate[0],
               endTime: this.selectedDate[1]
             })).data.d;
@@ -155,7 +160,7 @@
             this.histogramOption.series = result['series'];
             this.chart.setOption(this.histogramOption, true);
           } else {
-            const result = (await getReportByRegion(data.factoryName, {
+            const result = (await getReportByRegion(data.cityName,data.factoryName, {
               startTime: new Date('1980/1/1'),
               endTime: new Date('2030/12/31')
             })).data.d;
@@ -169,7 +174,7 @@
       async handleTimeChange() {
         if (this.curFactory !== '') {
           this.chartLoading = true;
-          const result = (await getReportByRegion(this.curFactory, {
+          const result = (await getReportByRegion(this.curCity,this.curFactory, {
             startTime: this.selectedDate[0],
             endTime: this.selectedDate[1]
           })).data.d;

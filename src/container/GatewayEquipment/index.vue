@@ -246,7 +246,7 @@
         </el-form-item>
         <el-form-item :label="GLOBAL.secondLevel" prop="factory" label-width="120px"
                       :rules="[{required: true, message: GLOBAL.secondLevel+'不能为空'}]">
-          <el-select v-model="newGatewayData.factory" @change="getNewWorkshop(newGatewayData.factory)"
+          <el-select v-model="newGatewayData.factory" @change="getNewWorkshop(newGatewayData.city,newGatewayData.factory)"
                      placeholder="请选择">
             <el-option
               v-for="f in factory"
@@ -437,7 +437,8 @@
     getGatewayType,
     getWorkshop, getWorkshopOptions,
     searchGatewaysApi,
-    updateGatewayApi
+    updateGatewayApi,
+    listWorkshopName
   } from '../../api/api';
   import UploadImg from "../../components/UploadImg/index";
   import FileSaver from 'file-saver'
@@ -778,7 +779,7 @@
                   message: '添加成功',
                   type: 'success'
                 });
-                this.workshop = (await getWorkshopOptions(this.workshopTable.factory)).data.d;
+                this.workshop = (await getWorkshopOptions(this.workshopTable.city,this.workshopTable.factory)).data.d;
                 this.getDeviceOptions();
               }
             } catch (e) {
@@ -792,15 +793,15 @@
         this.updateFactory = (await getFactoryOptions(city)).data.d;
         if (this.updateFactory[0] != null) {
           this.updateData.factory = this.updateFactory[0].value;
-          this.getUpdateWorkshop(this.updateData.factory);
+          this.getUpdateWorkshop(city,this.updateData.factory);
         } else {
           this.updateData.factory = "";
           this.updateData.workshop = "";
           this.updateFactory = [];
         }
       },
-      async getUpdateWorkshop(factory) {
-        this.updateWorkshop = (await getWorkshopOptions(factory)).data.d;
+      async getUpdateWorkshop(city,factory) {
+        this.updateWorkshop = (await getWorkshopOptions(city,factory)).data.d;
         if (this.updateWorkshop[0] != null) {
           this.updateData.workshop = this.updateWorkshop[0].value;
         } else {
@@ -811,19 +812,23 @@
         this.factory = (await getFactoryOptions(city)).data.d;
         if (this.factory[0] != null) {
           this.newGatewayData.factory = this.factory[0].value;
-          this.getNewWorkshop(this.newGatewayData.factory);
+          this.getNewWorkshop(this.newGatewayData.city,this.newGatewayData.factory);
         } else {
           this.newGatewayData.factory = "";
           this.newGatewayData.workshop = "";
           this.factory = [];
+          this.workshop=[];
         }
       },
-      async getNewWorkshop(factory) {
-        this.workshop = (await getWorkshopOptions(factory)).data.d;
-        if (this.workshop[0] != null) {
+      async getNewWorkshop(city,factory) {
+        this.workshop = (await listWorkshopName(city,factory)).data.d;
+        if (this.workshop!= null) {
           this.newGatewayData.workshop = this.workshop[0].value;
+          console.log(this.newGatewayData.workshop);
         } else {
+          console.log("实验室为空！");
           this.newGatewayData.workshop = "";
+          this.workshop=[];
         }
       },
       async update(formName) {
@@ -853,7 +858,7 @@
         console.log('test', row);
         this.updateData = JSON.parse(JSON.stringify(row));
         this.updateFactory = (await getFactoryOptions(row.city)).data.d;
-        this.updateWorkshop = (await getWorkshopOptions(row.factory)).data.d;
+        this.updateWorkshop = (await getWorkshopOptions(row.city,row.factory)).data.d;
         this.updateFormVisible = true
       },
       async deleteGateway(row) {
@@ -953,7 +958,7 @@
           this.factoryOptions = (await getFactoryOptions(city)).data.d;
           if (this.factoryOptions[0] != null) {
             this.searchGateway.factory = this.factoryOptions[0].value;
-            this.getWorkshopList(this.searchGateway.factory);
+            this.getWorkshopList(city,this.searchGateway.factory);
           } else {
             this.searchGateway.factory = "";
             this.searchGateway.workshop = "";
@@ -967,8 +972,8 @@
         }
         // 调获取工厂接口，searchGateway.city参数
       },
-      async getWorkshopList(factory) {
-        this.workshopOptions = (await getWorkshopOptions(factory)).data.d;
+      async getWorkshopList(city,factory) {
+        this.workshopOptions = (await getWorkshopOptions(city,factory)).data.d;
         if (this.workshopOptions[0] != null) {
           this.searchGateway.workshop = this.workshopOptions[0].value;
         } else {

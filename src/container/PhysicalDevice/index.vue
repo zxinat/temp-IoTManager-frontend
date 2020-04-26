@@ -216,7 +216,7 @@
                       :rules="[{required: true, message: '所属网关不能为空'}]">
           <el-select v-model="updateData.gatewayId" placeholder="选择所属网关">
             <el-option
-              v-for="dt in affiliateGateways"
+              v-for="dt in gateway"
               :key="dt.id"
               :label="dt.gatewayName"
               :value="dt.gatewayName">
@@ -284,7 +284,7 @@
         </el-form-item>
         <el-form-item :label="GLOBAL.secondLevel" prop="factory" label-width="120px"
                       :rules="[{required: true, message: GLOBAL.secondLevel+'不能为空'}]">
-          <el-select v-model="newDeviceData.factory" @change="getNewWorkshop(newDeviceData.factory)" placeholder="请选择">
+          <el-select v-model="newDeviceData.factory" @change="getNewWorkshop(newDeviceData.city,newDeviceData.factory)" placeholder="请选择">
             <el-option
               v-for="f in factory"
               :key="f.value"
@@ -296,7 +296,7 @@
         </el-form-item>
         <el-form-item :label="GLOBAL.thirdLevel" prop="workshop" label-width="120px"
                       :rules="[{required: true, message: GLOBAL.thirdLevel+'不能为空'}]">
-          <el-select v-model="newDeviceData.workshop" placeholder="请选择">
+          <el-select v-model="newDeviceData.workshop" @change="getNewGateway(newDeviceData.city,newDeviceData.factory,newDeviceData.workshop)" placeholder="请选择">
             <el-option
               v-for="w in workshop"
               :key="w.value"
@@ -326,7 +326,7 @@
                       :rules="[{required: true, message: '所属网关不能为空'}]">
           <el-select v-model="newDeviceData.gatewayId" placeholder="选择所属网关">
             <el-option
-              v-for="dt in affiliateGateways"
+              v-for="dt in gateway"
               :key="dt.id"
               :label="dt.gatewayName"
               :value="dt.gatewayName">
@@ -536,7 +536,8 @@
     getWorkshopOptions,
     searchDevicesByDeviceIdApi,
     searchDevicesByDeviceNameApi, setDeviceTags,
-    updateDeviceApi
+    updateDeviceApi,
+    getGatewayByWorkshop
   } from '../../api/api';
   import UploadImg from "../../components/UploadImg/index";
   import FileSaver from 'file-saver'
@@ -666,7 +667,9 @@
         deleteData: {
           number: []
         },
-        curPage: 1
+        curPage: 1,
+
+        gateway:[]
       }
     },
 
@@ -929,19 +932,30 @@
         this.factory = (await getFactoryOptions(city)).data.d;
         if (this.factory[0] != null) {
           this.newDeviceData.factory = this.factory[0].value;
-          this.getNewWorkshop(this.newDeviceData.factory);
+          this.getNewWorkshop(city,this.newDeviceData.factory);
         } else {
           this.newDeviceData.factory = "";
           this.newDeviceData.workshop = "";
           this.factory = [];
         }
       },
-      async getNewWorkshop(factory) {
-        this.workshop = (await getWorkshopOptions(factory)).data.d;
+      async getNewWorkshop(city,factory) {
+        console.log("getNewWorkshop run");
+        this.workshop = (await getWorkshopOptions(city,factory)).data.d;
         if (this.workshop[0] != null) {
           this.newDeviceData.workshop = this.workshop[0].value;
+          this.getNewGateway(this.newDeviceData.city,this.newDeviceData.factory,this.newDeviceData.workshop);
         } else {
           this.newDeviceData.workshop = "";
+        }
+      },
+      async getNewGateway(city,factory,workshop){
+        console.log("getNewGateway run");
+        this.gateway=(await getGatewayByWorkshop(city,factory,workshop)).data.d;
+        if (this.gateway[0]!=null){
+          this.newDeviceData.gatewayId=this.gateway[0].gatewayName;
+        }else{
+          this.newDeviceData.gatewayId="";
         }
       },
       async update(formName) {
@@ -1012,7 +1026,7 @@
       async openUpdateForm(row) {//打开更新表单
         this.updateData = row;
         this.updateFactory = (await getFactoryOptions(row.city)).data.d;
-        this.updateWorkshop = (await getWorkshopOptions(row.factory)).data.d;
+        this.updateWorkshop = (await getWorkshopOptions(row.cityName,row.factory)).data.d;
         this.updateFormVisible = true;
       },
       async deleteDevice(row) {
@@ -1119,7 +1133,7 @@
           this.factoryOptions = (await getFactoryOptions(city)).data.d;
           if (this.factoryOptions[0] != null) {
             this.searchDevice.factory = this.factoryOptions[0].value;
-            this.getWorkshopList(this.searchDevice.factory);
+            this.getWorkshopList(city,this.searchDevice.factory);
           } else {
             this.searchDevice.factory = "";
             this.searchDevice.workshop = "";
@@ -1133,8 +1147,8 @@
         }
         // 调获取工厂接口，searchDevice.city参数
       },
-      async getWorkshopList(factory) {
-        this.workshopOptions = (await getWorkshopOptions(factory)).data.d;
+      async getWorkshopList(city,factory) {
+        this.workshopOptions = (await getWorkshopOptions(city,factory)).data.d;
         if (this.workshopOptions[0] != null) {
           this.searchDevice.workshop = this.workshopOptions[0].value;
         } else {
@@ -1181,7 +1195,7 @@
       this.updateCity = (await getCityOptions()).data.d;
       this.newCityList = (await getCity(1, 'id', 'asc', 0)).data.d;
       this.newFactoryList = (await getFactory(1, 'id', 'asc', 0)).data.d;
-      this.affiliateGateways = (await getGatewaysApi('all')).data.d;
+      //this.affiliateGateways = (await getGatewaysApi('all')).data.d;
       // this.factory = (await getFactory()).data.d;
       // this.workshop = (await getWorkshop()).data.d;
       this.deviceState = (await getDeviceState()).data.d;

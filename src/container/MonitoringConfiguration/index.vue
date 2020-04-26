@@ -1,5 +1,6 @@
 <template>
   <div>
+
     <el-form :inline="true" :model="form" class="header">
       <el-form-item :label="GLOBAL.firstLevel" v-if="checkMonitorAuth(['MONITOR_RETRIEVE'])">
         <el-select v-model="form.city" @change="getFactoryList(form.city)" placeholder="请选择城市">
@@ -25,12 +26,13 @@
       <!--<el-button type="primary" @click="filter"><img src="../../assets/img/find.svg">筛选</el-button>-->
       <!--</el-form-item>-->
       <el-form-item style="float: right" v-if="checkMonitorAuth(['MONITOR_EXPORT_DEVICEDATA'])">
-        <el-button type="primary" @click="showExportDeviceData = true">导出设备数据</el-button>
+        <el-button type="primary" @click="showExportDeviceData=true">导出设备数据</el-button>
       </el-form-item>
       <el-form-item style="float: right" v-if="checkMonitorAuth(['MONITOR_DEFINE_THRESHOLD'])">
         <el-button type="primary" @click="showAlarmRules=true">定义报警规则</el-button>
       </el-form-item>
     </el-form>
+
     <el-dialog
       title="选择导出数据时间范围"
       :visible.sync="showExportDeviceData"
@@ -58,10 +60,11 @@
       </div>
       <el-divider></el-divider>
       <span slot="footer" class="dialog-footer">
-    <el-button @click="showExportDeviceData = false">取 消</el-button>
-    <el-button type="primary" @click="exportDeviceData()">确 定</el-button>
+      <el-button @click="showExportDeviceData = false">取 消</el-button>
+      <el-button type="primary" @click="exportDeviceData()">确 定</el-button>
       </span>
     </el-dialog>
+
     <el-dialog title="新建规则" :visible.sync="showAlarmRules">
       <el-form ref="alarmRulesForm" :model="alarmRules" label-width="80px">
         <el-form-item prop="name" label="规则名称" :rules="[{ required: true, message: '名称不能为空'}]">
@@ -142,6 +145,7 @@
         <el-button type="primary" @click="submitAlarmRules">确 定</el-button>
       </div>
     </el-dialog>
+
     <el-row v-if="checkMonitorAuth(['MONITOR_RETRIEVE'])">
       <el-col :span="3">
         <!--<MonitoringTree></MonitoringTree>-->
@@ -155,6 +159,7 @@
         <h2 v-else>无数据</h2>
       </el-col>
     </el-row>
+
     <el-dialog title="新增设备属性" :visible.sync="addFieldVisible">
       <el-form :model="fieldTable" ref="fieldTable">
         <el-form-item label="属性名" prop="fieldName" label-width="120px"
@@ -178,6 +183,7 @@
         <el-button type="primary" @click="addField('fieldTable')">确 定</el-button>
       </div>
     </el-dialog>
+
   </div>
 </template>
 
@@ -188,7 +194,7 @@
     addRule, createNewField, getAffiliateFields,
     getCityOptions, getDayAggregateData,
     getDeviceApi,
-    getDevicesApi, getDeviceStatus,
+    getDevicesApi,
     getDeviceTreeApi,
     getFactoryOptions,
     getFields, getSeverity
@@ -199,9 +205,14 @@
     name: "MonitoringConfiguration",
     data() {
       return {
+        deviceId:'Pangu001',
         hasData: true,
         exportScale: '',
-        deviceData: {},
+        deviceData: {
+          affiliateFields:[],
+          hardwareDeviceID:'',
+
+        },
         exportIndex: [],
         pageLoading: false,
         treeLoading: false,
@@ -259,8 +270,8 @@
       checkMonitorAuth(auth) {
         return checkAuth(auth);
       },
-      async getAffiliateField(deviceId) {
-        this.fieldOptions = (await getAffiliateFields(deviceId)).data.d;
+      async getAffiliateField(deviceName) {
+        this.fieldOptions = (await getAffiliateFields(deviceName)).data.d;
       },
       async filter() {
         this.treeLoading = true;
@@ -332,6 +343,9 @@
         if (data.id) {
           //data.label是设备名称
           this.$store.dispatch('device/setCurrentDeviceData', data.label);
+          this.deviceData.hardwareDeviceID=data.deviceId;
+          this.deviceData.affiliateFields=(await getAffiliateFields(data.deviceId)).data.d;
+          
         }
         this.pageLoading = false;
       },
@@ -344,7 +358,18 @@
             startTime: this.exportDeviceTime[0],
             endTime: this.exportDeviceTime[1]
           }, this.exportScale)).data.d;
-          total_result = total_result.concat(result);
+          console.log(result);
+          let exportData=[];
+          for (let j=0;j<result.length;j++){
+            exportData[j]={
+              time:result[j].time,
+              index:result[j].index,
+              max:result[j].max,
+              min:result[j].min,
+              avg:result[j].avg
+            }
+          }
+          total_result = total_result.concat(exportData);
         }
 
         console.log(total_result);
@@ -416,6 +441,7 @@
     async mounted() {
       await this.getCityList();
       await this.getDevices();
+      
       this.severityOptions = (await getSeverity()).data.d;
       // this.treeData = (await getDeviceTreeApi(this.form.city, this.form.factory)).data.d;
     },

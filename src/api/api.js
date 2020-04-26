@@ -1,11 +1,19 @@
 import axios from "axios";
 
 // axios.defaults.baseURL = 'https://www.easy-mock.com/mock/5c22475a4e21841210a7015f';
-// axios.defaults.baseURL = 'http://139.217.219.205:8080';
-axios.defaults.baseURL = 'http://localhost:5001';
+ //axios.defaults.baseURL = 'http://139.217.219.205:8080';
+//axios.defaults.baseURL = 'http://localhost:5001';
+axios.defaults.baseURL=IPCONFIG;
 // axios.defaults.baseURL='https://localhost:44373';
 //带cookie
-axios.defaults.withCredentials = true;
+//axios.defaults.withCredentials = true;
+axios.defaults.headers =  {
+  'Content-Type' : 'application/json; charset=utf-8',
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Credentials': true,
+  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
+  'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token'
+}
 //登陆注册
 export function loginApi(form) {
   return axios.post('/api/login', {
@@ -421,8 +429,8 @@ export function getFactoryOptions(cityname) {
   return axios.get(`/api/factory/factoryOptions/${cityname}`);
 }
 
-export function getWorkshopOptions(factoryname) {
-  return axios.get(`/api/workshop/workshopOptions/${factoryname}`);
+export function getWorkshopOptions(cityName,factoryname) {
+  return axios.get(`/api/workshop/workshopOptions/${cityName}/${factoryname}`);
 }
 
 export function getDeviceByWorkshop(city, factory, workshop) {
@@ -517,6 +525,7 @@ export function getAffiliateFields(deviceName) {
   return axios.get(`/api/field/affiliate/${deviceName}`);
 }
 
+// 获取所有城市的所有实验楼以及每个实验楼下的所有实验室，返回：树结构：城市->实验楼->实验室
 export function getCityCascaderOptions() {
   return axios.get('/api/city/cityCascaderOptions');
 }
@@ -694,8 +703,8 @@ export function getCityFactoryTree() {
   return axios.get(`/api/city/cityFactoryTree`);
 }
 
-export function getReportByRegion(factoryName, t) {
-  return axios.post(`/api/report/byRegion?factoryName=${factoryName}`, t);
+export function getReportByRegion(cityName,factoryName, t) {
+  return axios.post(`/api/report/byRegion?cityName=${cityName}&factoryName=${factoryName}`, t);
 }
 
 export function getReportByTime(t) {
@@ -862,4 +871,9 @@ export function getDayAggregateDataInDataStatistic(deviceName, fieldId, time) {
 
 export function getMonthAggregateData(deviceName, fieldId, time) {
   return axios.post(`/api/deviceData/monthAggregateData?deviceName=${deviceName}&fieldId=${fieldId}`, time);
+}
+
+//workshop
+export function listWorkshopName(cityName,factoryName){
+  return axios.get(`/api/Workshop/workshopNameList/${cityName}/${factoryName}`);
 }

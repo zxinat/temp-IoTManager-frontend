@@ -401,9 +401,10 @@
         const searchColumn = this.curSortColumn === '' ? "Id" : columnMap[this.curSortColumn];
         const searchOrder = this.curOrder === '' ? "asc" : orderMap[this.curOrder];
         const searchDeviceId = this.curSearchDevice === '全部' ? "all" : this.curSearchDevice;
+        this.getTotalPage('search', searchDeviceId);
         const data = await getDevicesDataApi('search', this.curPage, searchColumn, searchOrder, searchDeviceId);
         this.tableData = data.data.d;
-        this.getTotalPage('search', searchDeviceId);
+        
         this.loading = false;
       },
       async pageChange() {
@@ -427,7 +428,7 @@
       }
     },
     async mounted() {
-      this.getTotalPage('search');
+      this.getTotalPage('all');
       this.getDeviceOptions();
       this.getCityList();
       //获取所有设备信息

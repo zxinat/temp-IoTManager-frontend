@@ -182,6 +182,7 @@
         const data = await searchAlarmInformationApi(this.searchData);
         this.tableData = data.data.d;
       },
+      
       async handleAll() {
         try {
           const data = await handleAllAlarmInformationApi(this.handleData,this.multipleSelection.map(el=>el.id));
@@ -198,6 +199,7 @@
           this.$message.error('警报处理未成功');
         }
       },
+      
       async update() {
         try {
           const data = await updateThreshold(this.updateData.id, this.updateData);

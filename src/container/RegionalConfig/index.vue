@@ -281,6 +281,10 @@
           label="地址">
         </el-table-column>
         <el-table-column
+          prop="city"
+          :label="'所属'+GLOBAL.firstLevel">
+        </el-table-column>
+        <el-table-column
           prop="factory"
           :label="'所属'+GLOBAL.secondLevel">
         </el-table-column>
@@ -312,6 +316,17 @@
 
     <el-dialog :title="'修改'+GLOBAL.thirdLevel" :visible.sync="updateLabFormVisible">
       <el-form :model="updateLabData" ref="updateLabData">
+        <el-form-item :label="'所属'+GLOBAL.firstLevel" prop="city" label-width="120px"
+                      :rules="[{required: true, message: GLOBAL.firstLevel+'不能为空'}]">
+          <el-select v-model="updateLabData.city" :placeholder="'选择'+GLOBAL.firstLevel" @change="getUpdateBuildingList(updateLabData.city)">
+            <el-option
+              v-for="c in cityList"
+              :key="c.value"
+              :label="c.label"
+              :value="c.label">
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item :label="'所属'+GLOBAL.secondLevel" prop="factory" label-width="120px"
                       :rules="[{required: true, message: GLOBAL.secondLevel+'不能为空'}]">
           <el-select v-model="updateLabData.factory" :placeholder="'选择'+GLOBAL.secondLevel">
@@ -345,14 +360,25 @@
 
     <el-dialog :title="'添加'+GLOBAL.thirdLevel" :visible.sync="newLabFormVisible">
       <el-form :model="newLabData" ref="newLabData">
+        <el-form-item :label="'所属'+GLOBAL.firstLevel" prop="city" label-width="120px"
+                      :rules="[{required: true, message: GLOBAL.firstLevel+'不能为空'}]">
+          <el-select v-model="newLabData.city" :placeholder="'选择'+GLOBAL.firstLevel" @change="getNewFactory(newLabData.city)">
+            <el-option
+              v-for="c in cityList"
+              :key="c.value"
+              :label="c.label"
+              :value="c.label">
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item :label="'所属'+GLOBAL.secondLevel" prop="factory" label-width="120px"
                       :rules="[{required: true, message: GLOBAL.secondLevel+'不能为空'}]">
           <el-select v-model="newLabData.factory" :placeholder="'选择'+GLOBAL.secondLevel">
             <el-option
-              v-for="c in buildingList"
-              :key="c.id"
-              :label="c.factoryName"
-              :value="c.factoryName">
+              v-for="c in factoryList"
+              :key="c.value"
+              :label="c.label"
+              :value="c.label">
             </el-option>
           </el-select>
         </el-form-item>
@@ -408,6 +434,7 @@
     getFactoryAffiliateDevice,
     getFactoryAffiliateGateway,
     getWorkshopAffiliateGateway, getWorkshopAffiliateDevice,
+    listWorkshopName,
   } from '../../api/api';
   import {checkAuth} from "../../common/util";
 
@@ -416,20 +443,15 @@
       name: "RegionalConfig",
       data() {
           return{
-            changeCityForm: '',
-            changeFactoryForm: '',
-            changeWorkshopForm: '',
-            pageMode: 1,
-            loading: false,
+            //city-search-container
+            searchCity: '',
+            //city-table-container
             cityTotalPage: 0,
             cityCurPage: 1,
-            cityCurSortColumn: '',
-            cityCurOrder: '',
-            searchCity: '',
+            loading: false,
             cityData: [],
+            //city修改el-dialog
             cityList: [],
-            updateCityFormVisible: false,
-            newCityFormVisible: false,
             updateCityData: {
               cityName: '',
               remark: '',
@@ -438,19 +460,25 @@
               longitude: '',
               latitude: '',
             },
+            updateCityFormVisible: false,
+            //city添加el-dialog
             newCityData: {
               cityName: '',
               remark: '',
             },
+            newCityFormVisible: false,
+
+            //factory-search-container
+            searchBuilding: '',
+            //factory-table-container
             factoryTotalPage: 0,
             factoryCurPage: 1,
             factoryCurSortColumn: '',
             factoryCurOrder: '',
-            searchBuilding: '',
             buildingData: [],
+            //factory修改el-dialog
             buildingList: [],
             updateBuildingFormVisible: false,
-            newBuildingFormVisible: false,
             updateBuildingData: {
               factoryName:'',
               factoryPhoneNumber: '',
@@ -458,6 +486,8 @@
               city: '',
               remark: '',
             },
+            //factory添加el-dialog
+            newBuildingFormVisible: false,
             newBuildingData: {
               factoryName:'',
               factoryPhoneNumber: '',
@@ -465,12 +495,35 @@
               city: '',
               remark: '',
             },
+
+            //workshop-search-container
+            searchLab: '',
+            //workshop-table-container
             workshopTotalPage: 0,
             workshopCurPage: 1,
             workshopCurSortColumn: '',
             workshopCurOrder: '',
-            searchLab: '',
             labData: [],
+
+            changeCityForm: '',
+            changeFactoryForm: '',
+            changeWorkshopForm: '',
+            pageMode: 1,
+            
+            
+            cityCurSortColumn: '',
+            cityCurOrder: '',
+
+            
+      
+            
+            
+            
+            
+            
+            
+            
+            factoryList:[],
             labList: [],
             updateLabFormVisible: false,
             newLabFormVisible: false,
@@ -479,18 +532,21 @@
               workshopPhoneNumber: '',
               workshopAddress: '',
               factory: '',
+              city:'',
               remark:'',
             },
             newLabData: {
               workshopName: '',
               workshopPhoneNumber: '',
               workshopAddress: '',
+              city:'',
               factory: '',
               remark:'',
             },
           }
       },
       methods: {
+        //city-search-container
         checkRegionAuth(auth) {
           return checkAuth(auth);
         },
@@ -501,37 +557,10 @@
             this.cityData = this.getCity();
           }
         },
+        //city-table-container
         async openCityUpdateForm(row){  //打开更新表单
             this.updateCityData = JSON.parse(JSON.stringify(row));
             this.updateCityFormVisible = true;
-        },
-        async getCity() {
-          this.loading = true;
-          const orderMap = {ascending: 'asc', descending: 'desc'};
-          const columnMap = {id: 'id', longitude: 'longitude', latitude: 'latitude', updateTime: 'updateTime', createTime: 'createTime'};
-          const searchColumn = this.cityCurSortColumn === '' ? "id" : columnMap[this.cityCurSortColumn];
-          const searchOrder = this.cityCurOrder === '' ? "asc" : orderMap[this.cityCurOrder];
-          const searchCityName = this.searchCity === '全部' ? "all" : this.searchCity;
-          const data = await getCity(this.cityCurPage, searchColumn, searchOrder, this.pageMode);
-          this.cityData = data.data.d;
-          this.getCityTotalPage('search', searchCityName);
-          this.loading = false;
-        },
-        async cityPageChange() {
-          this.getCity();
-        },
-        async getCityTotalPage(searchType, city='all') {
-          if(searchType === 'all') {
-            this.cityTotalPage = (await getCityNumber('all')).data.d;
-          } else if(searchType === 'search') {
-            const c = city === '全部' ? 'all' : city;
-            this.cityTotalPage = (await getCityNumber('search', c)).data.d;
-          }
-        },
-        async citySortChange(ob) {
-          this.cityCurSortColumn = ob.prop;
-          this.cityCurOrder = ob.order;
-          this.getCity();
         },
         async deleteCity(row) {
           const affiliateFactory = (await getCityAffiliateFactory(row.id)).data.d;
@@ -562,6 +591,35 @@
               '个下属设备, ' + affiliateGateway + '个下属网关，无法被删除');
           }
         },
+        async getCity() {
+          this.loading = true;
+          const orderMap = {ascending: 'asc', descending: 'desc'};
+          const columnMap = {id: 'id', longitude: 'longitude', latitude: 'latitude', updateTime: 'updateTime', createTime: 'createTime'};
+          const searchColumn = this.cityCurSortColumn === '' ? "id" : columnMap[this.cityCurSortColumn];
+          const searchOrder = this.cityCurOrder === '' ? "asc" : orderMap[this.cityCurOrder];
+          const searchCityName = this.searchCity === '全部' ? "all" : this.searchCity;
+          const data = await getCity(this.cityCurPage, searchColumn, searchOrder, this.pageMode);
+          this.cityData = data.data.d;
+          this.getCityTotalPage('search', searchCityName);
+          this.loading = false;
+        },
+        async cityPageChange() {
+          this.getCity();
+        },
+        async getCityTotalPage(searchType, city='all') {
+          if(searchType === 'all') {
+            this.cityTotalPage = (await getCityNumber('all')).data.d;
+          } else if(searchType === 'search') {
+            const c = city === '全部' ? 'all' : city;
+            this.cityTotalPage = (await getCityNumber('search', c)).data.d;
+          }
+        },
+        async citySortChange(ob) {
+          this.cityCurSortColumn = ob.prop;
+          this.cityCurOrder = ob.order;
+          this.getCity();
+        },
+        
         async updateCity(formName){
           this.$refs[formName].validate(async (valid) => {
             if (valid) {
@@ -612,10 +670,23 @@
             this.buildingData = this.getFactory();
           }
         },
+        async getNewFactory(city){
+          
+          this.factoryList=(await getFactoryOptions(city)).data.d;
+          if(this.factoryList.length!=0){
+            this.newLabData.factory=this.factoryList[0].value;
+          }
+          else{
+            this.newLabData.factory=null;
+          }
+          
+        },
         async getUpdateBuildingList(city){
           this.buildingList = (await getFactoryOptions(city)).data.d;
-          if (this.buildingList[0] != null) {
+          console.log(this.updateLabData.city);
+          if (this.buildingList!= null) {
             this.updateBuildingData.buildingName = this.buildingList[0].value;
+            
           } else {
             this.updateBuildingData.buildingName = "";
             this.buildingList = [];
@@ -735,9 +806,9 @@
         async getUpdateLabList(city){
           this.LabList = (await getWorkshopOptions(city)).data.d;
           if (this.LabList[0] != null) {
-            this.updateLabData.labName = this.labList[0].value;
+            this.updateLabData.workshopName = this.labList[0].value;
           } else {
-            this.updateLabData.labName = "";
+            this.updateLabData.workshopName = "";
             this.labList = [];
           }
         },
@@ -792,9 +863,10 @@
             }
           });
         },
-        async openLabUpdateForm(row){//打开更新表单
+        async openLabUpdateForm(row){//打开实验室更新表单
           this.updateLabData = JSON.parse(JSON.stringify(row));
           this.updateLabFormVisible = true;
+          this.getUpdateBuildingList(this.updateLabData.city);
         },
         async addLab(formName){
           this.$refs[formName].validate(async (valid) => {

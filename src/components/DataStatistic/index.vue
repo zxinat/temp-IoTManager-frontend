@@ -43,7 +43,6 @@
     get100DataInDataStatistic,
     getDataStatistic,
     getDayAggregateData, getDayAggregateDataInDataStatistic,
-    getDeviceStatus,
     getFieldByDeviceName, getHourAggregateData, getMonthAggregateData
   } from "../../api/api";
 
@@ -150,6 +149,7 @@
             };
             if (this.curScale === 'hour') {
               tmpChartOption = (await getHourAggregateData(this.deviceData, this.selectedField, timeObj)).data.d;
+              console.log(tmpChartOption);
             } else if (this.curScale === 'day') {
               tmpChartOption = (await getDayAggregateDataInDataStatistic(this.deviceData, this.selectedField, timeObj)).data.d;
             } else if (this.curScale === 'month') {
