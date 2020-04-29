@@ -1,7 +1,7 @@
 <template>
   <div class="monitoring-device-card-container">
     <el-row>
-      <el-col style="margin: 5px; width: 45%; float: left">
+      <el-col style="padding: 5px; width: 33%; float: left">
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <img src="../../assets/img/chilunzu.svg">
@@ -21,7 +21,7 @@
           </div>
         </el-card>
       </el-col>
-      <el-col style="margin: 5px;  width: 45%; float: left">
+      <el-col style="padding: 5px;  width: 33%; float: left">
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <img src="../../assets/img/chilunzu.svg">
@@ -41,7 +41,7 @@
           </div>
         </el-card>
       </el-col>
-      <el-col style="margin: 5px; width: 30%; float: left;">
+      <el-col style="padding: 5px; width: 33%; float: left;">
         <el-card class="box-card" :body-style="{ padding: '0px' }">
         <div slot="header" class="clearfix" style="padding: 5px;">
           <img src="../../assets/img/chilunzu.svg">
@@ -66,22 +66,22 @@
           <el-button size="small" type="primary" class="upLoadButton">点击上传</el-button>
         </el-upload>
       </el-col>
-      <el-col style="margin: 5px; width: 60%; float: left;">
+      <!-- <el-col style="margin: 5px; width: 60%; float: left;">
         <el-card>
           <MonitoringMap></MonitoringMap>
         </el-card>
-      </el-col>
+      </el-col> -->
     </el-row>
   </div>
 </template>
 
 <script>
   import UploadImg from "../UploadImg/index";
-  import MonitoringMap from "../MonitoringMap/index";
+  // import MonitoringMap from "../MonitoringMap/index";
   import {getDeviceDataInDeviceCard, getPicture, uploadPicture} from "../../api/api";
   export default {
     name: "MonitoringDeviceCard",
-    components: {MonitoringMap, UploadImg},
+    components: {UploadImg},
     data(){
       return {
         curDeviceData: {},

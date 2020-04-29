@@ -69,7 +69,7 @@
           xAxis: {
             type: 'category',
             axisLabel: {
-              interval: 0,
+              interval: 5,
               rotate: 30
             },
             data: [],
